@@ -239,15 +239,45 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
         for col in range(Columns.COUNT):
             self.setForeground(col, QBrush(status_color))
 
+        # Implicit predecessor label rendered in gray so it reads as a default, not a user choice.
+        if self._predecessor_is_implicit():
+            self.setForeground(Columns.PREDECESSOR, QBrush(Colors.GRAY))
+
     def _predecessor_label(self) -> str:
-        """Render 'Depends On' cell as '⇦ <Task Name>' so the link is obvious in any row."""
-        if not self.node.predecessor_id:
-            return ""
-        tree = self.treeWidget()
-        name = None
-        if tree is not None and hasattr(tree, 'resolve_node_name'):
-            name = tree.resolve_node_name(self.node.predecessor_id)
-        return f"⇦ {name}" if name else "⇦ (missing)"
+        """Render 'Depends On' cell.
+
+        '⇦ Name' — explicit predecessor link set by the user.
+        '↑ Name' — implicit default: the previous sibling, which the scheduler
+                   uses automatically when no explicit predecessor is set.
+        ''      — no link and no prior sibling.
+        """
+        if self.node.predecessor_id:
+            tree = self.treeWidget()
+            name = None
+            if tree is not None and hasattr(tree, 'resolve_node_name'):
+                name = tree.resolve_node_name(self.node.predecessor_id)
+            return f"⇦ {name}" if name else "⇦ (missing)"
+
+        prev = self._implicit_predecessor()
+        if prev is not None:
+            return f"↑ {prev.name}"
+        return ""
+
+    def _implicit_predecessor(self):
+        """Previous sibling the scheduler would chain from when no explicit link is set."""
+        parent = self.node.parent
+        if not parent:
+            return None
+        try:
+            idx = parent.children.index(self.node)
+        except ValueError:
+            return None
+        if idx <= 0:
+            return None
+        return parent.children[idx - 1]
+
+    def _predecessor_is_implicit(self) -> bool:
+        return (not self.node.predecessor_id) and (self._implicit_predecessor() is not None)
 
     def check_is_overdue(self, node: TaskNode) -> bool:
         # Recursive check: Overdue if self is overdue OR any child is overdue
@@ -353,6 +383,9 @@ class TreeGridView(QTreeWidget):
         self.setDefaultDropAction(Qt.DropAction.MoveAction)
 
     def keyPressEvent(self, event):
+        if self.linking_mode and event.key() == Qt.Key.Key_Escape:
+            self._cancel_linking_mode()
+            return
         if event.matches(QKeySequence.StandardKey.Copy):
             self.copy_selection_to_clipboard()
         else:
@@ -387,64 +420,73 @@ class TreeGridView(QTreeWidget):
         QApplication.clipboard().setText(clipboard_text)
 
     def start_linking_mode(self, source_item: TaskTreeWidgetItem):
+        """Enter click-to-link mode. No modal popup — cursor + status bar hint only."""
         self.linking_mode = True
         self.linking_source_node = source_item.node
         self.setCursor(Qt.CursorShape.CrossCursor)
-        QMessageBox.information(self, "Link Task", f"Linking '{source_item.node.name}'.\n\nClick the PREDECESSOR task in the tree.")
+        self._show_link_hint(
+            f"Linking '{source_item.node.name}': click a task to set as predecessor. "
+            f"Click the same task to clear. Esc or right-click to cancel."
+        )
+
+    def _show_link_hint(self, msg: str):
+        """Write to the main window's status bar if one exists; silent otherwise."""
+        w = self.window()
+        status = getattr(w, 'statusBar', None)
+        if callable(status):
+            try:
+                status().showMessage(msg, 8000)
+            except Exception:
+                pass
+
+    def _cancel_linking_mode(self):
+        self.linking_mode = False
+        self.linking_source_node = None
+        self.setCursor(Qt.CursorShape.ArrowCursor)
+        self._show_link_hint("Linking cancelled.")
 
     def mousePressEvent(self, event):
         if self.linking_mode:
-            item = self.itemAt(event.position().toPoint())
-            if item and isinstance(item, TaskTreeWidgetItem):
-                target_node = item.node
-                source_node = self.linking_source_node
-                
-                # Validation
-                if target_node.id == source_node.id:
-                    QMessageBox.warning(self, "Invalid Link", "Cannot link a task to itself.")
-                    return # Keep mode active? Or cancel? Let's keep active.
-                
-                # Check for cycle (Target cannot be a descendant of Source)
-                descendants = source_node.get_all_descendants()
-                if target_node in descendants:
-                    QMessageBox.warning(self, "Invalid Link", "Cannot link to a descendant (Circular Dependency).")
-                    return
+            # Right-click cancels cleanly.
+            if event.button() == Qt.MouseButton.RightButton:
+                self._cancel_linking_mode()
+                return
 
-                # Check for Ancestor Cycle (Target cannot be an Ancestor of Source)
-                print(f"DEBUG: Checking Ancestors of '{source_node.name}'...")
-                ancestor = source_node.parent
-                while ancestor:
-                    print(f"DEBUG: Checking Ancestor: '{ancestor.name}' (ID: {ancestor.id})")
-                    if ancestor.id == target_node.id:
-                        QMessageBox.warning(self, "Invalid Link", "Cannot link to an Ancestor (Circular Dependency).")
-                        return
-                    ancestor = ancestor.parent
-                print("DEBUG: Ancestor Check Passed.")
-                
-                # Apply Link
-                print(f"DEBUG: Linking '{source_node.name}' (ID: {source_node.id}) to '{target_node.name}' (ID: {target_node.id})")
-                source_node.predecessor_id = target_node.id
-                self.recalculate_all_dates()
-                self.item_changed_signal.emit(source_node)
-                
-                QMessageBox.information(self, "Link Created", f"Linked '{source_node.name}' to '{target_node.name}'.")
-                
-                # Reset Mode
+            item = self.itemAt(event.position().toPoint())
+            if not isinstance(item, TaskTreeWidgetItem):
+                # Click on empty space: do nothing, stay in linking mode.
+                return
+
+            target_node = item.node
+            source_node = self.linking_source_node
+
+            # Clicking the source row again clears the predecessor (toggle-off).
+            if target_node.id == source_node.id:
+                self._apply_predecessor_change(source_node, None)
                 self.linking_mode = False
                 self.linking_source_node = None
                 self.setCursor(Qt.CursorShape.ArrowCursor)
-                return # Consume event
-            else:
-                # Clicked empty space or header?
-                # Maybe cancel if clicked empty space?
-                # For now, let's just ignore or cancel if right click?
-                if event.button() == Qt.MouseButton.RightButton:
-                     # Cancel
-                    self.linking_mode = False
-                    self.linking_source_node = None
-                    self.setCursor(Qt.CursorShape.ArrowCursor)
+                self._show_link_hint(f"Cleared predecessor on '{source_node.name}'.")
+                return
+
+            # Reject cycles: target cannot be a descendant or ancestor of source.
+            if target_node in source_node.get_all_descendants():
+                self._show_link_hint("Cannot link to a descendant (would create a cycle).")
+                return
+            ancestor = source_node.parent
+            while ancestor:
+                if ancestor.id == target_node.id:
+                    self._show_link_hint("Cannot link to an ancestor (would create a cycle).")
                     return
-                    
+                ancestor = ancestor.parent
+
+            self._apply_predecessor_change(source_node, target_node.id)
+            self.linking_mode = False
+            self.linking_source_node = None
+            self.setCursor(Qt.CursorShape.ArrowCursor)
+            self._show_link_hint(f"Linked '{source_node.name}' ⇦ '{target_node.name}'.")
+            return
+
         super().mousePressEvent(event)
 
     def dropEvent(self, event):
@@ -675,24 +717,24 @@ class TreeGridView(QTreeWidget):
             lock_action.triggered.connect(lambda: self.toggle_date_lock(item))
             menu.addAction(lock_action)
             
-            # Manual Linking — primary path: searchable dialog
-            link_pred_action = QAction("Set Predecessor...", self)
-            link_pred_action.setShortcut("Ctrl+L")
-            link_pred_action.triggered.connect(lambda: self.open_link_dialog(item))
-            menu.addAction(link_pred_action)
-
-            # Secondary path: click-to-pick in tree (handy for nearby tasks)
-            pick_pred_action = QAction("Set Predecessor (Click Target)...", self)
+            # Predecessor linking — primary path is inline (click the cell or use this).
+            pick_pred_action = QAction("Set Predecessor (Click Target)", self)
+            pick_pred_action.setShortcut("Ctrl+L")
             pick_pred_action.triggered.connect(lambda: self.start_linking_mode(item))
             menu.addAction(pick_pred_action)
 
-            # Predecessor actions — only when a link exists
+            # Advanced fallback: searchable dialog for distant/large trees.
+            link_pred_action = QAction("Pick from list… (advanced)", self)
+            link_pred_action.triggered.connect(lambda: self.open_link_dialog(item))
+            menu.addAction(link_pred_action)
+
+            # Jump + clear — only meaningful when an explicit link exists.
             if item.node.predecessor_id:
                 jump_action = QAction("Jump to Predecessor", self)
                 jump_action.triggered.connect(lambda: self.jump_to_predecessor(item))
                 menu.addAction(jump_action)
 
-                clear_link_action = QAction("Clear Predecessor Link", self)
+                clear_link_action = QAction("Clear Predecessor", self)
                 clear_link_action.triggered.connect(lambda: self.clear_link(item))
                 menu.addAction(clear_link_action)
             
@@ -718,9 +760,9 @@ class TreeGridView(QTreeWidget):
         if column in (Columns.START, Columns.END) and item.node.dates_locked:
             return # Do not allow editing
 
-        # Predecessor column is not free-text editable — open the picker dialog
+        # Predecessor column: enter inline linking mode. No free-text edit, no popup.
         if column == Columns.PREDECESSOR:
-            self.open_link_dialog(item)
+            self.start_linking_mode(item)
             return
 
         super().editItem(item, column)
@@ -823,10 +865,20 @@ class TreeGridView(QTreeWidget):
                     self.item_changed_signal.emit(item.node)
             self.update_filter_options()
 
-    def clear_link(self, item: TaskTreeWidgetItem):
-        item.node.predecessor_id = None
+    def _apply_predecessor_change(self, node: TaskNode, new_pred_id):
+        """Single point of mutation for predecessor links.
+
+        Funneling every path (inline click, context menu clear, advanced dialog)
+        through here guarantees the Depends On column repaints immediately —
+        the refresh step was missing on the earlier per-path call sites.
+        """
+        node.predecessor_id = new_pred_id if new_pred_id else None
         self.recalculate_all_dates()
-        self.item_changed_signal.emit(item.node)
+        self.refresh_entire_tree()
+        self.item_changed_signal.emit(node)
+
+    def clear_link(self, item: TaskTreeWidgetItem):
+        self._apply_predecessor_change(item.node, None)
 
     def open_link_dialog(self, item: TaskTreeWidgetItem):
         all_nodes = self.get_all_nodes_flat()
@@ -834,14 +886,7 @@ class TreeGridView(QTreeWidget):
         if dialog.exec():
             result_id = dialog.selected_node_id
             if result_id is not None:
-                if result_id == "":
-                    item.node.predecessor_id = None
-                else:
-                    item.node.predecessor_id = result_id
-                    
-                # Trigger update
-                self.recalculate_all_dates()
-                self.item_changed_signal.emit(item.node)
+                self._apply_predecessor_change(item.node, result_id or None)
 
     def get_all_nodes_flat(self) -> list[TaskNode]:
         nodes = []
