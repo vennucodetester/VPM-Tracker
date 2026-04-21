@@ -193,17 +193,18 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
         
     def update_from_node(self):
         self.setText(Columns.TREE, self.node.name)
-        
+
         # Parallel Toggle (Checkbox styled as Radio)
         self.setCheckState(Columns.TREE, Qt.CheckState.Checked if self.node.is_parallel else Qt.CheckState.Unchecked)
-        
+
         self.setText(Columns.START, self.node.start_date or "")
         self.setText(Columns.END, self.node.end_date or "")
         self.setText(Columns.DURATION, self.node.duration)
         self.setText(Columns.STATUS, self.node.status)
         self.setText(Columns.OWNER, self.node.owner)
+        self.setText(Columns.PREDECESSOR, self._predecessor_label())
         self.setText(Columns.NOTES, self.node.notes)
-        
+
         self.setFlags(self.flags() | Qt.ItemFlag.ItemIsEditable | Qt.ItemFlag.ItemIsUserCheckable)
         
         # Visual indication for locked dates
@@ -237,6 +238,16 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
         # Apply color to all columns
         for col in range(Columns.COUNT):
             self.setForeground(col, QBrush(status_color))
+
+    def _predecessor_label(self) -> str:
+        """Render 'Depends On' cell as '⇦ <Task Name>' so the link is obvious in any row."""
+        if not self.node.predecessor_id:
+            return ""
+        tree = self.treeWidget()
+        name = None
+        if tree is not None and hasattr(tree, 'resolve_node_name'):
+            name = tree.resolve_node_name(self.node.predecessor_id)
+        return f"⇦ {name}" if name else "⇦ (missing)"
 
     def check_is_overdue(self, node: TaskNode) -> bool:
         # Recursive check: Overdue if self is overdue OR any child is overdue
@@ -664,14 +675,24 @@ class TreeGridView(QTreeWidget):
             lock_action.triggered.connect(lambda: self.toggle_date_lock(item))
             menu.addAction(lock_action)
             
-            # Manual Linking
-            link_pred_action = QAction("Link Start to... (Pick)", self)
-            link_pred_action.triggered.connect(lambda: self.start_linking_mode(item))
+            # Manual Linking — primary path: searchable dialog
+            link_pred_action = QAction("Set Predecessor...", self)
+            link_pred_action.setShortcut("Ctrl+L")
+            link_pred_action.triggered.connect(lambda: self.open_link_dialog(item))
             menu.addAction(link_pred_action)
-            
-            # Clear Link Option
+
+            # Secondary path: click-to-pick in tree (handy for nearby tasks)
+            pick_pred_action = QAction("Set Predecessor (Click Target)...", self)
+            pick_pred_action.triggered.connect(lambda: self.start_linking_mode(item))
+            menu.addAction(pick_pred_action)
+
+            # Predecessor actions — only when a link exists
             if item.node.predecessor_id:
-                clear_link_action = QAction("Clear Link", self)
+                jump_action = QAction("Jump to Predecessor", self)
+                jump_action.triggered.connect(lambda: self.jump_to_predecessor(item))
+                menu.addAction(jump_action)
+
+                clear_link_action = QAction("Clear Predecessor Link", self)
                 clear_link_action.triggered.connect(lambda: self.clear_link(item))
                 menu.addAction(clear_link_action)
             
@@ -697,10 +718,33 @@ class TreeGridView(QTreeWidget):
         if column in (Columns.START, Columns.END) and item.node.dates_locked:
             return # Do not allow editing
 
-        # Smart Notes - Handled by Delegate now
-        # if column == Columns.NOTES: ...
-        
+        # Predecessor column is not free-text editable — open the picker dialog
+        if column == Columns.PREDECESSOR:
+            self.open_link_dialog(item)
+            return
+
         super().editItem(item, column)
+
+    def jump_to_predecessor(self, item: TaskTreeWidgetItem):
+        """Select and scroll to the task this item depends on."""
+        pred_id = item.node.predecessor_id
+        if not pred_id:
+            return
+        target_item = self._find_item_by_id(pred_id)
+        if target_item:
+            self.clearSelection()
+            target_item.setSelected(True)
+            self.setCurrentItem(target_item)
+            self.scrollToItem(target_item, QAbstractItemView.ScrollHint.PositionAtCenter)
+
+    def _find_item_by_id(self, node_id: str):
+        iterator = QTreeWidgetItemIterator(self)
+        while iterator.value():
+            it = iterator.value()
+            if isinstance(it, TaskTreeWidgetItem) and it.node.id == node_id:
+                return it
+            iterator += 1
+        return None
 
     def toggle_date_lock(self, item: TaskTreeWidgetItem):
         item.node.dates_locked = not item.node.dates_locked
@@ -779,28 +823,6 @@ class TreeGridView(QTreeWidget):
                     self.item_changed_signal.emit(item.node)
             self.update_filter_options()
 
-    def add_child_task(self, parent_item: QTreeWidgetItem = None):
-        # If no parent selected, add to root
-        parent_node = parent_item.node if parent_item else None
-        new_node = TaskNode("New Task", parent=parent_node)
-        
-        # Auto-Link Logic: If there are existing children, link this new one to the last one
-        siblings = parent_node.children if parent_node else self.root_nodes
-        # Note: new_node is not in siblings list yet (added below)
-        
-        if siblings:
-            # Link to the last sibling
-            # We want: Start = PrevSibling.End
-            # new_node.set_formula('start', "=PrevSibling.End")
-            # Default duration 1 day?
-            # new_node.set_formula('end', "=Start+1")
-            
-            # Use new manual logic
-            prev = siblings[-1]
-            new_node.update_from_previous_sibling(prev)
-        
-        if parent_node:
-            parent_node.add_child(new_node)
     def clear_link(self, item: TaskTreeWidgetItem):
         item.node.predecessor_id = None
         self.recalculate_all_dates()
@@ -830,59 +852,79 @@ class TreeGridView(QTreeWidget):
         traverse(self.root_nodes)
         return nodes
 
+    def resolve_node_name(self, node_id: str) -> str:
+        """Lookup a node's display name by id. Used by the Depends On column."""
+        node_map = self._get_node_map()
+        n = node_map.get(node_id)
+        return n.name if n else ""
+
+    def _get_node_map(self) -> dict:
+        """Fresh flat id→node map. Cheap enough for trees of a few thousand tasks."""
+        return {n.id: n for n in self.get_all_nodes_flat()}
+
     def recalculate_all_dates(self):
         """
-        Force a full recalculation of the entire tree.
-        Multi-pass approach to handle complex dependencies.
-        """
-        all_nodes = self.get_all_nodes_flat()
-        node_map = {n.id: n for n in all_nodes}
-        
-        # Pass 1: Apply Manual Links (Predecessors)
-        # This establishes the "Anchors" for linked tasks.
-        print("DEBUG: Starting Recalculate Pass 1 (Manual Links)")
-        count = 0
-        for node in all_nodes:
-            if node.predecessor_id:
-                if node.predecessor_id in node_map:
-                    pred = node_map[node.predecessor_id]
-                    print(f"DEBUG: Node '{node.name}' has predecessor '{pred.name}'. Updating...")
-                    node.update_from_predecessor(pred)
-                    count += 1
-                else:
-                    print(f"DEBUG: Node '{node.name}' has predecessor ID {node.predecessor_id} BUT IT IS MISSING from map!")
-        print(f"DEBUG: Pass 1 Complete. Updated {count} nodes.")
-                
-        print(f"DEBUG: Pass 1 Complete. Updated {count} nodes.")
-                
-        # Pass 2: Top-Down Sibling/Parent Logic
-        for root in self.root_nodes:
-            self.recursive_date_update(root)
+        Single-pass, bottom-up recalculation.
 
-    def recursive_date_update(self, node: 'TaskNode'):
+        Order per subtree (post-order):
+          1. If node has a predecessor_id that's already been resolved, anchor start from it.
+          2. Otherwise, if node has a previous sibling, anchor start from that sibling's end.
+          3. Recurse into children.
+          4. Rollup dates from children (is_rollup=True so we don't re-cascade).
+          5. Refresh status and owner.
+
+        A single `visited` set is threaded through to block recursion cycles from the
+        scheduler cascade (see task_node.set_date).
         """
-        Recursively update dates for a node and its children.
-        """
-        if node.predecessor_id:
-             # Do nothing here regarding start date. 
-             # It relies solely on the predecessor (Pass 1).
-             print(f"DEBUG: Recursive Update visiting '{node.name}'. SKIPPING sibling logic due to predecessor.")
-             pass
-        elif node.parent:
-            siblings = node.parent.children
-            if node in siblings:
-                idx = siblings.index(node)
-                if idx > 0:
-                    node.update_from_previous_sibling(siblings[idx-1])
-                    
-        # 2. Update Children (Recursion)
+        node_map = self._get_node_map()
+        visited: set = set()
+        resolved: set = set()  # Ids whose start has been established in this pass
+
+        def walk(node):
+            # 1. Anchor start: manual predecessor wins over sibling chain
+            if node.predecessor_id and node.predecessor_id in node_map:
+                pred = node_map[node.predecessor_id]
+                if pred.id in resolved or pred.id not in node_map:
+                    node.update_from_predecessor(pred)
+            elif node.parent:
+                siblings = node.parent.children
+                try:
+                    idx = siblings.index(node)
+                    if idx > 0 and not node.predecessor_id:
+                        node.update_from_previous_sibling(siblings[idx - 1])
+                except ValueError:
+                    pass
+
+            # 2. Recurse
+            for child in node.children:
+                walk(child)
+
+            # 3. Rollup (post-order), status, owner
+            node.update_dates_from_children(visited=visited)
+            node.update_status_from_dates()
+            node.update_owner_from_children()
+            resolved.add(node.id)
+
+        # Iterate roots in order; predecessors pointing backwards will be resolved naturally.
+        # For predecessors that point forward (target appears later in tree), we do a second
+        # lightweight pass just for those links.
+        for root in self.root_nodes:
+            walk(root)
+
+        # Forward-pointing predecessor fixup: any node whose pred was resolved AFTER we
+        # visited it still needs to be anchored. Re-apply those links once.
+        for n in node_map.values():
+            if n.predecessor_id and n.predecessor_id in node_map:
+                n.update_from_predecessor(node_map[n.predecessor_id])
+
+        # Final rollup sweep so parents reflect any shifts from the fixup pass.
+        for root in self.root_nodes:
+            self._rollup_only(root, visited)
+
+    def _rollup_only(self, node, visited: set):
         for child in node.children:
-            self.recursive_date_update(child)
-            
-        # 3. Rollup from Children (Post-Order)
-        node.update_dates_from_children()
-        node.update_status_from_dates()
-        node.update_owner_from_children() # Ensure owner rollup too
+            self._rollup_only(child, visited)
+        node.update_dates_from_children(visited=visited)
 
     def add_child_task(self, parent_item: QTreeWidgetItem = None):
         # If no parent selected, add to root

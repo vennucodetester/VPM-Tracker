@@ -7,34 +7,39 @@ class WorkdayCalculator:
     @staticmethod
     def add_workdays(start_date_str: str, days: int) -> str:
         """
-        Add 'days' workdays to start_date.
+        Return the date `days` workdays from start_date (inclusive of start).
+        Duration of 1 means End == Start. Invalid input returns the original string
+        unchanged and logs a warning; callers must still validate if they need to.
         """
+        if not start_date_str:
+            return start_date_str
+
         config = ConfigManager()
         holidays = set(config.get_holidays())
         exclude_weekends = config.get_exclude_weekends()
-        
+
         try:
             current_date = datetime.strptime(start_date_str, DATE_FMT)
         except ValueError:
+            import logging
+            logging.warning("add_workdays: invalid start_date %r", start_date_str)
             return start_date_str
-            
+
+        try:
+            days = int(days)
+        except (TypeError, ValueError):
+            days = 1
+        if days < 1:
+            days = 1
+
+        # Hard cap to prevent runaway loops on absurd inputs.
+        target = min(days - 1, 10_000)
         added = 0
-        # Direction: if days is negative, we go backwards? 
-        # For duration, days is usually positive. 
-        # If days is 0, return start_date? Or 1 day duration means same day?
-        # Convention: Duration 1 day = Start Date == End Date.
-        # So we add (days - 1) to get End Date.
-        
-        target_days = max(0, days - 1)
-        direction = 1 if target_days >= 0 else -1
-        
-        while added < abs(target_days):
-            current_date += timedelta(days=direction)
-            
-            # Check if valid workday
+        while added < target:
+            current_date += timedelta(days=1)
             if WorkdayCalculator.is_workday(current_date, holidays, exclude_weekends):
                 added += 1
-                
+
         return current_date.strftime(DATE_FMT)
 
     @staticmethod

@@ -107,62 +107,103 @@ class BulkEditDialog(QDialog):
         self.accept()
 
 class LinkTaskDialog(QDialog):
+    """Searchable picker for the predecessor of a task.
+
+    Shows ancestor path so tasks with the same name (e.g. 'Costing Estimate' under
+    two different microblocks) are distinguishable. Auto-filters as you type.
+    """
+
     def __init__(self, current_node, all_nodes, parent=None):
+        from PyQt6.QtWidgets import QListWidgetItem
         super().__init__(parent)
-        self.setWindowTitle(f"Link {current_node.name} to...")
-        self.resize(400, 400)
+        self.setWindowTitle(f"Set Predecessor for: {current_node.name}")
+        self.resize(520, 460)
         self.selected_node_id = None
-        
+        self._current_node = current_node
+
         layout = QVBoxLayout(self)
-        
-        lbl = QLabel("Select a Predecessor Task:")
-        layout.addWidget(lbl)
-        
+
+        hint = QLabel("Pick the task whose END DATE this one should follow.\n"
+                      "Type to filter by name, owner, or date.")
+        hint.setWordWrap(True)
+        layout.addWidget(hint)
+
+        self.search = QLineEdit()
+        self.search.setPlaceholderText("Search…")
+        self.search.textChanged.connect(self._apply_filter)
+        layout.addWidget(self.search)
+
         self.list_widget = QListWidget()
-        
-        # Filter logic:
-        # 1. Not self
-        # 2. Not a descendant (cycle)
-        # 3. Not already the predecessor? (Optional, but good to show current)
-        
-        descendants = current_node.get_all_descendants()
-        descendant_ids = {d.id for d in descendants}
-        
+        layout.addWidget(self.list_widget, 1)
+
+        # Build the candidate list: exclude self, descendants, and ancestors (no cycles).
+        descendant_ids = {d.id for d in current_node.get_all_descendants()}
+        ancestor_ids = set()
+        a = current_node.parent
+        while a is not None:
+            ancestor_ids.add(a.id)
+            a = a.parent
+
+        preselect_row = -1
         for node in all_nodes:
             if node.id == current_node.id:
                 continue
-            if node.id in descendant_ids:
+            if node.id in descendant_ids or node.id in ancestor_ids:
                 continue
-                
-            item_text = f"{node.name} ({node.start_date} - {node.end_date})"
-            item = QListWidget() # Wait, wrong type for item
-            from PyQt6.QtWidgets import QListWidgetItem
-            item = QListWidgetItem(item_text)
+
+            path = self._ancestor_path(node)
+            label = f"{path}  ({node.start_date} → {node.end_date})"
+            if node.owner:
+                label += f"  [{node.owner}]"
+
+            item = QListWidgetItem(label)
             item.setData(Qt.ItemDataRole.UserRole, node.id)
-            
-            if current_node.predecessor_id == node.id:
-                item.setSelected(True)
-                
             self.list_widget.addItem(item)
-            
-        layout.addWidget(self.list_widget)
-        
-        # Clear Link Button
-        self.btn_clear = QPushButton("Clear Link")
+            if current_node.predecessor_id == node.id:
+                preselect_row = self.list_widget.count() - 1
+
+        if preselect_row >= 0:
+            self.list_widget.setCurrentRow(preselect_row)
+
+        # Double-click accepts.
+        self.list_widget.itemDoubleClicked.connect(lambda _i: self.on_accept())
+
+        btn_row = QHBoxLayout()
+        self.btn_clear = QPushButton("Clear Predecessor")
+        self.btn_clear.setToolTip("Remove any existing predecessor link on this task.")
         self.btn_clear.clicked.connect(self.on_clear)
-        layout.addWidget(self.btn_clear)
-        
+        btn_row.addWidget(self.btn_clear)
+        btn_row.addStretch()
+        layout.addLayout(btn_row)
+
         buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         buttons.accepted.connect(self.on_accept)
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
-        
+
+        self.search.setFocus()
+
+    @staticmethod
+    def _ancestor_path(node) -> str:
+        parts = [node.name]
+        p = node.parent
+        while p is not None:
+            parts.append(p.name)
+            p = p.parent
+        return " / ".join(reversed(parts))
+
+    def _apply_filter(self, text: str):
+        needle = text.lower().strip()
+        for i in range(self.list_widget.count()):
+            it = self.list_widget.item(i)
+            it.setHidden(bool(needle) and needle not in it.text().lower())
+
     def on_accept(self):
-        selected_items = self.list_widget.selectedItems()
-        if selected_items:
-            self.selected_node_id = selected_items[0].data(Qt.ItemDataRole.UserRole)
+        selected = self.list_widget.selectedItems()
+        if selected and not selected[0].isHidden():
+            self.selected_node_id = selected[0].data(Qt.ItemDataRole.UserRole)
         self.accept()
-        
+
     def on_clear(self):
-        self.selected_node_id = "" # Empty string means clear
+        self.selected_node_id = ""  # Empty string signals "remove link"
         self.accept()
