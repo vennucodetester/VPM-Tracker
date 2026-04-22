@@ -1,0 +1,6 @@
+If i set the radio button, then the "depends on" predecessor should go away. Right now i am not able to change the dates. 
+even when i put a manual date, there shouldn't be a predecessor or it should give a note but right now it shows dependency but its not dependent on predecessor
+The current date highlight doesn't show up all the time. 
+
+
+
