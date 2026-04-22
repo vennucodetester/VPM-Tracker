@@ -16,7 +16,19 @@ class DateDelegate(QStyledItemDelegate):
         editor = QDateEdit(parent)
         editor.setCalendarPopup(True)
         editor.setDisplayFormat("yyyy-MM-dd")
-        
+
+        # Explicitly highlight today in the calendar popup. Qt's default
+        # outline can get swallowed by dark-theme stylesheets, so we set a
+        # bold, accent-colored text format on today's cell.
+        from PyQt6.QtGui import QTextCharFormat, QColor, QFont
+        cal = editor.calendarWidget()
+        if cal is not None:
+            fmt = QTextCharFormat()
+            fmt.setFontWeight(QFont.Weight.Bold)
+            fmt.setForeground(QColor("#FFD54F"))  # amber — pops on dark + light
+            fmt.setBackground(QColor(255, 213, 79, 60))  # subtle amber tint
+            cal.setDateTextFormat(QDate.currentDate(), fmt)
+
         # Auto-open calendar popup
         def open_popup():
             from PyQt6.QtWidgets import QToolButton
@@ -24,7 +36,7 @@ class DateDelegate(QStyledItemDelegate):
                 if isinstance(child, QToolButton):
                     child.animateClick()
                     return
-        
+
         QTimer.singleShot(100, open_popup)
         return editor
 
@@ -489,6 +501,19 @@ class TreeGridView(QTreeWidget):
 
         super().mousePressEvent(event)
 
+    def mouseDoubleClickEvent(self, event):
+        """Double-click on the Depends On column jumps to the predecessor
+        (explicit link or the implicit '↑ prev sibling') instead of opening
+        an editor. Every other column behaves normally.
+        """
+        item = self.itemAt(event.position().toPoint())
+        if isinstance(item, TaskTreeWidgetItem):
+            col = self.columnAt(int(event.position().x()))
+            if col == Columns.PREDECESSOR:
+                self.jump_to_predecessor(item)
+                return
+        super().mouseDoubleClickEvent(event)
+
     def dropEvent(self, event):
         # Get the item being moved
         source_item = self.currentItem()
@@ -768,16 +793,57 @@ class TreeGridView(QTreeWidget):
         super().editItem(item, column)
 
     def jump_to_predecessor(self, item: TaskTreeWidgetItem):
-        """Select and scroll to the task this item depends on."""
+        """Select, expand ancestors of, scroll to, and briefly flash the
+        task this item depends on. Handles both explicit predecessor_id
+        links and the implicit previous-sibling default shown in
+        'Depends On'.
+        """
+        target_node = None
         pred_id = item.node.predecessor_id
-        if not pred_id:
+        if pred_id:
+            t = self._find_item_by_id(pred_id)
+            if t is not None:
+                target_node = t
+        if target_node is None:
+            # Fall back to the implicit predecessor (the '↑ Name' entry)
+            implicit = item._implicit_predecessor()
+            if implicit is not None:
+                target_node = self._find_item_by_id(implicit.id)
+        if target_node is None:
             return
-        target_item = self._find_item_by_id(pred_id)
-        if target_item:
-            self.clearSelection()
-            target_item.setSelected(True)
-            self.setCurrentItem(target_item)
-            self.scrollToItem(target_item, QAbstractItemView.ScrollHint.PositionAtCenter)
+
+        # Expand every ancestor so the target row is visible.
+        ancestor = target_node.parent()
+        while ancestor is not None:
+            ancestor.setExpanded(True)
+            ancestor = ancestor.parent()
+
+        self.clearSelection()
+        target_node.setSelected(True)
+        self.setCurrentItem(target_node)
+        self.scrollToItem(target_node, QAbstractItemView.ScrollHint.PositionAtCenter)
+        self._flash_item(target_node)
+
+    def _flash_item(self, item: 'TaskTreeWidgetItem'):
+        """Briefly highlight a row with an amber background, then revert."""
+        from PyQt6.QtGui import QColor
+        flash_color = QBrush(QColor(255, 213, 79, 140))  # amber overlay
+        original = [item.background(col) for col in range(Columns.COUNT)]
+        self.blockSignals(True)
+        for col in range(Columns.COUNT):
+            item.setBackground(col, flash_color)
+        self.blockSignals(False)
+
+        def revert():
+            self.blockSignals(True)
+            try:
+                for col in range(Columns.COUNT):
+                    item.setBackground(col, original[col])
+            except RuntimeError:
+                pass  # item was removed before timer fired
+            self.blockSignals(False)
+
+        QTimer.singleShot(1400, revert)
 
     def _find_item_by_id(self, node_id: str):
         iterator = QTreeWidgetItemIterator(self)
@@ -865,13 +931,49 @@ class TreeGridView(QTreeWidget):
                     self.item_changed_signal.emit(item.node)
             self.update_filter_options()
 
+    def _start_is_auto(self, node: TaskNode) -> bool:
+        """True when the scheduler owns this task's start date, i.e. start
+        is not user-editable. Mirrors the rules in utils.scheduler.
+
+        Auto when:
+          - predecessor_id is set, OR
+          - is_parallel is False AND (node has a parent, OR node is a
+            non-first root — roots are siblings of each other).
+        The only manual starts are the first root task and any task with
+        is_parallel=True.
+        """
+        if node.predecessor_id:
+            return True
+        if node.is_parallel:
+            return False
+        if node.parent is not None:
+            return True
+        # Root task: only the first root is manual.
+        if self.root_nodes and node is self.root_nodes[0]:
+            return False
+        return True
+
     def _apply_predecessor_change(self, node: TaskNode, new_pred_id):
         """Single point of mutation for predecessor links.
 
         Funneling every path (inline click, context menu clear, advanced dialog)
         through here guarantees the Depends On column repaints immediately —
         the refresh step was missing on the earlier per-path call sites.
+
+        Conflict guard: parallel mode and a predecessor link are mutually
+        exclusive. Setting a predecessor while is_parallel=True is blocked.
+        Clearing (new_pred_id=None) is always allowed.
         """
+        if new_pred_id and node.is_parallel:
+            QMessageBox.warning(
+                self, "Conflicting settings",
+                f"'{node.name}' is set to run in parallel with its parent.\n\n"
+                "Disable parallel mode first before linking a predecessor."
+            )
+            # Cancel link — exit linking mode without changing anything.
+            self._cancel_linking_mode()
+            return
+
         node.predecessor_id = new_pred_id if new_pred_id else None
         self.recalculate_all_dates()
         self.refresh_entire_tree()
@@ -908,68 +1010,9 @@ class TreeGridView(QTreeWidget):
         return {n.id: n for n in self.get_all_nodes_flat()}
 
     def recalculate_all_dates(self):
-        """
-        Single-pass, bottom-up recalculation.
-
-        Order per subtree (post-order):
-          1. If node has a predecessor_id that's already been resolved, anchor start from it.
-          2. Otherwise, if node has a previous sibling, anchor start from that sibling's end.
-          3. Recurse into children.
-          4. Rollup dates from children (is_rollup=True so we don't re-cascade).
-          5. Refresh status and owner.
-
-        A single `visited` set is threaded through to block recursion cycles from the
-        scheduler cascade (see task_node.set_date).
-        """
-        node_map = self._get_node_map()
-        visited: set = set()
-        resolved: set = set()  # Ids whose start has been established in this pass
-
-        def walk(node):
-            # 1. Anchor start: manual predecessor wins over sibling chain
-            if node.predecessor_id and node.predecessor_id in node_map:
-                pred = node_map[node.predecessor_id]
-                if pred.id in resolved or pred.id not in node_map:
-                    node.update_from_predecessor(pred)
-            elif node.parent:
-                siblings = node.parent.children
-                try:
-                    idx = siblings.index(node)
-                    if idx > 0 and not node.predecessor_id:
-                        node.update_from_previous_sibling(siblings[idx - 1])
-                except ValueError:
-                    pass
-
-            # 2. Recurse
-            for child in node.children:
-                walk(child)
-
-            # 3. Rollup (post-order), status, owner
-            node.update_dates_from_children(visited=visited)
-            node.update_status_from_dates()
-            node.update_owner_from_children()
-            resolved.add(node.id)
-
-        # Iterate roots in order; predecessors pointing backwards will be resolved naturally.
-        # For predecessors that point forward (target appears later in tree), we do a second
-        # lightweight pass just for those links.
-        for root in self.root_nodes:
-            walk(root)
-
-        # Forward-pointing predecessor fixup: any node whose pred was resolved AFTER we
-        # visited it still needs to be anchored. Re-apply those links once.
-        for n in node_map.values():
-            if n.predecessor_id and n.predecessor_id in node_map:
-                n.update_from_predecessor(node_map[n.predecessor_id])
-
-        # Final rollup sweep so parents reflect any shifts from the fixup pass.
-        for root in self.root_nodes:
-            self._rollup_only(root, visited)
-
-    def _rollup_only(self, node, visited: set):
-        for child in node.children:
-            self._rollup_only(child, visited)
-        node.update_dates_from_children(visited=visited)
+        """Delegate to the shared scheduler (see utils.scheduler)."""
+        from utils.scheduler import schedule
+        schedule(self.root_nodes)
 
     def add_child_task(self, parent_item: QTreeWidgetItem = None):
         # If no parent selected, add to root
@@ -1033,18 +1076,56 @@ class TreeGridView(QTreeWidget):
             # Block signals to prevent recursion when we update the item programmatically
             self.blockSignals(True)
             
-            if column == Columns.TREE: 
+            if column == Columns.TREE:
                 # Check if checkState changed
                 new_state = item.checkState(Columns.TREE) == Qt.CheckState.Checked
                 if node.is_parallel != new_state:
-                    node.is_parallel = new_state
-                    # Trigger full recalc
-                    self.recalculate_all_dates()
-                
+                    # Conflict guard: parallel and predecessor are mutually exclusive.
+                    if new_state and node.predecessor_id:
+                        QMessageBox.warning(
+                            self, "Conflicting settings",
+                            f"'{node.name}' already has a predecessor link.\n\n"
+                            "Remove the predecessor link first before enabling "
+                            "parallel mode."
+                        )
+                        # Revert the checkbox — do NOT update node.is_parallel.
+                        item.setCheckState(
+                            Columns.TREE,
+                            Qt.CheckState.Unchecked if not node.is_parallel
+                            else Qt.CheckState.Checked
+                        )
+                    else:
+                        node.is_parallel = new_state
+                        self.recalculate_all_dates()
+
+                name_changed = node.name != text
                 node.name = text
-            elif column == Columns.START: 
+                # If the name changed, refresh every row so any task that
+                # points to this one via predecessor_id (Depends On column)
+                # picks up the new label. _predecessor_label resolves by id.
+                if name_changed:
+                    self.refresh_entire_tree()
+            elif column == Columns.START:
                 # Smart Date Change Logic
                 if self.is_updating: return
+
+                # Block manual start edits whenever the scheduler owns the
+                # start. Only the first root task and any is_parallel=ON task
+                # are manually editable. See _start_is_auto for the rules.
+                if self._start_is_auto(node):
+                    if node.predecessor_id:
+                        msg = ("This task has a predecessor. Remove the "
+                               "predecessor link before editing its Start "
+                               "date manually.")
+                    else:
+                        msg = ("This task's start date is set automatically "
+                               "from its parent or previous sibling. Enable "
+                               "the parallel toggle on this task to edit "
+                               "its start date manually.")
+                    QMessageBox.warning(self, "Start date is automatic", msg)
+                    item.setText(Columns.START, node.start_date or "")
+                    self.blockSignals(False)
+                    return
                 
                 # 1. Simulate Impact
                 impacts = node.simulate_date_change(text)
@@ -1076,9 +1157,12 @@ class TreeGridView(QTreeWidget):
                                     dur = WorkdayCalculator.calculate_duration(old_start, old_end)
                                     new_end = WorkdayCalculator.add_workdays(text, dur)
                                     node.end_date = new_end
-                                    
+
                             node.update_status_from_dates()
                             self.is_updating = False
+                            # Re-run scheduler so explicit-predecessor successors still resolve
+                            # (the "gap" only suppresses the sibling-chain ripple, not explicit links).
+                            self.recalculate_all_dates()
                             self.refresh_entire_tree()
                     else:
                         # Cancel: Revert text
@@ -1090,10 +1174,14 @@ class TreeGridView(QTreeWidget):
                     self.validate_child_dates(item) 
                     self.refresh_entire_tree()
                     
-            elif column == Columns.END:  
+            elif column == Columns.END:
+                # End date is always editable — it controls duration, not the
+                # start anchor. Predecessor links only own the start.
                 node.set_date('end', text)
-                self.validate_child_dates(item) 
-                # Full refresh needed for cascades
+                self.validate_child_dates(item)
+                # BUG FIX: must re-run the scheduler so predecessor_id successors
+                # pick up the new end date. refresh_entire_tree() alone only repaints.
+                self.recalculate_all_dates()
                 self.refresh_entire_tree()
             elif column == Columns.STATUS: 
                 node.set_status(text)
@@ -1119,7 +1207,10 @@ class TreeGridView(QTreeWidget):
                 try:
                     days = int(text)
                     node.set_duration(days)
-                    # Refresh tree because end date changed
+                    # BUG FIX: duration change shifts end_date, which must
+                    # ripple through predecessor_id successors. refresh alone
+                    # only repaints — we also need to re-run the scheduler.
+                    self.recalculate_all_dates()
                     self.refresh_entire_tree()
                 except ValueError:
                     pass # Ignore invalid input
