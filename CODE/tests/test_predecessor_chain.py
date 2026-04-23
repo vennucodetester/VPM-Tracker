@@ -231,31 +231,57 @@ def test_is_parallel_on_later_child_snaps_to_parent():
 
 
 def test_dates_locked_keeps_manual():
-    """dates_locked=True -> scheduler never touches that task; start/end preserved
-    even when the upstream anchor shifts."""
+    """dates_locked=True -> start is frozen; end rolls up from children.
+
+    Specifically:
+    - The locked node's start_date must never be overwritten by the scheduler.
+    - Leaf locked node: end_date stays hand-typed (no children to roll up from).
+    - Parent locked node WITH children: end_date = max(children.end_date).
+    """
     p = TaskNode("P")
     p.start_date, p.end_date = "2026-01-05", "2026-01-30"
     a = TaskNode("A", parent=p)
     a.start_date, a.end_date = "2026-01-05", "2026-01-09"
     p.add_child(a)
+
+    # Leaf locked task — both dates hand-typed, no children.
     b = TaskNode("B", parent=p)
-    b.start_date, b.end_date = "2026-01-19", "2026-01-23"  # hand-typed manual date
+    b.start_date, b.end_date = "2026-01-19", "2026-01-23"
     b.dates_locked = True
     p.add_child(b)
 
     schedule([p])
     assert b.start_date == "2026-01-19", (
-        f"dates_locked B.start should stay at 2026-01-19; got {b.start_date}"
+        f"Leaf locked B.start should stay 2026-01-19; got {b.start_date}"
     )
     assert b.end_date == "2026-01-23", (
-        f"dates_locked B.end should stay at 2026-01-23; got {b.end_date}"
+        f"Leaf locked B.end should stay 2026-01-23; got {b.end_date}"
     )
 
-    # Shift A's end — B must still stay frozen.
+    # Shift A's end — B's start must still stay frozen.
     a.set_date("end", "2026-01-23")
     schedule([p])
     assert b.start_date == "2026-01-19", (
         f"After upstream shift, locked B.start should still be 2026-01-19; got {b.start_date}"
+    )
+
+    # Parent locked task WITH children: start frozen, end = max(children.end).
+    parent_locked = TaskNode("PL")
+    parent_locked.start_date, parent_locked.end_date = "2026-02-02", "2026-02-06"
+    parent_locked.dates_locked = True
+    c1 = TaskNode("C1", parent=parent_locked)
+    c1.start_date, c1.end_date = "2026-02-02", "2026-02-06"
+    parent_locked.add_child(c1)
+    c2 = TaskNode("C2", parent=parent_locked)
+    c2.start_date, c2.end_date = "2026-02-09", "2026-02-20"
+    parent_locked.add_child(c2)
+
+    schedule([parent_locked])
+    assert parent_locked.start_date == "2026-02-02", (
+        f"Locked parent start must stay 2026-02-02; got {parent_locked.start_date}"
+    )
+    assert parent_locked.end_date == "2026-02-20", (
+        f"Locked parent end must roll up to max child end 2026-02-20; got {parent_locked.end_date}"
     )
 
 

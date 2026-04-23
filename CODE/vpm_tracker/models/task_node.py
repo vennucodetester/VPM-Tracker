@@ -96,8 +96,10 @@ class TaskNode:
         is_rollup=True - called from update_dates_from_children; skip cascade to avoid loops
         visited      - set of node ids already touched in this cascade (recursion guard)
         """
-        # F1: honor dates_locked on every write path
-        if self.dates_locked and not force:
+        # F1: honor dates_locked — but only for the start date.
+        # The end date is always auto-rolled-up from children (max of children's
+        # end dates), so we must let end-date writes through even when locked.
+        if self.dates_locked and not force and date_type == 'start':
             return
 
         changed = False
