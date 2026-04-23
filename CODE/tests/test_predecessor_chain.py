@@ -121,23 +121,22 @@ def test_parent_rollup_with_chain():
     assert p.end_date >= a.end_date, f"P.end={p.end_date} < A.end={a.end_date}"
 
 
-def test_is_parallel_on_means_manual():
-    """is_parallel=ON -> user owns the start; scheduler does NOT touch it."""
+def test_is_parallel_on_snaps_to_parent():
+    """is_parallel=ON -> start always snaps to parent.start_date."""
     p = TaskNode("P")
     p.start_date, p.end_date = "2026-01-05", "2026-01-16"
     a = TaskNode("A", parent=p)
     a.start_date, a.end_date = "2026-01-05", "2026-01-09"
     p.add_child(a)
     b = TaskNode("B", parent=p)
-    b.start_date, b.end_date = "2026-01-14", "2026-01-16"  # user-set manual date
+    b.start_date, b.end_date = "2026-01-14", "2026-01-16"  # stale
     b.is_parallel = True
     p.add_child(b)
 
-    original_start = b.start_date
     schedule([p])
-    assert b.start_date == original_start, (
-        f"is_parallel=ON should leave start alone; got {b.start_date} "
-        f"expected {original_start}"
+    assert b.start_date == p.start_date, (
+        f"is_parallel=ON should snap B.start to parent.start={p.start_date}; "
+        f"got {b.start_date}"
     )
 
 
@@ -191,7 +190,8 @@ def test_second_root_chains_from_first():
 
 
 def test_second_root_is_parallel_on_is_manual():
-    """2nd root with is_parallel=ON -> start is left alone."""
+    """2nd root with is_parallel=ON -> radio has no effect at root level;
+    root still chains from prev root (no parent to snap to)."""
     r1 = TaskNode("R1")
     r1.start_date, r1.end_date = "2026-01-05", "2026-01-09"
     r2 = TaskNode("R2")
@@ -199,8 +199,63 @@ def test_second_root_is_parallel_on_is_manual():
     r2.is_parallel = True
 
     schedule([r1, r2])
-    assert r2.start_date == "2026-03-01", (
-        f"2nd root with parallel ON should stay at 2026-03-01, got {r2.start_date}"
+    # Roots have no parent, so is_parallel snap-to-parent does not apply.
+    # The root chaining rule (prev_root.end + 1) still fires for 2nd+ roots.
+    expected = WC.get_next_workday(r1.end_date)
+    assert r2.start_date == expected, (
+        f"2nd root R2.start={r2.start_date} expected {expected} "
+        f"(root chaining applies; is_parallel irrelevant at root level)"
+    )
+
+
+def test_is_parallel_on_later_child_snaps_to_parent():
+    """is_parallel=ON on a later (non-first) child -> still snaps to parent.start,
+    NOT to prev_sibling.end + 1."""
+    p = TaskNode("P")
+    p.start_date, p.end_date = "2026-01-05", "2026-01-30"
+    a = TaskNode("A", parent=p)
+    a.start_date, a.end_date = "2026-01-05", "2026-01-09"
+    p.add_child(a)
+    b = TaskNode("B", parent=p)
+    b.start_date, b.end_date = "2026-01-12", "2026-01-16"
+    p.add_child(b)
+    c = TaskNode("C", parent=p)
+    c.start_date, c.end_date = "2026-01-20", "2026-01-23"  # stale
+    c.is_parallel = True  # Radio ON: should snap to parent.start
+    p.add_child(c)
+
+    schedule([p])
+    assert c.start_date == p.start_date, (
+        f"Radio ON later child C.start={c.start_date} expected parent.start={p.start_date}"
+    )
+
+
+def test_dates_locked_keeps_manual():
+    """dates_locked=True -> scheduler never touches that task; start/end preserved
+    even when the upstream anchor shifts."""
+    p = TaskNode("P")
+    p.start_date, p.end_date = "2026-01-05", "2026-01-30"
+    a = TaskNode("A", parent=p)
+    a.start_date, a.end_date = "2026-01-05", "2026-01-09"
+    p.add_child(a)
+    b = TaskNode("B", parent=p)
+    b.start_date, b.end_date = "2026-01-19", "2026-01-23"  # hand-typed manual date
+    b.dates_locked = True
+    p.add_child(b)
+
+    schedule([p])
+    assert b.start_date == "2026-01-19", (
+        f"dates_locked B.start should stay at 2026-01-19; got {b.start_date}"
+    )
+    assert b.end_date == "2026-01-23", (
+        f"dates_locked B.end should stay at 2026-01-23; got {b.end_date}"
+    )
+
+    # Shift A's end — B must still stay frozen.
+    a.set_date("end", "2026-01-23")
+    schedule([p])
+    assert b.start_date == "2026-01-19", (
+        f"After upstream shift, locked B.start should still be 2026-01-19; got {b.start_date}"
     )
 
 
@@ -234,11 +289,13 @@ if __name__ == "__main__":
         test_edit_a_start_ripples,
         test_forward_pointing_link_order,
         test_parent_rollup_with_chain,
-        test_is_parallel_on_means_manual,
+        test_is_parallel_on_snaps_to_parent,
         test_is_parallel_off_later_child_chains,
         test_first_child_snaps_to_parent,
         test_second_root_chains_from_first,
         test_second_root_is_parallel_on_is_manual,
+        test_is_parallel_on_later_child_snaps_to_parent,
+        test_dates_locked_keeps_manual,
         test_parallel_and_predecessor_not_both,
     ]
     failures = 0

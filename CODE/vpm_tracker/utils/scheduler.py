@@ -49,15 +49,19 @@ def schedule(root_nodes: List[TaskNode]):
             if pred.id in resolved:
                 node.update_from_predecessor(pred)
         elif node.parent:
-            siblings = node.parent.children
-            try:
-                idx = siblings.index(node)
-                if idx == 0:
-                    node.update_first_child_from_parent(node.parent)
-                else:
-                    node.update_from_previous_sibling(siblings[idx - 1])
-            except ValueError:
-                pass
+            if node.is_parallel:
+                # Radio ON: always snap to parent.start regardless of position
+                node.update_first_child_from_parent(node.parent)
+            else:
+                siblings = node.parent.children
+                try:
+                    idx = siblings.index(node)
+                    if idx == 0:
+                        node.update_first_child_from_parent(node.parent)
+                    else:
+                        node.update_from_previous_sibling(siblings[idx - 1])
+                except ValueError:
+                    pass
 
         for child in node.children:
             walk(child)

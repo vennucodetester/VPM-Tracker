@@ -154,11 +154,12 @@ class TaskNode:
         if not prev_sibling.end_date:
             return
 
-        # is_parallel ON = user owns this task's start date manually;
-        # scheduler leaves it alone. OFF = auto-chain to prev sibling's end.
-        if self.is_parallel:
-            return
-        new_start = WorkdayCalculator.get_next_workday(prev_sibling.end_date)
+        # is_parallel ON = snap to parent.start_date (parallel with parent);
+        # OFF = auto-chain to prev sibling's end + 1 workday.
+        if self.is_parallel and self.parent and self.parent.start_date:
+            new_start = self.parent.start_date
+        else:
+            new_start = WorkdayCalculator.get_next_workday(prev_sibling.end_date)
 
         if new_start != self.start_date:
             duration = 1
@@ -171,7 +172,7 @@ class TaskNode:
     def update_first_child_from_parent(self, parent: 'TaskNode'):
         """First child with is_parallel=OFF anchors to parent.start_date.
         Duration is preserved; end shifts to match."""
-        if self.predecessor_id or self.dates_locked or self.is_parallel:
+        if self.predecessor_id or self.dates_locked:
             return
         if not parent.start_date:
             return

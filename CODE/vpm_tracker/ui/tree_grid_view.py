@@ -738,7 +738,7 @@ class TreeGridView(QTreeWidget):
             menu.addSeparator()
             
             # Date Locking
-            lock_action = QAction("Unlock Dates" if item.node.dates_locked else "Lock Dates", self)
+            lock_action = QAction("Unset Manual Date" if item.node.dates_locked else "Set Manual Date", self)
             lock_action.triggered.connect(lambda: self.toggle_date_lock(item))
             menu.addAction(lock_action)
             
@@ -781,13 +781,15 @@ class TreeGridView(QTreeWidget):
             super().editItem(item, column)
             return
 
-        # Date Locking Check
-        if column in (Columns.START, Columns.END) and item.node.dates_locked:
-            return # Do not allow editing
-
         # Predecessor column: enter inline linking mode. No free-text edit, no popup.
         if column == Columns.PREDECESSOR:
             self.start_linking_mode(item)
+            return
+
+        # Block auto-scheduled start dates. _start_is_auto returns False when
+        # dates_locked=True, so "Set Manual Date" tasks bypass this block and
+        # become editable. END is never blocked — it always controls duration.
+        if column == Columns.START and self._start_is_auto(item.node):
             return
 
         super().editItem(item, column)
@@ -935,17 +937,18 @@ class TreeGridView(QTreeWidget):
         """True when the scheduler owns this task's start date, i.e. start
         is not user-editable. Mirrors the rules in utils.scheduler.
 
-        Auto when:
+        Manual (returns False) when:
+          - dates_locked=True  → "Set Manual Date" escape hatch, user owns it.
+          - first root task    → schedule anchor, always user-typed.
+        Auto (returns True) when:
           - predecessor_id is set, OR
-          - is_parallel is False AND (node has a parent, OR node is a
-            non-first root — roots are siblings of each other).
-        The only manual starts are the first root task and any task with
-        is_parallel=True.
+          - node has a parent (all children are auto — radio ON snaps to
+            parent.start, radio OFF chains from prev sibling).
         """
+        if node.dates_locked:
+            return False   # manual mode — user owns the start
         if node.predecessor_id:
             return True
-        if node.is_parallel:
-            return False
         if node.parent is not None:
             return True
         # Root task: only the first root is manual.
@@ -1114,14 +1117,13 @@ class TreeGridView(QTreeWidget):
                 # are manually editable. See _start_is_auto for the rules.
                 if self._start_is_auto(node):
                     if node.predecessor_id:
-                        msg = ("This task has a predecessor. Remove the "
-                               "predecessor link before editing its Start "
+                        msg = ("This task has a predecessor link. Remove the "
+                               "predecessor first before editing its Start "
                                "date manually.")
                     else:
-                        msg = ("This task's start date is set automatically "
-                               "from its parent or previous sibling. Enable "
-                               "the parallel toggle on this task to edit "
-                               "its start date manually.")
+                        msg = ("This task's start date is auto-scheduled.\n\n"
+                               "To type a date manually, right-click the task "
+                               "and choose 'Set Manual Date'.")
                     QMessageBox.warning(self, "Start date is automatic", msg)
                     item.setText(Columns.START, node.start_date or "")
                     self.blockSignals(False)
