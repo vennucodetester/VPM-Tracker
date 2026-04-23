@@ -251,17 +251,24 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
         for col in range(Columns.COUNT):
             self.setForeground(col, QBrush(status_color))
 
-        # Implicit predecessor label rendered in gray so it reads as a default, not a user choice.
-        if self._predecessor_is_implicit():
+        # Predecessor label colouring:
+        #   explicit link  → white (user choice — already set above)
+        #   manual date    → amber (stands out; user opted in deliberately)
+        #   auto (∥ or ↑)  → gray (scheduler-managed, not a user decision)
+        if self.node.dates_locked:
+            self.setForeground(Columns.PREDECESSOR, QBrush(QColor("#FFD54F")))  # amber
+        elif self._predecessor_is_implicit():
             self.setForeground(Columns.PREDECESSOR, QBrush(Colors.GRAY))
 
     def _predecessor_label(self) -> str:
         """Render 'Depends On' cell.
 
-        '⇦ Name' — explicit predecessor link set by the user.
-        '↑ Name' — implicit default: the previous sibling, which the scheduler
-                   uses automatically when no explicit predecessor is set.
-        ''      — no link and no prior sibling.
+        '⇦ Name'        — explicit predecessor link set by the user.
+        '📌 Manual date' — start/end typed by hand (dates_locked=True).
+        '∥ Parent name'  — Radio ON: task runs in parallel with its parent
+                           (start = parent.start always).
+        '↑ Name'         — Radio OFF: auto-chain from previous sibling.
+        ''               — first child or root with no link.
         """
         if self.node.predecessor_id:
             tree = self.treeWidget()
@@ -269,6 +276,12 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
             if tree is not None and hasattr(tree, 'resolve_node_name'):
                 name = tree.resolve_node_name(self.node.predecessor_id)
             return f"⇦ {name}" if name else "⇦ (missing)"
+
+        if self.node.dates_locked:
+            return "📌 Manual date"
+
+        if self.node.is_parallel and self.node.parent:
+            return f"∥ {self.node.parent.name}"
 
         prev = self._implicit_predecessor()
         if prev is not None:
@@ -289,37 +302,32 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
         return parent.children[idx - 1]
 
     def _predecessor_is_implicit(self) -> bool:
-        return (not self.node.predecessor_id) and (self._implicit_predecessor() is not None)
+        """True for auto-generated labels (gray); False for user-chosen labels (white)."""
+        if self.node.predecessor_id:
+            return False   # explicit link — user choice, show white
+        if self.node.dates_locked:
+            return False   # manual date — show in amber below
+        return True        # parallel-snap or sibling-chain — auto, show gray
 
     def check_is_overdue(self, node: TaskNode) -> bool:
-        # Recursive check: Overdue if self is overdue OR any child is overdue
-        
-        # 1. Check Self
-        self_overdue = False
+        """Red only when end date is in the past and task is not Completed.
+        (Schedule conflicts with a locked parent are NOT overdue — they are
+        shown via validate_child_dates dialogs instead.)
+        """
+        # 1. Check Self: past end date and not complete
         if node.status != "Completed" and node.end_date:
             try:
                 end_dt = datetime.strptime(node.end_date, "%Y-%m-%d")
                 if end_dt.date() < datetime.now().date():
-                    self_overdue = True
-            except ValueError: pass
-            
-        if self_overdue:
-            return True
-            
-        # 2. Check Parent Boundary (If Parent Locked)
-        if node.parent and node.parent.dates_locked and node.end_date and node.parent.end_date:
-            try:
-                c_end = datetime.strptime(node.end_date, "%Y-%m-%d")
-                p_end = datetime.strptime(node.parent.end_date, "%Y-%m-%d")
-                if c_end > p_end:
                     return True
-            except ValueError: pass
+            except ValueError:
+                pass
 
-        # 3. Check Children (Recursive)
+        # 2. Check Children (Recursive) — parent turns red if any child is overdue
         for child in node.children:
             if self.check_is_overdue(child):
                 return True
-                
+
         return False
 
 class TreeGridView(QTreeWidget):
