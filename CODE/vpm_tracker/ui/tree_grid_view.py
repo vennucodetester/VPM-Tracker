@@ -1137,43 +1137,56 @@ class TreeGridView(QTreeWidget):
                     dialog = ImpactDialog(impacts, self)
                     if dialog.exec():
                         if dialog.result_action == "update_all":
-                            # Standard Ripple
-                            node.set_date('start', text)
+                            # Standard Ripple: set this node's start, then
+                            # re-run the scheduler so children (Radio ON →
+                            # snap to parent.start; Radio OFF → chain from
+                            # prev sibling) and downstream predecessors all
+                            # update in one pass.
+                            old_start = node.start_date
+                            old_end = node.end_date
+                            # Preserve duration while shifting start
+                            if old_start and old_end and text != old_start:
+                                dur = WorkdayCalculator.calculate_duration(old_start, old_end)
+                                node.start_date = text
+                                node.end_date = WorkdayCalculator.add_workdays(text, dur)
+                            else:
+                                node.start_date = text
                             node.update_status_from_dates()
-                            self.validate_child_dates(item) 
+                            self.recalculate_all_dates()
+                            self.validate_child_dates(item)
                             self.refresh_entire_tree()
                         elif dialog.result_action == "keep_others":
-                            # Gap Logic: Only update this node, do NOT cascade
-                            self.is_updating = True
-                            node.start_date = text
-                            # We still need to update end date to keep duration?
-                            # Or just set start? Usually duration is constant.
-                            # Let's recalculate end based on duration.
-                            if node.end_date:
-                                duration = WorkdayCalculator.calculate_duration(node.start_date, node.end_date) # Old duration? No, need old start.
-                                # Actually node.start_date is already new text? No, text is new.
-                                # Wait, node.start_date is OLD value here.
-                                old_start = node.start_date
-                                old_end = node.end_date
-                                if old_start and old_end:
-                                    dur = WorkdayCalculator.calculate_duration(old_start, old_end)
-                                    new_end = WorkdayCalculator.add_workdays(text, dur)
-                                    node.end_date = new_end
-
+                            # Gap: shift only this node, leave siblings alone.
+                            old_start = node.start_date
+                            old_end = node.end_date
+                            if old_start and old_end:
+                                dur = WorkdayCalculator.calculate_duration(old_start, old_end)
+                                node.start_date = text
+                                node.end_date = WorkdayCalculator.add_workdays(text, dur)
+                            else:
+                                node.start_date = text
                             node.update_status_from_dates()
-                            self.is_updating = False
-                            # Re-run scheduler so explicit-predecessor successors still resolve
-                            # (the "gap" only suppresses the sibling-chain ripple, not explicit links).
+                            # Re-run scheduler so explicit-predecessor successors
+                            # still resolve (gap suppresses sibling-chain ripple only).
                             self.recalculate_all_dates()
                             self.refresh_entire_tree()
                     else:
                         # Cancel: Revert text
                         item.setText(Columns.START, node.start_date)
                 else:
-                    # No impact, just update
-                    node.set_date('start', text)
+                    # No downstream impact — set date and re-run scheduler
+                    # so this node's own children move with it.
+                    old_start = node.start_date
+                    old_end = node.end_date
+                    if old_start and old_end and text != old_start:
+                        dur = WorkdayCalculator.calculate_duration(old_start, old_end)
+                        node.start_date = text
+                        node.end_date = WorkdayCalculator.add_workdays(text, dur)
+                    else:
+                        node.start_date = text
                     node.update_status_from_dates()
-                    self.validate_child_dates(item) 
+                    self.recalculate_all_dates()
+                    self.validate_child_dates(item)
                     self.refresh_entire_tree()
                     
             elif column == Columns.END:
