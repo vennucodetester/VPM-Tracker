@@ -27,7 +27,7 @@
           "id": "51c97a71-6419-4f65-add6-ad229939296f",
           "name": "Microblock 2.5",
           "start_date": "2026-04-17",
-          "end_date": "2026-09-04",
+          "end_date": "2026-09-03",
           "status": "In Progress",
           "owner": "",
           "notes": "",
@@ -46,9 +46,9 @@
                 {
                   "id": "8373060c-7016-49fd-8c10-83f87d556879",
                   "name": "Costing Estimate",
-                  "start_date": "2026-04-24",
+                  "start_date": "2026-04-17",
                   "end_date": "2026-04-28",
-                  "status": "Not Started",
+                  "status": "In Progress",
                   "owner": "",
                   "notes": "",
                   "is_parallel": true,
@@ -184,8 +184,8 @@
                     {
                       "id": "0123a9b8-9953-4fc1-8cb2-eabebddc6221",
                       "name": "CNC Routed",
-                      "start_date": "2026-04-20",
-                      "end_date": "2026-04-28",
+                      "start_date": "2026-04-17",
+                      "end_date": "2026-04-27",
                       "status": "In Progress",
                       "owner": "",
                       "notes": "",
@@ -264,8 +264,8 @@
             {
               "id": "e0df237c-38c6-4539-9bd4-f2dbace70e44",
               "name": "Building prototypes",
-              "start_date": "2026-04-29",
-              "end_date": "2026-05-05",
+              "start_date": "2026-04-28",
+              "end_date": "2026-05-04",
               "status": "Not Started",
               "owner": "",
               "notes": "",
@@ -274,8 +274,8 @@
                 {
                   "id": "3d38c693-357a-4b2b-9fa6-bf53cc61b8bb",
                   "name": "Cassette assembly - Qty 1",
-                  "start_date": "2026-04-29",
-                  "end_date": "2026-05-05",
+                  "start_date": "2026-04-28",
+                  "end_date": "2026-05-04",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -288,8 +288,8 @@
                 {
                   "id": "272af9f1-c2cd-43cb-9dc5-0e54e3c74c6d",
                   "name": "Use existing case ????",
-                  "start_date": "2026-04-29",
-                  "end_date": "2026-04-29",
+                  "start_date": "2026-04-28",
+                  "end_date": "2026-04-28",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -307,8 +307,8 @@
             {
               "id": "424fdaf4-cc02-490a-a780-7c8db6edd9b5",
               "name": "Lab Testing",
-              "start_date": "2026-05-06",
-              "end_date": "2026-05-26",
+              "start_date": "2026-05-05",
+              "end_date": "2026-05-25",
               "status": "Not Started",
               "owner": "",
               "notes": "",
@@ -317,8 +317,8 @@
                 {
                   "id": "ec29973e-3722-49b4-8202-034b098e650e",
                   "name": "Initial design Comparison",
-                  "start_date": "2026-05-06",
-                  "end_date": "2026-05-12",
+                  "start_date": "2026-05-05",
+                  "end_date": "2026-05-11",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -331,8 +331,8 @@
                 {
                   "id": "3e949aea-9a83-4a4c-bd68-1d07737360d0",
                   "name": "NSF",
-                  "start_date": "2026-05-13",
-                  "end_date": "2026-05-19",
+                  "start_date": "2026-05-12",
+                  "end_date": "2026-05-18",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -345,8 +345,8 @@
                 {
                   "id": "0f9e01ca-3967-461f-b46d-d0251d96468e",
                   "name": "DOE",
-                  "start_date": "2026-05-20",
-                  "end_date": "2026-05-26",
+                  "start_date": "2026-05-19",
+                  "end_date": "2026-05-25",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -364,8 +364,8 @@
             {
               "id": "19f57c22-1369-43ab-8769-13f24b24309f",
               "name": "Buy parts - Production prototypes",
-              "start_date": "2026-05-13",
-              "end_date": "2026-07-22",
+              "start_date": "2026-05-12",
+              "end_date": "2026-07-21",
               "status": "Not Started",
               "owner": "",
               "notes": "",
@@ -374,8 +374,8 @@
                 {
                   "id": "854a9d59-04a4-4544-b3af-c3167cb309bf",
                   "name": "Enclosure",
-                  "start_date": "2026-05-13",
-                  "end_date": "2026-07-22",
+                  "start_date": "2026-05-12",
+                  "end_date": "2026-07-21",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -384,8 +384,8 @@
                     {
                       "id": "53b8be76-59c0-4bf3-8f84-9271f452c79e",
                       "name": "PO",
-                      "start_date": "2026-05-13",
-                      "end_date": "2026-05-13",
+                      "start_date": "2026-05-12",
+                      "end_date": "2026-05-12",
                       "status": "Not Started",
                       "owner": "",
                       "notes": "",
@@ -398,8 +398,8 @@
                     {
                       "id": "7af978d3-61e4-41a4-b00c-7c3d1d48bee7",
                       "name": "Sample delivery",
-                      "start_date": "2026-05-14",
-                      "end_date": "2026-07-22",
+                      "start_date": "2026-05-13",
+                      "end_date": "2026-07-21",
                       "status": "Not Started",
                       "owner": "",
                       "notes": "",
@@ -417,8 +417,8 @@
                 {
                   "id": "2ee15941-34ed-4c6a-8f43-495ec350f38b",
                   "name": "Base",
-                  "start_date": "2026-05-13",
-                  "end_date": "2026-07-22",
+                  "start_date": "2026-05-12",
+                  "end_date": "2026-07-21",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -427,8 +427,8 @@
                     {
                       "id": "8edd5a58-387e-4243-b99a-180fdccdd467",
                       "name": "PO",
-                      "start_date": "2026-05-13",
-                      "end_date": "2026-05-13",
+                      "start_date": "2026-05-12",
+                      "end_date": "2026-05-12",
                       "status": "Not Started",
                       "owner": "",
                       "notes": "",
@@ -441,8 +441,8 @@
                     {
                       "id": "b0e193e5-60ed-481d-8268-64e1ab6ed4a8",
                       "name": "Sample delivery",
-                      "start_date": "2026-05-14",
-                      "end_date": "2026-07-22",
+                      "start_date": "2026-05-13",
+                      "end_date": "2026-07-21",
                       "status": "Not Started",
                       "owner": "",
                       "notes": "",
@@ -460,8 +460,8 @@
                 {
                   "id": "80448618-1e54-49d4-b9a4-bde5f78e4bda",
                   "name": "Electrical harness",
-                  "start_date": "2026-05-13",
-                  "end_date": "2026-06-23",
+                  "start_date": "2026-05-12",
+                  "end_date": "2026-06-22",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -479,8 +479,8 @@
             {
               "id": "9139decb-a49d-4822-b035-a3b68456a778",
               "name": "Lab testing - For production",
-              "start_date": "2026-07-23",
-              "end_date": "2026-09-04",
+              "start_date": "2026-07-22",
+              "end_date": "2026-09-03",
               "status": "Not Started",
               "owner": "",
               "notes": "",
@@ -489,8 +489,8 @@
                 {
                   "id": "dbb1edda-adf5-419f-935a-4adbb6cb5a0a",
                   "name": "UL",
-                  "start_date": "2026-07-23",
-                  "end_date": "2026-09-04",
+                  "start_date": "2026-07-22",
+                  "end_date": "2026-09-03",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -503,8 +503,8 @@
                 {
                   "id": "69a779b2-130d-4feb-816d-81f5b2fdcbe9",
                   "name": "DOE",
-                  "start_date": "2026-07-23",
-                  "end_date": "2026-08-05",
+                  "start_date": "2026-07-22",
+                  "end_date": "2026-08-04",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -517,8 +517,8 @@
                 {
                   "id": "9689da47-57a0-4255-9715-f178142ecbfd",
                   "name": "NSF",
-                  "start_date": "2026-08-06",
-                  "end_date": "2026-08-19",
+                  "start_date": "2026-08-05",
+                  "end_date": "2026-08-18",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -536,8 +536,8 @@
             {
               "id": "09fceb4c-f520-4cc1-87e1-525157dbe1be",
               "name": "TC release",
-              "start_date": "2026-05-14",
-              "end_date": "2026-06-05",
+              "start_date": "2026-05-13",
+              "end_date": "2026-06-04",
               "status": "Not Started",
               "owner": "",
               "notes": "",
@@ -546,8 +546,8 @@
                 {
                   "id": "edb74cd4-b05f-4f99-aa73-7cfd703d6cec",
                   "name": "ENG Drawings",
-                  "start_date": "2026-05-14",
-                  "end_date": "2026-05-27",
+                  "start_date": "2026-05-13",
+                  "end_date": "2026-05-26",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -560,8 +560,8 @@
                 {
                   "id": "d1d4c4fb-47d7-4e98-b5ed-d3f29d99bc56",
                   "name": "TC BOMs",
-                  "start_date": "2026-05-28",
-                  "end_date": "2026-06-03",
+                  "start_date": "2026-05-27",
+                  "end_date": "2026-06-02",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -574,8 +574,8 @@
                 {
                   "id": "82e1a6ff-cd32-4979-9c67-a4c0708a169b",
                   "name": "TC D1 complete",
-                  "start_date": "2026-06-04",
-                  "end_date": "2026-06-05",
+                  "start_date": "2026-06-03",
+                  "end_date": "2026-06-04",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -612,7 +612,7 @@
           "id": "9abe30ef-e863-4fac-b702-7ac625a51864",
           "name": "DG-5DR-LT",
           "start_date": "2026-04-22",
-          "end_date": "2026-07-15",
+          "end_date": "2026-07-29",
           "status": "In Progress",
           "owner": "",
           "notes": "",
@@ -620,9 +620,9 @@
           "children": [
             {
               "id": "3ebab26a-2220-405e-a38d-45a91279fe58",
-              "name": "Engineering work",
+              "name": "Engineering work -1",
               "start_date": "2026-04-22",
-              "end_date": "2026-07-10",
+              "end_date": "2026-06-30",
               "status": "In Progress",
               "owner": "",
               "notes": "",
@@ -655,9 +655,9 @@
                     {
                       "id": "5fbbb457-6d66-4af8-8ea9-5bc65dddfd82",
                       "name": "Slim handle",
-                      "start_date": "2026-04-23",
-                      "end_date": "2026-05-12",
-                      "status": "Not Started",
+                      "start_date": "2026-04-22",
+                      "end_date": "2026-05-11",
+                      "status": "In Progress",
                       "owner": "",
                       "notes": "",
                       "is_parallel": true,
@@ -826,20 +826,6 @@
                   "predecessor_id": null
                 },
                 {
-                  "id": "ebadf875-9609-4598-af0a-1c5032d3c8ad",
-                  "name": "Production drawings - Round 2. Testing changes",
-                  "start_date": "2026-06-08",
-                  "end_date": "2026-06-19",
-                  "status": "Not Started",
-                  "owner": "",
-                  "notes": "",
-                  "is_parallel": false,
-                  "children": [],
-                  "expanded": false,
-                  "dates_locked": false,
-                  "predecessor_id": "6d4e74dd-7cc3-4045-8e1c-c1bff743ad0d"
-                },
-                {
                   "id": "5654bef3-e468-48f2-bf98-8b74e1c2ffc3",
                   "name": "Order parts",
                   "start_date": "2026-04-22",
@@ -866,9 +852,9 @@
                     {
                       "id": "e09e879d-74ff-4b8e-92e2-1b8cf390fa51",
                       "name": "Case canopy delivery",
-                      "start_date": "2026-04-23",
-                      "end_date": "2026-05-20",
-                      "status": "Not Started",
+                      "start_date": "2026-04-22",
+                      "end_date": "2026-05-19",
+                      "status": "In Progress",
                       "owner": "",
                       "notes": "",
                       "is_parallel": true,
@@ -880,9 +866,9 @@
                     {
                       "id": "a2445bc4-1ef7-479b-a99b-f313f94063f4",
                       "name": "Cassettes delivery",
-                      "start_date": "2026-04-24",
-                      "end_date": "2026-05-15",
-                      "status": "Not Started",
+                      "start_date": "2026-04-22",
+                      "end_date": "2026-05-13",
+                      "status": "In Progress",
                       "owner": "",
                       "notes": "",
                       "is_parallel": true,
@@ -894,9 +880,9 @@
                     {
                       "id": "245dd7ef-dec8-488d-a967-a26e74261ac0",
                       "name": "Electrical plug and other parts",
-                      "start_date": "2026-04-24",
-                      "end_date": "2026-04-27",
-                      "status": "Not Started",
+                      "start_date": "2026-04-22",
+                      "end_date": "2026-04-23",
+                      "status": "In Progress",
                       "owner": "",
                       "notes": "",
                       "is_parallel": true,
@@ -906,7 +892,7 @@
                       "predecessor_id": null
                     }
                   ],
-                  "expanded": true,
+                  "expanded": false,
                   "dates_locked": false,
                   "predecessor_id": null
                 },
@@ -914,7 +900,7 @@
                   "id": "7efffd37-4c19-47a8-8625-401986b61e5e",
                   "name": "TC work",
                   "start_date": "2026-04-29",
-                  "end_date": "2026-07-03",
+                  "end_date": "2026-06-02",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -947,20 +933,6 @@
                       "expanded": false,
                       "dates_locked": false,
                       "predecessor_id": "4ba506f5-340b-4087-bd7f-638d928ab311"
-                    },
-                    {
-                      "id": "203c518e-39ec-4dce-aad3-7345ca323ce7",
-                      "name": "TC Round 2 release - If changes come from testing",
-                      "start_date": "2026-06-22",
-                      "end_date": "2026-07-03",
-                      "status": "Not Started",
-                      "owner": "",
-                      "notes": "",
-                      "is_parallel": false,
-                      "children": [],
-                      "expanded": true,
-                      "dates_locked": false,
-                      "predecessor_id": "ebadf875-9609-4598-af0a-1c5032d3c8ad"
                     }
                   ],
                   "expanded": true,
@@ -970,8 +942,8 @@
                 {
                   "id": "239d824b-72de-4055-8179-ef1a5fb1ba17",
                   "name": "HPC",
-                  "start_date": "2026-07-06",
-                  "end_date": "2026-07-10",
+                  "start_date": "2026-06-03",
+                  "end_date": "2026-06-09",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -979,7 +951,7 @@
                   "children": [],
                   "expanded": false,
                   "dates_locked": false,
-                  "predecessor_id": "7efffd37-4c19-47a8-8625-401986b61e5e"
+                  "predecessor_id": "19d5125c-6e8d-4eef-864b-67dadd092605"
                 }
               ],
               "expanded": true,
@@ -989,8 +961,8 @@
             {
               "id": "35d885bc-9a1b-42a9-b826-de7c7f837c70",
               "name": "Model shop work",
-              "start_date": "2026-05-21",
-              "end_date": "2026-07-01",
+              "start_date": "2026-05-20",
+              "end_date": "2026-07-07",
               "status": "Not Started",
               "owner": "",
               "notes": "",
@@ -999,8 +971,8 @@
                 {
                   "id": "e84e06a2-ce7d-474f-a591-39380420737e",
                   "name": "Convert MT canopy to LT",
-                  "start_date": "2026-05-21",
-                  "end_date": "2026-05-21",
+                  "start_date": "2026-05-20",
+                  "end_date": "2026-05-26",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -1014,7 +986,7 @@
                   "id": "891b596c-89aa-4e3a-ad4f-865f60cd22e8",
                   "name": "Modify DG case with new structure",
                   "start_date": "2026-07-01",
-                  "end_date": "2026-07-01",
+                  "end_date": "2026-07-07",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -1025,7 +997,7 @@
                   "predecessor_id": "f5bd3fa9-1fbb-4a5e-81a3-564c47bd3ec5"
                 }
               ],
-              "expanded": true,
+              "expanded": false,
               "dates_locked": false,
               "predecessor_id": null
             },
@@ -1033,7 +1005,7 @@
               "id": "34851afa-cb42-42fa-abdc-9b31382ca25e",
               "name": "Testing",
               "start_date": "2026-04-22",
-              "end_date": "2026-07-14",
+              "end_date": "2026-07-29",
               "status": "In Progress",
               "owner": "",
               "notes": "",
@@ -1084,9 +1056,9 @@
                 },
                 {
                   "id": "12f55052-9dc0-4d94-aba4-da59076e44aa",
-                  "name": "Lab testing",
+                  "name": "TESTING",
                   "start_date": "2026-04-22",
-                  "end_date": "2026-07-14",
+                  "end_date": "2026-07-29",
                   "status": "In Progress",
                   "owner": "",
                   "notes": "",
@@ -1095,8 +1067,8 @@
                     {
                       "id": "ffc1ecbf-574e-4102-b53b-626680087512",
                       "name": "Structural testing",
-                      "start_date": "2026-05-25",
-                      "end_date": "2026-06-10",
+                      "start_date": "2026-07-08",
+                      "end_date": "2026-07-29",
                       "status": "Not Started",
                       "owner": "",
                       "notes": "",
@@ -1104,9 +1076,23 @@
                       "children": [
                         {
                           "id": "90bbe3a1-c490-47ee-be33-185bdc05fd39",
-                          "name": "Attempt 1",
-                          "start_date": "2026-05-25",
-                          "end_date": "2026-05-27",
+                          "name": "Case load test - 1",
+                          "start_date": "2026-07-08",
+                          "end_date": "2026-07-10",
+                          "status": "Not Started",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": "891b596c-89aa-4e3a-ad4f-865f60cd22e8"
+                        },
+                        {
+                          "id": "bddd26a8-4fea-4771-822b-ad848a3be4e1",
+                          "name": "Case load test - 2",
+                          "start_date": "2026-07-13",
+                          "end_date": "2026-07-24",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -1117,10 +1103,10 @@
                           "predecessor_id": null
                         },
                         {
-                          "id": "bddd26a8-4fea-4771-822b-ad848a3be4e1",
-                          "name": "Attempt 2",
-                          "start_date": "2026-05-28",
-                          "end_date": "2026-06-10",
+                          "id": "fe15d5ec-0e4f-4916-86a9-d01cf718d1de",
+                          "name": "Transit test",
+                          "start_date": "2026-07-27",
+                          "end_date": "2026-07-29",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -1133,11 +1119,11 @@
                       ],
                       "expanded": false,
                       "dates_locked": false,
-                      "predecessor_id": "be6dfe5e-d5ea-4844-9fa2-748ac8a006cc"
+                      "predecessor_id": null
                     },
                     {
                       "id": "016f0bb1-ff5b-47ad-84a1-c02d2b751019",
-                      "name": "Performance",
+                      "name": "Performance Testing",
                       "start_date": "2026-04-22",
                       "end_date": "2026-07-14",
                       "status": "In Progress",
@@ -1148,8 +1134,8 @@
                         {
                           "id": "508a7255-0487-403c-b19b-e9cb9b340ba1",
                           "name": "5Dr LT",
-                          "start_date": "2026-05-25",
-                          "end_date": "2026-07-03",
+                          "start_date": "2026-05-27",
+                          "end_date": "2026-07-07",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -1158,8 +1144,8 @@
                             {
                               "id": "02c49b38-795f-4b0f-8eeb-a6cc6ed6b62d",
                               "name": "DOE",
-                              "start_date": "2026-05-25",
-                              "end_date": "2026-05-29",
+                              "start_date": "2026-05-27",
+                              "end_date": "2026-06-02",
                               "status": "Not Started",
                               "owner": "",
                               "notes": "",
@@ -1167,13 +1153,13 @@
                               "children": [],
                               "expanded": false,
                               "dates_locked": false,
-                              "predecessor_id": "be6dfe5e-d5ea-4844-9fa2-748ac8a006cc"
+                              "predecessor_id": "e84e06a2-ce7d-474f-a591-39380420737e"
                             },
                             {
                               "id": "6d4e74dd-7cc3-4045-8e1c-c1bff743ad0d",
                               "name": "NSF",
-                              "start_date": "2026-06-01",
-                              "end_date": "2026-06-05",
+                              "start_date": "2026-06-03",
+                              "end_date": "2026-06-09",
                               "status": "Not Started",
                               "owner": "",
                               "notes": "",
@@ -1186,8 +1172,8 @@
                             {
                               "id": "9a4a27af-c65e-4fa9-9a4c-57a6f1324eb4",
                               "name": "Target spec perf test",
-                              "start_date": "2026-06-08",
-                              "end_date": "2026-06-12",
+                              "start_date": "2026-06-10",
+                              "end_date": "2026-06-16",
                               "status": "Not Started",
                               "owner": "",
                               "notes": "",
@@ -1200,8 +1186,8 @@
                             {
                               "id": "2b24e772-d386-4d51-a38e-06d45900a5e5",
                               "name": "UL",
-                              "start_date": "2026-06-15",
-                              "end_date": "2026-07-03",
+                              "start_date": "2026-06-17",
+                              "end_date": "2026-07-07",
                               "status": "Not Started",
                               "owner": "",
                               "notes": "",
@@ -1212,7 +1198,7 @@
                               "predecessor_id": null
                             }
                           ],
-                          "expanded": false,
+                          "expanded": true,
                           "dates_locked": false,
                           "predecessor_id": "891b596c-89aa-4e3a-ad4f-865f60cd22e8"
                         },
@@ -1233,9 +1219,9 @@
                         {
                           "id": "d5c50fd9-9216-4859-b8ef-7a08b0ae0d93",
                           "name": "3Dr LT - Target spec",
-                          "start_date": "2026-04-23",
-                          "end_date": "2026-04-29",
-                          "status": "Not Started",
+                          "start_date": "2026-04-22",
+                          "end_date": "2026-04-28",
+                          "status": "In Progress",
                           "owner": "",
                           "notes": "",
                           "is_parallel": true,
@@ -1261,7 +1247,7 @@
                       ],
                       "expanded": true,
                       "dates_locked": false,
-                      "predecessor_id": "be6dfe5e-d5ea-4844-9fa2-748ac8a006cc"
+                      "predecessor_id": null
                     }
                   ],
                   "expanded": true,
@@ -1274,10 +1260,53 @@
               "predecessor_id": null
             },
             {
+              "id": "85fc4403-1ada-4ddd-afc4-362ce7a368e0",
+              "name": "Engineering work - 2 (Changes after testing)",
+              "start_date": "2026-06-10",
+              "end_date": "2026-06-30",
+              "status": "Not Started",
+              "owner": "",
+              "notes": "",
+              "is_parallel": false,
+              "children": [
+                {
+                  "id": "ebadf875-9609-4598-af0a-1c5032d3c8ad",
+                  "name": "Production drawings - Round 2. Testing changes",
+                  "start_date": "2026-06-10",
+                  "end_date": "2026-06-16",
+                  "status": "Not Started",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": false,
+                  "children": [],
+                  "expanded": false,
+                  "dates_locked": false,
+                  "predecessor_id": "6d4e74dd-7cc3-4045-8e1c-c1bff743ad0d"
+                },
+                {
+                  "id": "203c518e-39ec-4dce-aad3-7345ca323ce7",
+                  "name": "TC Round 2 release - If changes come from testing",
+                  "start_date": "2026-06-17",
+                  "end_date": "2026-06-30",
+                  "status": "Not Started",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": false,
+                  "children": [],
+                  "expanded": false,
+                  "dates_locked": false,
+                  "predecessor_id": "ebadf875-9609-4598-af0a-1c5032d3c8ad"
+                }
+              ],
+              "expanded": true,
+              "dates_locked": false,
+              "predecessor_id": null
+            },
+            {
               "id": "df47a0b4-a52e-4b6c-aa9b-86a761bc5743",
               "name": "Placing orders in HPC",
-              "start_date": "2026-07-15",
-              "end_date": "2026-07-15",
+              "start_date": "2026-07-01",
+              "end_date": "2026-07-01",
               "status": "Not Started",
               "owner": "",
               "notes": "",
@@ -1285,7 +1314,7 @@
               "children": [],
               "expanded": true,
               "dates_locked": false,
-              "predecessor_id": null
+              "predecessor_id": "203c518e-39ec-4dce-aad3-7345ca323ce7"
             }
           ],
           "expanded": true,
