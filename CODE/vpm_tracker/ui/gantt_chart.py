@@ -1,1101 +1,938 @@
 """
-Gantt Chart Widget - Microsoft Project Style
+Gantt Chart Widget — Simplified Classic View
 
-A comprehensive Gantt chart visualization with:
-- Timeline rendering with horizontal task bars
-- Critical path highlighting
-- Dependency arrows (Finish-to-Start)
-- Milestone markers
-- Slack/float visualization
-- Zoom and pan controls
-- Color-coded tasks by status and criticality
+Two panels:
+  Left  (260 px)  : TracePanel — shows the predecessor chain from the clicked
+                    task, with slack annotations and BOTTLENECK labels.
+  Right (scrollable): GanttTimeline — task names in a 200-px left margin;
+                    horizontal status-coloured bars on the timeline to the right.
+
+Controls
+  • Zoom slider / +/- buttons
+  • "Show Links" toggle  (dependency arrows, off by default)
+  • "Clear Trace" button
+  • Status legend (4 colours)
+
+Click any task name or bar → trace panel fills with the predecessor chain.
+Double-click any bar → jumps to Tracker tab and selects that task.
 """
 
 from datetime import datetime, timedelta
-from typing import List, Dict, Optional, Tuple, Set
-from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QScrollArea,
-                             QLabel, QPushButton, QSlider, QSplitter, QTreeWidget,
-                             QTreeWidgetItem, QHeaderView, QToolBar, QStyle, QLineEdit,
-                             QCheckBox, QComboBox, QDateEdit, QSpinBox, QGroupBox,
-                             QTreeWidgetItemIterator, QMenu)
-from PyQt6.QtCore import Qt, QRect, QPoint, QPointF, QSize, pyqtSignal, QDate
-from PyQt6.QtGui import (QPainter, QPen, QColor, QBrush, QPainterPath,
-                        QFont, QPalette, QPolygonF, QLinearGradient, QAction)
+from typing import Dict, List, Optional, Set
+
+from PyQt6.QtCore import Qt, QPoint, QPointF, QRect, QSize, pyqtSignal
+from PyQt6.QtGui import (QBrush, QColor, QFont, QFontMetrics, QLinearGradient,
+                         QPainter, QPainterPath, QPalette, QPen, QPolygonF)
+from PyQt6.QtWidgets import (QFrame, QHBoxLayout, QLabel, QPushButton,
+                             QScrollArea, QSlider, QSplitter,
+                             QTreeWidgetItemIterator, QVBoxLayout, QWidget)
 
 from models.task_node import TaskNode
 from utils.critical_path import CriticalPathAnalyzer
 
-
-def get_top_n_critical_paths(root_nodes: List[TaskNode], n: int = 5) -> List[Dict]:
-    """
-    Get top N critical paths using progressive hiding algorithm.
-
-    Args:
-        root_nodes: List of root task nodes
-        n: Number of critical paths to find (default 5)
-
-    Returns:
-        List of dictionaries with:
-        - number: Path number (1-5)
-        - task_ids: Set of critical task IDs
-        - tasks: List of TaskNode objects
-    """
-    hidden_task_ids = set()
-    critical_paths = []
-
-    for i in range(n):
-        # Rebuild tree without hidden tasks
-        filtered_roots = _rebuild_tree_without_hidden(root_nodes, hidden_task_ids)
-
-        if not filtered_roots:
-            break  # No more tasks to analyze
-
-        # Calculate critical path
-        analyzer = CriticalPathAnalyzer(filtered_roots)
-        results = analyzer.analyze()
-
-        critical_ids = results['critical_path_ids']
-        if not critical_ids:
-            break  # No more critical paths
-
-        # Get actual task objects
-        critical_tasks = [task for task in _flatten_all_nodes(filtered_roots)
-                         if task.id in critical_ids]
-
-        # Store this critical path
-        critical_paths.append({
-            'number': i + 1,
-            'task_ids': critical_ids,
-            'tasks': critical_tasks
-        })
-
-        # Hide these tasks for next iteration
-        hidden_task_ids.update(critical_ids)
-
-    return critical_paths
-
-
-def _rebuild_tree_without_hidden(root_nodes: List[TaskNode], hidden_ids: Set[str]) -> List[TaskNode]:
-    """Rebuild task tree excluding hidden task IDs."""
-    if not hidden_ids:
-        return root_nodes
-
-    def clone_node_tree(node: TaskNode, parent: Optional[TaskNode] = None) -> Optional[TaskNode]:
-        # Skip hidden nodes
-        if node.id in hidden_ids:
-            return None
-
-        # Clone this node
-        cloned = TaskNode(node.name, parent=parent)
-        cloned.id = node.id
-        cloned.status = node.status
-        cloned.owner = node.owner
-        cloned.start_date = node.start_date
-        cloned.end_date = node.end_date
-        # duration is auto-calculated from start_date and end_date, no need to set
-        cloned.is_parallel = node.is_parallel
-        cloned.predecessor_id = node.predecessor_id
-        cloned.notes = node.notes
-
-        # Recursively clone children (excluding hidden ones)
-        for child in node.children:
-            cloned_child = clone_node_tree(child, cloned)
-            if cloned_child:
-                cloned.add_child(cloned_child)
-
-        return cloned
-
-    # Rebuild roots
-    new_roots = []
-    for root in root_nodes:
-        cloned_root = clone_node_tree(root)
-        if cloned_root:
-            new_roots.append(cloned_root)
-
-    return new_roots
-
-
-def _flatten_all_nodes(nodes: List[TaskNode]) -> List[TaskNode]:
-    """Flatten hierarchical nodes to a list."""
-    result = []
-    for node in nodes:
-        result.append(node)
-        if node.children:
-            result.extend(_flatten_all_nodes(node.children))
-    return result
-from vpm_tracker_core import Columns
-
 DATE_FMT = "%Y-%m-%d"
 
+# ---------------------------------------------------------------------------
+# Palette
+# ---------------------------------------------------------------------------
+_C_COMPLETED   = QColor("#4CAF50")   # green
+_C_IN_PROGRESS = QColor("#FFC107")   # amber
+_C_NOT_STARTED = QColor("#5C8DB8")   # steel blue
+_C_OVERDUE     = QColor("#E53935")   # red
+_C_PARENT      = QColor("#546E7A")   # blue-grey, thin summary bar
+_C_TRACE       = QColor("#FF9800")   # orange trace highlight
+_C_TODAY       = QColor(255, 120, 0, 200)
+_C_DEPEND      = QColor(110, 110, 120)
+_C_NAME_BG     = QColor(26, 26, 32)
+_C_NAME_ALT    = QColor(32, 32, 40)
+_C_HEADER      = QColor(36, 36, 44)
+_C_CANVAS      = QColor(28, 28, 35)
 
-class TopCriticalPathsPanel(QWidget):
-    """
-    Left panel displaying top 5 critical paths.
-    Shows tasks in expandable groups, click to highlight in Gantt.
-    """
 
-    task_clicked = pyqtSignal(TaskNode)  # Emitted when a task is clicked
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+def _flatten(nodes: List[TaskNode]) -> List[TaskNode]:
+    """Pre-order flatten of a task forest."""
+    out: List[TaskNode] = []
+    for n in nodes:
+        out.append(n)
+        if n.children:
+            out.extend(_flatten(n.children))
+    return out
+
+
+def _depth(task: TaskNode) -> int:
+    d, p = 0, task.parent
+    while p:
+        d += 1
+        p = p.parent
+    return d
+
+
+def _is_overdue(task: TaskNode) -> bool:
+    if task.status == "Completed" or not task.end_date:
+        return False
+    try:
+        return datetime.strptime(task.end_date, DATE_FMT).date() < datetime.now().date()
+    except ValueError:
+        return False
+
+
+def _bar_color(task: TaskNode) -> QColor:
+    if _is_overdue(task):
+        return QColor(_C_OVERDUE)
+    if task.status == "Completed":
+        return QColor(_C_COMPLETED)
+    if task.status == "In Progress":
+        return QColor(_C_IN_PROGRESS)
+    return QColor(_C_NOT_STARTED)
+
+
+# ---------------------------------------------------------------------------
+# TracePanel
+# ---------------------------------------------------------------------------
+
+class TracePanel(QWidget):
+    """
+    Left panel: displays the predecessor chain trace for a clicked task.
+
+    chain format (list of dicts):
+        task         : TaskNode
+        slack        : int (workdays of float)
+        duration     : int (calendar days)
+        is_bottleneck: bool (slack == 0 and it's a leaf)
+    chain[0] = the clicked target; chain[-1] = the furthest upstream ancestor.
+    """
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.critical_paths = []
-        self.setup_ui()
+        self.setFixedWidth(260)
+        self._build_ui()
 
-    def setup_ui(self):
-        """Setup the panel UI."""
+    def _build_ui(self):
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(10, 10, 10, 10)
-        layout.setSpacing(5)
+        layout.setContentsMargins(8, 10, 8, 8)
+        layout.setSpacing(6)
 
-        # Title
-        title = QLabel("TOP 5 CRITICAL PATHS")
-        title.setStyleSheet("font-size: 11pt; font-weight: bold; color: #FF5050; padding: 5px;")
-        layout.addWidget(title)
+        self._title = QLabel("TRACE PATH")
+        self._title.setStyleSheet(
+            "font-size: 10pt; font-weight: bold; color: #FFC107; padding: 2px 0;"
+        )
+        layout.addWidget(self._title)
 
-        # Description
-        desc = QLabel("Progressive critical path analysis.\nClick task to highlight in timeline.")
-        desc.setStyleSheet("color: #aaa; font-size: 9pt; padding: 0 5px 10px 5px;")
-        desc.setWordWrap(True)
-        layout.addWidget(desc)
+        self._hint = QLabel(
+            "Click any task name or bar\nto trace its predecessor chain."
+        )
+        self._hint.setStyleSheet("color: #777; font-size: 9pt;")
+        self._hint.setWordWrap(True)
+        layout.addWidget(self._hint)
 
-        # Tree widget for critical paths
-        self.tree = QTreeWidget()
-        self.tree.setHeaderHidden(True)
-        self.tree.setIndentation(15)
-        self.tree.itemClicked.connect(self._on_item_clicked)
-        layout.addWidget(self.tree)
+        sep = QFrame()
+        sep.setFrameShape(QFrame.Shape.HLine)
+        sep.setStyleSheet("background: #444; max-height: 1px;")
+        layout.addWidget(sep)
 
-    def load_critical_paths(self, root_nodes: List[TaskNode]):
-        """Load and display top 5 critical paths."""
-        self.tree.clear()
-        self.critical_paths = get_top_n_critical_paths(root_nodes, n=5)
+        # Scroll area for chain items
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        layout.addWidget(scroll, 1)
 
-        for path_info in self.critical_paths:
-            path_number = path_info['number']
-            tasks = path_info['tasks']
+        self._inner = QWidget()
+        self._inner_layout = QVBoxLayout(self._inner)
+        self._inner_layout.setContentsMargins(0, 0, 0, 0)
+        self._inner_layout.setSpacing(3)
+        self._inner_layout.addStretch()   # keeps items top-aligned
+        scroll.setWidget(self._inner)
 
-            # Create parent item for this critical path
-            parent_item = QTreeWidgetItem(self.tree)
-            parent_item.setText(0, f"🔴 {path_number}{'st' if path_number == 1 else 'nd' if path_number == 2 else 'rd' if path_number == 3 else 'th'} Critical Path ({len(tasks)} tasks)")
-            parent_item.setExpanded(path_number == 1)  # Expand first path by default
+    # ------------------------------------------------------------------
 
-            # Set bold font for parent
-            font = parent_item.font(0)
-            font.setBold(True)
-            parent_item.setFont(0, font)
+    def update_trace(self, chain: List[Dict], target_name: str):
+        self._title.setText(f"▶ {target_name}")
+        self._hint.setVisible(False)
+        self._clear_items()
 
-            # Group tasks by their parent to show hierarchy
-            tasks_by_parent = {}
-            for task in tasks:
-                parent_key = task.parent.id if task.parent else None
-                if parent_key not in tasks_by_parent:
-                    tasks_by_parent[parent_key] = []
-                tasks_by_parent[parent_key].append(task)
+        for entry in chain:
+            task        = entry["task"]
+            slack       = entry["slack"]
+            dur         = entry["duration"]
+            bottleneck  = entry["is_bottleneck"]
 
-            # Add task items grouped by parent
-            for parent_key, child_tasks in tasks_by_parent.items():
-                if child_tasks:
-                    # Get parent name (one level up)
-                    parent_name = child_tasks[0].parent.name if child_tasks[0].parent else "Root"
+            icon  = "⚠" if bottleneck else "✓"
+            sub   = "← BOTTLENECK" if bottleneck else f"{slack}d slack"
+            color = "#E53935" if bottleneck else "#4CAF50"
+            bg    = "#2d1010" if bottleneck else "#102010"
+            border= "#E53935" if bottleneck else "#4CAF50"
 
-                    # Create parent group item
-                    parent_group_item = QTreeWidgetItem(parent_item)
-                    parent_group_item.setText(0, f"   📁 {parent_name}")
-                    parent_group_font = parent_group_item.font(0)
-                    parent_group_font.setItalic(True)
-                    parent_group_item.setFont(0, parent_group_font)
-                    parent_group_item.setExpanded(True)
+            html = (
+                f"<span style='font-size:10pt;color:{color};'>{icon}</span> "
+                f"<b style='font-size:9pt;color:#ddd;'>{task.name}</b><br>"
+                f"<span style='font-size:8pt;color:#999;'>{dur}d &nbsp;·&nbsp; {sub}</span>"
+            )
+            lbl = QLabel(html)
+            lbl.setWordWrap(True)
+            lbl.setStyleSheet(
+                f"background:{bg}; border-left:3px solid {border}; "
+                f"padding:5px 6px; border-radius:2px;"
+            )
+            # Insert before the trailing stretch
+            self._inner_layout.insertWidget(self._inner_layout.count() - 1, lbl)
 
-                    # Add critical child tasks under the parent
-                    for task in child_tasks:
-                        task_item = QTreeWidgetItem(parent_group_item)
-                        task_item.setText(0, f"      ⚠️  {task.name}")
-                        task_item.setData(0, Qt.ItemDataRole.UserRole, task)
+    def clear_trace(self):
+        self._title.setText("TRACE PATH")
+        self._hint.setVisible(True)
+        self._clear_items()
 
-    def _on_item_clicked(self, item: QTreeWidgetItem, column: int):
-        """Handle click on a task item."""
-        task = item.data(0, Qt.ItemDataRole.UserRole)
-        if task:  # Only emit if it's a task item (not a path header)
-            self.task_clicked.emit(task)
+    def _clear_items(self):
+        while self._inner_layout.count() > 1:          # keep the stretch
+            item = self._inner_layout.takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
 
+
+# ---------------------------------------------------------------------------
+# GanttTimeline canvas
+# ---------------------------------------------------------------------------
 
 class GanttTimeline(QWidget):
     """
-    The timeline canvas where task bars, dependencies, and critical path are drawn.
+    Scrollable Gantt canvas.
+
+    Layout
+    ------
+    x ∈ [0, left_margin)          : task-name strip (painted by _draw_name_strip)
+    x ∈ [left_margin, width)      : bar area  (painted by _draw_bars / _draw_grid …)
+    y ∈ [0, header_height)        : header row (months + days)
+    y ∈ [header_height, height)   : task rows
     """
 
+    task_clicked        = pyqtSignal(TaskNode)
     task_double_clicked = pyqtSignal(TaskNode)
-    reload_required = pyqtSignal()
+
+    # Geometry constants
+    LEFT_MARGIN   = 200     # px reserved for task names
+    ROW_HEIGHT    = 32
+    HEADER_HEIGHT = 54
 
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setMinimumHeight(400)
         self.setMouseTracking(True)
-        self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-        self.customContextMenuRequested.connect(self._show_context_menu)
 
         # Data
-        self.tasks: List[TaskNode] = []
-        self.task_y_positions: Dict[str, int] = {}  # task_id -> y position
-        self.node_map: Dict[str, TaskNode] = {}
+        self.tasks: List[TaskNode]          = []
+        self.task_y_positions: Dict[str,int]= {}
+        self.node_map: Dict[str, TaskNode]  = {}
+        self.slack_data: Dict[str, int]     = {}
 
-        # Critical path data
-        self.analyzer: Optional[CriticalPathAnalyzer] = None
-        self.critical_path_ids: Set[str] = set()  # Critical LEAF tasks
-        self.critical_parent_ids: Set[str] = set()  # Parents with critical descendants
-        self.slack_data: Dict[str, int] = {}
-
-        # Hidden tasks tracking
-        self.root_nodes: List[TaskNode] = []
-        self.hidden_task_ids: Set[str] = set()
-
-        # Timeline settings
+        # Timeline bounds
         self.start_date: Optional[datetime] = None
-        self.end_date: Optional[datetime] = None
-        self.pixels_per_day = 20  # Zoom level
-        self.row_height = 35
-        self.header_height = 60
-        self.left_margin = 10
-        self.top_margin = self.header_height + 10
+        self.end_date:   Optional[datetime] = None
 
-        # Colors (Microsoft Project inspired)
-        self.color_critical = QColor(255, 80, 80)       # Red for critical path
-        self.color_normal = QColor(100, 150, 255)       # Blue for normal tasks
-        self.color_completed = QColor(100, 200, 100)    # Green for completed
-        self.color_milestone = QColor(255, 200, 50)     # Gold for milestones
-        self.color_slack = QColor(150, 150, 150, 100)   # Gray transparent for slack
-        self.color_dependency = QColor(80, 80, 80)      # Dark gray for arrows
-        self.color_today = QColor(255, 100, 0, 150)     # Orange for today marker
-        self.color_grid = QColor(200, 200, 200, 50)     # Light gray for grid
-        self.color_highlight = QColor(255, 140, 0, 200) # Orange for highlighted task (from critical paths panel)
+        # Zoom
+        self.pixels_per_day: int = 20
 
-        # Interaction
+        # Interaction state
         self.hovered_task: Optional[TaskNode] = None
-        self.highlighted_task: Optional[TaskNode] = None
-        self.show_critical_path = True
-        self.show_slack = True
-        self.show_dependencies = True
+        self.traced_ids:  Set[str]            = set()
+        self.show_dependencies: bool          = False   # off by default
 
-        # Set background
+        # Background fill
         self.setAutoFillBackground(True)
         pal = self.palette()
-        pal.setColor(QPalette.ColorRole.Window, QColor(30, 30, 30))
+        pal.setColor(QPalette.ColorRole.Window, _C_CANVAS)
         self.setPalette(pal)
 
-        # Tooltip setup
-        self.setToolTip("")
+    # ------------------------------------------------------------------
+    # Loading
+    # ------------------------------------------------------------------
 
-    def load_tasks(self, root_nodes: List[TaskNode]):
-        """Load tasks and calculate critical path."""
-        self.tasks = self._flatten_nodes(root_nodes)
-        self.node_map = {task.id: task for task in self.tasks}
+    def load_tasks(self, root_nodes: List[TaskNode],
+                   slack_data: Optional[Dict[str, int]] = None):
+        self.tasks      = _flatten(root_nodes)
+        self.node_map   = {t.id: t for t in self.tasks}
+        self.slack_data = slack_data or {}
 
-        # Calculate Y positions
         self.task_y_positions = {}
-        y_pos = self.top_margin
+        y = self.HEADER_HEIGHT + 5
         for task in self.tasks:
-            self.task_y_positions[task.id] = y_pos
-            y_pos += self.row_height
+            self.task_y_positions[task.id] = y
+            y += self.ROW_HEIGHT
 
-        # Calculate timeline bounds
-        self._calculate_timeline_bounds()
-
-        # Perform critical path analysis
-        self.analyzer = CriticalPathAnalyzer(root_nodes)
-        results = self.analyzer.analyze()
-        self.critical_path_ids = results['critical_path_ids']  # Critical LEAF tasks
-        self.critical_parent_ids = results['critical_parent_ids']  # Parents with critical descendants
-        self.slack_data = results['slack']
-
-        # Update widget size
+        self._calc_bounds()
         self._update_size()
         self.update()
 
-    def _flatten_nodes(self, nodes: List[TaskNode]) -> List[TaskNode]:
-        """Flatten hierarchical nodes to a list."""
-        result = []
-        for node in nodes:
-            result.append(node)
-            if node.children:
-                result.extend(self._flatten_nodes(node.children))
-        return result
-
-    def _calculate_timeline_bounds(self):
-        """Calculate the start and end dates for the timeline."""
-        if not self.tasks:
-            self.start_date = datetime.now()
-            self.end_date = datetime.now() + timedelta(days=30)
-            return
-
-        start_dates = []
-        end_dates = []
-
-        for task in self.tasks:
-            if task.start_date:
-                try:
-                    start_dates.append(datetime.strptime(task.start_date, DATE_FMT))
-                except ValueError:
-                    pass
-            if task.end_date:
-                try:
-                    end_dates.append(datetime.strptime(task.end_date, DATE_FMT))
-                except ValueError:
-                    pass
-
-        if start_dates and end_dates:
-            # Add padding (1 week before/after)
-            self.start_date = min(start_dates) - timedelta(days=7)
-            self.end_date = max(end_dates) + timedelta(days=7)
+    def _calc_bounds(self):
+        starts, ends = [], []
+        for t in self.tasks:
+            for attr, lst in ((t.start_date, starts), (t.end_date, ends)):
+                if attr:
+                    try:
+                        lst.append(datetime.strptime(attr, DATE_FMT))
+                    except ValueError:
+                        pass
+        if starts and ends:
+            self.start_date = min(starts) - timedelta(days=7)
+            self.end_date   = max(ends)   + timedelta(days=14)
         else:
             self.start_date = datetime.now()
-            self.end_date = datetime.now() + timedelta(days=30)
+            self.end_date   = datetime.now() + timedelta(days=30)
 
     def _update_size(self):
-        """Update widget size based on content."""
         if not self.start_date or not self.end_date:
             return
+        w = self.LEFT_MARGIN + (self.end_date - self.start_date).days * self.pixels_per_day + 80
+        h = len(self.tasks) * self.ROW_HEIGHT + self.HEADER_HEIGHT + 40
+        self.setMinimumWidth(max(w, 600))
+        self.setMinimumHeight(max(h, 400))
 
-        timeline_width = (self.end_date - self.start_date).days * self.pixels_per_day
-        timeline_height = len(self.tasks) * self.row_height + self.top_margin + 50
-
-        self.setMinimumWidth(timeline_width + self.left_margin + 100)
-        self.setMinimumHeight(timeline_height)
-
-    def _date_to_x(self, date_str: str) -> int:
-        """Convert date string to X coordinate."""
-        if not self.start_date:
-            return 0
-
-        try:
-            date = datetime.strptime(date_str, DATE_FMT)
-            days_from_start = (date - self.start_date).days
-            return self.left_margin + (days_from_start * self.pixels_per_day)
-        except (ValueError, AttributeError):
-            return 0
-
-    def _x_to_date(self, x: int) -> datetime:
-        """Convert X coordinate to date."""
-        if not self.start_date:
-            return datetime.now()
-
-        days_from_start = (x - self.left_margin) / self.pixels_per_day
-        return self.start_date + timedelta(days=int(days_from_start))
-
-    def set_zoom(self, zoom_level: int):
-        """Set zoom level (pixels per day)."""
-        self.pixels_per_day = max(5, min(50, zoom_level))
+    def set_zoom(self, ppd: int):
+        self.pixels_per_day = max(4, min(80, ppd))
         self._update_size()
         self.update()
 
+    # ------------------------------------------------------------------
+    # Coordinate helpers
+    # ------------------------------------------------------------------
+
+    def _x(self, date_str: str) -> Optional[int]:
+        """Date string → pixel x.  Returns None if date is invalid."""
+        if not self.start_date:
+            return None
+        try:
+            d = datetime.strptime(date_str, DATE_FMT)
+            return self.LEFT_MARGIN + int((d - self.start_date).days * self.pixels_per_day)
+        except (ValueError, TypeError):
+            return None
+
+    # ------------------------------------------------------------------
+    # Paint
+    # ------------------------------------------------------------------
+
     def paintEvent(self, event):
-        """Main paint event - draws the entire Gantt chart."""
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
-        # Draw timeline header
-        self._draw_timeline_header(painter)
-
-        # Draw grid lines
         self._draw_grid(painter)
-
-        # Draw today marker
+        self._draw_name_strip(painter)
+        self._draw_timeline_header(painter)
         self._draw_today_marker(painter)
-
-        # Draw task bars with slack
-        if self.show_slack:
-            self._draw_slack_bars(painter)
-
         self._draw_task_bars(painter)
-
-        # Draw dependencies
         if self.show_dependencies:
             self._draw_dependencies(painter)
 
-        # Draw milestones
-        self._draw_milestones(painter)
+        # Divider between name strip and bar area
+        painter.setPen(QPen(QColor(75, 75, 90), 1))
+        painter.drawLine(self.LEFT_MARGIN, 0, self.LEFT_MARGIN, self.height())
 
-    def _draw_timeline_header(self, painter: QPainter):
-        """Draw the timeline header with date labels."""
-        if not self.start_date or not self.end_date:
-            return
-
-        painter.fillRect(0, 0, self.width(), self.header_height, QColor(40, 40, 40))
-
-        # Draw month/year labels
-        font = QFont("Arial", 9, QFont.Weight.Bold)
-        painter.setFont(font)
-        painter.setPen(QPen(QColor(220, 220, 220)))
-
-        current_date = self.start_date
-        while current_date <= self.end_date:
-            x = self._date_to_x(current_date.strftime(DATE_FMT))
-
-            # Draw month label at start of month
-            if current_date.day == 1 or current_date == self.start_date:
-                month_label = current_date.strftime("%b %Y")
-                painter.drawText(QRect(x, 5, 100, 20), Qt.AlignmentFlag.AlignLeft, month_label)
-
-            # Draw day labels
-            day_label = str(current_date.day)
-            painter.setFont(QFont("Arial", 7))
-            painter.setPen(QPen(QColor(180, 180, 180)))
-            painter.drawText(QRect(x, 30, self.pixels_per_day, 20),
-                           Qt.AlignmentFlag.AlignCenter, day_label)
-
-            # Draw week separators
-            if current_date.weekday() == 0:  # Monday
-                painter.setPen(QPen(QColor(100, 100, 100), 1, Qt.PenStyle.DashLine))
-                painter.drawLine(x, self.header_height, x, self.height())
-
-            current_date += timedelta(days=1)
-
-        # Draw header bottom border
-        painter.setPen(QPen(QColor(100, 100, 100), 2))
-        painter.drawLine(0, self.header_height, self.width(), self.header_height)
+    # ---- grid & weekend shading ----------------------------------------
 
     def _draw_grid(self, painter: QPainter):
-        """Draw background grid."""
         if not self.start_date or not self.end_date:
             return
 
-        painter.setPen(QPen(self.color_grid, 1))
-
-        # Horizontal lines (per task)
+        # Alternating rows + horizontal separators
         for i, task in enumerate(self.tasks):
-            y = self.top_margin + (i * self.row_height)
-            painter.drawLine(0, y, self.width(), y)
+            y = self.task_y_positions.get(task.id, 0)
+            rect = QRect(self.LEFT_MARGIN, y,
+                         self.width() - self.LEFT_MARGIN, self.ROW_HEIGHT)
+            painter.fillRect(rect, _C_NAME_ALT if i % 2 == 1 else _C_CANVAS)
+            painter.setPen(QPen(QColor(48, 48, 58), 1))
+            painter.drawLine(self.LEFT_MARGIN, y + self.ROW_HEIGHT - 1,
+                             self.width(),     y + self.ROW_HEIGHT - 1)
 
-        # Vertical lines (per day)
-        current_date = self.start_date
-        while current_date <= self.end_date:
-            x = self._date_to_x(current_date.strftime(DATE_FMT))
+        # Weekend column shading
+        cur = self.start_date
+        while cur <= self.end_date:
+            if cur.weekday() in (5, 6):
+                x = self._x(cur.strftime(DATE_FMT))
+                if x is not None:
+                    painter.fillRect(
+                        QRect(x, self.HEADER_HEIGHT,
+                              self.pixels_per_day, self.height()),
+                        QColor(45, 45, 52, 80)
+                    )
+            cur += timedelta(days=1)
 
-            # Weekend shading
-            if current_date.weekday() in [5, 6]:  # Saturday, Sunday
-                rect = QRect(x, self.header_height, self.pixels_per_day, self.height())
-                painter.fillRect(rect, QColor(50, 50, 50, 30))
+    # ---- task name strip -----------------------------------------------
 
-            current_date += timedelta(days=1)
+    def _draw_name_strip(self, painter: QPainter):
+        # Column header
+        painter.fillRect(0, 0, self.LEFT_MARGIN, self.HEADER_HEIGHT, _C_HEADER)
+        painter.setFont(QFont("Arial", 9, QFont.Weight.Bold))
+        painter.setPen(QPen(QColor(180, 180, 190)))
+        painter.drawText(
+            QRect(8, 0, self.LEFT_MARGIN - 12, self.HEADER_HEIGHT),
+            Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft,
+            "Task"
+        )
+
+        name_font_bold   = QFont("Arial", 8, QFont.Weight.Bold)
+        name_font_normal = QFont("Arial", 8, QFont.Weight.Normal)
+        fm_bold   = QFontMetrics(name_font_bold)
+        fm_normal = QFontMetrics(name_font_normal)
+
+        for i, task in enumerate(self.tasks):
+            y        = self.task_y_positions.get(task.id, 0)
+            row_rect = QRect(0, y, self.LEFT_MARGIN, self.ROW_HEIGHT)
+
+            # Background
+            bg = _C_NAME_ALT if i % 2 == 1 else _C_NAME_BG
+            painter.fillRect(row_rect, bg)
+
+            # Trace highlight
+            if task.id in self.traced_ids:
+                painter.fillRect(row_rect, QColor(55, 38, 5))
+
+            # Indentation
+            indent = 6 + _depth(task) * 14
+            avail  = self.LEFT_MARGIN - indent - 8
+
+            # Collapse triangle hint for parents
+            if task.children:
+                painter.setFont(name_font_bold)
+                fm = fm_bold
+                text = fm.elidedText(task.name, Qt.TextElideMode.ElideRight, avail)
+                color = QColor(255, 200, 80) if task.id in self.traced_ids \
+                        else QColor(200, 200, 210)
+            else:
+                painter.setFont(name_font_normal)
+                fm = fm_normal
+                text = fm.elidedText(task.name, Qt.TextElideMode.ElideRight, avail)
+                color = QColor(255, 200, 80) if task.id in self.traced_ids \
+                        else QColor(190, 190, 195)
+
+            painter.setPen(QPen(color))
+            painter.drawText(
+                QRect(indent, y, avail, self.ROW_HEIGHT),
+                Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft,
+                text
+            )
+
+            # Row separator
+            painter.setPen(QPen(QColor(50, 50, 62), 1))
+            painter.drawLine(0, y + self.ROW_HEIGHT - 1,
+                             self.LEFT_MARGIN, y + self.ROW_HEIGHT - 1)
+
+    # ---- timeline header -----------------------------------------------
+
+    def _draw_timeline_header(self, painter: QPainter):
+        if not self.start_date or not self.end_date:
+            return
+
+        painter.fillRect(self.LEFT_MARGIN, 0,
+                         self.width() - self.LEFT_MARGIN, self.HEADER_HEIGHT,
+                         _C_HEADER)
+
+        cur = self.start_date
+        while cur <= self.end_date:
+            x = self._x(cur.strftime(DATE_FMT))
+            if x is None:
+                cur += timedelta(days=1)
+                continue
+
+            # Month label at month boundary
+            if cur.day == 1 or cur == self.start_date:
+                painter.setFont(QFont("Arial", 9, QFont.Weight.Bold))
+                painter.setPen(QPen(QColor(200, 200, 210)))
+                painter.drawText(QRect(x + 2, 4, 110, 22),
+                                 Qt.AlignmentFlag.AlignLeft,
+                                 cur.strftime("%b %Y"))
+
+            # Day number (only when zoomed in enough)
+            if self.pixels_per_day >= 12:
+                painter.setFont(QFont("Arial", 7))
+                painter.setPen(QPen(QColor(140, 140, 150)))
+                painter.drawText(
+                    QRect(x, 28, self.pixels_per_day, 20),
+                    Qt.AlignmentFlag.AlignCenter,
+                    str(cur.day)
+                )
+
+            # Monday tick mark
+            if cur.weekday() == 0:
+                painter.setPen(QPen(QColor(75, 75, 90), 1))
+                painter.drawLine(x, self.HEADER_HEIGHT - 8, x, self.HEADER_HEIGHT)
+
+            cur += timedelta(days=1)
+
+        # Bottom border
+        painter.setPen(QPen(QColor(80, 80, 95), 1))
+        painter.drawLine(self.LEFT_MARGIN, self.HEADER_HEIGHT,
+                         self.width(), self.HEADER_HEIGHT)
+
+    # ---- today line ----------------------------------------------------
 
     def _draw_today_marker(self, painter: QPainter):
-        """Draw a vertical line for today's date."""
-        today = datetime.now()
-        if self.start_date and self.end_date:
-            if self.start_date <= today <= self.end_date:
-                x = self._date_to_x(today.strftime(DATE_FMT))
-                painter.setPen(QPen(self.color_today, 2))
-                painter.drawLine(x, self.header_height, x, self.height())
+        x = self._x(datetime.now().strftime(DATE_FMT))
+        if x is None or x < self.LEFT_MARGIN:
+            return
+        painter.setPen(QPen(_C_TODAY, 2))
+        painter.drawLine(x, self.HEADER_HEIGHT, x, self.height())
+        painter.setFont(QFont("Arial", 7, QFont.Weight.Bold))
+        painter.setPen(QPen(_C_TODAY))
+        painter.drawText(x + 3, self.HEADER_HEIGHT + 14, "TODAY")
 
-                # Label
-                painter.setFont(QFont("Arial", 8, QFont.Weight.Bold))
-                painter.drawText(x + 5, self.header_height + 15, "TODAY")
+    # ---- task bars -----------------------------------------------------
 
     def _draw_task_bars(self, painter: QPainter):
-        """Draw task bars with color coding."""
+        fm = QFontMetrics(QFont("Arial", 8))
+
         for task in self.tasks:
             if not task.start_date or not task.end_date:
                 continue
 
-            x_start = self._date_to_x(task.start_date)
-            x_end = self._date_to_x(task.end_date)
-            y = self.task_y_positions.get(task.id, 0)
+            xs = self._x(task.start_date)
+            xe = self._x(task.end_date)
+            if xs is None or xe is None:
+                continue            # skip bad dates silently
 
-            # Determine bar properties
-            is_critical_leaf = task.id in self.critical_path_ids  # Critical LEAF task
-            is_critical_parent = task.id in self.critical_parent_ids  # Parent with critical descendants
-            is_completed = task.status == "Completed"
-            bar_rect = QRect(x_start, y + 5, x_end - x_start, self.row_height - 10)
+            y    = self.task_y_positions.get(task.id, 0)
+            bw   = max(xe - xs, 4)
 
-            # --- NEW Coloring Logic for Option 1 ---
-            # Critical LEAF tasks → RED fill + RED outline (completely red)
-            # Critical PARENT tasks → Status fill (blue/green) + RED outline
-            # Non-critical tasks → Status fill, no red outline
-
-            # Step 1: Determine fill color
-            if is_critical_leaf and self.show_critical_path:
-                # Critical LEAF → RED fill
-                bar_color = self.color_critical
-            elif is_completed:
-                # Completed → Green fill
-                bar_color = self.color_completed
-            else:
-                # In-progress/Not started → Blue fill
-                bar_color = self.color_normal
-
-            # Step 2: Draw bar with fill color
-            gradient = QLinearGradient(QPointF(bar_rect.topLeft()), QPointF(bar_rect.bottomLeft()))
-            gradient.setColorAt(0, bar_color.lighter(120))
-            gradient.setColorAt(1, bar_color.darker(110))
-            painter.setBrush(QBrush(gradient))
-            painter.setPen(QPen(bar_color.darker(150), 1))
-            painter.drawRoundedRect(bar_rect, 3, 3)
-
-            # Step 3: Add RED OUTLINE for ALL critical tasks (leaf and parent)
-            if (is_critical_leaf or is_critical_parent) and self.show_critical_path:
-                painter.setBrush(Qt.BrushStyle.NoBrush)  # No fill, just outline
-                painter.setPen(QPen(self.color_critical, 3))  # Thick red outline
-                painter.drawRoundedRect(bar_rect, 3, 3)
-
-            # Draw task name on bar
-            painter.setPen(QPen(QColor(255, 255, 255)))
-            painter.setFont(QFont("Arial", 8))
-
-            # Truncate text if too long
-            text = task.name
-            if bar_rect.width() < 100:
-                text = text[:10] + "..." if len(text) > 10 else text
-
-            painter.drawText(bar_rect, Qt.AlignmentFlag.AlignCenter, text)
-
-            # Draw highlight overlay if this task is highlighted
-            if self.highlighted_task and task.id == self.highlighted_task.id:
-                painter.setPen(QPen(self.color_highlight, 4))
+            if task.children:
+                # ── Summary / parent bar: thin, full children span, no text ──
+                bh   = max(5, self.ROW_HEIGHT // 5)
+                by   = y + (self.ROW_HEIGHT - bh) // 2
+                rect = QRect(xs, by, bw, bh)
+                painter.fillRect(rect, _C_PARENT)
+                painter.setPen(QPen(_C_PARENT.darker(150), 1))
                 painter.setBrush(Qt.BrushStyle.NoBrush)
-                painter.drawRoundedRect(bar_rect.adjusted(-2, -2, 2, 2), 3, 3)
+                painter.drawRect(rect)
 
-    def _draw_slack_bars(self, painter: QPainter):
-        """Draw slack (float) visualization as dotted extensions."""
-        if not self.analyzer:
-            return
+            else:
+                # ── Leaf bar ──
+                bh   = self.ROW_HEIGHT - 10
+                by   = y + 5
+                rect = QRect(xs, by, bw, bh)
 
-        for task in self.tasks:
-            if task.id not in self.slack_data:
-                continue
+                color = _bar_color(task)
+                painter.setBrush(QBrush(color))
+                painter.setPen(QPen(color.darker(140), 1))
+                painter.drawRoundedRect(rect, 3, 3)
 
-            slack_days = self.slack_data[task.id]
-            if slack_days <= 0 or not task.end_date:
-                continue
+                # Trace amber outline
+                if task.id in self.traced_ids:
+                    painter.setPen(QPen(_C_TRACE, 2))
+                    painter.setBrush(Qt.BrushStyle.NoBrush)
+                    painter.drawRoundedRect(rect.adjusted(-2, -2, 2, 2), 3, 3)
 
-            # Calculate slack bar position
-            x_end = self._date_to_x(task.end_date)
-            slack_width = slack_days * self.pixels_per_day
-            y = self.task_y_positions.get(task.id, 0)
+                # Label inside bar (if room)
+                if bw > 20:
+                    label = fm.elidedText(task.name,
+                                          Qt.TextElideMode.ElideRight,
+                                          bw - 6)
+                    painter.setFont(QFont("Arial", 8))
+                    painter.setPen(QPen(QColor(255, 255, 255, 210)))
+                    painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, label)
 
-            # Draw slack as dotted line
-            slack_rect = QRect(x_end, y + self.row_height // 2 - 2, slack_width, 4)
-            painter.fillRect(slack_rect, self.color_slack)
-
-            # Draw slack label
-            if slack_width > 30:
-                painter.setPen(QPen(QColor(150, 150, 150)))
-                painter.setFont(QFont("Arial", 7))
-                painter.drawText(x_end + 5, y + self.row_height // 2 + 10,
-                               f"+{slack_days}d slack")
+    # ---- dependency arrows ---------------------------------------------
 
     def _draw_dependencies(self, painter: QPainter):
-        """Draw dependency arrows between tasks."""
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
 
         for task in self.tasks:
-            # Find predecessor
-            predecessor = None
-            if task.predecessor_id and task.predecessor_id in self.node_map:
-                predecessor = self.node_map[task.predecessor_id]
-            elif task.parent and not task.is_parallel:
-                # Implicit predecessor (previous sibling)
-                siblings = task.parent.children
-                try:
-                    idx = siblings.index(task)
-                    if idx > 0:
-                        predecessor = siblings[idx - 1]
-                except ValueError:
-                    pass
-
-            if not predecessor or not predecessor.end_date or not task.start_date:
+            pred = self._find_predecessor(task)
+            if not pred or not pred.end_date or not task.start_date:
                 continue
 
-            # Calculate arrow coordinates
-            pred_x_end = self._date_to_x(predecessor.end_date)
-            pred_y = self.task_y_positions.get(predecessor.id, 0) + self.row_height // 2
+            px = self._x(pred.end_date)
+            tx = self._x(task.start_date)
+            if px is None or tx is None:
+                continue
 
-            task_x_start = self._date_to_x(task.start_date)
-            task_y = self.task_y_positions.get(task.id, 0) + self.row_height // 2
+            py = self.task_y_positions.get(pred.id, 0) + self.ROW_HEIGHT // 2
+            ty = self.task_y_positions.get(task.id,  0) + self.ROW_HEIGHT // 2
 
-            # Draw arrow path (Finish-to-Start)
+            in_trace = (task.id in self.traced_ids and pred.id in self.traced_ids)
+            color    = _C_TRACE if in_trace else _C_DEPEND
+            width    = 2 if in_trace else 1
+
             path = QPainterPath()
-            path.moveTo(pred_x_end, pred_y)
-
-            # Calculate control points for curved arrow
-            mid_x = (pred_x_end + task_x_start) / 2
-
-            if abs(task_y - pred_y) < 5:
-                # Horizontal arrow
-                path.lineTo(task_x_start - 10, task_y)
+            path.moveTo(px, py)
+            mx = (px + tx) / 2
+            if abs(ty - py) < 4:
+                path.lineTo(tx - 8, ty)
             else:
-                # Curved arrow
-                path.lineTo(mid_x, pred_y)
-                path.lineTo(mid_x, task_y)
-                path.lineTo(task_x_start - 10, task_y)
+                path.lineTo(mx, py)
+                path.lineTo(mx, ty)
+                path.lineTo(tx - 8, ty)
 
-            # Draw path
-            pen_color = QColor(255, 100, 100) if task.id in self.critical_path_ids else self.color_dependency
-            painter.setPen(QPen(pen_color, 2))
+            painter.setPen(QPen(color, width))
             painter.setBrush(Qt.BrushStyle.NoBrush)
             painter.drawPath(path)
 
-            # Draw arrowhead
-            self._draw_arrowhead(painter, task_x_start - 10, task_y, pen_color)
+            # Arrowhead
+            sz  = 7
+            pts = QPolygonF([
+                QPointF(tx - 8,      ty),
+                QPointF(tx - 8 - sz, ty - sz // 2),
+                QPointF(tx - 8 - sz, ty + sz // 2),
+            ])
+            painter.setBrush(QBrush(color))
+            painter.setPen(Qt.PenStyle.NoPen)
+            painter.drawPolygon(pts)
 
-    def _draw_arrowhead(self, painter: QPainter, x: int, y: int, color: QColor):
-        """Draw an arrowhead pointing right."""
-        arrow_size = 8
-        points = QPolygonF([
-            QPointF(x, y),
-            QPointF(x - arrow_size, y - arrow_size // 2),
-            QPointF(x - arrow_size, y + arrow_size // 2)
-        ])
+    # ---- predecessor lookup (shared by bars + arrows) ------------------
 
-        painter.setBrush(QBrush(color))
-        painter.setPen(Qt.PenStyle.NoPen)
-        painter.drawPolygon(points)
-
-    def _draw_milestones(self, painter: QPainter):
-        """Draw diamond markers for milestone tasks (zero duration)."""
-        for task in self.tasks:
-            if not task.start_date or not task.end_date:
-                continue
-
-            # Check if milestone (zero or 1-day duration)
-            try:
-                start = datetime.strptime(task.start_date, DATE_FMT)
-                end = datetime.strptime(task.end_date, DATE_FMT)
-                duration_days = (end - start).days
-
-                if duration_days <= 1 and "milestone" in task.name.lower():
-                    x = self._date_to_x(task.start_date)
-                    y = self.task_y_positions.get(task.id, 0) + self.row_height // 2
-
-                    # Draw diamond
-                    diamond_size = 12
-                    points = QPolygonF([
-                        QPointF(x, y - diamond_size),
-                        QPointF(x + diamond_size, y),
-                        QPointF(x, y + diamond_size),
-                        QPointF(x - diamond_size, y)
-                    ])
-
-                    painter.setBrush(QBrush(self.color_milestone))
-                    painter.setPen(QPen(self.color_milestone.darker(150), 2))
-                    painter.drawPolygon(points)
-
-            except ValueError:
-                pass
-
-    def highlight_task(self, task: TaskNode):
-        """Highlight a specific task."""
-        self.highlighted_task = task
-        self.update()
-
-    def set_root_nodes(self, root_nodes: List[TaskNode]):
-        """Set the root nodes for hiding functionality."""
-        self.root_nodes = root_nodes
-
-    def _show_context_menu(self, pos: QPoint):
-        """Show context menu on right-click."""
-        # Find task at position
-        task = self._get_task_at_position(pos)
-
-        if not task:
-            return
-
-        menu = QMenu(self)
-
-        # Check if task is critical
-        is_critical = task.id in self.critical_path_ids
-
-        # Add "Hide Critical Task" option (only for critical tasks)
-        if is_critical:
-            hide_action = QAction("Hide Critical Task", self)
-            hide_action.triggered.connect(lambda: self._hide_critical_task(task))
-            menu.addAction(hide_action)
-
-        # Always add "Show All Hidden Tasks" option
-        if self.hidden_task_ids:
-            menu.addSeparator()
-            show_all_action = QAction(f"Show All Hidden Tasks ({len(self.hidden_task_ids)})", self)
-            show_all_action.triggered.connect(self._show_all_hidden_tasks)
-            menu.addAction(show_all_action)
-
-        # Show menu at cursor position
-        menu.exec(self.mapToGlobal(pos))
-
-    def _hide_critical_task(self, task: TaskNode):
-        """Hide a critical task and reload to show next critical path."""
-        self.hidden_task_ids.add(task.id)
-        self.reload_required.emit()
-
-    def _show_all_hidden_tasks(self):
-        """Show all hidden tasks."""
-        self.hidden_task_ids.clear()
-        self.reload_required.emit()
-
-    def get_filtered_root_nodes(self) -> List[TaskNode]:
-        """Get root nodes with hidden tasks filtered out."""
-        if not self.hidden_task_ids:
-            return self.root_nodes
-
-        # Rebuild tree without hidden nodes
-        def clone_node_tree(node: TaskNode, parent: Optional[TaskNode] = None) -> Optional[TaskNode]:
-            # Skip hidden nodes
-            if node.id in self.hidden_task_ids:
-                return None
-
-            # Clone this node
-            cloned = TaskNode(node.name, parent=parent)
-            # Copy all attributes
-            cloned.id = node.id
-            cloned.status = node.status
-            cloned.owner = node.owner
-            cloned.start_date = node.start_date
-            cloned.end_date = node.end_date
-
-            cloned.is_parallel = node.is_parallel
-            cloned.predecessor_id = node.predecessor_id
-            cloned.notes = node.notes
-
-            # Recursively clone children (excluding hidden ones)
-            for child in node.children:
-                cloned_child = clone_node_tree(child, cloned)
-                if cloned_child:
-                    cloned.add_child(cloned_child)
-
-            return cloned
-
-        # Rebuild roots
-        new_roots = []
-        for root in self.root_nodes:
-            cloned_root = clone_node_tree(root)
-            if cloned_root:
-                new_roots.append(cloned_root)
-
-        return new_roots
-
-    def mouseMoveEvent(self, event):
-        """Handle mouse move for tooltips."""
-        pos = event.pos()
-        task_at_pos = self._get_task_at_position(pos)
-
-        if task_at_pos != self.hovered_task:
-            self.hovered_task = task_at_pos
-            if task_at_pos:
-                self._show_tooltip(task_at_pos, event.globalPosition().toPoint())
-            else:
-                self.setToolTip("")
-
-    def mouseDoubleClickEvent(self, event):
-        """Handle double-click to jump to Tracker tab."""
-        pos = event.pos()
-        task_at_pos = self._get_task_at_position(pos)
-
-        if task_at_pos:
-            self.task_double_clicked.emit(task_at_pos)
-
-    def _get_task_at_position(self, pos: QPoint) -> Optional[TaskNode]:
-        """Find task at mouse position."""
-        x = pos.x()
-        y = pos.y()
-
-        for task in self.tasks:
-            if not task.start_date or not task.end_date:
-                continue
-
-            x_start = self._date_to_x(task.start_date)
-            x_end = self._date_to_x(task.end_date)
-            task_y = self.task_y_positions.get(task.id, 0)
-
-            # Check if mouse is within task bar bounds
-            if (x_start <= x <= x_end and
-                task_y + 5 <= y <= task_y + self.row_height - 5):
-                return task
-
-        return None
-
-    def _show_tooltip(self, task: TaskNode, global_pos: QPoint):
-        """Show rich tooltip for a task."""
-        # Calculate critical path info
-        is_critical = task.id in self.critical_path_ids
-        slack_days = self.slack_data.get(task.id, 0)
-
-        # Get early/late dates if available
-        early_start = ""
-        late_start = ""
-        if self.analyzer:
-            results = self.analyzer.analyze()
-            if task.id in results['early_start']:
-                early_start = results['early_start'][task.id].strftime('%Y-%m-%d')
-            if task.id in results['late_start']:
-                late_start = results['late_start'][task.id].strftime('%Y-%m-%d')
-
-        # Find predecessor
-        predecessor_name = "None"
+    def _find_predecessor(self, task: TaskNode) -> Optional[TaskNode]:
         if task.predecessor_id and task.predecessor_id in self.node_map:
-            predecessor_name = self.node_map[task.predecessor_id].name
-        elif task.parent and not task.is_parallel:
+            return self.node_map[task.predecessor_id]
+        if task.parent and not task.is_parallel:
             siblings = task.parent.children
             try:
                 idx = siblings.index(task)
                 if idx > 0:
-                    predecessor_name = siblings[idx - 1].name
+                    return siblings[idx - 1]
             except ValueError:
                 pass
+        return None
 
-        # Find successors
-        successors = []
-        for other_task in self.tasks:
-            if other_task.predecessor_id == task.id:
-                successors.append(other_task.name)
-            elif other_task.parent and not other_task.is_parallel:
-                siblings = other_task.parent.children
-                try:
-                    idx = siblings.index(other_task)
-                    if idx > 0 and siblings[idx - 1].id == task.id:
-                        successors.append(other_task.name)
-                except ValueError:
-                    pass
+    # ------------------------------------------------------------------
+    # Mouse events
+    # ------------------------------------------------------------------
 
-        successors_text = ", ".join(successors[:3]) if successors else "None"
-        if len(successors) > 3:
-            successors_text += f" (+{len(successors) - 3} more)"
+    def mousePressEvent(self, event):
+        if event.button() == Qt.MouseButton.LeftButton:
+            task = self._task_at(event.pos())
+            if task:
+                self.task_clicked.emit(task)
 
-        # Build tooltip HTML
-        tooltip = f"""<html>
-<style>
-    body {{ font-family: Arial; font-size: 10pt; }}
-    .header {{ font-size: 11pt; font-weight: bold; color: #FF5050; }}
-    .section {{ font-weight: bold; margin-top: 8px; }}
-    .critical {{ color: #FF5050; font-weight: bold; }}
-    .normal {{ color: #6496FF; }}
-</style>
-<body>
-<div class="header">📋 {task.name}</div>
-<hr>
-<div><b>Status:</b> {task.status}</div>
-<div><b>Owner:</b> {task.owner or 'Unassigned'}</div>
+    def mouseDoubleClickEvent(self, event):
+        task = self._task_at(event.pos())
+        if task:
+            self.task_double_clicked.emit(task)
 
-<div class="section">📅 Schedule:</div>
-<div>Start: {task.start_date or 'N/A'}</div>
-<div>End: {task.end_date or 'N/A'}</div>
-<div>Duration: {task.duration} days</div>
+    def mouseMoveEvent(self, event):
+        task = self._task_at(event.pos())
+        if task != self.hovered_task:
+            self.hovered_task = task
+            self.setToolTip(self._tooltip(task) if task else "")
 
-<div class="section">⏱️ Critical Path:</div>
-<div>Is Critical: <span class="{'critical' if is_critical else 'normal'}">{'YES ⚠️' if is_critical else 'NO'}</span></div>
-<div>Slack: {slack_days} days</div>"""
+    def _task_at(self, pos: QPoint) -> Optional[TaskNode]:
+        """Return the task under cursor (name strip or bar area)."""
+        x, y = pos.x(), pos.y()
+        for task in self.tasks:
+            ty = self.task_y_positions.get(task.id, 0)
+            if not (ty <= y < ty + self.ROW_HEIGHT):
+                continue
+            # Name strip click — any x in [0, LEFT_MARGIN) hits
+            if x < self.LEFT_MARGIN:
+                return task
+            # Bar area click
+            if task.start_date and task.end_date:
+                xs = self._x(task.start_date)
+                xe = self._x(task.end_date)
+                if xs is not None and xe is not None:
+                    if xs - 4 <= x <= max(xe, xs + 8):
+                        return task
+        return None
 
-        if early_start:
-            tooltip += f"<div>Early Start: {early_start}</div>"
-        if late_start:
-            tooltip += f"<div>Late Start: {late_start}</div>"
+    def _tooltip(self, task: TaskNode) -> str:
+        slack = self.slack_data.get(task.id, 0)
+        over  = "  ⚠ Overdue" if _is_overdue(task) else ""
+        lines = [
+            f"<b>{task.name}</b>",
+            f"Status: {task.status}{over}",
+            f"Start: {task.start_date or 'N/A'}",
+            f"End:   {task.end_date or 'N/A'}",
+            f"Duration: {task.duration} days",
+            f"Slack: {slack} days",
+        ]
+        if task.owner:
+            lines.append(f"Owner: {task.owner}")
+        return "<br>".join(lines)
 
-        tooltip += f"""
-<div class="section">🔗 Dependencies:</div>
-<div>Predecessor: {predecessor_name}</div>
-<div>Successors: {successors_text}</div>"""
+    # ------------------------------------------------------------------
+    # Trace helpers called from GanttChartWidget
+    # ------------------------------------------------------------------
 
-        if task.notes:
-            notes_preview = task.notes[:100] + "..." if len(task.notes) > 100 else task.notes
-            tooltip += f"""
-<div class="section">📝 Notes:</div>
-<div>{notes_preview}</div>"""
+    def highlight_trace(self, task_ids: Set[str]):
+        self.traced_ids = task_ids
+        self.update()
 
-        tooltip += """
-</body>
-</html>"""
+    def clear_trace(self):
+        self.traced_ids = set()
+        self.update()
 
-        self.setToolTip(tooltip)
 
+# ---------------------------------------------------------------------------
+# GanttChartWidget — top-level widget
+# ---------------------------------------------------------------------------
 
 class GanttChartWidget(QWidget):
     """
-    Main Gantt Chart Widget with critical path analysis.
-    Microsoft Project style with right-click hide functionality.
+    Public interface (called from project_widget.py):
+        load_nodes(root_nodes)   — refresh the whole chart
+        main_window              — set by ProjectWidget so double-click can
+                                   switch to the Tracker tab
     """
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.main_window = None  # Will be set by main window
-        self.root_nodes = []  # Store original root nodes
-        self.setup_ui()
+        self.main_window = None
+        self.root_nodes:  List[TaskNode]    = []
+        self.node_map:    Dict[str, TaskNode] = {}
+        self.slack_data:  Dict[str, int]    = {}
+        self._setup_ui()
 
-    def setup_ui(self):
-        """Setup the UI layout."""
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
+    # ------------------------------------------------------------------
+    # UI construction
+    # ------------------------------------------------------------------
 
-        # Toolbar
-        toolbar = self._create_toolbar()
-        layout.addWidget(toolbar)
+    def _setup_ui(self):
+        root = QVBoxLayout(self)
+        root.setContentsMargins(0, 0, 0, 0)
+        root.setSpacing(0)
 
-        # Splitter: Top 5 Critical Paths Panel on left, Timeline on right
+        # Create timeline first so _build_toolbar() can reference it
+        self.timeline = GanttTimeline()
+        self.timeline.task_clicked.connect(self._on_task_clicked)
+        self.timeline.task_double_clicked.connect(self._on_task_double_clicked)
+
+        root.addWidget(self._build_toolbar())
+
         splitter = QSplitter(Qt.Orientation.Horizontal)
 
-        # Left panel: Top 5 Critical Paths
-        self.critical_paths_panel = TopCriticalPathsPanel()
-        self.critical_paths_panel.task_clicked.connect(self._on_critical_task_clicked)
-        splitter.addWidget(self.critical_paths_panel)
+        # Left panel
+        self.trace_panel = TracePanel()
+        splitter.addWidget(self.trace_panel)
 
-        # Right panel: Timeline in scroll area
-        scroll_area = QScrollArea()
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        # Right panel
+        self._scroll = QScrollArea()
+        self._scroll.setWidgetResizable(True)
+        self._scroll.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self._scroll.setVerticalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAsNeeded)
 
-        self.timeline = GanttTimeline()
-        self.timeline.task_double_clicked.connect(self._on_task_double_clicked)
-        self.timeline.reload_required.connect(self._reload_with_filtered_tasks)
-        scroll_area.setWidget(self.timeline)
-        splitter.addWidget(scroll_area)
+        self._scroll.setWidget(self.timeline)
+        splitter.addWidget(self._scroll)
 
-        # Set splitter proportions (25% left panel, 75% timeline)
-        splitter.setSizes([300, 900])
+        splitter.setSizes([260, 900])
+        root.addWidget(splitter)
 
-        layout.addWidget(splitter)
+    def _build_toolbar(self) -> QWidget:
+        bar = QWidget()
+        bar.setFixedHeight(40)
+        bar.setStyleSheet(
+            "background: #222230; border-bottom: 1px solid #444;"
+        )
+        h = QHBoxLayout(bar)
+        h.setContentsMargins(10, 4, 10, 4)
+        h.setSpacing(8)
 
-    def _create_toolbar(self) -> QToolBar:
-        """Create toolbar with controls."""
-        toolbar = QToolBar()
-        toolbar.setIconSize(QSize(16, 16))
-        toolbar.setStyleSheet("QToolBar { background: #2b2b2b; border-bottom: 1px solid #555; }")
+        # Zoom
+        lbl = QLabel("Zoom:")
+        lbl.setStyleSheet("color:#ccc;")
+        h.addWidget(lbl)
 
-        # Zoom controls
-        toolbar.addWidget(QLabel(" Zoom: "))
+        btn_out = QPushButton("−")
+        btn_out.setFixedWidth(28)
+        btn_out.setStyleSheet("QPushButton { color:#ccc; background:#333; border:1px solid #555; }")
+        btn_out.clicked.connect(lambda: self._zoom(-5))
+        h.addWidget(btn_out)
 
-        zoom_out_btn = QPushButton("-")
-        zoom_out_btn.setMaximumWidth(30)
-        zoom_out_btn.clicked.connect(lambda: self._zoom(-5))
-        toolbar.addWidget(zoom_out_btn)
+        self._zoom_slider = QSlider(Qt.Orientation.Horizontal)
+        self._zoom_slider.setMinimum(4)
+        self._zoom_slider.setMaximum(80)
+        self._zoom_slider.setValue(20)
+        self._zoom_slider.setFixedWidth(140)
+        self._zoom_slider.valueChanged.connect(self.timeline.set_zoom)
+        h.addWidget(self._zoom_slider)
 
-        self.zoom_slider = QSlider(Qt.Orientation.Horizontal)
-        self.zoom_slider.setMinimum(5)
-        self.zoom_slider.setMaximum(50)
-        self.zoom_slider.setValue(20)
-        self.zoom_slider.setMaximumWidth(150)
-        self.zoom_slider.valueChanged.connect(self._on_zoom_changed)
-        toolbar.addWidget(self.zoom_slider)
+        btn_in = QPushButton("+")
+        btn_in.setFixedWidth(28)
+        btn_in.setStyleSheet("QPushButton { color:#ccc; background:#333; border:1px solid #555; }")
+        btn_in.clicked.connect(lambda: self._zoom(5))
+        h.addWidget(btn_in)
 
-        zoom_in_btn = QPushButton("+")
-        zoom_in_btn.setMaximumWidth(30)
-        zoom_in_btn.clicked.connect(lambda: self._zoom(5))
-        toolbar.addWidget(zoom_in_btn)
+        h.addSpacing(16)
 
-        toolbar.addSeparator()
+        # Show Links toggle
+        self._links_btn = QPushButton("Show Links")
+        self._links_btn.setCheckable(True)
+        self._links_btn.setChecked(False)
+        self._links_btn.setStyleSheet(
+            "QPushButton { color:#ccc; background:#333; border:1px solid #555; padding:2px 8px; }"
+            "QPushButton:checked { background:#3a3a6a; border-color:#6060aa; }"
+        )
+        self._links_btn.toggled.connect(self._toggle_links)
+        h.addWidget(self._links_btn)
 
-        # Toggle buttons
-        self.critical_path_btn = QPushButton("Critical Path")
-        self.critical_path_btn.setCheckable(True)
-        self.critical_path_btn.setChecked(True)
-        self.critical_path_btn.toggled.connect(self._toggle_critical_path)
-        toolbar.addWidget(self.critical_path_btn)
+        # Clear Trace button
+        clr = QPushButton("Clear Trace")
+        clr.setStyleSheet(
+            "QPushButton { color:#ccc; background:#333; border:1px solid #555; padding:2px 8px; }"
+            "QPushButton:hover { background:#444; }"
+        )
+        clr.clicked.connect(self._clear_trace)
+        h.addWidget(clr)
 
-        self.slack_btn = QPushButton("Show Slack")
-        self.slack_btn.setCheckable(True)
-        self.slack_btn.setChecked(True)
-        self.slack_btn.toggled.connect(self._toggle_slack)
-        toolbar.addWidget(self.slack_btn)
-
-        self.dependencies_btn = QPushButton("Dependencies")
-        self.dependencies_btn.setCheckable(True)
-        self.dependencies_btn.setChecked(True)
-        self.dependencies_btn.toggled.connect(self._toggle_dependencies)
-        toolbar.addWidget(self.dependencies_btn)
-
-        toolbar.addSeparator()
+        h.addStretch()
 
         # Legend
-        legend_label = QLabel(" 🔴 Critical | 🔵 Normal | 🟢 Complete | 🟡 Milestone ")
-        legend_label.setStyleSheet("color: #e0e0e0; padding: 5px;")
-        toolbar.addWidget(legend_label)
+        h.addWidget(self._build_legend())
 
-        return toolbar
+        return bar
+
+    @staticmethod
+    def _build_legend() -> QWidget:
+        w = QWidget()
+        h = QHBoxLayout(w)
+        h.setContentsMargins(0, 0, 0, 0)
+        h.setSpacing(6)
+        for color, label in (
+            ("#4CAF50", "Completed"),
+            ("#FFC107", "In Progress"),
+            ("#5C8DB8", "Not Started"),
+            ("#E53935", "Overdue"),
+        ):
+            dot = QLabel("●")
+            dot.setStyleSheet(f"color:{color}; font-size:14px;")
+            lbl = QLabel(label)
+            lbl.setStyleSheet("color:#bbb; font-size:8pt;")
+            h.addWidget(dot)
+            h.addWidget(lbl)
+        return w
+
+    # ------------------------------------------------------------------
+    # Public API
+    # ------------------------------------------------------------------
 
     def load_nodes(self, root_nodes: List[TaskNode]):
-        """Load task nodes and render Gantt chart."""
+        """Refresh the Gantt chart with the current task forest."""
         if not root_nodes:
             return
 
-        # Store original root nodes
         self.root_nodes = root_nodes
+        self.node_map   = {n.id: n for n in _flatten(root_nodes)}
 
-        # Load top 5 critical paths in left panel
-        self.critical_paths_panel.load_critical_paths(root_nodes)
+        # Critical path analysis for slack data
+        try:
+            analyzer        = CriticalPathAnalyzer(root_nodes)
+            results         = analyzer.analyze()
+            self.slack_data = results.get("slack", {})
+        except Exception:
+            self.slack_data = {}
 
-        # Set root nodes in timeline for hiding functionality
-        self.timeline.set_root_nodes(root_nodes)
+        self.timeline.load_tasks(root_nodes, self.slack_data)
+        self._clear_trace()
 
-        # Load timeline
-        self.timeline.load_tasks(root_nodes)
-
-    def _reload_with_filtered_tasks(self):
-        """Reload timeline with filtered root nodes (excluding hidden tasks)."""
-        # Get filtered root nodes from timeline
-        filtered_roots = self.timeline.get_filtered_root_nodes()
-
-        # Reload timeline with filtered tasks
-        if filtered_roots:
-            self.timeline.load_tasks(filtered_roots)
-        else:
-            # All tasks hidden - show empty timeline
-            self.timeline.tasks = []
-            self.timeline.update()
+    # ------------------------------------------------------------------
+    # Toolbar handlers
+    # ------------------------------------------------------------------
 
     def _zoom(self, delta: int):
-        """Zoom in or out."""
-        new_value = self.zoom_slider.value() + delta
-        self.zoom_slider.setValue(max(5, min(50, new_value)))
+        v = self._zoom_slider.value() + delta
+        self._zoom_slider.setValue(max(4, min(80, v)))
 
-    def _on_zoom_changed(self, value: int):
-        """Handle zoom slider change."""
-        self.timeline.set_zoom(value)
-
-    def _toggle_critical_path(self, checked: bool):
-        """Toggle critical path visualization."""
-        self.timeline.show_critical_path = checked
-        self.timeline.update()
-
-    def _toggle_slack(self, checked: bool):
-        """Toggle slack visualization."""
-        self.timeline.show_slack = checked
-        self.timeline.update()
-
-    def _toggle_dependencies(self, checked: bool):
-        """Toggle dependency arrows."""
+    def _toggle_links(self, checked: bool):
         self.timeline.show_dependencies = checked
         self.timeline.update()
 
-    def _on_critical_task_clicked(self, task: TaskNode):
-        """Handle click on task in Top 5 Critical Paths panel - highlight in Gantt with orange."""
-        self.timeline.highlight_task(task)
+    def _clear_trace(self):
+        self.timeline.clear_trace()
+        self.trace_panel.clear_trace()
+
+    # ------------------------------------------------------------------
+    # Trace — clicked task
+    # ------------------------------------------------------------------
+
+    def _on_task_clicked(self, task: TaskNode):
+        chain      = self._compute_trace(task)
+        traced_ids = {e["task"].id for e in chain}
+        self.timeline.highlight_trace(traced_ids)
+        self.trace_panel.update_trace(chain, task.name)
+
+    def _compute_trace(self, target: TaskNode) -> List[Dict]:
+        """
+        Walk backwards through the predecessor chain starting at *target*.
+
+        For each node we record:
+            task         TaskNode
+            duration     calendar days (end - start + 1)
+            slack        workdays of float from CriticalPathAnalyzer
+            is_bottleneck True when slack == 0 and the node is a leaf task
+
+        chain[0] = target (the clicked task)
+        chain[-1] = furthest upstream anchor
+        """
+        chain: List[Dict] = []
+        visited: Set[str] = set()
+        current: Optional[TaskNode] = target
+
+        while current and current.id not in visited:
+            visited.add(current.id)
+
+            dur = 0
+            if current.start_date and current.end_date:
+                try:
+                    s   = datetime.strptime(current.start_date, DATE_FMT)
+                    e   = datetime.strptime(current.end_date,   DATE_FMT)
+                    dur = (e - s).days + 1
+                except ValueError:
+                    pass
+
+            slack = self.slack_data.get(current.id, 0)
+            chain.append({
+                "task":         current,
+                "duration":     dur,
+                "slack":        slack,
+                "is_bottleneck": slack == 0 and not current.children,
+            })
+
+            # Find upstream predecessor
+            pred: Optional[TaskNode] = None
+            if current.predecessor_id and current.predecessor_id in self.node_map:
+                pred = self.node_map[current.predecessor_id]
+            elif current.parent:
+                sibs = current.parent.children
+                try:
+                    idx = sibs.index(current)
+                    if idx > 0 and not current.is_parallel:
+                        pred = sibs[idx - 1]
+                    elif idx == 0:
+                        # First child — walk up to parent (if not already visited)
+                        p = current.parent
+                        if p.id not in visited:
+                            pred = p
+                except ValueError:
+                    pass
+
+            current = pred
+
+        return chain
+
+    # ------------------------------------------------------------------
+    # Double-click → jump to Tracker tab
+    # ------------------------------------------------------------------
 
     def _on_task_double_clicked(self, task: TaskNode):
-        """Handle double-click on task bar - jump to Tracker tab and highlight."""
-        if self.main_window:
-            # Switch to Tracker tab (index 0)
-            self.main_window.tabs.setCurrentIndex(0)
-
-            # Find and highlight the task in tree view
-            self._highlight_task_in_tree(task)
-
-    def _highlight_task_in_tree(self, task: TaskNode):
-        """Find and highlight task in the tree view."""
         if not self.main_window:
             return
+        try:
+            self.main_window.inner_tabs.setCurrentIndex(0)
+        except AttributeError:
+            pass
+        self._select_in_tree(task)
 
-        tree_view = self.main_window.tree_view
-
-        # Search for the task in tree
-        iterator = QTreeWidgetItemIterator(tree_view)
-        while iterator.value():
-            item = iterator.value()
+    def _select_in_tree(self, task: TaskNode):
+        if not self.main_window:
+            return
+        tree = self.main_window.tree_view
+        it   = QTreeWidgetItemIterator(tree)
+        while it.value():
+            item      = it.value()
             item_task = item.data(0, Qt.ItemDataRole.UserRole)
-
-            if item_task and hasattr(item_task, 'id') and item_task.id == task.id:
-                # Found the task!
-                tree_view.setCurrentItem(item)
-                tree_view.scrollToItem(item)
-
-                # Highlight with yellow background
-                for col in range(tree_view.columnCount()):
-                    item.setBackground(col, QColor(255, 255, 0, 100))  # Yellow highlight
-
+            if item_task and getattr(item_task, "id", None) == task.id:
+                tree.setCurrentItem(item)
+                tree.scrollToItem(item)
+                for col in range(tree.columnCount()):
+                    item.setBackground(col, QColor(255, 255, 0, 80))
                 break
-
-            iterator += 1
+            it += 1

@@ -580,13 +580,25 @@ class TreeGridView(QTreeWidget):
         self.item_changed_signal.emit(source_node)
 
     def load_project(self, nodes: list[TaskNode]):
-        self.clear()
-        self.root_nodes = nodes
-        for node in nodes:
-            self.add_node_to_tree(node, self.invisibleRootItem())
-        
+        self.blockSignals(True)
+        try:
+            self.clear()
+            self.root_nodes = nodes
+            for node in nodes:
+                self.add_node_to_tree(node, self.invisibleRootItem())
+        finally:
+            self.blockSignals(False)
+
         self.update_filter_options()
-        
+
+        # Refresh all item labels now that every item is attached to the tree.
+        # _predecessor_label() calls treeWidget() to resolve a predecessor's name;
+        # that call returns None during add_node_to_tree (item not yet in tree),
+        # so all explicit predecessors would show "⇦ (missing)" until a later
+        # refresh. Calling this here fixes the display immediately on load.
+        # (refresh_entire_tree blocks signals internally — no popups during load.)
+        self.refresh_entire_tree()
+
         # Force full recalculation to apply new logic (e.g. Next-Day Sequencing) to old files
         self.recalculate_all_dates()
 
@@ -761,15 +773,17 @@ class TreeGridView(QTreeWidget):
             link_pred_action.triggered.connect(lambda: self.open_link_dialog(item))
             menu.addAction(link_pred_action)
 
-            # Jump + clear — only meaningful when an explicit link exists.
+            # Clear Predecessor — always visible; greyed out when nothing to clear.
+            clear_link_action = QAction("Clear Predecessor", self)
+            clear_link_action.setEnabled(bool(item.node.predecessor_id))
+            clear_link_action.triggered.connect(lambda: self.clear_link(item))
+            menu.addAction(clear_link_action)
+
+            # Jump — only meaningful when there is an explicit link to navigate to.
             if item.node.predecessor_id:
                 jump_action = QAction("Jump to Predecessor", self)
                 jump_action.triggered.connect(lambda: self.jump_to_predecessor(item))
                 menu.addAction(jump_action)
-
-                clear_link_action = QAction("Clear Predecessor", self)
-                clear_link_action.triggered.connect(lambda: self.clear_link(item))
-                menu.addAction(clear_link_action)
             
             menu.addSeparator()
             
@@ -1276,15 +1290,23 @@ class TreeGridView(QTreeWidget):
     def refresh_entire_tree(self):
         """
         Recursively update all items from their nodes.
-        This is necessary because a change in one node might cascade to 
+        This is necessary because a change in one node might cascade to
         siblings or children anywhere in the tree.
+
+        Signals are blocked for the entire pass: this method is a pure
+        visual repaint from the model and must never fire on_item_changed
+        (which is for user edits only).
         """
-        iterator = QTreeWidgetItemIterator(self)
-        while iterator.value():
-            item = iterator.value()
-            if isinstance(item, TaskTreeWidgetItem):
-                item.update_from_node()
-            iterator += 1
+        self.blockSignals(True)
+        try:
+            iterator = QTreeWidgetItemIterator(self)
+            while iterator.value():
+                item = iterator.value()
+                if isinstance(item, TaskTreeWidgetItem):
+                    item.update_from_node()
+                iterator += 1
+        finally:
+            self.blockSignals(False)
 
     def validate_child_dates(self, item: TaskTreeWidgetItem):
         """
