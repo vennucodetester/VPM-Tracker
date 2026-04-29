@@ -853,19 +853,22 @@ class TreeGridView(QTreeWidget):
         from PyQt6.QtGui import QColor
         flash_color = QBrush(QColor(255, 213, 79, 140))  # amber overlay
         original = [item.background(col) for col in range(Columns.COUNT)]
-        self.blockSignals(True)
-        for col in range(Columns.COUNT):
-            item.setBackground(col, flash_color)
-        self.blockSignals(False)
+        was_blocked = self.blockSignals(True)
+        try:
+            for col in range(Columns.COUNT):
+                item.setBackground(col, flash_color)
+        finally:
+            self.blockSignals(was_blocked)
 
         def revert():
-            self.blockSignals(True)
+            was_blocked_inner = self.blockSignals(True)
             try:
                 for col in range(Columns.COUNT):
                     item.setBackground(col, original[col])
             except RuntimeError:
                 pass  # item was removed before timer fired
-            self.blockSignals(False)
+            finally:
+                self.blockSignals(was_blocked_inner)
 
         QTimer.singleShot(1400, revert)
 
@@ -1264,16 +1267,26 @@ class TreeGridView(QTreeWidget):
             self.update_filter_options()
 
     def on_item_collapsed(self, item: QTreeWidgetItem):
-        if isinstance(item, TaskTreeWidgetItem):
-            item.node.expanded = False
-            # Recursively collapse children so next expansion is single-level
-            for i in range(item.childCount()):
-                child = item.child(i)
+        if not isinstance(item, TaskTreeWidgetItem):
+            return
+        item.node.expanded = False
+        # Collapse all descendants iteratively using an explicit stack.
+        # The old recursive approach caused RecursionError on large projects
+        # because (a) it called itself directly AND (b) child.setExpanded(False)
+        # fired itemCollapsed again — doubling the recursion depth per level.
+        # Blocking signals here prevents that re-entrant signal cascade.
+        stack = [item.child(i) for i in range(item.childCount())]
+        was_blocked = self.blockSignals(True)
+        try:
+            while stack:
+                child = stack.pop()
                 child.setExpanded(False)
                 if isinstance(child, TaskTreeWidgetItem):
                     child.node.expanded = False
-                    # We need to recurse deeper to ensure grandchildren are also collapsed
-                    self.on_item_collapsed(child)
+                for i in range(child.childCount()):
+                    stack.append(child.child(i))
+        finally:
+            self.blockSignals(was_blocked)
 
     def on_item_expanded(self, item: QTreeWidgetItem):
         if isinstance(item, TaskTreeWidgetItem):
@@ -1296,8 +1309,16 @@ class TreeGridView(QTreeWidget):
         Signals are blocked for the entire pass: this method is a pure
         visual repaint from the model and must never fire on_item_changed
         (which is for user edits only).
+
+        IMPORTANT: blockSignals returns the *previous* state — we save it
+        and restore it instead of force-unblocking. This is required because
+        on_item_changed (and other callers) may already have blocked signals
+        before invoking us. If we unconditionally unblock at the end, the
+        outer caller's signal-suppression breaks and update_from_node()
+        re-fires on_item_changed → spurious "Start date is automatic" popup
+        loops on STATUS edits.
         """
-        self.blockSignals(True)
+        was_blocked = self.blockSignals(True)
         try:
             iterator = QTreeWidgetItemIterator(self)
             while iterator.value():
@@ -1306,7 +1327,7 @@ class TreeGridView(QTreeWidget):
                     item.update_from_node()
                 iterator += 1
         finally:
-            self.blockSignals(False)
+            self.blockSignals(was_blocked)
 
     def validate_child_dates(self, item: TaskTreeWidgetItem):
         """

@@ -5,6 +5,10 @@ import os
 # Add project root to path so imports work
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
+# Raise Python's recursion limit for large, deeply-nested project files.
+# Default is 1000; 5000 gives plenty of headroom without risk.
+sys.setrecursionlimit(5000)
+
 from PyQt6.QtWidgets import QApplication
 from ui.main_window import MainWindow
 
