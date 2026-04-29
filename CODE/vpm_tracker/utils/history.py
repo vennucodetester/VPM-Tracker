@@ -15,8 +15,21 @@ Typical flow:
 
 Caller is responsible for rebuilding the UI from the returned snapshot.
 """
-import copy
+import json
 from typing import Any, Optional
+
+
+def _clone(snapshot: Any) -> Any:
+    """Deep-clone a snapshot dict using JSON round-trip.
+
+    copy.deepcopy() is recursive and blows Python's call stack on large,
+    deeply-nested task trees (RecursionError: maximum recursion depth exceeded).
+    json.dumps / json.loads is implemented in C and is fully iterative, so it
+    handles arbitrarily deep trees without touching the Python call stack.
+    Snapshots only contain JSON-safe types (str, bool, int, list, dict, None)
+    so this round-trip is lossless.
+    """
+    return json.loads(json.dumps(snapshot))
 
 
 DEFAULT_MAX_DEPTH = 50
@@ -33,7 +46,7 @@ class HistoryStack:
         Clears the redo stack because a new branch of history has started."""
         if snapshot is None:
             return
-        self._undo.append(copy.deepcopy(snapshot))
+        self._undo.append(_clone(snapshot))
         if len(self._undo) > self._max:
             # Drop oldest to stay within budget
             self._undo = self._undo[-self._max:]
@@ -51,7 +64,7 @@ class HistoryStack:
         if not self._undo:
             return None
         prev = self._undo.pop()
-        self._redo.append(copy.deepcopy(current_snapshot))
+        self._redo.append(_clone(current_snapshot))
         if len(self._redo) > self._max:
             self._redo = self._redo[-self._max:]
         return prev
@@ -60,7 +73,7 @@ class HistoryStack:
         if not self._redo:
             return None
         nxt = self._redo.pop()
-        self._undo.append(copy.deepcopy(current_snapshot))
+        self._undo.append(_clone(current_snapshot))
         if len(self._undo) > self._max:
             self._undo = self._undo[-self._max:]
         return nxt
