@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git clone *)",
+      "Bash(git -C \"C:/Users/silam/OneDrive/Documents/VPM-Tracker\" pull origin main)",
+      "Bash(python -c ' *)",
+      "Bash(python tests/test_timeline_invariants.py)",
+      "Bash(python tests/test_predecessor_chain.py)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(python build_vave.py)",
+      "Bash(python scripts/recalc.py \"C:\\\\Users\\\\silam\\\\OneDrive\\\\Documents\\\\VPM-Tracker\\\\MicroBlock 2.0 Estimated Cost.xlsx\")",
+      "Bash(python -)"
+    ]
+  }
+}
