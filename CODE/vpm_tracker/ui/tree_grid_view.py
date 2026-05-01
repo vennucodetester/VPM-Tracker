@@ -1125,6 +1125,7 @@ class TreeGridView(QTreeWidget):
                     else:
                         node.is_parallel = new_state
                         self.recalculate_all_dates()
+                        self.refresh_entire_tree()
 
                 name_changed = node.name != text
                 node.name = text
