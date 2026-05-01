@@ -48,7 +48,7 @@
                   "name": "Costing Estimate",
                   "start_date": "2026-04-17",
                   "end_date": "2026-04-28",
-                  "status": "In Progress",
+                  "status": "Completed",
                   "owner": "",
                   "notes": "",
                   "is_parallel": true,
@@ -114,7 +114,7 @@
                   "predecessor_id": null
                 }
               ],
-              "expanded": true,
+              "expanded": false,
               "dates_locked": false,
               "predecessor_id": null
             },
@@ -167,7 +167,7 @@
                       "predecessor_id": "03afbeee-148f-40f3-a273-c9cdf8e3bfbb"
                     }
                   ],
-                  "expanded": true,
+                  "expanded": false,
                   "dates_locked": false,
                   "predecessor_id": null
                 },
@@ -210,7 +210,7 @@
                       "predecessor_id": null
                     }
                   ],
-                  "expanded": true,
+                  "expanded": false,
                   "dates_locked": false,
                   "predecessor_id": null
                 },
@@ -257,7 +257,7 @@
                   "predecessor_id": null
                 }
               ],
-              "expanded": true,
+              "expanded": false,
               "dates_locked": false,
               "predecessor_id": null
             },
@@ -300,7 +300,7 @@
                   "predecessor_id": "0123a9b8-9953-4fc1-8cb2-eabebddc6221"
                 }
               ],
-              "expanded": true,
+              "expanded": false,
               "dates_locked": false,
               "predecessor_id": null
             },
@@ -357,7 +357,7 @@
                   "predecessor_id": null
                 }
               ],
-              "expanded": true,
+              "expanded": false,
               "dates_locked": false,
               "predecessor_id": null
             },
@@ -472,7 +472,7 @@
                   "predecessor_id": "ec29973e-3722-49b4-8202-034b098e650e"
                 }
               ],
-              "expanded": true,
+              "expanded": false,
               "dates_locked": false,
               "predecessor_id": "ec29973e-3722-49b4-8202-034b098e650e"
             },
@@ -529,7 +529,7 @@
                   "predecessor_id": null
                 }
               ],
-              "expanded": true,
+              "expanded": false,
               "dates_locked": false,
               "predecessor_id": null
             },
@@ -586,7 +586,7 @@
                   "predecessor_id": null
                 }
               ],
-              "expanded": true,
+              "expanded": false,
               "dates_locked": false,
               "predecessor_id": null
             }
@@ -629,6 +629,20 @@
               "is_parallel": false,
               "children": [
                 {
+                  "id": "141e1e3d-73c6-4310-aeb8-f39295855e66",
+                  "name": "DFMEA/ DVPR",
+                  "start_date": "2026-04-22",
+                  "end_date": "2026-05-08",
+                  "status": "In Progress",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": true,
+                  "children": [],
+                  "expanded": false,
+                  "dates_locked": false,
+                  "predecessor_id": null
+                },
+                {
                   "id": "f945f74f-e5d4-4541-b189-1caf3bdaf6fc",
                   "name": "Prototype drawings - for MS",
                   "start_date": "2026-04-22",
@@ -636,7 +650,7 @@
                   "status": "In Progress",
                   "owner": "",
                   "notes": "",
-                  "is_parallel": false,
+                  "is_parallel": true,
                   "children": [],
                   "expanded": false,
                   "dates_locked": false,
@@ -892,7 +906,7 @@
                       "predecessor_id": null
                     }
                   ],
-                  "expanded": true,
+                  "expanded": false,
                   "dates_locked": false,
                   "predecessor_id": null
                 },
@@ -935,7 +949,7 @@
                       "predecessor_id": "4ba506f5-340b-4087-bd7f-638d928ab311"
                     }
                   ],
-                  "expanded": true,
+                  "expanded": false,
                   "dates_locked": false,
                   "predecessor_id": null
                 },
@@ -997,7 +1011,7 @@
                   "predecessor_id": "f5bd3fa9-1fbb-4a5e-81a3-564c47bd3ec5"
                 }
               ],
-              "expanded": true,
+              "expanded": false,
               "dates_locked": false,
               "predecessor_id": null
             },
@@ -1117,7 +1131,7 @@
                           "predecessor_id": null
                         }
                       ],
-                      "expanded": true,
+                      "expanded": false,
                       "dates_locked": false,
                       "predecessor_id": null
                     },
@@ -1198,7 +1212,7 @@
                               "predecessor_id": null
                             }
                           ],
-                          "expanded": true,
+                          "expanded": false,
                           "dates_locked": false,
                           "predecessor_id": "891b596c-89aa-4e3a-ad4f-865f60cd22e8"
                         },
@@ -1220,7 +1234,7 @@
                           "id": "d5c50fd9-9216-4859-b8ef-7a08b0ae0d93",
                           "name": "3Dr LT - Target spec",
                           "start_date": "2026-04-22",
-                          "end_date": "2026-04-28",
+                          "end_date": "2026-05-01",
                           "status": "In Progress",
                           "owner": "",
                           "notes": "",
@@ -1245,17 +1259,17 @@
                           "predecessor_id": null
                         }
                       ],
-                      "expanded": true,
+                      "expanded": false,
                       "dates_locked": false,
                       "predecessor_id": null
                     }
                   ],
-                  "expanded": true,
+                  "expanded": false,
                   "dates_locked": false,
                   "predecessor_id": null
                 }
               ],
-              "expanded": true,
+              "expanded": false,
               "dates_locked": false,
               "predecessor_id": null
             },
@@ -1298,7 +1312,7 @@
                   "predecessor_id": "ebadf875-9609-4598-af0a-1c5032d3c8ad"
                 }
               ],
-              "expanded": true,
+              "expanded": false,
               "dates_locked": false,
               "predecessor_id": null
             },
@@ -1315,6 +1329,824 @@
               "expanded": true,
               "dates_locked": false,
               "predecessor_id": "203c518e-39ec-4dce-aad3-7345ca323ce7"
+            }
+          ],
+          "expanded": true,
+          "dates_locked": false,
+          "predecessor_id": null
+        }
+      ]
+    },
+    {
+      "name": "DG- 5Dr LT-Ph2",
+      "metadata": {
+        "owners": [
+          "Unassigned",
+          "Me"
+        ],
+        "holidays": [],
+        "exclude_weekends": true
+      },
+      "tasks": [
+        {
+          "id": "1e2b5e14-dde1-45b3-ab74-2bd700915385",
+          "name": "DG- 5Dr LT - Fixed speed",
+          "start_date": "2026-04-13",
+          "end_date": "2026-09-14",
+          "status": "In Progress",
+          "owner": "",
+          "notes": "",
+          "is_parallel": false,
+          "children": [
+            {
+              "id": "ff238e31-d74f-442c-bae9-8395c96dc86b",
+              "name": "Phase 1",
+              "start_date": "2026-04-13",
+              "end_date": "2026-05-15",
+              "status": "In Progress",
+              "owner": "",
+              "notes": "",
+              "is_parallel": false,
+              "children": [
+                {
+                  "id": "df9b4cb1-1b9b-4764-8cb1-d0c17bf4dde4",
+                  "name": "PDD",
+                  "start_date": "2026-04-13",
+                  "end_date": "2026-05-08",
+                  "status": "In Progress",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": false,
+                  "children": [],
+                  "expanded": false,
+                  "dates_locked": false,
+                  "predecessor_id": null
+                },
+                {
+                  "id": "d24da270-3869-430f-98d6-3fc31e004337",
+                  "name": "DFMEA/DVPR",
+                  "start_date": "2026-04-13",
+                  "end_date": "2026-05-08",
+                  "status": "In Progress",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": true,
+                  "children": [],
+                  "expanded": false,
+                  "dates_locked": false,
+                  "predecessor_id": null
+                },
+                {
+                  "id": "700f421f-afd2-48b9-a0b1-f9a69f74dc15",
+                  "name": "Engineering Concept development",
+                  "start_date": "2026-04-13",
+                  "end_date": "2026-05-15",
+                  "status": "In Progress",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": true,
+                  "children": [
+                    {
+                      "id": "13a8a1f3-01a6-4178-a1ed-f69346b704f7",
+                      "name": "CAE",
+                      "start_date": "2026-04-13",
+                      "end_date": "2026-05-15",
+                      "status": "In Progress",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": false,
+                      "children": [
+                        {
+                          "id": "045acf53-7b8f-4811-88dd-08a05c1ad77b",
+                          "name": "CFD",
+                          "start_date": "2026-04-13",
+                          "end_date": "2026-05-15",
+                          "status": "In Progress",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [
+                            {
+                              "id": "584373ac-b0f5-4810-b768-081514411c75",
+                              "name": "5Dr LT",
+                              "start_date": "2026-04-13",
+                              "end_date": "2026-05-11",
+                              "status": "In Progress",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [
+                                {
+                                  "id": "d594933a-46b9-497d-863b-6dc58d11d755",
+                                  "name": "Trial 1",
+                                  "start_date": "2026-04-13",
+                                  "end_date": "2026-05-04",
+                                  "status": "In Progress",
+                                  "owner": "",
+                                  "notes": "",
+                                  "is_parallel": false,
+                                  "children": [],
+                                  "expanded": false,
+                                  "dates_locked": false,
+                                  "predecessor_id": null
+                                },
+                                {
+                                  "id": "dec500d4-7dad-453c-ad28-202a564edb25",
+                                  "name": "Trial 2",
+                                  "start_date": "2026-05-05",
+                                  "end_date": "2026-05-11",
+                                  "status": "Not Started",
+                                  "owner": "",
+                                  "notes": "",
+                                  "is_parallel": false,
+                                  "children": [],
+                                  "expanded": false,
+                                  "dates_locked": false,
+                                  "predecessor_id": null
+                                }
+                              ],
+                              "expanded": false,
+                              "dates_locked": false,
+                              "predecessor_id": null
+                            },
+                            {
+                              "id": "74a45722-2731-4381-afa8-dfdccace1af9",
+                              "name": "3Dr + 4Dr",
+                              "start_date": "2026-04-13",
+                              "end_date": "2026-05-15",
+                              "status": "In Progress",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": true,
+                              "children": [
+                                {
+                                  "id": "6570fbb0-8e33-4419-b64b-883ef07e5e02",
+                                  "name": "Trial 1",
+                                  "start_date": "2026-04-13",
+                                  "end_date": "2026-05-08",
+                                  "status": "In Progress",
+                                  "owner": "",
+                                  "notes": "",
+                                  "is_parallel": false,
+                                  "children": [],
+                                  "expanded": false,
+                                  "dates_locked": false,
+                                  "predecessor_id": null
+                                },
+                                {
+                                  "id": "f722314d-71d9-468f-a09f-7081e92276d3",
+                                  "name": "Trial 2",
+                                  "start_date": "2026-05-11",
+                                  "end_date": "2026-05-15",
+                                  "status": "Not Started",
+                                  "owner": "",
+                                  "notes": "",
+                                  "is_parallel": false,
+                                  "children": [],
+                                  "expanded": false,
+                                  "dates_locked": false,
+                                  "predecessor_id": null
+                                }
+                              ],
+                              "expanded": false,
+                              "dates_locked": false,
+                              "predecessor_id": null
+                            }
+                          ],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null
+                        },
+                        {
+                          "id": "25b8b9aa-ea50-4b1e-a74b-d1ff3c27f291",
+                          "name": "FEA - Structural changes",
+                          "start_date": "2026-04-13",
+                          "end_date": "2026-05-11",
+                          "status": "In Progress",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": true,
+                          "children": [
+                            {
+                              "id": "718fb328-40d4-4564-b2fb-985216930bcc",
+                              "name": "Trial 1",
+                              "start_date": "2026-04-13",
+                              "end_date": "2026-05-04",
+                              "status": "In Progress",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": false,
+                              "dates_locked": false,
+                              "predecessor_id": null
+                            },
+                            {
+                              "id": "d63f45ca-1c0a-4e72-82e2-9ee7cb32c862",
+                              "name": "Trial 2",
+                              "start_date": "2026-05-05",
+                              "end_date": "2026-05-11",
+                              "status": "Not Started",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": false,
+                              "dates_locked": false,
+                              "predecessor_id": null
+                            }
+                          ],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null
+                        }
+                      ],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": null
+                    },
+                    {
+                      "id": "6c2d919d-81a9-4546-ba00-0c4114af81f7",
+                      "name": "Power supply",
+                      "start_date": "2026-04-13",
+                      "end_date": "2026-05-04",
+                      "status": "In Progress",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": true,
+                      "children": [
+                        {
+                          "id": "2a8e8a83-d876-498c-b5ce-2cf580a8ec74",
+                          "name": "Decision. 2 30A cords vs 1 50A cord. Plug to use",
+                          "start_date": "2026-04-13",
+                          "end_date": "2026-05-04",
+                          "status": "In Progress",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null
+                        }
+                      ],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": null
+                    },
+                    {
+                      "id": "ff7739f4-7e77-4678-83eb-2e84cc5cea9f",
+                      "name": "Foaming canopy- Confirm with MFG",
+                      "start_date": "2026-04-13",
+                      "end_date": "2026-05-15",
+                      "status": "In Progress",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": true,
+                      "children": [
+                        {
+                          "id": "47d4b4b5-b01f-47da-94bc-20a2d0d60de5",
+                          "name": "Foam canopies in MTY",
+                          "start_date": "2026-04-13",
+                          "end_date": "2026-05-06",
+                          "status": "In Progress",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null
+                        },
+                        {
+                          "id": "cf9646a4-630a-4f16-b36a-fa8ac0ea4fe3",
+                          "name": "Tear down analysis",
+                          "start_date": "2026-05-07",
+                          "end_date": "2026-05-15",
+                          "status": "Not Started",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null
+                        }
+                      ],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": null
+                    },
+                    {
+                      "id": "84d6e893-fe45-4d63-b342-7be1fc0c01c4",
+                      "name": "3D model updates",
+                      "start_date": "2026-05-12",
+                      "end_date": "2026-05-12",
+                      "status": "Not Started",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": false,
+                      "children": [],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": "d63f45ca-1c0a-4e72-82e2-9ee7cb32c862"
+                    }
+                  ],
+                  "expanded": false,
+                  "dates_locked": false,
+                  "predecessor_id": null
+                },
+                {
+                  "id": "634adcc2-d8a5-4837-8887-9d22387be7d0",
+                  "name": "Concept design review",
+                  "start_date": "2026-05-13",
+                  "end_date": "2026-05-13",
+                  "status": "Not Started",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": false,
+                  "children": [],
+                  "expanded": false,
+                  "dates_locked": false,
+                  "predecessor_id": "84d6e893-fe45-4d63-b342-7be1fc0c01c4"
+                }
+              ],
+              "expanded": true,
+              "dates_locked": false,
+              "predecessor_id": null
+            },
+            {
+              "id": "ce067b0d-6fe4-4e75-9504-92b7867cd121",
+              "name": "Phase 2",
+              "start_date": "2026-05-05",
+              "end_date": "2026-05-26",
+              "status": "Not Started",
+              "owner": "",
+              "notes": "",
+              "is_parallel": false,
+              "children": [
+                {
+                  "id": "77b553f3-ed9b-4024-8e63-412950b1d405",
+                  "name": "Component selection",
+                  "start_date": "2026-05-05",
+                  "end_date": "2026-05-05",
+                  "status": "Not Started",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": false,
+                  "children": [
+                    {
+                      "id": "169a707a-cfd1-4d4f-9a98-a14a468ecca4",
+                      "name": "Electrical plug",
+                      "start_date": "2026-05-05",
+                      "end_date": "2026-05-05",
+                      "status": "Not Started",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": false,
+                      "children": [],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": "2a8e8a83-d876-498c-b5ce-2cf580a8ec74"
+                    }
+                  ],
+                  "expanded": false,
+                  "dates_locked": false,
+                  "predecessor_id": null
+                },
+                {
+                  "id": "95df4e4e-4f45-4444-b68f-fb052d5c8bd3",
+                  "name": "Order parts. ",
+                  "start_date": "2026-05-06",
+                  "end_date": "2026-05-12",
+                  "status": "Not Started",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": false,
+                  "children": [
+                    {
+                      "id": "d2f3b944-5d43-4cab-bf66-0c4633df7bd1",
+                      "name": "Electrical plug",
+                      "start_date": "2026-05-06",
+                      "end_date": "2026-05-12",
+                      "status": "Not Started",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": false,
+                      "children": [],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": "169a707a-cfd1-4d4f-9a98-a14a468ecca4"
+                    }
+                  ],
+                  "expanded": false,
+                  "dates_locked": false,
+                  "predecessor_id": null
+                },
+                {
+                  "id": "aecc1f1e-91e5-49e9-bcce-1b7616036af0",
+                  "name": "Engineering Drawings",
+                  "start_date": "2026-05-13",
+                  "end_date": "2026-05-19",
+                  "status": "Not Started",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": false,
+                  "children": [],
+                  "expanded": false,
+                  "dates_locked": false,
+                  "predecessor_id": "84d6e893-fe45-4d63-b342-7be1fc0c01c4"
+                },
+                {
+                  "id": "680f05c4-7098-4100-a663-c35613e4682c",
+                  "name": "TC workflow",
+                  "start_date": "2026-05-20",
+                  "end_date": "2026-05-26",
+                  "status": "Not Started",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": false,
+                  "children": [],
+                  "expanded": false,
+                  "dates_locked": false,
+                  "predecessor_id": null
+                },
+                {
+                  "id": "aa6643e1-3a95-4bb6-9df7-389d91fda8f7",
+                  "name": "Test requests",
+                  "start_date": "2026-05-11",
+                  "end_date": "2026-05-20",
+                  "status": "Not Started",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": false,
+                  "children": [
+                    {
+                      "id": "6b9c216c-0f8f-4854-ac35-332c80ebd5f5",
+                      "name": "Model shop request",
+                      "start_date": "2026-05-20",
+                      "end_date": "2026-05-20",
+                      "status": "Not Started",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": false,
+                      "children": [],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": "aecc1f1e-91e5-49e9-bcce-1b7616036af0"
+                    },
+                    {
+                      "id": "631fb7a5-3d02-4c0c-b1b3-8c45e9ddf79b",
+                      "name": "Lab test request",
+                      "start_date": "2026-05-11",
+                      "end_date": "2026-05-12",
+                      "status": "Not Started",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": false,
+                      "children": [],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": "d24da270-3869-430f-98d6-3fc31e004337"
+                    }
+                  ],
+                  "expanded": false,
+                  "dates_locked": false,
+                  "predecessor_id": null
+                }
+              ],
+              "expanded": true,
+              "dates_locked": false,
+              "predecessor_id": null
+            },
+            {
+              "id": "c7857336-0e8c-4006-8f0e-dc062fc8f150",
+              "name": "Phase 3",
+              "start_date": "2026-05-13",
+              "end_date": "2026-07-02",
+              "status": "Not Started",
+              "owner": "",
+              "notes": "",
+              "is_parallel": false,
+              "children": [
+                {
+                  "id": "7c398776-353a-467e-ad11-41d4c65e3cfa",
+                  "name": "Model shop work",
+                  "start_date": "2026-05-13",
+                  "end_date": "2026-05-27",
+                  "status": "Not Started",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": false,
+                  "children": [
+                    {
+                      "id": "dd840467-76d9-4afb-8b00-efa20dc62c87",
+                      "name": "MS- Getting buy parts together",
+                      "start_date": "2026-05-13",
+                      "end_date": "2026-05-14",
+                      "status": "Not Started",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": false,
+                      "children": [],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": "95df4e4e-4f45-4444-b68f-fb052d5c8bd3"
+                    },
+                    {
+                      "id": "73a572d1-2626-45fe-bdd4-a7b2fc8e1195",
+                      "name": "MS- Perf case. Work complete",
+                      "start_date": "2026-05-15",
+                      "end_date": "2026-05-21",
+                      "status": "Not Started",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": false,
+                      "children": [],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": null
+                    },
+                    {
+                      "id": "08342b9f-d36d-497a-b6d9-c63df8499b52",
+                      "name": "MS - Structural case. Work complete",
+                      "start_date": "2026-05-27",
+                      "end_date": "2026-05-27",
+                      "status": "Not Started",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": true,
+                      "children": [],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": null
+                    }
+                  ],
+                  "expanded": false,
+                  "dates_locked": false,
+                  "predecessor_id": null
+                },
+                {
+                  "id": "97aeb522-baf5-41bb-80b3-239282f6d625",
+                  "name": "Lab testing",
+                  "start_date": "2026-05-22",
+                  "end_date": "2026-07-02",
+                  "status": "Not Started",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": false,
+                  "children": [
+                    {
+                      "id": "ed5cd3a0-8148-43f4-a982-3e04235b3b08",
+                      "name": "NSF",
+                      "start_date": "2026-05-22",
+                      "end_date": "2026-05-28",
+                      "status": "Not Started",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": false,
+                      "children": [],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": "73a572d1-2626-45fe-bdd4-a7b2fc8e1195"
+                    },
+                    {
+                      "id": "a89c9889-080a-4ffc-b5a7-838e05bbe9bf",
+                      "name": "DOE",
+                      "start_date": "2026-05-29",
+                      "end_date": "2026-06-11",
+                      "status": "Not Started",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": false,
+                      "children": [],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": null
+                    },
+                    {
+                      "id": "e59fad4b-ed93-49b4-84b6-0040f852ac16",
+                      "name": "UL",
+                      "start_date": "2026-06-12",
+                      "end_date": "2026-07-02",
+                      "status": "Not Started",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": false,
+                      "children": [],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": null
+                    }
+                  ],
+                  "expanded": false,
+                  "dates_locked": false,
+                  "predecessor_id": null
+                },
+                {
+                  "id": "6c129d75-f0e8-4b6b-bf1f-66c6f0302cb7",
+                  "name": "Structural testing",
+                  "start_date": "2026-05-28",
+                  "end_date": "2026-06-11",
+                  "status": "Not Started",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": false,
+                  "children": [
+                    {
+                      "id": "26c754f2-a9db-4dc2-89ed-58327582edfc",
+                      "name": "Trial 1",
+                      "start_date": "2026-05-28",
+                      "end_date": "2026-05-28",
+                      "status": "Not Started",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": false,
+                      "children": [],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": "08342b9f-d36d-497a-b6d9-c63df8499b52"
+                    },
+                    {
+                      "id": "ba1eba41-e49e-45e4-a94b-14f979a7c684",
+                      "name": "Trial 2",
+                      "start_date": "2026-05-29",
+                      "end_date": "2026-06-11",
+                      "status": "Not Started",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": false,
+                      "children": [],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": null
+                    }
+                  ],
+                  "expanded": false,
+                  "dates_locked": false,
+                  "predecessor_id": null
+                }
+              ],
+              "expanded": true,
+              "dates_locked": false,
+              "predecessor_id": null
+            },
+            {
+              "id": "8342c5a3-a21a-4433-b294-7a2b16565c28",
+              "name": "Phase 4",
+              "start_date": "2026-07-03",
+              "end_date": "2026-08-03",
+              "status": "Not Started",
+              "owner": "",
+              "notes": "",
+              "is_parallel": false,
+              "children": [
+                {
+                  "id": "2ce51c16-a332-484b-947c-bf83b200a74e",
+                  "name": "Engineering design updates",
+                  "start_date": "2026-07-03",
+                  "end_date": "2026-07-24",
+                  "status": "Not Started",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": false,
+                  "children": [
+                    {
+                      "id": "a84f0735-b2d6-47da-985d-d945d10481ee",
+                      "name": "3D model",
+                      "start_date": "2026-07-03",
+                      "end_date": "2026-07-03",
+                      "status": "Not Started",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": false,
+                      "children": [],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": null
+                    },
+                    {
+                      "id": "50484a0c-835b-409e-b5e1-1aa1cc2cf260",
+                      "name": "Drawing updates",
+                      "start_date": "2026-07-06",
+                      "end_date": "2026-07-10",
+                      "status": "Not Started",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": false,
+                      "children": [],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": null
+                    },
+                    {
+                      "id": "e253cf55-fbc4-49f6-a2cf-2c9c1f63c01a",
+                      "name": "Final TC release",
+                      "start_date": "2026-07-13",
+                      "end_date": "2026-07-24",
+                      "status": "Not Started",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": false,
+                      "children": [],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": null
+                    }
+                  ],
+                  "expanded": false,
+                  "dates_locked": false,
+                  "predecessor_id": null
+                },
+                {
+                  "id": "76cc371c-5827-421f-8039-9cd05e6a4020",
+                  "name": "Final design review",
+                  "start_date": "2026-07-27",
+                  "end_date": "2026-07-27",
+                  "status": "Not Started",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": false,
+                  "children": [],
+                  "expanded": false,
+                  "dates_locked": false,
+                  "predecessor_id": null
+                },
+                {
+                  "id": "78f71151-42a6-4bb2-9e15-d5a629adc4a4",
+                  "name": "MAB",
+                  "start_date": "2026-07-28",
+                  "end_date": "2026-08-03",
+                  "status": "Not Started",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": false,
+                  "children": [],
+                  "expanded": false,
+                  "dates_locked": false,
+                  "predecessor_id": null
+                }
+              ],
+              "expanded": true,
+              "dates_locked": false,
+              "predecessor_id": null
+            },
+            {
+              "id": "b463f291-e75b-41e4-99df-56ec1a90232f",
+              "name": "Phase 5",
+              "start_date": "2026-08-04",
+              "end_date": "2026-09-14",
+              "status": "Not Started",
+              "owner": "",
+              "notes": "",
+              "is_parallel": false,
+              "children": [
+                {
+                  "id": "1c958322-ba27-4dd8-9acc-67846b1b865e",
+                  "name": "MAB Fracas updates",
+                  "start_date": "2026-08-04",
+                  "end_date": "2026-08-24",
+                  "status": "Not Started",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": false,
+                  "children": [],
+                  "expanded": true,
+                  "dates_locked": false,
+                  "predecessor_id": null
+                },
+                {
+                  "id": "82c7a9ad-8a8b-4b87-b544-a1138a210218",
+                  "name": "TC Release",
+                  "start_date": "2026-08-25",
+                  "end_date": "2026-09-07",
+                  "status": "Not Started",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": false,
+                  "children": [],
+                  "expanded": true,
+                  "dates_locked": false,
+                  "predecessor_id": null
+                },
+                {
+                  "id": "b8635b31-669c-49cc-80c9-c04ff8dd9ff6",
+                  "name": "Gate 4",
+                  "start_date": "2026-09-08",
+                  "end_date": "2026-09-14",
+                  "status": "Not Started",
+                  "owner": "",
+                  "notes": "",
+                  "is_parallel": false,
+                  "children": [],
+                  "expanded": true,
+                  "dates_locked": false,
+                  "predecessor_id": null
+                }
+              ],
+              "expanded": true,
+              "dates_locked": false,
+              "predecessor_id": null
             }
           ],
           "expanded": true,
