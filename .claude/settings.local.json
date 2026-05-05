@@ -11,7 +11,10 @@
       "Bash(git push *)",
       "Bash(python build_vave.py)",
       "Bash(python scripts/recalc.py \"C:\\\\Users\\\\silam\\\\OneDrive\\\\Documents\\\\VPM-Tracker\\\\MicroBlock 2.0 Estimated Cost.xlsx\")",
-      "Bash(python -)"
+      "Bash(python -)",
+      "Bash(python eol_bell_curves.py)",
+      "Bash(python build_eol_workbook.py)",
+      "Bash(python -c \"import sys; [print\\(l.encode\\('ascii','replace'\\).decode\\(\\)\\) for l in sys.stdin]\")"
     ]
   }
 }
