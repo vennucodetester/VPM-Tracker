@@ -17,7 +17,7 @@ from openpyxl.utils import get_column_letter
 BASE      = os.path.dirname(os.path.abspath(__file__))
 DATA_FILE = os.path.join(BASE, "SAVE FILES", "Run test data start to 4-27-26.xlsx")
 OUT_DIR   = os.path.join(BASE, "eol_output")
-OUT_FILE  = os.path.join(OUT_DIR, "EOL_BellCurves_v3d.xlsx")
+OUT_FILE  = os.path.join(OUT_DIR, "EOL_BellCurves_v3g.xlsx")
 
 BOM_MAP = {"CRS0000675": "LT", "CRS0000674": "MT"}
 
@@ -110,6 +110,48 @@ def build_rawdata(wb, df, meas_present):
     ws.auto_filter.ref = f"A1:{get_column_letter(len(headers))}{LAST_ROW}"
     print(f"  RawData: {LAST_ROW-1} rows, {len(headers)} cols")
 
+# ── Sheet: _Helpers (filtered values for simple aggregation) ───────────────
+# Layout: 4 cols per measurement: LT-all, MT-all, LT-pass, MT-pass
+# For measurement index m: cols are at positions 4*m+1 .. 4*m+4
+# Returns the value if condition matches, else "" (empty string ignored by MIN/MAX/etc)
+def helper_col(meas_idx, variant):
+    """variant: 'LT_all', 'MT_all', 'LT_pass', 'MT_pass' → column letter"""
+    offset = {"LT_all": 1, "MT_all": 2, "LT_pass": 3, "MT_pass": 4}[variant]
+    return get_column_letter(4 * meas_idx + offset)
+
+def build_helpers(wb):
+    ws = wb.create_sheet("_Helpers")
+    ws.sheet_state = "hidden"
+
+    # Header row
+    for m_idx, (_, label, col_letter) in enumerate(MEAS_COLS):
+        for v_idx, variant in enumerate(["LT_all", "MT_all", "LT_pass", "MT_pass"]):
+            col = 4 * m_idx + v_idx + 1
+            ws.cell(row=1, column=col, value=f"{label}_{variant}").font = Font(bold=True, size=8)
+            ws.column_dimensions[get_column_letter(col)].width = 12
+
+    # Per-row formulas: each cell = IF(conditions, RawData value, "")
+    for r in range(2, LAST_ROW + 1):
+        for m_idx, (_, _, col_letter) in enumerate(MEAS_COLS):
+            val_cell = f"RawData!${col_letter}{r}"
+            ut_cell  = f"RawData!$C{r}"
+            pf_cell  = f"RawData!$F{r}"
+
+            # LT_all: UnitType=LT AND value<>0
+            ws.cell(row=r, column=4*m_idx+1,
+                    value=f'=IF(AND({ut_cell}="LT",{val_cell}<>0),{val_cell},"")')
+            # MT_all
+            ws.cell(row=r, column=4*m_idx+2,
+                    value=f'=IF(AND({ut_cell}="MT",{val_cell}<>0),{val_cell},"")')
+            # LT_pass: UnitType=LT AND OverallPassFail=Pass AND value<>0
+            ws.cell(row=r, column=4*m_idx+3,
+                    value=f'=IF(AND({ut_cell}="LT",{pf_cell}="Pass",{val_cell}<>0),{val_cell},"")')
+            # MT_pass
+            ws.cell(row=r, column=4*m_idx+4,
+                    value=f'=IF(AND({ut_cell}="MT",{pf_cell}="Pass",{val_cell}<>0),{val_cell},"")')
+
+    print(f"  _Helpers: {LAST_ROW-1} rows x {4*len(MEAS_COLS)} cols (hidden)")
+
 # ── Sheet 2: Config ─────────────────────────────────────────────────────────
 def build_config(wb):
     ws = wb.create_sheet("Config")
@@ -120,45 +162,36 @@ def build_config(wb):
         hdr_cell(ws, 1, ci, h)
         ws.column_dimensions[get_column_letter(ci)].width = 16
 
-    rng = f"$2:${LAST_ROW}"  # data range in RawData
     ri = 2
     for ut in ["LT", "MT"]:
-        for _, label, col_letter in MEAS_COLS:
+        for m_idx, (_, label, col_letter) in enumerate(MEAS_COLS):
             ws.cell(row=ri, column=1, value=ut)
             ws.cell(row=ri, column=2, value=label)
             ws.cell(row=ri, column=3, value=col_letter)
 
-            val_rng = f"RawData!${col_letter}$2:${col_letter}${LAST_ROW}"
-            ut_rng  = f"RawData!$C$2:$C${LAST_ROW}"
-            pf_rng  = f"RawData!$F$2:$F${LAST_ROW}"
+            # Helper column ranges (full data rows)
+            all_col  = helper_col(m_idx, f"{ut}_all")
+            pass_col = helper_col(m_idx, f"{ut}_pass")
+            all_rng  = f"_Helpers!${all_col}$2:${all_col}${LAST_ROW}"
+            pass_rng = f"_Helpers!${pass_col}$2:${pass_col}${LAST_ROW}"
 
-            # D: n_all (count non-zero for this unit)
-            ws.cell(row=ri, column=4,
-                    value=f'=COUNTIFS({ut_rng},"{ut}",{val_rng},"<>0")')
+            # D: n_all = COUNT of numeric values in helper col (ignores "")
+            ws.cell(row=ri, column=4, value=f'=COUNT({all_rng})')
 
             # E: n_pass
-            ws.cell(row=ri, column=5,
-                    value=f'=COUNTIFS({ut_rng},"{ut}",{pf_rng},"Pass",{val_rng},"<>0")')
+            ws.cell(row=ri, column=5, value=f'=COUNT({pass_rng})')
 
-            # F: Mean_pass
-            ws.cell(row=ri, column=6,
-                    value=f'=IFERROR(AVERAGEIFS({val_rng},{ut_rng},"{ut}",{pf_rng},"Pass",{val_rng},"<>0"),0)')
+            # F: Mean_pass = simple AVERAGE (ignores "")
+            ws.cell(row=ri, column=6, value=f'=IFERROR(AVERAGE({pass_rng}),0)')
 
-            # G: StdDev_pass (SUMPRODUCT-based since no STDEVIFS)
-            mean_ref = f"$F{ri}"
-            npass_ref = f"$E{ri}"
-            ws.cell(row=ri, column=7,
-                    value=f'=IFERROR(SQRT(SUMPRODUCT(({ut_rng}="{ut}")*({pf_rng}="Pass")*({val_rng}<>0)*({val_rng}-{mean_ref})^2)/({npass_ref}-1)),0)')
+            # G: StdDev_pass = simple STDEV (ignores "")
+            ws.cell(row=ri, column=7, value=f'=IFERROR(STDEV({pass_rng}),0)')
 
-            # H: Min_all — AGGREGATE(15,6,arr,1) = SMALL ignoring errors, k=1 = MIN
-            # Division trick: values / condition → #DIV/0! for non-matches, AGGREGATE skips them
-            agg_cond = f'(({ut_rng}="{ut}")*({val_rng}<>0))'
-            ws.cell(row=ri, column=8,
-                    value=f'=IFERROR(AGGREGATE(15,6,{val_rng}/{agg_cond},1),0)')
+            # H: Min_all = simple MIN (ignores "")
+            ws.cell(row=ri, column=8, value=f'=IFERROR(MIN({all_rng}),0)')
 
-            # I: Max_all — AGGREGATE(14,6,arr,1) = LARGE ignoring errors, k=1 = MAX
-            ws.cell(row=ri, column=9,
-                    value=f'=IFERROR(AGGREGATE(14,6,{val_rng}/{agg_cond},1),0)')
+            # I: Max_all = simple MAX (ignores "")
+            ws.cell(row=ri, column=9, value=f'=IFERROR(MAX({all_rng}),0)')
 
             # J: BinWidth = (Max - Min + StdDev) / N_BINS
             ws.cell(row=ri, column=10,
@@ -177,7 +210,7 @@ def build_config(wb):
             ri += 1
 
     ws.freeze_panes = "A2"
-    print(f"  Config: {ri-2} rows (all formulas)")
+    print(f"  Config: {ri-2} rows (all formulas via _Helpers)")
 
 # ── Sheet 3/4: HistData (formula-driven) ──────────────────────────────────
 def build_histdata(wb, unit_type, sheet_name):
@@ -243,9 +276,9 @@ def build_histdata(wb, unit_type, sheet_name):
             ws.cell(row=r, column=7,
                     value=f'=IF({sd_ref}=0,0,IF(ABS(($A{r}-{mean_ref})/{sd_ref})>3,$D{r},0))')
 
-            # H: CurveY = NORM.DIST * n_all * binwidth
+            # H: CurveY = NORMDIST * n_all * binwidth
             ws.cell(row=r, column=8,
-                    value=f'=IFERROR(NORM.DIST($A{r},{mean_ref},{sd_ref},FALSE)*{nall_ref}*{bw_ref},0)')
+                    value=f'=IFERROR(NORMDIST($A{r},{mean_ref},{sd_ref},FALSE)*{nall_ref}*{bw_ref},0)')
 
             # Alternating fill
             fill = ALT_FILL if b % 2 == 0 else PatternFill()
@@ -342,9 +375,10 @@ def build_tolerance(wb):
         cfg_base = config_offset_lt if ut == "LT" else config_offset_mt
         for idx, (raw_col, label, col_letter) in enumerate(MEAS_COLS):
             cfg_row = cfg_base + idx
-            val_rng = f"RawData!${col_letter}$2:${col_letter}${LAST_ROW}"
-            ut_rng  = f"RawData!$C$2:$C${LAST_ROW}"
-            pf_rng  = f"RawData!$F$2:$F${LAST_ROW}"
+
+            # Pass-only helper column for this (unit, measurement)
+            pass_col = helper_col(idx, f"{ut}_pass")
+            pass_rng = f"_Helpers!${pass_col}$2:${pass_col}${LAST_ROW}"
 
             # A: Unit, B: Measurement
             ws.cell(row=ri, column=1, value=ut)
@@ -365,24 +399,21 @@ def build_tolerance(wb):
             # G: 3sigma High
             ws.cell(row=ri, column=7, value=f'=Config!$F${cfg_row}+3*Config!$G${cfg_row}')
 
-            # H: P1 Low — AGGREGATE(16,6,arr,percentile) = PERCENTILE.INC ignoring errors
-            agg_tol_cond = f'(({ut_rng}="{ut}")*({pf_rng}="Pass")*({val_rng}<>0))'
-            agg_tol_arr  = f'{val_rng}/{agg_tol_cond}'
+            # H: P1 Low — simple PERCENTILE on helper col (ignores empty strings)
             ws.cell(row=ri, column=8,
-                    value=f'=IFERROR(AGGREGATE(16,6,{agg_tol_arr},0.01),"")')
+                    value=f'=IFERROR(PERCENTILE({pass_rng},0.01),"")')
 
             # I: P99 High
             ws.cell(row=ri, column=9,
-                    value=f'=IFERROR(AGGREGATE(16,6,{agg_tol_arr},0.99),"")')
+                    value=f'=IFERROR(PERCENTILE({pass_rng},0.99),"")')
 
             # J: IQR Low = Q1 - 1.5*IQR
-            # AGGREGATE(17,6,arr,q) = QUARTILE.INC ignoring errors
             ws.cell(row=ri, column=10,
-                    value=f'=IFERROR(AGGREGATE(17,6,{agg_tol_arr},1)-1.5*(AGGREGATE(17,6,{agg_tol_arr},3)-AGGREGATE(17,6,{agg_tol_arr},1)),"")')
+                    value=f'=IFERROR(QUARTILE({pass_rng},1)-1.5*(QUARTILE({pass_rng},3)-QUARTILE({pass_rng},1)),"")')
 
             # K: IQR High = Q3 + 1.5*IQR
             ws.cell(row=ri, column=11,
-                    value=f'=IFERROR(AGGREGATE(17,6,{agg_tol_arr},3)+1.5*(AGGREGATE(17,6,{agg_tol_arr},3)-AGGREGATE(17,6,{agg_tol_arr},1)),"")')
+                    value=f'=IFERROR(QUARTILE({pass_rng},3)+1.5*(QUARTILE({pass_rng},3)-QUARTILE({pass_rng},1)),"")')
 
             # L: Recommended Low = MAX(3sig, P1, IQR)
             ws.cell(row=ri, column=12,
@@ -498,6 +529,7 @@ def main():
 
     print("Building sheets...")
     build_rawdata(wb, df, meas_present)
+    build_helpers(wb)
     build_config(wb)
     build_histdata(wb, "LT", "LT_HistData")
     build_histdata(wb, "MT", "MT_HistData")

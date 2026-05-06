@@ -14,7 +14,8 @@
       "Bash(python -)",
       "Bash(python eol_bell_curves.py)",
       "Bash(python build_eol_workbook.py)",
-      "Bash(python -c \"import sys; [print\\(l.encode\\('ascii','replace'\\).decode\\(\\)\\) for l in sys.stdin]\")"
+      "Bash(python -c \"import sys; [print\\(l.encode\\('ascii','replace'\\).decode\\(\\)\\) for l in sys.stdin]\")",
+      "Bash(python build_eol_workbook_simple.py)"
     ]
   }
 }
