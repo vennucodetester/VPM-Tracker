@@ -16,9 +16,10 @@ class Columns:
     OWNER = 5
     PREDECESSOR = 6
     NOTES = 7
-    COUNT = 8
+    DELAY = 8
+    COUNT = 9
 
-    NAMES = ["Task Name", "Start Date", "End Date", "Duration", "Status", "Owner", "Depends On", "Notes"]
+    NAMES = ["Task Name", "Start Date", "End Date", "Duration", "Status", "Owner", "Depends On", "Notes", "Delay"]
 
 class Status(Enum):
     PENDING = "Not Started"
@@ -35,7 +36,6 @@ class Colors:
     # Status Colors (for text or small indicators)
     RED = QColor("#FF0000")          # Pure Bright Red (Overdue)
     GREEN = QColor("#00C853")        # Vivid Green (Completed)
-    ORANGE = QColor("#E65100")       # Dark Orange (Leaf)
     GRAY = QColor("#212121")         # Almost Black (Parent)
     
     # UI

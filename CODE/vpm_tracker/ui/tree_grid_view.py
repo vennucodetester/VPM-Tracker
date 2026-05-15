@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from PyQt6.QtWidgets import (QTreeWidget, QTreeWidgetItem, QHeaderView, 
                             QAbstractItemView, QMenu, QMessageBox, QStyledItemDelegate,
                             QCalendarWidget, QDateEdit, QStyle, QStyleOptionButton, QApplication)
@@ -184,7 +184,11 @@ class NotesDelegate(QStyledItemDelegate):
         if dialog.exec():
             new_text = text_edit.toPlainText()
             node.notes = new_text
-            item.update_from_node()
+            was_blocked = tree_view.blockSignals(True)
+            try:
+                item.update_from_node()
+            finally:
+                tree_view.blockSignals(was_blocked)
             tree_view.item_changed_signal.emit(node)
 
     def paint(self, painter, option, index):
@@ -217,39 +221,58 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
         self.setText(Columns.PREDECESSOR, self._predecessor_label())
         self.setText(Columns.NOTES, self.node.notes)
 
+        # Delay column: duration vs baseline
+        delay_text = ""
+        delay_diff = 0
+        if self.node.baseline_duration is not None:
+            try:
+                current = int(self.node.duration)
+                delay_diff = current - self.node.baseline_duration
+                if delay_diff > 0:
+                    delay_text = f"+{delay_diff}d"
+                elif delay_diff < 0:
+                    delay_text = f"{delay_diff}d"
+                else:
+                    delay_text = "On track"
+            except (ValueError, TypeError):
+                pass
+        self.setText(Columns.DELAY, delay_text)
+
         self.setFlags(self.flags() | Qt.ItemFlag.ItemIsEditable | Qt.ItemFlag.ItemIsUserCheckable)
-        
+
         # Visual indication for locked dates
         if self.node.dates_locked:
             self.setForeground(Columns.START, QBrush(Colors.GRAY))
             self.setForeground(Columns.END, QBrush(Colors.GRAY))
         else:
-            # Reset to default (which might be overridden by status color below, 
-            # but usually date columns are black unless locked)
             self.setForeground(Columns.START, QBrush(Colors.TEXT_WHITE))
             self.setForeground(Columns.END, QBrush(Colors.TEXT_WHITE))
-        
-        # Coloring Logic (Strict Priority)
-        # Priority 1: Overdue (Red) - End < Today AND Status != Completed (Recursive)
-        # Priority 2: Completed (Green) - Status = Completed
-        # Priority 3: Leaf Tasks (Orange) - No children
-        # Priority 4: Parent Tasks (Gray) - Has children
-        
-        status_color = Colors.TEXT_WHITE # Default
-        
+
+        # Status coloring: Red (overdue), Green (completed), Black (default)
+        status_color = Colors.TEXT_WHITE
+
         is_completed = self.node.status == "Completed"
         is_overdue = self.check_is_overdue(self.node)
-        
+
         if is_overdue:
             status_color = Colors.RED
         elif is_completed:
             status_color = Colors.GREEN
         else:
             status_color = Colors.TEXT_WHITE
-            
-        # Apply color to all columns
+
+        # Apply status color to all columns
         for col in range(Columns.COUNT):
             self.setForeground(col, QBrush(status_color))
+
+        # Delay column color (overrides status color for this column)
+        if self.node.baseline_duration is not None:
+            if delay_diff > 0:
+                self.setForeground(Columns.DELAY, QBrush(QColor("#FF0000")))  # red
+            elif delay_diff < 0:
+                self.setForeground(Columns.DELAY, QBrush(QColor("#00C853")))  # green
+            else:
+                self.setForeground(Columns.DELAY, QBrush(Colors.GRAY))
 
         # Predecessor label colouring:
         #   explicit link  → white (user choice — already set above)
@@ -259,6 +282,14 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
             self.setForeground(Columns.PREDECESSOR, QBrush(QColor("#FFD54F")))  # amber
         elif self._predecessor_is_implicit():
             self.setForeground(Columns.PREDECESSOR, QBrush(Colors.GRAY))
+
+        # "This week" background highlight — light blue tint on rows
+        # whose date range overlaps the current Mon–Fri week.
+        this_week_bg = QBrush(QColor("#E3F2FD"))
+        default_bg = QBrush(QColor(0, 0, 0, 0))  # transparent
+        is_this_week = self._overlaps_this_week(self.node)
+        for col in range(Columns.COUNT):
+            self.setBackground(col, this_week_bg if is_this_week else default_bg)
 
     def _predecessor_label(self) -> str:
         """Render 'Depends On' cell.
@@ -328,6 +359,28 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
             if self.check_is_overdue(child):
                 return True
 
+        return False
+
+    @staticmethod
+    def _overlaps_this_week(node: TaskNode) -> bool:
+        """True if the task's date range overlaps the current Mon–Sun week,
+        or if any child does (so parents highlight when collapsed)."""
+        today = datetime.now().date()
+        # Monday of this week through Sunday
+        week_start = today - timedelta(days=today.weekday())
+        week_end = week_start + timedelta(days=6)
+        try:
+            if node.start_date and node.end_date:
+                s = datetime.strptime(node.start_date, "%Y-%m-%d").date()
+                e = datetime.strptime(node.end_date, "%Y-%m-%d").date()
+                if s <= week_end and e >= week_start:
+                    return True
+        except ValueError:
+            pass
+        # Check children so parents highlight too
+        for child in node.children:
+            if TaskTreeWidgetItem._overlaps_this_week(child):
+                return True
         return False
 
 class TreeGridView(QTreeWidget):
@@ -786,7 +839,15 @@ class TreeGridView(QTreeWidget):
                 menu.addAction(jump_action)
             
             menu.addSeparator()
-            
+
+            # Baseline — per-task reset when a duration change was intentional
+            update_bl_action = QAction("Update Baseline (not a delay)", self)
+            update_bl_action.setEnabled(item.node.baseline_duration is not None)
+            update_bl_action.triggered.connect(lambda: self.update_baseline_for_node(item.node))
+            menu.addAction(update_bl_action)
+
+            menu.addSeparator()
+
             delete_action = QAction("Delete Task(s)", self)
             delete_action.triggered.connect(lambda: self.delete_smart(item))
             menu.addAction(delete_action)
@@ -812,6 +873,10 @@ class TreeGridView(QTreeWidget):
         # dates_locked=True, so "Set Manual Date" tasks bypass this block and
         # become editable. END is never blocked — it always controls duration.
         if column == Columns.START and self._start_is_auto(item.node):
+            return
+
+        # Delay column is read-only (auto-calculated from baseline)
+        if column == Columns.DELAY:
             return
 
         super().editItem(item, column)
@@ -1042,6 +1107,31 @@ class TreeGridView(QTreeWidget):
         from utils.scheduler import schedule
         schedule(self.root_nodes)
 
+    # ---- Baseline / Delay tracking ----
+
+    def set_baseline(self):
+        """Snapshot current durations as the planned baseline for all tasks."""
+        for node in self.get_all_nodes_flat():
+            try:
+                node.baseline_duration = int(node.duration)
+            except (ValueError, TypeError):
+                node.baseline_duration = None
+        self.refresh_entire_tree()
+
+    def clear_baseline(self):
+        """Remove all baseline data."""
+        for node in self.get_all_nodes_flat():
+            node.baseline_duration = None
+        self.refresh_entire_tree()
+
+    def update_baseline_for_node(self, node: TaskNode):
+        """Reset one task's baseline to its current duration (intentional change)."""
+        try:
+            node.baseline_duration = int(node.duration)
+        except (ValueError, TypeError):
+            node.baseline_duration = None
+        self.refresh_entire_tree()
+
     def add_child_task(self, parent_item: QTreeWidgetItem = None):
         # If no parent selected, add to root
         parent_node = parent_item.node if parent_item else None
@@ -1244,6 +1334,7 @@ class TreeGridView(QTreeWidget):
                     
                 self.refresh_entire_tree()
             elif column == Columns.NOTES: node.notes = text
+            elif column == Columns.DELAY: pass  # read-only, skip
             elif column == Columns.DURATION:
                 try:
                     days = int(text)

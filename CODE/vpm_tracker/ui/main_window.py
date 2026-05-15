@@ -220,6 +220,15 @@ class MainWindow(QMainWindow):
         refresh_action.triggered.connect(self.refresh_all)
         edit_menu.addAction(refresh_action)
 
+        edit_menu.addSeparator()
+        set_bl_action = QAction("Set Baseline", self)
+        set_bl_action.triggered.connect(self._set_baseline)
+        edit_menu.addAction(set_bl_action)
+
+        clear_bl_action = QAction("Clear All Baselines", self)
+        clear_bl_action.triggered.connect(self._clear_baseline)
+        edit_menu.addAction(clear_bl_action)
+
         # Options menu (operates on the active project's config).
         options_menu = menu.addMenu("Options")
         manage_owners_action = QAction("Manage Owners…", self)
@@ -239,6 +248,18 @@ class MainWindow(QMainWindow):
         proj = self.active_project()
         if proj:
             proj.redo()
+
+    def _set_baseline(self):
+        proj = self.active_project()
+        if proj:
+            proj.tree_view.set_baseline()
+            self.on_data_changed()
+
+    def _clear_baseline(self):
+        proj = self.active_project()
+        if proj:
+            proj.tree_view.clear_baseline()
+            self.on_data_changed()
 
     # ---------------- options dialogs ----------------
     def open_owner_manager(self):
