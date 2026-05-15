@@ -41,6 +41,7 @@ class TaskNode:
         self.dates_locked: bool = False
         self.predecessor_id: Optional[str] = None  # Manual cross-tree link
         self.baseline_duration: Optional[int] = None  # Set by "Set Baseline"
+        self.delay_notes: str = ""  # Running log of delay reasons
 
     def add_child(self, child: 'TaskNode'):
         child.parent = self
@@ -381,6 +382,7 @@ class TaskNode:
             "dates_locked": self.dates_locked,
             "predecessor_id": self.predecessor_id,
             "baseline_duration": self.baseline_duration,
+            "delay_notes": self.delay_notes,
         }
 
     @classmethod
@@ -398,6 +400,7 @@ class TaskNode:
         node.dates_locked = data.get("dates_locked", False)
         node.predecessor_id = data.get("predecessor_id")
         node.baseline_duration = data.get("baseline_duration")
+        node.delay_notes = data.get("delay_notes", "")
 
         if "is_parallel" in data:
             node.is_parallel = data["is_parallel"]

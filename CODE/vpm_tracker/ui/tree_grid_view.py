@@ -201,6 +201,85 @@ class NotesDelegate(QStyledItemDelegate):
         else:
             super().paint(painter, option, index)
 
+class DelayDelegate(QStyledItemDelegate):
+    """Double-click the Delay cell to log a timestamped delay reason."""
+
+    def createEditor(self, parent, option, index):
+        return None  # prevent default inline edit
+
+    def editorEvent(self, event, model, option, index):
+        from PyQt6.QtCore import QEvent
+        if event.type() == QEvent.Type.MouseButtonDblClick:
+            self._open_dialog(index)
+            return True
+        return super().editorEvent(event, model, option, index)
+
+    def _open_dialog(self, index):
+        from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout,
+                                     QPlainTextEdit, QLineEdit, QLabel,
+                                     QDialogButtonBox)
+        tree_view = self.parent()
+        if not tree_view:
+            return
+        item = tree_view.itemFromIndex(index)
+        if not item or not hasattr(item, 'node'):
+            return
+        node = item.node
+
+        # Only allow logging when a baseline exists and there's a delay
+        if node.baseline_duration is None:
+            QMessageBox.information(tree_view, "No Baseline",
+                "Set a baseline first (Edit → Set Baseline) before logging delays.")
+            return
+
+        try:
+            diff = int(node.duration) - node.baseline_duration
+        except (ValueError, TypeError):
+            diff = 0
+
+        today_tag = datetime.now().strftime("[%Y-%m-%d]")
+        delay_tag = f"+{diff}d" if diff > 0 else (f"{diff}d" if diff < 0 else "0d")
+
+        dialog = QDialog(tree_view)
+        dialog.setWindowTitle(f"Delay Log — {node.name}")
+        dialog.resize(420, 320)
+        layout = QVBoxLayout(dialog)
+
+        # Existing log (read-only display)
+        if node.delay_notes:
+            layout.addWidget(QLabel("Previous entries:"))
+            history = QPlainTextEdit(node.delay_notes)
+            history.setReadOnly(True)
+            history.setMaximumHeight(140)
+            layout.addWidget(history)
+
+        # New entry input
+        layout.addWidget(QLabel(f"New entry ({today_tag} {delay_tag}) — reason:"))
+        reason_edit = QLineEdit()
+        reason_edit.setPlaceholderText("e.g. Vendor late on parts")
+        layout.addWidget(reason_edit)
+        reason_edit.setFocus()
+
+        buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok |
+                                   QDialogButtonBox.StandardButton.Cancel)
+        buttons.accepted.connect(dialog.accept)
+        buttons.rejected.connect(dialog.reject)
+        layout.addWidget(buttons)
+
+        if dialog.exec():
+            reason = reason_edit.text().strip()
+            if not reason:
+                return
+            new_entry = f"{today_tag} {delay_tag}: {reason}"
+            node.delay_notes = (node.delay_notes + "\n" + new_entry).strip()
+            was_blocked = tree_view.blockSignals(True)
+            try:
+                item.update_from_node()
+            finally:
+                tree_view.blockSignals(was_blocked)
+            tree_view.item_changed_signal.emit(node)
+
+
 class TaskTreeWidgetItem(QTreeWidgetItem):
     def __init__(self, node: TaskNode):
         super().__init__()
@@ -237,6 +316,13 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
             except (ValueError, TypeError):
                 pass
         self.setText(Columns.DELAY, delay_text)
+        # Tooltip: show delay log if there are notes, else hint to double-click
+        if self.node.delay_notes:
+            self.setToolTip(Columns.DELAY, self.node.delay_notes)
+        elif delay_diff > 0:
+            self.setToolTip(Columns.DELAY, "Double-click to log delay reason")
+        else:
+            self.setToolTip(Columns.DELAY, "")
 
         self.setFlags(self.flags() | Qt.ItemFlag.ItemIsEditable | Qt.ItemFlag.ItemIsUserCheckable)
 
@@ -427,6 +513,7 @@ class TreeGridView(QTreeWidget):
         self.setItemDelegateForColumn(Columns.STATUS, StatusDelegate(self))
         self.setItemDelegateForColumn(Columns.OWNER, OwnerDelegate(self))
         self.setItemDelegateForColumn(Columns.NOTES, NotesDelegate(self))
+        self.setItemDelegateForColumn(Columns.DELAY, DelayDelegate(self))
         
         # Adjustable Row Height (Global)
         # QTreeWidget items don't have a simple "setHeight". 
