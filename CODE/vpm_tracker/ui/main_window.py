@@ -151,15 +151,6 @@ class MainWindow(QMainWindow):
         ]
 
     # ---------------- menu ----------------
-    def refresh_all(self):
-        """Kept as a public API (hooked from View menu); no toolbar button."""
-        proj = self.active_project()
-        if not proj:
-            return
-        proj.tree_view.recalculate_all_dates()
-        if proj.inner_tabs.currentIndex() == 1:
-            proj.gantt_view.load_nodes(proj.tree_view.root_nodes)
-
     def setup_menu(self):
         menu = self.menuBar()
         file_menu = menu.addMenu("File")
@@ -215,10 +206,9 @@ class MainWindow(QMainWindow):
         edit_menu.addAction(redo_action)
 
         edit_menu.addSeparator()
-        refresh_action = QAction("Refresh Timeline", self)
-        refresh_action.setShortcut("F5")
-        refresh_action.triggered.connect(self.refresh_all)
-        edit_menu.addAction(refresh_action)
+        delay_summary_action = QAction("View Delay Summary…", self)
+        delay_summary_action.triggered.connect(self._show_delay_summary)
+        edit_menu.addAction(delay_summary_action)
 
         edit_menu.addSeparator()
         set_bl_action = QAction("Set Baseline", self)
@@ -260,6 +250,72 @@ class MainWindow(QMainWindow):
         if proj:
             proj.tree_view.clear_baseline()
             self.on_data_changed()
+
+    def _show_delay_summary(self):
+        from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QLabel,
+                                     QTableWidget, QTableWidgetItem,
+                                     QHeaderView, QDialogButtonBox)
+        from PyQt6.QtGui import QColor
+        from PyQt6.QtCore import Qt
+
+        proj = self.active_project()
+        if not proj:
+            return
+
+        # Collect delayed tasks
+        delayed = []
+        for node in proj.tree_view.get_all_nodes_flat():
+            if node.baseline_duration is None:
+                continue
+            try:
+                diff = int(node.duration) - node.baseline_duration
+            except (ValueError, TypeError):
+                continue
+            if diff > 0:
+                delayed.append((node, diff))
+
+        dialog = QDialog(self)
+        dialog.setWindowTitle(f"Delay Summary — {proj.name}")
+        dialog.resize(620, 400)
+        layout = QVBoxLayout(dialog)
+
+        if not delayed:
+            layout.addWidget(QLabel("No delays detected. All tasks are on track!"))
+        else:
+            total = sum(d for _, d in delayed)
+            summary_lbl = QLabel(f"  {len(delayed)} task(s) delayed  |  Total slip: +{total}d")
+            summary_lbl.setStyleSheet("font-weight: bold; padding: 6px;")
+            layout.addWidget(summary_lbl)
+
+            table = QTableWidget(len(delayed), 3)
+            table.setHorizontalHeaderLabels(["Task", "Delay", "Log"])
+            table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+            table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
+            table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
+            table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+            table.setWordWrap(True)
+            table.verticalHeader().setVisible(False)
+
+            for row, (node, diff) in enumerate(delayed):
+                name_item = QTableWidgetItem(node.name)
+                delay_item = QTableWidgetItem(f"+{diff}d")
+                delay_item.setForeground(QColor("#FF0000"))
+                delay_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                log_text = node.delay_notes if node.delay_notes else "(no reason logged — double-click Delay cell to add)"
+                log_item = QTableWidgetItem(log_text)
+                if not node.delay_notes:
+                    log_item.setForeground(QColor("#999999"))
+                table.setItem(row, 0, name_item)
+                table.setItem(row, 1, delay_item)
+                table.setItem(row, 2, log_item)
+                table.resizeRowToContents(row)
+
+            layout.addWidget(table)
+
+        buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
+        buttons.rejected.connect(dialog.reject)
+        layout.addWidget(buttons)
+        dialog.exec()
 
     # ---------------- options dialogs ----------------
     def open_owner_manager(self):
