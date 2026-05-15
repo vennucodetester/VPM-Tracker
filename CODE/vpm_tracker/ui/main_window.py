@@ -262,6 +262,13 @@ class MainWindow(QMainWindow):
         if not proj:
             return
 
+        def full_path(node):
+            parts, n = [], node
+            while n:
+                parts.append(n.name)
+                n = n.parent
+            return " > ".join(reversed(parts))
+
         # Collect delayed tasks
         delayed = []
         for node in proj.tree_view.get_all_nodes_flat():
@@ -299,7 +306,7 @@ class MainWindow(QMainWindow):
             table.verticalHeader().setVisible(False)
 
             for row, (node, diff) in enumerate(delayed):
-                name_item = QTableWidgetItem(node.name)
+                name_item = QTableWidgetItem(full_path(node))
                 delay_item = QTableWidgetItem(f"+{diff}d")
                 delay_item.setForeground(QColor("#FF0000"))
                 delay_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)

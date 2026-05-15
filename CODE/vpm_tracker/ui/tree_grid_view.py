@@ -1219,6 +1219,24 @@ class TreeGridView(QTreeWidget):
             node.baseline_duration = None
         self.refresh_entire_tree()
 
+    def _prompt_delay_reason_if_needed(self, node: TaskNode):
+        """After a duration change, auto-open the delay log dialog if a new delay exists."""
+        if node.baseline_duration is None:
+            return
+        try:
+            diff = int(node.duration) - node.baseline_duration
+        except (ValueError, TypeError):
+            return
+        if diff <= 0:
+            return
+        # Find the tree item and open the delay dialog
+        item = self._find_item_by_id(node.id)
+        if item:
+            delay_delegate = self.itemDelegateForColumn(Columns.DELAY)
+            if hasattr(delay_delegate, '_open_dialog'):
+                idx = self.indexFromItem(item, Columns.DELAY)
+                delay_delegate._open_dialog(idx)
+
     def add_child_task(self, parent_item: QTreeWidgetItem = None):
         # If no parent selected, add to root
         parent_node = parent_item.node if parent_item else None
@@ -1401,6 +1419,9 @@ class TreeGridView(QTreeWidget):
                 # pick up the new end date. refresh_entire_tree() alone only repaints.
                 self.recalculate_all_dates()
                 self.refresh_entire_tree()
+                self.blockSignals(False)
+                self._prompt_delay_reason_if_needed(node)
+                self.blockSignals(True)
             elif column == Columns.STATUS: 
                 node.set_status(text)
                 # Status change might affect parent, refresh tree
@@ -1431,6 +1452,9 @@ class TreeGridView(QTreeWidget):
                     # only repaints — we also need to re-run the scheduler.
                     self.recalculate_all_dates()
                     self.refresh_entire_tree()
+                    self.blockSignals(False)
+                    self._prompt_delay_reason_if_needed(node)
+                    self.blockSignals(True)
                 except ValueError:
                     pass # Ignore invalid input
             
