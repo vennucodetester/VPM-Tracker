@@ -265,6 +265,8 @@ class MainWindow(QMainWindow):
         # Collect delayed tasks
         delayed = []
         for node in proj.tree_view.get_all_nodes_flat():
+            if node.children:  # skip parents — their delay is a rollup of children
+                continue
             if node.baseline_duration is None:
                 continue
             try:
