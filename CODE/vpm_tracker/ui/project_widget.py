@@ -2,7 +2,7 @@
 ProjectWidget — one project's Tracker + Visuals pair.
 
 The outer MainWindow creates one ProjectWidget per project tab. Each widget
-owns its own TreeGridView, GanttChartWidget, metadata, and undo stack, and
+owns its own TreeGridView, FocusView, metadata, and undo stack, and
 registers itself with ConfigManager so scheduler calls always resolve
 settings against the active project.
 """
@@ -15,7 +15,7 @@ from PyQt6.QtGui import QKeySequence, QShortcut
 
 from models.task_node import TaskNode
 from ui.tree_grid_view import TreeGridView
-from ui.gantt_chart import GanttChartWidget
+from ui.focus_view import FocusView
 from utils.config_manager import ConfigManager
 from utils.history import HistoryStack
 
@@ -70,8 +70,7 @@ class ProjectWidget(QWidget):
         self.tree_view = TreeGridView()
         self.inner_tabs.addTab(self.tree_view, "Tracker")
 
-        self.gantt_view = GanttChartWidget()
-        self.gantt_view.main_window = self  # keeps legacy attr for the gantt code
+        self.gantt_view = FocusView()  # name kept so callers don't change
         self.inner_tabs.addTab(self.gantt_view, "Visuals")
 
         self.inner_tabs.currentChanged.connect(self._on_inner_tab_changed)
