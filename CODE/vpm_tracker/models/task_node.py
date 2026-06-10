@@ -40,8 +40,12 @@ class TaskNode:
         self.expanded: bool = True
         self.dates_locked: bool = False
         self.predecessor_id: Optional[str] = None  # Manual cross-tree link
-        self.baseline_duration: Optional[int] = None  # Set by "Set Baseline"
-        self.delay_notes: str = ""  # Running log of delay reasons
+        self.baseline_duration: Optional[int] = None  # Set by "Set Baseline" (Rev A)
+        self.baseline_end: Optional[str] = None       # End date at baseline time
+        self.delay_notes: str = ""  # Legacy free-text log (pre-revision files)
+        # Revision trail: Rev A = baseline; each slip confirmed by the user
+        # appends {"rev","date","end","slip","reason"}. See DelayDelegate.
+        self.revisions: list = []
 
     def add_child(self, child: 'TaskNode'):
         child.parent = self
@@ -299,6 +303,36 @@ class TaskNode:
         self.set_date('end', new_end)
 
     # ------------------------------------------------------------------
+    # Delay / revision helpers
+    # ------------------------------------------------------------------
+
+    def logged_slip(self) -> int:
+        """Total slip already recorded across all revisions."""
+        return sum(r.get("slip", 0) for r in self.revisions)
+
+    def revision_trail(self) -> str:
+        """Human-readable Rev A..N trail (falls back to legacy delay_notes)."""
+        lines = []
+        if self.baseline_duration is not None:
+            base = f"Rev A  (baseline)  {self.baseline_duration}d"
+            if self.baseline_end:
+                base += f"  end {self.baseline_end}"
+            lines.append(base)
+        for r in self.revisions:
+            slip = r.get("slip", 0)
+            sign = f"+{slip}d" if slip > 0 else f"{slip}d"
+            line = f"Rev {r.get('rev', '?')}  {r.get('date', '')}  {sign}"
+            if r.get("end"):
+                line += f"  end {r['end']}"
+            if r.get("reason"):
+                line += f"  — {r['reason']}"
+            lines.append(line)
+        if not self.revisions and self.delay_notes:
+            # Old files logged free text before revisions existed
+            lines.append(self.delay_notes)
+        return "\n".join(lines)
+
+    # ------------------------------------------------------------------
     # Rollup (F4 — pass is_rollup=True so set_date doesn't re-cascade)
     # ------------------------------------------------------------------
 
@@ -382,7 +416,9 @@ class TaskNode:
             "dates_locked": self.dates_locked,
             "predecessor_id": self.predecessor_id,
             "baseline_duration": self.baseline_duration,
+            "baseline_end": self.baseline_end,
             "delay_notes": self.delay_notes,
+            "revisions": self.revisions,
         }
 
     @classmethod
@@ -400,7 +436,9 @@ class TaskNode:
         node.dates_locked = data.get("dates_locked", False)
         node.predecessor_id = data.get("predecessor_id")
         node.baseline_duration = data.get("baseline_duration")
+        node.baseline_end = data.get("baseline_end")
         node.delay_notes = data.get("delay_notes", "")
+        node.revisions = data.get("revisions", [])
 
         if "is_parallel" in data:
             node.is_parallel = data["is_parallel"]

@@ -233,28 +233,34 @@ class DelayDelegate(QStyledItemDelegate):
             return
 
         try:
-            diff = int(node.duration) - node.baseline_duration
+            total_diff = int(node.duration) - node.baseline_duration
         except (ValueError, TypeError):
-            diff = 0
+            total_diff = 0
+        # Slip not yet covered by a recorded revision — this entry's amount.
+        new_slip = total_diff - node.logged_slip()
 
-        today_tag = datetime.now().strftime("[%Y-%m-%d]")
-        delay_tag = f"+{diff}d" if diff > 0 else (f"{diff}d" if diff < 0 else "0d")
+        today_str = datetime.now().strftime("%Y-%m-%d")
+        next_rev = chr(ord('B') + len(node.revisions))
+        slip_tag = f"+{new_slip}d" if new_slip > 0 else f"{new_slip}d"
 
         dialog = QDialog(tree_view)
         dialog.setWindowTitle(f"Delay Log — {node.name}")
-        dialog.resize(420, 320)
+        dialog.resize(460, 340)
         layout = QVBoxLayout(dialog)
 
-        # Existing log (read-only display)
-        if node.delay_notes:
-            layout.addWidget(QLabel("Previous entries:"))
-            history = QPlainTextEdit(node.delay_notes)
+        # Revision trail so far (Rev A baseline + confirmed slips)
+        trail = node.revision_trail()
+        if trail:
+            layout.addWidget(QLabel("History:"))
+            history = QPlainTextEdit(trail)
             history.setReadOnly(True)
             history.setMaximumHeight(140)
             layout.addWidget(history)
 
-        # New entry input
-        layout.addWidget(QLabel(f"New entry ({today_tag} {delay_tag}) — reason:"))
+        # New revision input
+        layout.addWidget(QLabel(
+            f"New: Rev {next_rev}  {today_str}  {slip_tag}"
+            f"  (end now {node.end_date or '?'}) — reason:"))
         reason_edit = QLineEdit()
         reason_edit.setPlaceholderText("e.g. Vendor late on parts")
         layout.addWidget(reason_edit)
@@ -270,8 +276,13 @@ class DelayDelegate(QStyledItemDelegate):
             reason = reason_edit.text().strip()
             if not reason:
                 return
-            new_entry = f"{today_tag} {delay_tag}: {reason}"
-            node.delay_notes = (node.delay_notes + "\n" + new_entry).strip()
+            node.revisions.append({
+                "rev": next_rev,
+                "date": today_str,
+                "end": node.end_date or "",
+                "slip": new_slip,
+                "reason": reason,
+            })
             was_blocked = tree_view.blockSignals(True)
             try:
                 item.update_from_node()
@@ -315,14 +326,23 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
                     delay_text = "On track"
             except (ValueError, TypeError):
                 pass
+        # Parents: their "delay" is just a rollup of children — show it
+        # muted with a ↑ marker so one slip never reads as two.
+        is_parent = bool(self.node.children)
+        if is_parent and delay_diff > 0:
+            delay_text = f"↑ +{delay_diff}d"
         self.setText(Columns.DELAY, delay_text)
-        # Tooltip: show delay log if there are notes, else hint to double-click
-        if self.node.delay_notes:
-            self.setToolTip(Columns.DELAY, self.node.delay_notes)
-        elif delay_diff > 0:
-            self.setToolTip(Columns.DELAY, "Double-click to log delay reason")
+        # Tooltip: revision trail (Rev A/B/C…), legacy notes, or a hint.
+        if is_parent and delay_diff > 0:
+            self.setToolTip(Columns.DELAY, "Rolled up from delayed child tasks")
         else:
-            self.setToolTip(Columns.DELAY, "")
+            trail = self.node.revision_trail()
+            if self.node.revisions or self.node.delay_notes:
+                self.setToolTip(Columns.DELAY, trail)
+            elif delay_diff > 0:
+                self.setToolTip(Columns.DELAY, "Double-click to log delay reason")
+            else:
+                self.setToolTip(Columns.DELAY, "")
 
         self.setFlags(self.flags() | Qt.ItemFlag.ItemIsEditable | Qt.ItemFlag.ItemIsUserCheckable)
 
@@ -353,7 +373,9 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
 
         # Delay column color (overrides status color for this column)
         if self.node.baseline_duration is not None:
-            if delay_diff > 0:
+            if is_parent and delay_diff > 0:
+                self.setForeground(Columns.DELAY, QBrush(QColor("#9E9E9E")))  # gray rollup
+            elif delay_diff > 0:
                 self.setForeground(Columns.DELAY, QBrush(QColor("#FF0000")))  # red
             elif delay_diff < 0:
                 self.setForeground(Columns.DELAY, QBrush(QColor("#00C853")))  # green
@@ -1196,38 +1218,62 @@ class TreeGridView(QTreeWidget):
 
     # ---- Baseline / Delay tracking ----
 
+    def has_baseline(self) -> bool:
+        return any(n.baseline_duration is not None
+                   for n in self.get_all_nodes_flat())
+
     def set_baseline(self):
-        """Snapshot current durations as the planned baseline for all tasks."""
+        """Snapshot current durations + end dates as Rev A for all tasks.
+        Warns first if delay history exists — re-baselining clears it."""
+        if any(n.revisions for n in self.get_all_nodes_flat()):
+            reply = QMessageBox.question(
+                self, "Clear delay history?",
+                "Setting a new baseline erases the existing delay history "
+                "(all Rev B/C… entries) on every task.\n\nContinue?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+            if reply != QMessageBox.StandardButton.Yes:
+                return
         for node in self.get_all_nodes_flat():
             try:
                 node.baseline_duration = int(node.duration)
             except (ValueError, TypeError):
                 node.baseline_duration = None
+            node.baseline_end = node.end_date
+            node.revisions = []
+            node.delay_notes = ""
         self.refresh_entire_tree()
 
     def clear_baseline(self):
-        """Remove all baseline data."""
+        """Remove all baseline + delay history data."""
         for node in self.get_all_nodes_flat():
             node.baseline_duration = None
+            node.baseline_end = None
+            node.revisions = []
+            node.delay_notes = ""
         self.refresh_entire_tree()
 
     def update_baseline_for_node(self, node: TaskNode):
-        """Reset one task's baseline to its current duration (intentional change)."""
+        """Re-stamp one task as a fresh Rev A (intentional change, not a delay).
+        Clears that task's revision trail so the audit stays clean."""
         try:
             node.baseline_duration = int(node.duration)
         except (ValueError, TypeError):
             node.baseline_duration = None
+        node.baseline_end = node.end_date
+        node.revisions = []
+        node.delay_notes = ""
         self.refresh_entire_tree()
 
     def _prompt_delay_reason_if_needed(self, node: TaskNode):
-        """After a duration change, auto-open the delay log dialog if a new delay exists."""
-        if node.baseline_duration is None:
-            return
+        """After a duration change, auto-open the delay log dialog if there is
+        slip not yet covered by a recorded revision."""
+        if node.baseline_duration is None or node.children:
+            return  # no baseline, or parent (rollup — children carry the log)
         try:
             diff = int(node.duration) - node.baseline_duration
         except (ValueError, TypeError):
             return
-        if diff <= 0:
+        if diff - node.logged_slip() <= 0:
             return
         # Find the tree item and open the delay dialog
         item = self._find_item_by_id(node.id)
@@ -1265,9 +1311,23 @@ class TreeGridView(QTreeWidget):
             self.root_nodes.append(new_node)
             self.add_node_to_tree(new_node, self.invisibleRootItem())
             
-        # Evaluate formulas immediately -> No formulas anymore
-        # new_node.evaluate_formulas()
-            
+        # Scenario choice: a baseline exists, so the user decides whether this
+        # new task counts against the plan or is just a restructure.
+        #   Yes → baseline 0d: its whole duration reads as slip, and the delay
+        #         reason popup fires when they set its duration.
+        #   No  → baseline stays None: Delay column blank until next Set Baseline.
+        if self.has_baseline():
+            reply = QMessageBox.question(
+                self, "Count as delay?",
+                f"A baseline is set on this project.\n\n"
+                f"Should '{new_node.name}' count as a delay to the plan?\n\n"
+                "Yes — its duration will show as slip (you'll be asked why).\n"
+                "No — it's a plan change; its Delay column stays blank.",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+            if reply == QMessageBox.StandardButton.Yes:
+                new_node.baseline_duration = 0
+                new_node.baseline_end = new_node.start_date
+
         self.item_changed_signal.emit(new_node)
         self.update_filter_options()
 
@@ -1420,8 +1480,10 @@ class TreeGridView(QTreeWidget):
                 self.recalculate_all_dates()
                 self.refresh_entire_tree()
                 self.blockSignals(False)
-                self._prompt_delay_reason_if_needed(node)
-                self.blockSignals(True)
+                try:
+                    self._prompt_delay_reason_if_needed(node)
+                finally:
+                    self.blockSignals(True)
             elif column == Columns.STATUS: 
                 node.set_status(text)
                 # Status change might affect parent, refresh tree
@@ -1453,8 +1515,10 @@ class TreeGridView(QTreeWidget):
                     self.recalculate_all_dates()
                     self.refresh_entire_tree()
                     self.blockSignals(False)
-                    self._prompt_delay_reason_if_needed(node)
-                    self.blockSignals(True)
+                    try:
+                        self._prompt_delay_reason_if_needed(node)
+                    finally:
+                        self.blockSignals(True)
                 except ValueError:
                     pass # Ignore invalid input
             

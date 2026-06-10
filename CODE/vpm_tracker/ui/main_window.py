@@ -310,9 +310,11 @@ class MainWindow(QMainWindow):
                 delay_item = QTableWidgetItem(f"+{diff}d")
                 delay_item.setForeground(QColor("#FF0000"))
                 delay_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-                log_text = node.delay_notes if node.delay_notes else "(no reason logged — double-click Delay cell to add)"
+                has_log = bool(node.revisions or node.delay_notes)
+                log_text = (node.revision_trail() if has_log
+                            else "(no reason logged — double-click Delay cell to add)")
                 log_item = QTableWidgetItem(log_text)
-                if not node.delay_notes:
+                if not has_log:
                     log_item.setForeground(QColor("#999999"))
                 table.setItem(row, 0, name_item)
                 table.setItem(row, 1, delay_item)

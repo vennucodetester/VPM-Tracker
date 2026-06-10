@@ -17,10 +17,7 @@ def main():
     
     # Force Light Mode / Excel-like style
     app.setStyle("Fusion") # Fusion gives us a clean base to style on top of
-    
-    # Force Light Mode / Excel-like style
-    app.setStyle("Fusion") 
-    
+
     # Safe Light Theme
     # We target specific widgets to ensure White/Black contrast without breaking headers
     app.setStyleSheet("""
