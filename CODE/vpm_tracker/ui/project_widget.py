@@ -9,13 +9,14 @@ settings against the active project.
 import uuid
 from typing import Dict, List
 
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QTabWidget
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QTabWidget, QSplitter
 from PyQt6.QtCore import pyqtSignal, Qt
 from PyQt6.QtGui import QKeySequence, QShortcut
 
 from models.task_node import TaskNode
 from ui.tree_grid_view import TreeGridView
 from ui.focus_view import FocusView
+from ui.timeline_pane import TimelineContainer
 from utils.config_manager import ConfigManager
 from utils.history import HistoryStack
 
@@ -73,7 +74,18 @@ class ProjectWidget(QWidget):
         layout.addWidget(self.inner_tabs)
 
         self.tree_view = TreeGridView()
-        self.inner_tabs.addTab(self.tree_view, "Tracker")
+
+        # Tracker tab = grid + attached timeline (MS Project style):
+        # same rows, same scroll, same collapse state — the timeline asks
+        # the grid where each row is, so they can never drift apart.
+        self.timeline = TimelineContainer(self.tree_view)
+        tracker_split = QSplitter(Qt.Orientation.Horizontal)
+        tracker_split.addWidget(self.tree_view)
+        tracker_split.addWidget(self.timeline)
+        tracker_split.setStretchFactor(0, 3)
+        tracker_split.setStretchFactor(1, 2)
+        tracker_split.setCollapsible(0, False)
+        self.inner_tabs.addTab(tracker_split, "Tracker")
 
         self.gantt_view = FocusView()  # name kept so callers don't change
         self.gantt_view.task_activated.connect(self._jump_to_task)
