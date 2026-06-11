@@ -350,8 +350,14 @@ class TimelineCanvas(QWidget):
             rows.append((item.node, y, r.height()))
 
         today = date.today()
+        # Clip row drawing to below the header so boxes/labels from rows
+        # scrolled upward can't paint over the month bar.
+        p.save()
+        p.setClipRect(QRect(0, header_h, self.width(),
+                            self.height() - header_h))
         self._render_rows(p, rows, x_of, self.width(), today,
                           register_hits=True)
+        p.restore()
         self._render_today(p, x_of, today, header_h, self.height())
         p.end()
 
@@ -380,6 +386,20 @@ class TimelineCanvas(QWidget):
         if node:
             self._tree.jump_to_node_id(node.id)
         super().mousePressEvent(event)
+
+    def wheelEvent(self, event):
+        """Vertical wheel over the chart scrolls the GRID — the chart
+        mirrors the grid's rows, so they move together regardless of
+        which side the mouse is over. Shift+wheel (or a sideways wheel)
+        still pans the chart horizontally via the scroll area."""
+        if (abs(event.angleDelta().y()) > abs(event.angleDelta().x())
+                and not (event.modifiers()
+                         & Qt.KeyboardModifier.ShiftModifier)):
+            from PyQt6.QtWidgets import QApplication
+            QApplication.sendEvent(self._tree.viewport(), event)
+            event.accept()
+            return
+        super().wheelEvent(event)
 
     # ---------------- export ----------------
     def export_image(self, path):
