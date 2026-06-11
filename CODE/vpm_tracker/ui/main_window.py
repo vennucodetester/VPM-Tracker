@@ -206,6 +206,12 @@ class MainWindow(QMainWindow):
         edit_menu.addAction(redo_action)
 
         edit_menu.addSeparator()
+        refresh_action = QAction("Refresh All", self)
+        refresh_action.setShortcut("F5")
+        refresh_action.triggered.connect(self._refresh_all)
+        edit_menu.addAction(refresh_action)
+
+        edit_menu.addSeparator()
         delay_summary_action = QAction("View Delay Summary…", self)
         delay_summary_action.triggered.connect(self._show_delay_summary)
         edit_menu.addAction(delay_summary_action)
@@ -250,6 +256,19 @@ class MainWindow(QMainWindow):
         if proj:
             proj.tree_view.clear_baseline()
             self.on_data_changed()
+
+    def _refresh_all(self):
+        """Full refresh: re-run the scheduler AND repaint every row.
+        The old Refresh Timeline only recalculated the model without
+        repainting, which is why dates looked stale until the user
+        wiggled them back and forth."""
+        proj = self.active_project()
+        if not proj:
+            return
+        proj.tree_view.recalculate_all_dates()
+        proj.tree_view.refresh_entire_tree()
+        if proj.inner_tabs.currentIndex() == 1:
+            proj.gantt_view.load_nodes(proj.tree_view.root_nodes)
 
     def _show_delay_summary(self):
         from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QLabel,

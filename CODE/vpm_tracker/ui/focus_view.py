@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
                              QFrame, QScrollArea)
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSignal
 
 from utils.workday_calculator import WorkdayCalculator
 
@@ -44,7 +44,16 @@ def _flatten(roots):
     return out
 
 
+def _link(node):
+    """Task name as a clickable anchor carrying the node id."""
+    return (f"<a href='{node.id}' style='color:inherit; "
+            f"text-decoration:none;'>{node.name}</a>")
+
+
 class FocusView(QWidget):
+    # Emits the node id when the user clicks a task name → jump to Tracker.
+    task_activated = pyqtSignal(str)
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.root_nodes = []
@@ -88,12 +97,13 @@ class FocusView(QWidget):
             if w:
                 w.deleteLater()
 
-    @staticmethod
-    def _label(html, size=13):
+    def _label(self, html, size=13):
         lbl = QLabel(html)
         lbl.setWordWrap(True)
         lbl.setTextFormat(Qt.TextFormat.RichText)
         lbl.setStyleSheet(f"font-size: {size}px; color: #202020;")
+        lbl.setOpenExternalLinks(False)
+        lbl.linkActivated.connect(self.task_activated.emit)
         return lbl
 
     # ------------------------------------------------------------------
@@ -246,7 +256,7 @@ class FocusView(QWidget):
                 tag = f"{t.duration}d"
             pills.append(
                 f"<span style='{style} padding:3px 8px; border-radius:6px; "
-                f"white-space:nowrap;'>{t.name} · {tag}</span>")
+                f"white-space:nowrap;'>{_link(t)} · {tag}</span>")
         lay.addWidget(self._label(
             " <span style='color:#888'>→</span> ".join(pills)))
 
@@ -255,7 +265,7 @@ class FocusView(QWidget):
             owner = f" ({push_task.owner})" if push_task.owner else ""
             lay.addWidget(self._label(
                 f"<span style='color:#A32D2D; font-weight:bold;'>Push here:"
-                f"</span> <b>{push_task.name}</b>{owner} — every workday "
+                f"</span> <b>{_link(push_task)}</b>{owner} — every workday "
                 f"saved here moves the project end a day earlier.", size=13))
 
         # Watch list: near-critical leaves not already in the chain
@@ -268,7 +278,7 @@ class FocusView(QWidget):
             key=lambda n: slack[n.id])[:3]
         if watch:
             rows = "<br>".join(
-                f"• {n.name} — only <b>{slack[n.id]}d</b> of slack"
+                f"• {_link(n)} — only <b>{slack[n.id]}d</b> of slack"
                 for n in watch)
             lay.addWidget(self._label(
                 f"<span style='color:#854F0B; font-weight:bold;'>Watch list:"
@@ -297,11 +307,17 @@ class FocusView(QWidget):
         next_start = week_start + timedelta(days=7)
         next_end = next_start + timedelta(days=6)
 
-        overdue, due_week, starting = [], [], []
+        closed_start = week_start - timedelta(days=14)
+
+        overdue, due_week, starting, closed = [], [], [], []
         for n in all_nodes:
-            if n.children or n.status == "Completed":
+            if n.children:
                 continue
             s, e = _parse(n.start_date), _parse(n.end_date)
+            if n.status == "Completed":
+                if e and closed_start <= e <= today:
+                    closed.append(n)
+                continue
             if e and e < today:
                 overdue.append(n)
             elif e and today <= e <= week_end:
@@ -320,6 +336,9 @@ class FocusView(QWidget):
              lambda n: n.end_date, "due"),
             ("Starting next week", "#0F6E56", sorted(starting, key=lambda n: n.start_date or ""),
              lambda n: n.start_date, "starts"),
+            (f"Closed since {closed_start.strftime('%b %d')}", "#5F5E5A",
+             sorted(closed, key=lambda n: n.end_date or "", reverse=True),
+             lambda n: n.end_date, "done"),
         ):
             card = QFrame()
             card.setStyleSheet(
@@ -336,7 +355,7 @@ class FocusView(QWidget):
                 for n in items[:8]:
                     owner = f" · {n.owner}" if n.owner else ""
                     clay.addWidget(self._label(
-                        f"{n.name}<br><span style='color:#999; font-size:11px;'>"
+                        f"{_link(n)}<br><span style='color:#999; font-size:11px;'>"
                         f"{prefix} {_fmt(date_of(n))}{owner}</span>", size=12))
                 if len(items) > 8:
                     clay.addWidget(self._label(

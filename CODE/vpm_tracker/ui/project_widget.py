@@ -71,6 +71,7 @@ class ProjectWidget(QWidget):
         self.inner_tabs.addTab(self.tree_view, "Tracker")
 
         self.gantt_view = FocusView()  # name kept so callers don't change
+        self.gantt_view.task_activated.connect(self._jump_to_task)
         self.inner_tabs.addTab(self.gantt_view, "Visuals")
 
         self.inner_tabs.currentChanged.connect(self._on_inner_tab_changed)
@@ -78,6 +79,11 @@ class ProjectWidget(QWidget):
     def _on_inner_tab_changed(self, index: int):
         if index == 1:  # Visuals
             self.gantt_view.load_nodes(self.tree_view.root_nodes)
+
+    def _jump_to_task(self, node_id: str):
+        """Click on a task name in Visuals → show that row in the Tracker."""
+        self.inner_tabs.setCurrentIndex(0)
+        self.tree_view.jump_to_node_id(node_id)
 
     # ---- lifecycle ----
     def activate(self):

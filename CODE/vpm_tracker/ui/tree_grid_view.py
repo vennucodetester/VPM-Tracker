@@ -494,6 +494,11 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
 class TreeGridView(QTreeWidget):
     item_changed_signal = pyqtSignal(TaskNode) # Signal when data changes
 
+    # Task clipboard for cut/copy/paste. Class-level on purpose: it is
+    # shared by every project tab, which is what makes cross-project
+    # paste work.
+    _task_clipboard: list = []
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.root_nodes = [] # List of top-level TaskNodes
@@ -957,6 +962,21 @@ class TreeGridView(QTreeWidget):
 
             menu.addSeparator()
 
+            cut_action = QAction("Cut Task(s)", self)
+            cut_action.triggered.connect(self.cut_selected_tasks)
+            menu.addAction(cut_action)
+
+            copy_action = QAction("Copy Task(s)", self)
+            copy_action.triggered.connect(self.copy_selected_tasks)
+            menu.addAction(copy_action)
+
+            paste_action2 = QAction("Paste Below", self)
+            paste_action2.setEnabled(bool(TreeGridView._task_clipboard))
+            paste_action2.triggered.connect(lambda: self.paste_tasks(item))
+            menu.addAction(paste_action2)
+
+            menu.addSeparator()
+
             delete_action = QAction("Delete Task(s)", self)
             delete_action.triggered.connect(lambda: self.delete_smart(item))
             menu.addAction(delete_action)
@@ -965,6 +985,11 @@ class TreeGridView(QTreeWidget):
             add_action = QAction("Add Root Task", self)
             add_action.triggered.connect(lambda: self.add_child_task(None))
             menu.addAction(add_action)
+
+            paste_root_action = QAction("Paste", self)
+            paste_root_action.setEnabled(bool(TreeGridView._task_clipboard))
+            paste_root_action.triggered.connect(lambda: self.paste_tasks(None))
+            menu.addAction(paste_root_action)
             
         menu.exec(self.viewport().mapToGlobal(position))
 
@@ -1054,6 +1079,22 @@ class TreeGridView(QTreeWidget):
                 return it
             iterator += 1
         return None
+
+    def jump_to_node_id(self, node_id: str):
+        """Expand, scroll to, select and flash the row for this node id.
+        Used by the Visuals tab to jump into the Tracker."""
+        item = self._find_item_by_id(node_id)
+        if not item:
+            return
+        parent = item.parent()
+        while parent:
+            parent.setExpanded(True)
+            parent = parent.parent()
+        self.clearSelection()
+        item.setSelected(True)
+        self.setCurrentItem(item)
+        self.scrollToItem(item, QAbstractItemView.ScrollHint.PositionAtCenter)
+        self._flash_item(item)
 
     def toggle_date_lock(self, item: TaskTreeWidgetItem):
         item.node.dates_locked = not item.node.dates_locked
@@ -1346,9 +1387,141 @@ class TreeGridView(QTreeWidget):
             parent_item.removeChild(item)
         else:
             self.invisibleRootItem().removeChild(item)
-        
+
         self.item_changed_signal.emit(node) # Emit deleted node (or parent) for update
         self.update_filter_options()
+
+    # ------------------------------------------------------------------
+    # Cut / Copy / Paste (within and across project tabs)
+    # ------------------------------------------------------------------
+
+    def _top_level_selection(self):
+        """Selected items minus any whose ancestor is also selected —
+        copying a parent already carries its whole subtree."""
+        items = [i for i in self.selectedItems()
+                 if isinstance(i, TaskTreeWidgetItem)]
+        sel_ids = {i.node.id for i in items}
+        out = []
+        for i in items:
+            p = i.parent()
+            covered = False
+            while p:
+                if isinstance(p, TaskTreeWidgetItem) and p.node.id in sel_ids:
+                    covered = True
+                    break
+                p = p.parent()
+            if not covered:
+                out.append(i)
+        return out
+
+    def copy_selected_tasks(self):
+        tops = self._top_level_selection()
+        if tops:
+            TreeGridView._task_clipboard = [i.node.to_dict() for i in tops]
+
+    def cut_selected_tasks(self):
+        tops = self._top_level_selection()
+        if not tops:
+            return
+        TreeGridView._task_clipboard = [i.node.to_dict() for i in tops]
+        # Every id leaving this project (subtrees included)
+        removed = set()
+
+        def collect(n):
+            removed.add(n.id)
+            for c in n.children:
+                collect(c)
+        for i in tops:
+            collect(i.node)
+        for i in tops:
+            self.delete_task(i)
+        # Tasks left behind that depended on a removed task would keep a
+        # dangling link ("(missing)") — clear them instead.
+        for n in self.get_all_nodes_flat():
+            if n.predecessor_id in removed:
+                n.predecessor_id = None
+        self.recalculate_all_dates()
+        self.refresh_entire_tree()
+
+    def paste_tasks(self, anchor_item: QTreeWidgetItem = None):
+        """Paste clipboard subtrees as siblings after anchor_item
+        (appended at root level when there is no anchor)."""
+        import uuid
+        if not TreeGridView._task_clipboard:
+            return
+        dest_ids = {n.id for n in self.get_all_nodes_flat()}
+
+        nodes = [TaskNode.from_dict(d) for d in TreeGridView._task_clipboard]
+
+        # Fresh ids on every paste (a copy must never duplicate ids).
+        idmap = {}
+
+        def remap(n):
+            new_id = str(uuid.uuid4())
+            idmap[n.id] = new_id
+            n.id = new_id
+            for c in n.children:
+                remap(c)
+        for n in nodes:
+            remap(n)
+
+        # Predecessor links: inside the pasted set → remap (survives across
+        # projects). Outside the set → keep only if the target exists in
+        # this project; otherwise clear and report.
+        cleared = 0
+
+        def fix_preds(n):
+            nonlocal cleared
+            if n.predecessor_id:
+                if n.predecessor_id in idmap:
+                    n.predecessor_id = idmap[n.predecessor_id]
+                elif n.predecessor_id not in dest_ids:
+                    n.predecessor_id = None
+                    cleared += 1
+            for c in n.children:
+                fix_preds(c)
+        for n in nodes:
+            fix_preds(n)
+
+        was_blocked = self.blockSignals(True)
+        try:
+            if anchor_item and isinstance(anchor_item, TaskTreeWidgetItem):
+                anchor_node = anchor_item.node
+                parent_node = anchor_node.parent
+                siblings = parent_node.children if parent_node else self.root_nodes
+                idx = siblings.index(anchor_node) + 1
+                ui_parent = anchor_item.parent()
+                for off, n in enumerate(nodes):
+                    n.parent = parent_node
+                    siblings.insert(idx + off, n)
+                    item = TaskTreeWidgetItem(n)
+                    if ui_parent:
+                        ui_parent.insertChild(
+                            ui_parent.indexOfChild(anchor_item) + 1 + off, item)
+                    else:
+                        self.insertTopLevelItem(
+                            self.indexOfTopLevelItem(anchor_item) + 1 + off, item)
+                    item.setExpanded(n.expanded)
+                    for c in n.children:
+                        self.add_node_to_tree(c, item)
+            else:
+                for n in nodes:
+                    n.parent = None
+                    self.root_nodes.append(n)
+                    self.add_node_to_tree(n, self.invisibleRootItem())
+        finally:
+            self.blockSignals(was_blocked)
+
+        self.recalculate_all_dates()
+        self.refresh_entire_tree()
+        self.update_filter_options()
+        self.item_changed_signal.emit(nodes[0])
+
+        if cleared:
+            QMessageBox.information(
+                self, "Links cleared",
+                f"{cleared} predecessor link(s) pointed at tasks that are "
+                "not in this project, so they were cleared.")
 
     def on_item_changed(self, item: QTreeWidgetItem, column: int):
         # Update model from UI
