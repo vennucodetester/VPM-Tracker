@@ -13,7 +13,7 @@ from PyQt6.QtWidgets import (
     QTabWidget, QInputDialog, QMenu,
 )
 from PyQt6.QtGui import QAction
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QSettings
 
 from ui.project_widget import ProjectWidget
 from models.task_node import TaskNode
@@ -31,6 +31,8 @@ class MainWindow(QMainWindow):
 
         self.current_filepath = None
         self.unsaved_changes = False
+        self.settings = QSettings("VPM", "VPMTracker")
+        self._search_dialog = None
 
         self.central_widget = QWidget()
         self.setCentralWidget(self.central_widget)
@@ -191,6 +193,9 @@ class MainWindow(QMainWindow):
         load_action.triggered.connect(self.load_project_file)
         file_menu.addAction(load_action)
 
+        self.recent_menu = file_menu.addMenu("Open Recent")
+        self.recent_menu.aboutToShow.connect(self._populate_recent_menu)
+
         save_action = QAction("Save", self)
         save_action.setShortcut("Ctrl+S")
         save_action.triggered.connect(self.save_project_file)
@@ -245,6 +250,17 @@ class MainWindow(QMainWindow):
         edit_menu.addAction(journal_action)
 
         edit_menu.addSeparator()
+        search_action = QAction("Search Everything…", self)
+        search_action.setShortcut("Ctrl+F")
+        search_action.triggered.connect(self._show_search)
+        edit_menu.addAction(search_action)
+
+        capture_action = QAction("Quick Capture to Inbox…", self)
+        capture_action.setShortcut("Ctrl+Space")
+        capture_action.triggered.connect(self._quick_capture)
+        edit_menu.addAction(capture_action)
+
+        edit_menu.addSeparator()
         set_bl_action = QAction("Set Baseline", self)
         set_bl_action.triggered.connect(self._set_baseline)
         edit_menu.addAction(set_bl_action)
@@ -297,6 +313,100 @@ class MainWindow(QMainWindow):
         proj.tree_view.refresh_entire_tree()
         if proj.inner_tabs.currentIndex() == 1:
             proj.gantt_view.load_nodes(proj.tree_view.root_nodes)
+
+    def _quick_capture(self):
+        """One-line capture box → lands in the active project's Inbox."""
+        proj = self.active_project()
+        if not proj:
+            return
+        text, ok = QInputDialog.getText(
+            self, "Quick capture",
+            "Thought / task (goes to Inbox, no dates):")
+        if ok and text.strip():
+            proj.tree_view.quick_capture(text)
+            self.statusBar().showMessage("Captured to Inbox", 2000)
+
+    # ---------------- global search ----------------
+    def _show_search(self):
+        from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QLineEdit,
+                                     QListWidget, QListWidgetItem, QLabel)
+        if self._search_dialog is not None:
+            self._search_dialog.show()
+            self._search_dialog.raise_()
+            self._search_dialog.activateWindow()
+            return
+
+        dlg = QDialog(self)
+        dlg.setWindowTitle("Search Everything")
+        dlg.resize(640, 420)
+        dlg.setModal(False)
+        layout = QVBoxLayout(dlg)
+        box = QLineEdit()
+        box.setPlaceholderText("Search task names, notes, delay reasons, journal…")
+        layout.addWidget(box)
+        hint = QLabel("Type at least 2 characters. Click a result to jump to it.")
+        hint.setStyleSheet("color: #888; font-size: 11px;")
+        layout.addWidget(hint)
+        results = QListWidget()
+        layout.addWidget(results)
+
+        def full_path(node):
+            parts, n = [], node
+            while n:
+                parts.append(n.name)
+                n = n.parent
+            return " > ".join(reversed(parts))
+
+        def run_search(query: str):
+            results.clear()
+            q = query.strip().lower()
+            if len(q) < 2:
+                return
+            for tab_idx in range(self.project_tabs.count()):
+                proj = self.project_tabs.widget(tab_idx)
+                if not isinstance(proj, ProjectWidget):
+                    continue
+                tag = f"[{proj.name}] " if self.project_tabs.count() > 1 else ""
+                for node in proj.tree_view.get_all_nodes_flat():
+                    hits = []
+                    if q in node.name.lower():
+                        hits.append("name")
+                    if node.notes and q in node.notes.lower():
+                        hits.append("notes")
+                    delay_text = (node.delay_notes + " " + " ".join(
+                        r.get("reason", "") for r in node.revisions)).lower()
+                    if q in delay_text:
+                        hits.append("delay log")
+                    if hits:
+                        it = QListWidgetItem(
+                            f"{tag}{full_path(node)}   — {', '.join(hits)}")
+                        it.setData(Qt.ItemDataRole.UserRole, (tab_idx, node.id))
+                        results.addItem(it)
+                for e in proj.journal:
+                    if q in e.get("text", "").lower():
+                        it = QListWidgetItem(
+                            f"{tag}Journal {e.get('ts', '')}: {e.get('text', '')}")
+                        it.setData(Qt.ItemDataRole.UserRole, (tab_idx, None))
+                        results.addItem(it)
+
+        def open_result(it):
+            tab_idx, node_id = it.data(Qt.ItemDataRole.UserRole)
+            self.project_tabs.setCurrentIndex(tab_idx)
+            proj = self.project_tabs.widget(tab_idx)
+            if node_id:
+                proj.inner_tabs.setCurrentIndex(0)
+                proj.tree_view.jump_to_node_id(node_id)
+            else:
+                self._show_journal()
+
+        box.textChanged.connect(run_search)
+        results.itemClicked.connect(open_result)
+        results.itemActivated.connect(open_result)
+
+        self._search_dialog = dlg
+        dlg.finished.connect(lambda _: setattr(self, "_search_dialog", None))
+        dlg.show()
+        box.setFocus()
 
     def _show_digest_since_last_visit(self):
         """'Since you were here' — journal entries from the last 7 days,
@@ -490,6 +600,7 @@ class MainWindow(QMainWindow):
             self.statusBar().showMessage(f"Saved to {self.current_filepath}", 3000)
             self.unsaved_changes = False
             self.update_title()
+            self._remember_recent(self.current_filepath)
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Could not save file: {e}")
 
@@ -507,6 +618,9 @@ class MainWindow(QMainWindow):
         )
         if not filename:
             return
+        self._load_path(filename)
+
+    def _load_path(self, filename: str):
         try:
             from utils.vpmt_io import load_projects, read_version, CURRENT_VERSION
             projects = load_projects(filename)
@@ -545,7 +659,36 @@ class MainWindow(QMainWindow):
         self.unsaved_changes = False
         self.update_title()
         self.statusBar().showMessage(f"Loaded {filename}", 3000)
+        self._remember_recent(filename)
         self._show_digest_since_last_visit()
+
+    # ---------------- recent files ----------------
+    def _recent_files(self) -> list:
+        files = self.settings.value("recent_files", []) or []
+        if isinstance(files, str):
+            files = [files]
+        return [f for f in files if os.path.exists(f)]
+
+    def _remember_recent(self, path: str):
+        files = self._recent_files()
+        if path in files:
+            files.remove(path)
+        files.insert(0, path)
+        self.settings.setValue("recent_files", files[:8])
+
+    def _populate_recent_menu(self):
+        self.recent_menu.clear()
+        files = self._recent_files()
+        if not files:
+            empty = QAction("(no recent files)", self)
+            empty.setEnabled(False)
+            self.recent_menu.addAction(empty)
+            return
+        for path in files:
+            act = QAction(os.path.basename(path), self)
+            act.setToolTip(path)
+            act.triggered.connect(lambda _, p=path: self._load_path(p))
+            self.recent_menu.addAction(act)
 
     # ---------------- excel export ----------------
     def export_all_to_excel(self):

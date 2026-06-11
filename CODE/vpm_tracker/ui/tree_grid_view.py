@@ -581,8 +581,96 @@ class TreeGridView(QTreeWidget):
             return
         if event.matches(QKeySequence.StandardKey.Copy):
             self.copy_selection_to_clipboard()
-        else:
-            super().keyPressEvent(event)
+            return
+
+        # Keyboard-first capture (only when no cell editor is open):
+        #   Enter      → new task below the current row, name in edit mode
+        #   Tab        → indent current row
+        #   Shift+Tab  → outdent current row
+        editing = self.state() == QAbstractItemView.State.EditingState
+        current = self.currentItem()
+        if not editing and isinstance(current, TaskTreeWidgetItem):
+            key = event.key()
+            if key in (Qt.Key.Key_Return, Qt.Key.Key_Enter):
+                self.add_sibling_below(current)
+                return
+            if key == Qt.Key.Key_Tab:
+                self.indent_smart(current)
+                return
+            if key == Qt.Key.Key_Backtab:
+                self.outdent_smart(current)
+                return
+        super().keyPressEvent(event)
+
+    def add_sibling_below(self, item: 'TaskTreeWidgetItem'):
+        """Insert a new task right below `item` at the same level and start
+        editing its name — Enter-to-add flow for fast brain-dumps."""
+        anchor = item.node
+        parent_node = anchor.parent
+        new_node = TaskNode("New Task", parent=parent_node)
+        new_node.update_from_previous_sibling(anchor)
+
+        siblings = parent_node.children if parent_node else self.root_nodes
+        try:
+            idx = siblings.index(anchor) + 1
+        except ValueError:
+            idx = len(siblings)
+        siblings.insert(idx, new_node)
+
+        was_blocked = self.blockSignals(True)
+        try:
+            new_item = TaskTreeWidgetItem(new_node)
+            ui_parent = item.parent()
+            if ui_parent:
+                ui_parent.insertChild(ui_parent.indexOfChild(item) + 1, new_item)
+            else:
+                self.insertTopLevelItem(self.indexOfTopLevelItem(item) + 1, new_item)
+        finally:
+            self.blockSignals(was_blocked)
+
+        self.recalculate_all_dates()
+        self.refresh_entire_tree()
+        self.journal_event.emit(f"Added task '{new_node.name}'")
+        self.item_changed_signal.emit(new_node)
+        self.setCurrentItem(new_item)
+        self.editItem(new_item, Columns.TREE)
+
+    def quick_capture(self, text: str):
+        """Drop a dateless task into the 'Inbox' root group (created on
+        first use, pinned to the top). No dates → the scheduler ignores it
+        until the task is moved into the real plan."""
+        text = (text or "").strip()
+        if not text:
+            return
+        inbox = next((r for r in self.root_nodes
+                      if r.name.strip().lower() == "inbox"), None)
+        was_blocked = self.blockSignals(True)
+        try:
+            if inbox is None:
+                inbox = TaskNode("Inbox")
+                inbox.dates_locked = True  # keep the scheduler's hands off
+                # TaskNode defaults dates to today — Inbox must be dateless
+                # so the scheduler skips it and it never shows as overdue.
+                inbox.start_date = None
+                inbox.end_date = None
+                self.root_nodes.insert(0, inbox)
+                inbox_item = TaskTreeWidgetItem(inbox)
+                self.insertTopLevelItem(0, inbox_item)
+            else:
+                inbox_item = self._find_item_by_id(inbox.id)
+            child = TaskNode(text, parent=inbox)
+            child.start_date = None
+            child.end_date = None
+            inbox.children.append(child)
+            if inbox_item is not None:
+                child_item = TaskTreeWidgetItem(child)
+                inbox_item.addChild(child_item)
+                inbox_item.setExpanded(True)
+        finally:
+            self.blockSignals(was_blocked)
+        self.journal_event.emit(f"Captured to Inbox: '{text}'")
+        self.item_changed_signal.emit(child)
+        self.update_filter_options()
             
     def copy_selection_to_clipboard(self):
         selected_items = self.selectedItems()
