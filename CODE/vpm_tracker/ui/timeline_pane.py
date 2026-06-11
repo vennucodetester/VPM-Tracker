@@ -24,6 +24,10 @@ C_PROGRESS = QColor("#FFB300")
 C_NOT_STARTED = QColor("#64B5F6")
 C_OVERDUE = QColor("#E53935")
 C_SUMMARY = QColor("#37474F")
+# Summary bracket shade per outline depth: siblings share a shade, a
+# child group is visibly lighter than the group that contains it.
+SUMMARY_SHADES = [QColor("#1C262B"), QColor("#455A64"),
+                  QColor("#78909C"), QColor("#A7BCC7")]
 C_MILESTONE = QColor("#37474F")
 C_TODAY = QColor("#FF6D00")
 C_LINK = QColor("#78909C")
@@ -101,6 +105,23 @@ class TimelineCanvas(QWidget):
         self.setMinimumWidth(self.content_width())
         self.updateGeometry()
         self.update()
+
+    def _depth_wbs(self, node):
+        """Outline depth and MS Project-style WBS number ('1.3.2')."""
+        parts = []
+        depth = 0
+        n = node
+        while n is not None:
+            parent = n.parent
+            sibs = parent.children if parent else self._tree.root_nodes
+            try:
+                parts.append(str(sibs.index(n) + 1))
+            except ValueError:
+                parts.append("?")
+            if parent is not None:
+                depth += 1
+            n = parent
+        return depth, ".".join(reversed(parts))
 
     # ---------------- shared chart renderer ----------------
     def _render_header(self, p, t0, t1, ppd, x_of, header_h, total_h, width):
@@ -186,14 +207,17 @@ class TimelineCanvas(QWidget):
             yc = y + row_h // 2
             is_parent = bool(node.children)
             is_milestone = (not is_parent) and (e - s).days <= 0
+            depth, wbs = self._depth_wbs(node)
 
             if is_parent:
                 # MS Project-style summary bracket: thick dark bar with
-                # downward end caps.
+                # downward end caps. Shade encodes outline depth so a
+                # nested group reads lighter than the group containing it.
+                shade = SUMMARY_SHADES[min(depth, len(SUMMARY_SHADES) - 1)]
                 bh = 8
                 bar = QRect(x1, yc - bh // 2 - 2, w, bh)
                 p.setPen(Qt.PenStyle.NoPen)
-                p.setBrush(C_SUMMARY)
+                p.setBrush(shade)
                 p.drawRect(bar)
                 cap = bh + 4
                 for cx in (x1, x2):
@@ -234,7 +258,10 @@ class TimelineCanvas(QWidget):
                 fb = QFont(p.font())
                 fb.setBold(is_parent)
                 p.setFont(fb)
-                p.drawText(x2 + 8, yc + 4, name)
+                # WBS outline number: '1.3.2  Name' — same segment count =
+                # same level; the prefix names the parent. This is how
+                # MS Project disambiguates hierarchy on the chart side.
+                p.drawText(x2 + 8, yc + 4, f"{wbs}  {name}")
 
         # Dependency arrows for explicit predecessor links, both ends visible
         if self.show_links:
@@ -388,11 +415,12 @@ class TimelineCanvas(QWidget):
             f.setBold(bool(node.children))
             p.setFont(f)
             p.setPen(QPen(QColor("#222222")))
-            name = node.name
-            limit = 36 - depth * 2
+            _, wbs = self._depth_wbs(node)
+            name = f"{wbs}  {node.name}"
+            limit = 40 - depth * 2
             if len(name) > limit:
                 name = name[:limit - 2] + "…"
-            p.drawText(8 + depth * 14, y + ROW_H - 9, name)
+            p.drawText(8 + depth * 12, y + ROW_H - 9, name)
         p.setPen(QPen(C_MONTH_LINE, 1))
         p.drawLine(NAME_W - 6, 0, NAME_W - 6, chart_bottom)
 
