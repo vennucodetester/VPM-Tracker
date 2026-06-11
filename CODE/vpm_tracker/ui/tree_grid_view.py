@@ -1902,6 +1902,30 @@ class TreeGridView(QTreeWidget):
         if isinstance(item, TaskTreeWidgetItem):
             item.node.expanded = True
 
+    def set_outline_level(self, level):
+        """Expand the tree to show exactly `level` outline levels
+        (None = expand everything). Used by the timeline's level buttons —
+        the chart mirrors the grid, so this is also the chart's zoom-out
+        to a clean phase view."""
+        was_blocked = self.blockSignals(True)
+        try:
+            iterator = QTreeWidgetItemIterator(self)
+            while iterator.value():
+                item = iterator.value()
+                iterator += 1
+                if not isinstance(item, TaskTreeWidgetItem):
+                    continue
+                depth = 0
+                p = item.parent()
+                while p:
+                    depth += 1
+                    p = p.parent()
+                expand = True if level is None else (depth <= level - 2)
+                item.setExpanded(expand)
+                item.node.expanded = expand
+        finally:
+            self.blockSignals(was_blocked)
+
     def refresh_parents(self, item: QTreeWidgetItem):
         """Update parent items visually after a rollup."""
         parent = item.parent()

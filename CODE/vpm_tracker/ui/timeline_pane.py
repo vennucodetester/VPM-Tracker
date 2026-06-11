@@ -1,13 +1,20 @@
 """
-TimelinePane v2 — Gantt bars welded to the Tracker grid, drawn to read
-like MS Project: fat bordered bars with task-name labels, dark summary
-brackets for phases, milestone diamonds, dependency arrows, row banding.
+TimelinePane v3 — Gantt welded to the Tracker grid, redesigned around
+two ideas after v2's hierarchy cues failed on deep trees:
 
-Alignment contract: the canvas asks Qt where the grid's viewport really
-is on screen (mapToGlobal) every paint, so bars sit pixel-exact beside
-their rows no matter what headers/toolbars surround either widget.
-The controls strip lives BELOW the chart so the canvas top edge lines
-up with the grid's top edge.
+1. Outline-level buttons (1 / 2 / 3 / All) — one click collapses the
+   grid (and therefore the chart) to that depth. The readable
+   "management chart" is the level-2/3 view, exactly like MS Project's
+   Outline Level dropdown.
+
+2. Groups draw as nested CONTAINER BOXES, not summary brackets:
+   a light rounded outline wrapping the group's children rows,
+   inset a few px per depth — real visual indentation. A COLLAPSED
+   group draws as one fat slate bar (the clean phase bar).
+
+Alignment contract: every paint asks Qt where the grid's viewport is
+on screen (mapToGlobal), so bars sit pixel-exact beside their rows.
+The controls strip lives BELOW the chart.
 """
 from datetime import datetime, date, timedelta
 
@@ -23,11 +30,9 @@ C_DONE = QColor("#43A047")
 C_PROGRESS = QColor("#FFB300")
 C_NOT_STARTED = QColor("#64B5F6")
 C_OVERDUE = QColor("#E53935")
-C_SUMMARY = QColor("#37474F")
-# Summary bracket shade per outline depth: siblings share a shade, a
-# child group is visibly lighter than the group that contains it.
-SUMMARY_SHADES = [QColor("#1C262B"), QColor("#455A64"),
-                  QColor("#78909C"), QColor("#A7BCC7")]
+C_SUMMARY = QColor("#37474F")     # collapsed group bar
+C_BOX = QColor("#90A4AE")         # expanded group outline
+C_BOX_FILL = QColor(55, 71, 79, 6)
 C_MILESTONE = QColor("#37474F")
 C_TODAY = QColor("#FF6D00")
 C_LINK = QColor("#78909C")
@@ -36,8 +41,8 @@ C_BAND = QColor(0, 0, 0, 9)
 C_MONTH_LINE = QColor(0, 0, 0, 38)
 C_WEEK_LINE = QColor(0, 0, 0, 14)
 
-LEFT_PAD = 14
-RIGHT_PAD = 160  # room for labels after the last bar
+LEFT_PAD = 18
+RIGHT_PAD = 170  # room for labels after the last bar
 
 
 def _parse(s):
@@ -45,6 +50,15 @@ def _parse(s):
         return datetime.strptime(s, DATE_FMT).date()
     except (ValueError, TypeError):
         return None
+
+
+def _depth(node):
+    d = 0
+    n = node.parent
+    while n is not None:
+        d += 1
+        n = n.parent
+    return d
 
 
 def _status_color(node, today):
@@ -84,7 +98,7 @@ class TimelineCanvas(QWidget):
         if lo is None:
             today = date.today()
             return today - timedelta(days=7), today + timedelta(days=21)
-        return lo - timedelta(days=3), hi + timedelta(days=10)
+        return lo - timedelta(days=4), hi + timedelta(days=10)
 
     def _effective_ppd(self, days):
         if self.px_per_day > 0:
@@ -105,23 +119,6 @@ class TimelineCanvas(QWidget):
         self.setMinimumWidth(self.content_width())
         self.updateGeometry()
         self.update()
-
-    def _depth_wbs(self, node):
-        """Outline depth and MS Project-style WBS number ('1.3.2')."""
-        parts = []
-        depth = 0
-        n = node
-        while n is not None:
-            parent = n.parent
-            sibs = parent.children if parent else self._tree.root_nodes
-            try:
-                parts.append(str(sibs.index(n) + 1))
-            except ValueError:
-                parts.append("?")
-            if parent is not None:
-                depth += 1
-            n = parent
-        return depth, ".".join(reversed(parts))
 
     # ---------------- shared chart renderer ----------------
     def _render_header(self, p, t0, t1, ppd, x_of, header_h, total_h, width):
@@ -152,81 +149,102 @@ class TimelineCanvas(QWidget):
         p.setPen(QPen(C_MONTH_LINE, 1))
         p.drawLine(0, header_h, width, header_h)
 
-    def _render_rows(self, p, rows, x_of, width, today,
-                     register_hits=False):
-        """rows: list of (node, y, row_h) — shared by live paint + export."""
+    @staticmethod
+    def _last_descendant_idx(rows, i):
+        """Index of the last row that is a descendant of rows[i], or None."""
+        node = rows[i][0]
+        last = None
+        j = i + 1
+        while j < len(rows):
+            anc = rows[j][0].parent
+            ok = False
+            while anc is not None:
+                if anc is node:
+                    ok = True
+                    break
+                anc = anc.parent
+            if not ok:
+                break
+            last = j
+            j += 1
+        return last
+
+    def _render_rows(self, p, rows, x_of, width, today, register_hits=False):
+        """rows: list of (node, y, row_h) in visual order — shared by the
+        live paint and the PNG export."""
         geom = {}  # node.id -> (x1, x2, y_center) for link arrows
         f = QFont(p.font())
         f.setPointSize(8)
-        f.setBold(False)
-        p.setFont(f)
 
         for idx, (node, y, row_h) in enumerate(rows):
             if idx % 2 == 1:
                 p.fillRect(QRect(0, y, width, row_h), C_BAND)
 
-        # Containment tint: shade each parent's time window across its
-        # descendant rows, so children visibly sit INSIDE their parent.
-        # Nested groups overlap → deeper tint = deeper nesting.
-        tint = QColor(55, 71, 79, 13)
+        # --- groups first (boxes sit behind everything) ---
         for i, (node, y, row_h) in enumerate(rows):
             if not node.children:
                 continue
             s, e = _parse(node.start_date), _parse(node.end_date)
             if not s or not e:
                 continue
-            last = None
-            j = i + 1
-            while j < len(rows):
-                anc = rows[j][0].parent
-                is_desc = False
-                while anc is not None:
-                    if anc is node:
-                        is_desc = True
-                        break
-                    anc = anc.parent
-                if not is_desc:
-                    break
-                last = j
-                j += 1
-            if last is None:
-                continue
             x1 = int(x_of(s))
             x2 = int(x_of(e + timedelta(days=1)))
-            top = y + row_h - 5
-            bottom = rows[last][1] + rows[last][2] - 3
-            p.fillRect(QRect(x1, top, max(x2 - x1, 4), bottom - top), tint)
+            yc = y + row_h // 2
+            geom[node.id] = (x1, x2, yc)
+            last = self._last_descendant_idx(rows, i)
 
+            if last is None:
+                # Collapsed group → one fat slate bar (management view)
+                bh = max(14, int(row_h * 0.55))
+                bar = QRect(x1, yc - bh // 2, max(x2 - x1, 4), bh)
+                p.setPen(QPen(C_SUMMARY.darker(125), 1))
+                p.setBrush(C_SUMMARY)
+                p.drawRoundedRect(bar, 3, 3)
+                if register_hits:
+                    self._hits.append((bar.adjusted(-2, -4, 2, 4), node))
+                if self.show_labels:
+                    fb = QFont(f)
+                    fb.setBold(True)
+                    p.setFont(fb)
+                    p.setPen(QPen(C_LABEL))
+                    name = node.name if len(node.name) <= 40 else node.name[:37] + "…"
+                    p.drawText(x2 + 8, yc + 4, name)
+            else:
+                # Expanded group → container box wrapping its children,
+                # inset per depth so nesting reads as indentation.
+                m = max(12 - _depth(node) * 3, 2)
+                bx1, bx2 = x1 - m, x2 + m
+                top = y + 2
+                bottom = rows[last][1] + rows[last][2] - 2
+                box = QRect(bx1, top, max(bx2 - bx1, 6), bottom - top)
+                p.setPen(QPen(C_BOX, 1.4))
+                p.setBrush(C_BOX_FILL)
+                p.drawRoundedRect(box, 6, 6)
+                if register_hits:
+                    self._hits.append((QRect(bx1, y, box.width(), row_h),
+                                       node))
+                if self.show_labels:
+                    fb = QFont(f)
+                    fb.setBold(True)
+                    p.setFont(fb)
+                    p.setPen(QPen(C_SUMMARY))
+                    name = node.name if len(node.name) <= 44 else node.name[:41] + "…"
+                    p.drawText(bx1 + 8, yc + 4, name)
+
+        # --- leaf bars & milestones on top ---
+        p.setFont(f)
         for node, y, row_h in rows:
+            if node.children:
+                continue
             s, e = _parse(node.start_date), _parse(node.end_date)
             if not s or not e:
                 continue
             x1 = int(x_of(s))
             x2 = int(x_of(e + timedelta(days=1)))
-            w = max(x2 - x1, 4)
             yc = y + row_h // 2
-            is_parent = bool(node.children)
-            is_milestone = (not is_parent) and (e - s).days <= 0
-            depth, wbs = self._depth_wbs(node)
+            is_milestone = (e - s).days <= 0
 
-            if is_parent:
-                # MS Project-style summary bracket: thick dark bar with
-                # downward end caps. Shade encodes outline depth so a
-                # nested group reads lighter than the group containing it.
-                shade = SUMMARY_SHADES[min(depth, len(SUMMARY_SHADES) - 1)]
-                bh = 8
-                bar = QRect(x1, yc - bh // 2 - 2, w, bh)
-                p.setPen(Qt.PenStyle.NoPen)
-                p.setBrush(shade)
-                p.drawRect(bar)
-                cap = bh + 4
-                for cx in (x1, x2):
-                    tri = QPolygonF([QPointF(cx - 5, bar.bottom() + 1),
-                                     QPointF(cx + 5, bar.bottom() + 1),
-                                     QPointF(cx, bar.bottom() + 1 + cap // 2)])
-                    p.drawPolygon(tri)
-                hit = bar.adjusted(-2, -6, 2, 10)
-            elif is_milestone:
+            if is_milestone:
                 size = min(row_h - 10, 16)
                 cx = x1 + max((x2 - x1) // 2, 2)
                 tri = QPolygonF([QPointF(cx, yc - size / 2),
@@ -236,13 +254,13 @@ class TimelineCanvas(QWidget):
                 p.setPen(QPen(C_MILESTONE.darker(120), 1))
                 p.setBrush(C_MILESTONE)
                 p.drawPolygon(tri)
-                hit = QRect(int(cx - size), int(yc - size), int(size * 2),
-                            int(size * 2))
-                x2 = int(cx + size / 2)  # labels/arrows hang off the diamond
+                hit = QRect(int(cx - size), int(yc - size),
+                            int(size * 2), int(size * 2))
+                x2 = int(cx + size / 2)
             else:
                 color = _status_color(node, today)
                 bh = max(14, int(row_h * 0.55))
-                bar = QRect(x1, yc - bh // 2, w, bh)
+                bar = QRect(x1, yc - bh // 2, max(x2 - x1, 4), bh)
                 p.setPen(QPen(color.darker(135), 1))
                 p.setBrush(color)
                 p.drawRoundedRect(bar, 3, 3)
@@ -251,19 +269,12 @@ class TimelineCanvas(QWidget):
             geom[node.id] = (x1, x2, yc)
             if register_hits:
                 self._hits.append((hit, node))
-
             if self.show_labels:
                 p.setPen(QPen(C_LABEL))
-                name = node.name if len(node.name) <= 38 else node.name[:35] + "…"
-                fb = QFont(p.font())
-                fb.setBold(is_parent)
-                p.setFont(fb)
-                # WBS outline number: '1.3.2  Name' — same segment count =
-                # same level; the prefix names the parent. This is how
-                # MS Project disambiguates hierarchy on the chart side.
-                p.drawText(x2 + 8, yc + 4, f"{wbs}  {name}")
+                name = node.name if len(node.name) <= 40 else node.name[:37] + "…"
+                p.drawText(x2 + 8, yc + 4, name)
 
-        # Dependency arrows for explicit predecessor links, both ends visible
+        # --- dependency arrows (explicit links, both ends visible) ---
         if self.show_links:
             p.setPen(QPen(C_LINK, 1.4))
             p.setBrush(C_LINK)
@@ -308,8 +319,6 @@ class TimelineCanvas(QWidget):
         def x_of(d):
             return LEFT_PAD + (d - t0).days * ppd
 
-        # Pixel-exact row offset: where is the grid's viewport relative
-        # to this canvas, on the actual screen?
         try:
             tree_top = self._tree.viewport().mapToGlobal(QPoint(0, 0)).y()
             my_top = self.mapToGlobal(QPoint(0, 0)).y()
@@ -334,9 +343,9 @@ class TimelineCanvas(QWidget):
             if r.height() <= 0:
                 continue
             y = offset + r.y()
-            # Generous margins: a parent just above the viewport must still
-            # be in `rows` so its containment tint covers visible children.
-            if y + r.height() < header_h - 600 or y > self.height() + 600:
+            # generous margins: an off-screen parent must still box its
+            # visible children
+            if y + r.height() < header_h - 800 or y > self.height() + 800:
                 continue
             rows.append((item.node, y, r.height()))
 
@@ -348,7 +357,8 @@ class TimelineCanvas(QWidget):
 
     # ---------------- interaction ----------------
     def _node_at(self, pos):
-        for rect, node in self._hits:
+        # later entries are drawn on top — search from the end
+        for rect, node in reversed(self._hits):
             if rect.contains(pos):
                 return node
         return None
@@ -407,7 +417,6 @@ class TimelineCanvas(QWidget):
         self._render_header(p, t0, t1, ppd, x_of, HEAD_H,
                             chart_bottom, pm.width())
 
-        # Name column
         f = QFont(p.font())
         f.setPointSize(8)
         for idx, (depth, node) in enumerate(ordered):
@@ -415,9 +424,8 @@ class TimelineCanvas(QWidget):
             f.setBold(bool(node.children))
             p.setFont(f)
             p.setPen(QPen(QColor("#222222")))
-            _, wbs = self._depth_wbs(node)
-            name = f"{wbs}  {node.name}"
-            limit = 40 - depth * 2
+            name = node.name
+            limit = 38 - depth * 2
             if len(name) > limit:
                 name = name[:limit - 2] + "…"
             p.drawText(8 + depth * 12, y + ROW_H - 9, name)
@@ -427,24 +435,21 @@ class TimelineCanvas(QWidget):
         rows = [(node, HEAD_H + idx * ROW_H, ROW_H)
                 for idx, (_, node) in enumerate(ordered)]
         today = date.today()
-        # labels are in the name column already — avoid double text
         saved_labels = self.show_labels
-        self.show_labels = False
+        self.show_labels = False  # names live in the name column
         self._render_rows(p, rows, x_of, pm.width(), today)
         self.show_labels = saved_labels
         self._render_today(p, x_of, today, HEAD_H, chart_bottom)
 
-        # Legend strip
         y = chart_bottom + 8
         f.setBold(False)
-        f.setPointSize(8)
         p.setFont(f)
         x = 10
         for color, text in ((C_DONE, "Completed"),
                             (C_PROGRESS, "In progress"),
                             (C_NOT_STARTED, "Not started"),
                             (C_OVERDUE, "Overdue"),
-                            (C_SUMMARY, "Phase"),
+                            (C_SUMMARY, "Group"),
                             (C_MILESTONE, "◆ Milestone")):
             p.setPen(Qt.PenStyle.NoPen)
             p.setBrush(color)
@@ -457,8 +462,8 @@ class TimelineCanvas(QWidget):
 
 
 class TimelineContainer(QWidget):
-    """Chart on top, controls strip at the BOTTOM — keeping the canvas
-    top edge aligned with the grid's top edge."""
+    """Chart on top, controls strip at the BOTTOM (keeps the canvas top
+    edge aligned with the grid's top edge)."""
 
     def __init__(self, tree, parent=None):
         super().__init__(parent)
@@ -481,10 +486,12 @@ class TimelineContainer(QWidget):
         bar.setContentsMargins(4, 2, 4, 2)
         bar.setSpacing(4)
 
-        def btn(label, tip, slot, checkable=False, checked=False):
+        def btn(label, tip, slot, checkable=False, checked=False, width=None):
             b = QPushButton(label)
             b.setToolTip(tip)
             b.setFixedHeight(22)
+            if width:
+                b.setFixedWidth(width)
             b.setCheckable(checkable)
             if checkable:
                 b.setChecked(checked)
@@ -494,9 +501,19 @@ class TimelineContainer(QWidget):
 
         self.toggle_btn = btn("Hide", "Show / hide the timeline",
                               self._toggle, checkable=True, checked=True)
+
+        lv = QLabel("Levels:")
+        lv.setStyleSheet("font-size: 10px; color: #555; margin-left: 6px;")
+        bar.addWidget(lv)
+        for label, level in (("1", 1), ("2", 2), ("3", 3), ("All", None)):
+            btn(label,
+                f"Collapse the plan to outline level {label} "
+                "(grid and chart together)",
+                lambda _, l=level: self._set_level(l), width=34)
+
         btn("Fit", "Fit whole project in view", self._fit)
-        btn("−", "Zoom out", lambda: self._zoom(0.7))
-        btn("+", "Zoom in", lambda: self._zoom(1.4))
+        btn("−", "Zoom out", lambda: self._zoom(0.7), width=28)
+        btn("+", "Zoom in", lambda: self._zoom(1.4), width=28)
         self.labels_btn = btn("Labels", "Show task names next to bars",
                               self._set_flags, checkable=True, checked=True)
         self.links_btn = btn("Links", "Show dependency arrows",
@@ -508,7 +525,8 @@ class TimelineContainer(QWidget):
             "<span style='color:#FFB300'>■</span> active "
             "<span style='color:#64B5F6'>■</span> planned "
             "<span style='color:#E53935'>■</span> late "
-            "<span style='color:#37474F'>▬</span> phase")
+            "<span style='color:#37474F'>■</span> group "
+            "<span style='color:#90A4AE'>▢</span> open group")
         legend.setStyleSheet("font-size: 10px; color: #555;")
         bar.addWidget(legend)
         bar.addStretch()
@@ -527,6 +545,10 @@ class TimelineContainer(QWidget):
         visible = self.toggle_btn.isChecked()
         self.scroll.setVisible(visible)
         self.toggle_btn.setText("Hide" if visible else "Show timeline")
+
+    def _set_level(self, level):
+        self._tree.set_outline_level(level)
+        self.canvas.refresh()
 
     def _set_flags(self):
         self.canvas.show_labels = self.labels_btn.isChecked()
