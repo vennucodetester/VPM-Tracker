@@ -144,6 +144,38 @@ class TimelineCanvas(QWidget):
             if idx % 2 == 1:
                 p.fillRect(QRect(0, y, width, row_h), C_BAND)
 
+        # Containment tint: shade each parent's time window across its
+        # descendant rows, so children visibly sit INSIDE their parent.
+        # Nested groups overlap → deeper tint = deeper nesting.
+        tint = QColor(55, 71, 79, 13)
+        for i, (node, y, row_h) in enumerate(rows):
+            if not node.children:
+                continue
+            s, e = _parse(node.start_date), _parse(node.end_date)
+            if not s or not e:
+                continue
+            last = None
+            j = i + 1
+            while j < len(rows):
+                anc = rows[j][0].parent
+                is_desc = False
+                while anc is not None:
+                    if anc is node:
+                        is_desc = True
+                        break
+                    anc = anc.parent
+                if not is_desc:
+                    break
+                last = j
+                j += 1
+            if last is None:
+                continue
+            x1 = int(x_of(s))
+            x2 = int(x_of(e + timedelta(days=1)))
+            top = y + row_h - 5
+            bottom = rows[last][1] + rows[last][2] - 3
+            p.fillRect(QRect(x1, top, max(x2 - x1, 4), bottom - top), tint)
+
         for node, y, row_h in rows:
             s, e = _parse(node.start_date), _parse(node.end_date)
             if not s or not e:
@@ -275,7 +307,9 @@ class TimelineCanvas(QWidget):
             if r.height() <= 0:
                 continue
             y = offset + r.y()
-            if y + r.height() < header_h or y > self.height():
+            # Generous margins: a parent just above the viewport must still
+            # be in `rows` so its containment tint covers visible children.
+            if y + r.height() < header_h - 600 or y > self.height() + 600:
                 continue
             rows.append((item.node, y, r.height()))
 
