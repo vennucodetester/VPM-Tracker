@@ -2,7 +2,8 @@ from datetime import datetime, timedelta
 from PyQt6.QtWidgets import (QTreeWidget, QTreeWidgetItem, QHeaderView, 
                             QAbstractItemView, QMenu, QMessageBox, QStyledItemDelegate,
                             QCalendarWidget, QDateEdit, QStyle, QStyleOptionButton, QApplication)
-from PyQt6.QtCore import Qt, pyqtSignal, QPoint, QDate, QTimer, QRect
+from PyQt6.QtCore import (Qt, pyqtSignal, QPoint, QDate, QTimer, QRect,
+                          QEvent, QItemSelectionModel)
 from PyQt6.QtGui import QAction, QColor, QBrush, QKeySequence
 
 from vpm_tracker_core import Columns, Colors, AppConstants, Status
@@ -575,6 +576,22 @@ class TreeGridView(QTreeWidget):
         self.setDragDropMode(QAbstractItemView.DragDropMode.InternalMove)
         self.setDefaultDropAction(Qt.DropAction.MoveAction)
 
+    def event(self, e):
+        """Intercept Tab/Shift+Tab before Qt's focus system and the view's
+        own tab-navigation consume them — keyPressEvent never sees Tab,
+        which is why indent/outdent silently moved the cursor instead."""
+        if (e.type() == QEvent.Type.KeyPress
+                and e.key() in (Qt.Key.Key_Tab, Qt.Key.Key_Backtab)
+                and self.state() != QAbstractItemView.State.EditingState):
+            current = self.currentItem()
+            if isinstance(current, TaskTreeWidgetItem):
+                if e.key() == Qt.Key.Key_Tab:
+                    self.indent_smart(current)
+                else:
+                    self.outdent_smart(current)
+                return True
+        return super().event(e)
+
     def keyPressEvent(self, event):
         if self.linking_mode and event.key() == Qt.Key.Key_Escape:
             self._cancel_linking_mode()
@@ -583,10 +600,10 @@ class TreeGridView(QTreeWidget):
             self.copy_selection_to_clipboard()
             return
 
-        # Keyboard-first capture (only when no cell editor is open):
-        #   Enter      → new task below the current row, name in edit mode
-        #   Tab        → indent current row
-        #   Shift+Tab  → outdent current row
+        # Keyboard-first flow (only when no cell editor is open):
+        #   Enter  → new task below the current row, name in edit mode
+        #   Delete → confirm popup (Enter = yes) then delete the row
+        #   (Tab / Shift+Tab handled in event() above)
         editing = self.state() == QAbstractItemView.State.EditingState
         current = self.currentItem()
         if not editing and isinstance(current, TaskTreeWidgetItem):
@@ -594,13 +611,27 @@ class TreeGridView(QTreeWidget):
             if key in (Qt.Key.Key_Return, Qt.Key.Key_Enter):
                 self.add_sibling_below(current)
                 return
-            if key == Qt.Key.Key_Tab:
-                self.indent_smart(current)
-                return
-            if key == Qt.Key.Key_Backtab:
-                self.outdent_smart(current)
+            if key == Qt.Key.Key_Delete:
+                self._delete_with_confirm(current)
                 return
         super().keyPressEvent(event)
+
+    def _delete_with_confirm(self, item: 'TaskTreeWidgetItem'):
+        """Delete-key flow: popup defaults to Yes so a bare Enter confirms —
+        the whole add/indent/delete loop stays on the keyboard."""
+        selected = [i for i in self.selectedItems()
+                    if isinstance(i, TaskTreeWidgetItem)]
+        count = max(len(selected), 1)
+        label = (f"Delete '{item.node.name}'?" if count == 1
+                 else f"Delete {count} selected task(s)?")
+        box = QMessageBox(self)
+        box.setWindowTitle("Delete task")
+        box.setText(label)
+        box.setStandardButtons(QMessageBox.StandardButton.Yes |
+                               QMessageBox.StandardButton.No)
+        box.setDefaultButton(QMessageBox.StandardButton.Yes)
+        if box.exec() == QMessageBox.StandardButton.Yes:
+            self.delete_smart(item)
 
     def add_sibling_below(self, item: 'TaskTreeWidgetItem'):
         """Insert a new task right below `item` at the same level and start
@@ -1142,9 +1173,11 @@ class TreeGridView(QTreeWidget):
         self._flash_item(target_node)
 
     def _flash_item(self, item: 'TaskTreeWidgetItem'):
-        """Briefly highlight a row with an amber background, then revert."""
+        """Highlight a row in solid orange, then revert. Strong and opaque
+        on purpose — it must stand out from selection blue and the
+        light-blue 'this week' row tint."""
         from PyQt6.QtGui import QColor
-        flash_color = QBrush(QColor(255, 213, 79, 140))  # amber overlay
+        flash_color = QBrush(QColor("#FFB300"))  # solid vivid amber
         original = [item.background(col) for col in range(Columns.COUNT)]
         was_blocked = self.blockSignals(True)
         try:
@@ -1163,7 +1196,7 @@ class TreeGridView(QTreeWidget):
             finally:
                 self.blockSignals(was_blocked_inner)
 
-        QTimer.singleShot(1400, revert)
+        QTimer.singleShot(2500, revert)
 
     def _find_item_by_id(self, node_id: str):
         iterator = QTreeWidgetItemIterator(self)
@@ -1175,8 +1208,12 @@ class TreeGridView(QTreeWidget):
         return None
 
     def jump_to_node_id(self, node_id: str):
-        """Expand, scroll to, select and flash the row for this node id.
-        Used by the Visuals tab to jump into the Tracker."""
+        """Expand, scroll to and flash the row for this node id.
+        Used by the Visuals tab and Search to jump into the Tracker.
+
+        Deliberately does NOT select the row: Qt paints the selection
+        color over the cell backgrounds, which made the flash invisible
+        (it looked like any other light-blue selected row)."""
         item = self._find_item_by_id(node_id)
         if not item:
             return
@@ -1185,8 +1222,8 @@ class TreeGridView(QTreeWidget):
             parent.setExpanded(True)
             parent = parent.parent()
         self.clearSelection()
-        item.setSelected(True)
-        self.setCurrentItem(item)
+        self.setCurrentItem(
+            item, 0, QItemSelectionModel.SelectionFlag.NoUpdate)
         self.scrollToItem(item, QAbstractItemView.ScrollHint.PositionAtCenter)
         self._flash_item(item)
 
