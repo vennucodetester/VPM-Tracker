@@ -53,9 +53,33 @@ class MainWindow(QMainWindow):
         self._add_project_from_data("Project 1", {}, [])
         self._seed_test_data(self.project_tabs.widget(0))
 
+        # Autosave: every 3 minutes, if a file path exists and there are
+        # unsaved changes, save silently. A crash costs minutes, not a day.
+        from PyQt6.QtCore import QTimer
+        self._autosave_timer = QTimer(self)
+        self._autosave_timer.timeout.connect(self._autosave)
+        self._autosave_timer.start(3 * 60 * 1000)
+
+    def _autosave(self):
+        if not self.current_filepath or not self.unsaved_changes:
+            return
+        try:
+            from utils.vpmt_io import save_projects
+            save_projects(
+                [p.to_persistable() for p in self.all_projects()],
+                self.current_filepath,
+            )
+            self.unsaved_changes = False
+            self.update_title()
+            self.statusBar().showMessage("Autosaved", 2000)
+        except Exception:
+            pass  # autosave must never interrupt the user; manual save will surface errors
+
     # ---------------- project lifecycle ----------------
-    def _add_project_from_data(self, name: str, metadata: dict, roots: list) -> ProjectWidget:
-        proj = ProjectWidget(name=name, metadata=metadata, roots=roots)
+    def _add_project_from_data(self, name: str, metadata: dict, roots: list,
+                               journal: list = None) -> ProjectWidget:
+        proj = ProjectWidget(name=name, metadata=metadata, roots=roots,
+                             journal=journal)
         proj.project_changed.connect(self.on_data_changed)
         index = self.project_tabs.addTab(proj, name)
         self.project_tabs.setCurrentIndex(index)
@@ -216,6 +240,10 @@ class MainWindow(QMainWindow):
         delay_summary_action.triggered.connect(self._show_delay_summary)
         edit_menu.addAction(delay_summary_action)
 
+        journal_action = QAction("View Activity Journal…", self)
+        journal_action.triggered.connect(self._show_journal)
+        edit_menu.addAction(journal_action)
+
         edit_menu.addSeparator()
         set_bl_action = QAction("Set Baseline", self)
         set_bl_action.triggered.connect(self._set_baseline)
@@ -269,6 +297,52 @@ class MainWindow(QMainWindow):
         proj.tree_view.refresh_entire_tree()
         if proj.inner_tabs.currentIndex() == 1:
             proj.gantt_view.load_nodes(proj.tree_view.root_nodes)
+
+    def _show_digest_since_last_visit(self):
+        """'Since you were here' — journal entries from the last 7 days,
+        shown once right after a file is opened."""
+        from datetime import datetime, timedelta
+        cutoff = (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d %H:%M")
+        lines = []
+        for proj in self.all_projects():
+            recent = [e for e in proj.journal if e.get("ts", "") >= cutoff]
+            for e in recent[-15:]:
+                prefix = f"[{proj.name}] " if self.project_tabs.count() > 1 else ""
+                lines.append(f"{e['ts']}  {prefix}{e['text']}")
+        if not lines:
+            return
+        lines.sort()
+        body = "\n".join(lines[-25:])
+        QMessageBox.information(
+            self, "Since you were here",
+            f"Activity in the last 7 days:\n\n{body}")
+
+    def _show_journal(self):
+        """Full activity journal for the active project."""
+        from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QPlainTextEdit,
+                                     QDialogButtonBox, QLabel)
+        proj = self.active_project()
+        if not proj:
+            return
+        dialog = QDialog(self)
+        dialog.setWindowTitle(f"Activity Journal — {proj.name}")
+        dialog.resize(560, 440)
+        layout = QVBoxLayout(dialog)
+        if proj.journal:
+            text = "\n".join(
+                f"{e.get('ts', '?')}  {e.get('text', '')}"
+                for e in reversed(proj.journal))  # newest first
+            view = QPlainTextEdit(text)
+            view.setReadOnly(True)
+            layout.addWidget(view)
+        else:
+            layout.addWidget(QLabel(
+                "No activity recorded yet. The journal fills in "
+                "automatically as you work."))
+        buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
+        buttons.rejected.connect(dialog.reject)
+        layout.addWidget(buttons)
+        dialog.exec()
 
     def _show_delay_summary(self):
         from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QLabel,
@@ -434,11 +508,23 @@ class MainWindow(QMainWindow):
         if not filename:
             return
         try:
-            from utils.vpmt_io import load_projects
+            from utils.vpmt_io import load_projects, read_version, CURRENT_VERSION
             projects = load_projects(filename)
+            file_version = read_version(filename)
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Could not load file: {e}")
             return
+
+        # Seatbelt: a file written by an older app version may lack newer
+        # data (baselines, delay logs, journal). Say so NOW, not days later.
+        if file_version != CURRENT_VERSION:
+            QMessageBox.information(
+                self, "Older file version",
+                f"This file was saved by an older version of the app "
+                f"(file: {file_version}, current: {CURRENT_VERSION}).\n\n"
+                "Newer data such as baselines, delay logs, or the activity "
+                "journal may be missing from it. Saving will upgrade the "
+                "file to the current format.")
 
         # Wipe existing tabs. Each project's close_project releases ConfigManager state.
         while self.project_tabs.count():
@@ -452,12 +538,14 @@ class MainWindow(QMainWindow):
             self._add_project_from_data(
                 proj_dict["name"], proj_dict.get("metadata", {}),
                 proj_dict.get("roots", []),
+                proj_dict.get("journal", []),
             )
 
         self.current_filepath = filename
         self.unsaved_changes = False
         self.update_title()
         self.statusBar().showMessage(f"Loaded {filename}", 3000)
+        self._show_digest_since_last_visit()
 
     # ---------------- excel export ----------------
     def export_all_to_excel(self):

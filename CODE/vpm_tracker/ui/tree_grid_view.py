@@ -288,6 +288,8 @@ class DelayDelegate(QStyledItemDelegate):
                 item.update_from_node()
             finally:
                 tree_view.blockSignals(was_blocked)
+            tree_view.journal_event.emit(
+                f"Delay logged — '{node.name}' {slip_tag}: {reason}")
             tree_view.item_changed_signal.emit(node)
 
 
@@ -493,6 +495,10 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
 
 class TreeGridView(QTreeWidget):
     item_changed_signal = pyqtSignal(TaskNode) # Signal when data changes
+    # One human-readable line per user action, consumed by the project's
+    # activity journal. NOTE: must be emitted while this widget's signals
+    # are NOT blocked (on_item_changed queues lines and flushes at the end).
+    journal_event = pyqtSignal(str)
 
     # Task clipboard for cut/copy/paste. Class-level on purpose: it is
     # shared by every project tab, which is what makes cross-project
@@ -1099,6 +1105,9 @@ class TreeGridView(QTreeWidget):
     def toggle_date_lock(self, item: TaskTreeWidgetItem):
         item.node.dates_locked = not item.node.dates_locked
         item.update_from_node()
+        self.journal_event.emit(
+            f"'{item.node.name}': manual date "
+            f"{'set' if item.node.dates_locked else 'unset'}")
         self.item_changed_signal.emit(item.node)
 
     def link_selected_tasks(self, items):
@@ -1369,6 +1378,8 @@ class TreeGridView(QTreeWidget):
                 new_node.baseline_duration = 0
                 new_node.baseline_end = new_node.start_date
 
+        where = f" under '{parent_node.name}'" if parent_node else ""
+        self.journal_event.emit(f"Added task '{new_node.name}'{where}")
         self.item_changed_signal.emit(new_node)
         self.update_filter_options()
 
@@ -1388,6 +1399,12 @@ class TreeGridView(QTreeWidget):
         else:
             self.invisibleRootItem().removeChild(item)
 
+        # Removal changes sibling anchoring — re-run the scheduler and
+        # repaint (date propagation is the scheduler's job, see task_node).
+        self.recalculate_all_dates()
+        self.refresh_entire_tree()
+
+        self.journal_event.emit(f"Deleted task '{node.name}'")
         self.item_changed_signal.emit(node) # Emit deleted node (or parent) for update
         self.update_filter_options()
 
@@ -1515,6 +1532,9 @@ class TreeGridView(QTreeWidget):
         self.recalculate_all_dates()
         self.refresh_entire_tree()
         self.update_filter_options()
+        names = ", ".join(f"'{n.name}'" for n in nodes[:3])
+        more = f" +{len(nodes) - 3} more" if len(nodes) > 3 else ""
+        self.journal_event.emit(f"Pasted {len(nodes)} task(s): {names}{more}")
         self.item_changed_signal.emit(nodes[0])
 
         if cleared:
@@ -1528,7 +1548,12 @@ class TreeGridView(QTreeWidget):
         if isinstance(item, TaskTreeWidgetItem):
             node = item.node
             text = item.text(column)
-            
+
+            # Journal: queue lines now, emit after signals are unblocked —
+            # emitting while blocked would silently drop them.
+            journal_lines = []
+            old_vals = (node.start_date, node.end_date, node.status, node.owner)
+
             # Block signals to prevent recursion when we update the item programmatically
             self.blockSignals(True)
             
@@ -1554,8 +1579,13 @@ class TreeGridView(QTreeWidget):
                         node.is_parallel = new_state
                         self.recalculate_all_dates()
                         self.refresh_entire_tree()
+                        journal_lines.append(
+                            f"'{node.name}': parallel mode "
+                            f"{'ON' if new_state else 'OFF'}")
 
                 name_changed = node.name != text
+                if name_changed:
+                    journal_lines.append(f"Renamed '{node.name}' → '{text}'")
                 node.name = text
                 # If the name changed, refresh every row so any task that
                 # points to this one via predecessor_id (Depends On column)
@@ -1700,9 +1730,24 @@ class TreeGridView(QTreeWidget):
             
             # Re-apply colors in case status/dates changed
             item.update_from_node()
-            
+
             self.blockSignals(False)
-            
+
+            # Journal the edited node's own field changes (one line each)
+            if old_vals[0] != node.start_date:
+                journal_lines.append(
+                    f"'{node.name}': start {old_vals[0] or '—'} → {node.start_date}")
+            if old_vals[1] != node.end_date:
+                journal_lines.append(
+                    f"'{node.name}': end {old_vals[1] or '—'} → {node.end_date}")
+            if old_vals[2] != node.status:
+                journal_lines.append(f"'{node.name}': status → {node.status}")
+            if old_vals[3] != node.owner:
+                journal_lines.append(
+                    f"'{node.name}': owner → {node.owner or '—'}")
+            for line in journal_lines:
+                self.journal_event.emit(line)
+
             self.item_changed_signal.emit(node)
             self.update_filter_options()
 

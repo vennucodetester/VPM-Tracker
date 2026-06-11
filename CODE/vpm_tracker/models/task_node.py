@@ -74,7 +74,7 @@ class TaskNode:
                 prev = self.children[idx - 1]
                 next_sib = self.children[idx]
                 next_sib.update_from_previous_sibling(prev)
-                next_sib.cascade_updates()
+                # (further ripple is the scheduler's job — callers recalc)
 
             if not self.children:
                 self.is_parallel = False
@@ -146,7 +146,11 @@ class TaskNode:
         if self.parent:
             self.parent.update_dates_from_children(visited=visited)
 
-        self.cascade_updates(visited=visited)
+        # NOTE: no sibling cascade here. Propagating a date change to other
+        # tasks is the scheduler's job (utils/scheduler.py) — every UI call
+        # site follows a mutation with recalculate_all_dates(). Having a
+        # second propagation path in the model was the source of the
+        # "toggle it twice" / stale-date bugs.
 
     # ------------------------------------------------------------------
     # Sibling / predecessor propagation
@@ -210,41 +214,9 @@ class TaskNode:
             self.end_date = _clamp_end(self.start_date, self.end_date)
             self.update_status_from_dates()
 
-    # ------------------------------------------------------------------
-    # Cascade (F3 — visited guard)
-    # ------------------------------------------------------------------
-
-    def cascade_updates(self, visited: Optional[set] = None):
-        """Push my end-date forward to later siblings; bounded by visited set."""
-        if visited is None:
-            visited = set()
-        if self.id in visited:
-            return
-        visited.add(self.id)
-
-        if not self.parent:
-            return
-
-        siblings = self.parent.children
-        try:
-            idx = siblings.index(self)
-        except ValueError:
-            return
-
-        for i in range(idx + 1, len(siblings)):
-            curr = siblings[i]
-            if curr.id in visited:
-                continue
-            old_start = curr.start_date
-            curr.update_from_previous_sibling(siblings[i - 1])
-            if curr.start_date != old_start and curr.children:
-                delta = self._days_between(old_start, curr.start_date)
-                if delta:
-                    curr.shift_children(delta)
-
-        # F4: rollup once; flag so it doesn't re-cascade to siblings
-        if self.parent:
-            self.parent.update_dates_from_children(visited=visited)
+    # cascade_updates() was removed: it was a second, competing date-
+    # propagation engine alongside utils/scheduler.py. The scheduler is
+    # now the only code that ripples date changes between tasks.
 
     # ------------------------------------------------------------------
     # Shift children by explicit delta (F2 — no stale min-start math)

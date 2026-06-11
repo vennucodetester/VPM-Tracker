@@ -18,11 +18,43 @@ Saves always emit v2.0. The loader returns a list of Project dicts so the
 UI can spin up one tab per project regardless of source format.
 """
 import json
+import os
+import shutil
 from typing import List, Dict
 from models.task_node import TaskNode
 
 
-CURRENT_VERSION = "2.0"
+CURRENT_VERSION = "2.1"
+BACKUP_KEEP = 5
+
+
+def _rotate_backups(filename: str):
+    """Keep the last BACKUP_KEEP saves as filename.bak1 (newest) .. bakN."""
+    if not os.path.exists(filename):
+        return
+    try:
+        oldest = f"{filename}.bak{BACKUP_KEEP}"
+        if os.path.exists(oldest):
+            os.remove(oldest)
+        for i in range(BACKUP_KEEP - 1, 0, -1):
+            src = f"{filename}.bak{i}"
+            if os.path.exists(src):
+                os.replace(src, f"{filename}.bak{i + 1}")
+        shutil.copy2(filename, f"{filename}.bak1")
+    except OSError:
+        pass  # backups are best-effort; never block the actual save
+
+
+def read_version(filename: str) -> str:
+    """Version string of a saved file ('1.x' shapes report as 'legacy')."""
+    try:
+        with open(filename, "r") as f:
+            data = json.load(f)
+        if isinstance(data, dict):
+            return data.get("version", "legacy")
+        return "legacy"
+    except Exception:
+        return "unknown"
 
 
 def _repair_envelope(node: TaskNode):
@@ -53,12 +85,21 @@ def save_projects(projects: List[Dict], filename: str):
                 "name": p["name"],
                 "metadata": p.get("metadata", {}),
                 "tasks": [n.to_dict() for n in p.get("roots", [])],
+                "journal": p.get("journal", []),
             }
             for p in projects
         ],
     }
-    with open(filename, "w") as f:
+    # Atomic save: write a temp file beside the target, then swap. A crash
+    # or power cut mid-write leaves the old file untouched. The previous
+    # save is also rotated into .bak1..bak5 first.
+    tmp = filename + ".tmp"
+    with open(tmp, "w") as f:
         json.dump(payload, f, indent=2)
+        f.flush()
+        os.fsync(f.fileno())
+    _rotate_backups(filename)
+    os.replace(tmp, filename)
 
 
 def load_projects(filename: str) -> List[Dict]:
@@ -78,7 +119,8 @@ def load_projects(filename: str) -> List[Dict]:
         roots = [TaskNode.from_dict(d) for d in tasks_data]
         for r in roots:
             _repair_envelope(r)
-        result.append({"name": name, "metadata": metadata, "roots": roots})
+        result.append({"name": name, "metadata": metadata, "roots": roots,
+                       "journal": proj.get("journal", []) or []})
 
     # Always hand back at least one project so the UI has something to show.
     if not result:

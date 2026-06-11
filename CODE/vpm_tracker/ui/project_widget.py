@@ -25,11 +25,15 @@ class ProjectWidget(QWidget):
     project_changed = pyqtSignal()
 
     def __init__(self, name: str = "Project 1", metadata: Dict = None,
-                 roots: List[TaskNode] = None, parent=None):
+                 roots: List[TaskNode] = None, journal: list = None,
+                 parent=None):
         super().__init__(parent)
         self.project_id = f"proj-{uuid.uuid4().hex[:8]}"
         self.name = name or "Project 1"
         self.history = HistoryStack(max_depth=50)
+        # Activity journal: the app's own diary of every change, persisted
+        # in the .vpmt file. Entries: {"ts": "2026-06-10 14:32", "text": "..."}
+        self.journal: list = list(journal) if journal else []
 
         # Register metadata into the per-project config store.
         ConfigManager.register_project(self.project_id, metadata or {})
@@ -47,6 +51,7 @@ class ProjectWidget(QWidget):
         self._last_snapshot = self.get_snapshot()
         self._restoring = False  # suppress history pushes during undo/redo restore
         self.tree_view.item_changed_signal.connect(self._on_tree_changed)
+        self.tree_view.journal_event.connect(self.log_event)
 
         # Ctrl+Z / Ctrl+Y shortcuts — ApplicationShortcut scope so they fire
         # even when focus is inside the tree's cell editor.
@@ -170,6 +175,18 @@ class ProjectWidget(QWidget):
         self._last_snapshot = self.get_snapshot()
         self.project_changed.emit()
 
+    def log_event(self, text: str):
+        """Append a dated line to this project's activity journal."""
+        if self._restoring:
+            return  # undo/redo replays are not new events
+        from datetime import datetime
+        self.journal.append({
+            "ts": datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "text": text,
+        })
+        if len(self.journal) > 2000:
+            self.journal = self.journal[-2000:]
+
     # ---- convenience used by MainWindow ----
     def to_persistable(self) -> Dict:
         """Shape matching utils.vpmt_io.save_projects()."""
@@ -178,4 +195,5 @@ class ProjectWidget(QWidget):
             "name": self.name,
             "metadata": CM.snapshot_project(self.project_id),
             "roots": list(self.tree_view.root_nodes),
+            "journal": list(self.journal),
         }
