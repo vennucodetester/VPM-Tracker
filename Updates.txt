@@ -3,3 +3,5 @@
 3. on my visual tab. i rather see the list of all things that i changed this week instead of "closed since section"
 
 4. You currently have one critical path on visual tab. that lays out entire critical path. Give me the next 2 critical paths just like that so i have the top 3 critical paths all the time. 
+
+5. I need to be able to increase or decrease font size. cant do that right now
