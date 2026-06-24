@@ -1,6 +1,9 @@
-from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QLabel, QPushButton, QListWidget, 
-                             QDialogButtonBox, QHBoxLayout, QPlainTextEdit, QComboBox, QLineEdit)
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QLabel, QPushButton, QListWidget,
+                             QDialogButtonBox, QHBoxLayout, QPlainTextEdit, QComboBox,
+                             QLineEdit, QTableWidget, QTableWidgetItem, QHeaderView,
+                             QDateEdit)
+from PyQt6.QtCore import Qt, QDate
+from PyQt6.QtGui import QColor, QBrush, QFont
 
 class ImpactDialog(QDialog):
     def __init__(self, affected_tasks, parent=None):
@@ -206,4 +209,162 @@ class LinkTaskDialog(QDialog):
 
     def on_clear(self):
         self.selected_node_id = ""  # Empty string signals "remove link"
+        self.accept()
+
+
+class ImpactReviewDialog(QDialog):
+    """Shown the moment a task's start OR end date changes.
+
+    One combined window: it leads with the thing that matters — does the
+    project end date move? — lists every task that shifts, and (when the edit
+    pushes the task past its baseline) includes a 'reason for delay' box so the
+    impact review and the delay log happen in a single OK. No second popup.
+
+    Takes a precomputed `review` payload (built by TreeGridView._simulate_impact
+    using the real scheduler on a clone, so the numbers are truthful):
+        task_name, change_desc,
+        project_end_old, project_end_new, project_delta,
+        impacts: [{name, old_end, new_end, on_chain}],
+        delay_slip (int, 0 = no delay box), delay_rev, node_new_end
+    After exec(): result_action ("update_all"|"keep_others"|None) and
+    delay_reason (typed text, "" if none).
+    """
+
+    def __init__(self, review, parent=None):
+        super().__init__(parent)
+        self.review = review or {}
+        self.result_action = None  # "update_all" | "keep_others" | None
+        self.delay_reason = ""
+        self._reason_edit = None
+
+        self.setWindowTitle("Date change — impact review")
+        self.resize(700, 580)
+        layout = QVBoxLayout(self)
+        layout.setSpacing(10)
+
+        layout.addWidget(self._rich(
+            f"<b>{self.review.get('task_name', 'Task')}</b> — "
+            f"{self.review.get('change_desc', '')}", 14))
+
+        # ---- HEADLINE banner: does the final date move? ----
+        pe_old = self.review.get('project_end_old')
+        pe_new = self.review.get('project_end_new')
+        pd = int(self.review.get('project_delta', 0) or 0)
+        banner = QLabel()
+        banner.setWordWrap(True)
+        banner.setTextFormat(Qt.TextFormat.RichText)
+        if pe_old and pe_new and pd > 0:
+            banner.setText(
+                f"⚠  <b>FINAL DATE SLIPS</b><br>project end "
+                f"{pe_old} → <b>{pe_new}</b>  (+{pd} days later)")
+            banner.setStyleSheet(
+                "background:#FCEBEB; color:#791F1F; border:2px solid #E24B4A;"
+                "border-radius:8px; padding:12px; font-size:15px;")
+        elif pe_old and pe_new and pd < 0:
+            banner.setText(
+                f"✓  <b>FINAL DATE PULLS IN</b><br>project end "
+                f"{pe_old} → <b>{pe_new}</b>  ({abs(pd)} days earlier)")
+            banner.setStyleSheet(
+                "background:#E7F6EC; color:#0B5B33; border:2px solid #4CAF50;"
+                "border-radius:8px; padding:12px; font-size:15px;")
+        else:
+            holds = pe_new or pe_old or "—"
+            banner.setText(
+                f"✓  <b>FINAL DATE HOLDS</b><br>project still ends "
+                f"<b>{holds}</b>")
+            banner.setStyleSheet(
+                "background:#E7F6EC; color:#0B5B33; border:2px solid #4CAF50;"
+                "border-radius:8px; padding:12px; font-size:15px;")
+        layout.addWidget(banner)
+
+        # ---- rundown of every task that shifts ----
+        impacts = self.review.get('impacts', []) or []
+        if impacts:
+            layout.addWidget(self._rich(
+                f"<span style='color:#555;'>{len(impacts)} other task(s) "
+                f"shift because of this change:</span>"))
+            table = QTableWidget(len(impacts), 4)
+            table.setHorizontalHeaderLabels(
+                ["Task", "Current end", "New end", "Drives end date"])
+            hdr = table.horizontalHeader()
+            hdr.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+            hdr.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
+            hdr.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
+            hdr.setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
+            table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+            table.verticalHeader().setVisible(False)
+            table.setAlternatingRowColors(True)
+            for r, imp in enumerate(impacts):
+                cells = [
+                    QTableWidgetItem(str(imp.get('name', ''))),
+                    QTableWidgetItem(str(imp.get('old_end', ''))),
+                    QTableWidgetItem(str(imp.get('new_end', ''))),
+                    QTableWidgetItem("⚠ yes" if imp.get('on_chain') else "—"),
+                ]
+                for c, cell in enumerate(cells):
+                    align = (Qt.AlignmentFlag.AlignLeft if c == 0
+                             else Qt.AlignmentFlag.AlignCenter)
+                    cell.setTextAlignment(align | Qt.AlignmentFlag.AlignVCenter)
+                    table.setItem(r, c, cell)
+                if imp.get('on_chain'):
+                    table.item(r, 3).setForeground(QBrush(QColor("#FF9800")))
+            layout.addWidget(table, 1)
+        else:
+            layout.addWidget(self._rich(
+                "<span style='color:#888;'>No other tasks are affected.</span>"))
+
+        # ---- delay reason (only when this edit slips past the baseline) ----
+        slip = int(self.review.get('delay_slip', 0) or 0)
+        if slip > 0:
+            rev = self.review.get('delay_rev', '?')
+            reason_box = QLabel(
+                f"⏱  This is a <b>+{slip}d</b> delay vs baseline "
+                f"(Rev {rev}). Log the reason:")
+            reason_box.setTextFormat(Qt.TextFormat.RichText)
+            reason_box.setStyleSheet(
+                "background:#FFF6E5; color:#5A3E00; border:1px solid #E0B85C;"
+                "border-radius:6px; padding:8px;")
+            layout.addWidget(reason_box)
+            self._reason_edit = QLineEdit()
+            self._reason_edit.setPlaceholderText(
+                "e.g. Vendor late on parts (optional, but recommended)")
+            layout.addWidget(self._reason_edit)
+
+        # ---- decision buttons ----
+        row = QHBoxLayout()
+        ok = QPushButton("OK — apply")
+        ok.setToolTip("Apply the date change and ripple all dependent tasks.")
+        ok.setDefault(True)
+        ok.clicked.connect(self._ok)
+        only = QPushButton("Move only this task")
+        only.setToolTip("Shift just this task; leave successors where they are.")
+        only.clicked.connect(self._only)
+        cancel = QPushButton("Cancel")
+        cancel.setToolTip("Discard the change — nothing moves.")
+        cancel.clicked.connect(self.reject)
+        row.addWidget(ok)
+        row.addWidget(only)
+        row.addStretch()
+        row.addWidget(cancel)
+        layout.addLayout(row)
+
+    def _rich(self, html, size=13):
+        lbl = QLabel(html)
+        lbl.setWordWrap(True)
+        lbl.setTextFormat(Qt.TextFormat.RichText)
+        lbl.setStyleSheet(f"font-size:{size}px;")
+        return lbl
+
+    def _capture_reason(self):
+        if self._reason_edit is not None:
+            self.delay_reason = self._reason_edit.text().strip()
+
+    def _ok(self):
+        self.result_action = "update_all"
+        self._capture_reason()
+        self.accept()
+
+    def _only(self):
+        self.result_action = "keep_others"
+        self._capture_reason()
         self.accept()

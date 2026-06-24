@@ -942,7 +942,7 @@
               "id": "42a627d0-168f-4e7d-bddc-3cbf26222b7c",
               "name": "DG- VAVE short term",
               "start_date": "2026-04-13",
-              "end_date": "2026-09-24",
+              "end_date": "2026-08-06",
               "status": "In Progress",
               "owner": "",
               "notes": "",
@@ -1062,7 +1062,7 @@
                   "id": "358242de-cc15-4e9e-a730-1f802c048f49",
                   "name": "VAVE activities",
                   "start_date": "2026-06-05",
-                  "end_date": "2026-09-24",
+                  "end_date": "2026-08-06",
                   "status": "In Progress",
                   "owner": "",
                   "notes": "",
@@ -1072,7 +1072,7 @@
                       "id": "f51f83c3-2aee-4e73-be19-117f2a009b07",
                       "name": "Cassette VAVE activities",
                       "start_date": "2026-06-05",
-                      "end_date": "2026-09-24",
+                      "end_date": "2026-07-30",
                       "status": "In Progress",
                       "owner": "",
                       "notes": "",
@@ -1307,158 +1307,48 @@
                           "id": "2b6cc908-19e0-418d-bb5d-a59afbe46d48",
                           "name": "Aluminum coil",
                           "start_date": "2026-06-05",
-                          "end_date": "2026-09-24",
+                          "end_date": "2026-06-26",
                           "status": "In Progress",
                           "owner": "",
                           "notes": "",
                           "is_parallel": true,
                           "children": [
                             {
-                              "id": "7cc97bb0-89e9-4004-8214-da579ac1693d",
-                              "name": "MT Aluminum coil",
+                              "id": "367609f4-dbee-41a6-b270-9e5c7940257c",
+                              "name": "Define coil spec. Drawings?",
                               "start_date": "2026-06-05",
-                              "end_date": "2026-09-23",
+                              "end_date": "2026-06-18",
+                              "status": "Completed",
+                              "owner": "",
+                              "notes": "[2026-06-16]: Got the first result. Aluminum coil used for locker has the same or better performance. Asked Wendy to evaluate current coil with Al material ",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": false,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": 6,
+                              "baseline_end": "2026-06-12",
+                              "delay_notes": "",
+                              "revisions": [
+                                {
+                                  "rev": "B",
+                                  "date": "2026-06-15",
+                                  "end": "2026-06-18",
+                                  "slip": 4,
+                                  "reason": "Working with Wendy to calculate the aluminum coil performance. Doing fit tesst in 3D"
+                                }
+                              ]
+                            },
+                            {
+                              "id": "921a1c7e-ded9-4ab7-9d2e-6cac094f41d0",
+                              "name": "Request for quotes. MT/LT",
+                              "start_date": "2026-06-19",
+                              "end_date": "2026-06-26",
                               "status": "In Progress",
                               "owner": "",
                               "notes": "",
                               "is_parallel": false,
-                              "children": [
-                                {
-                                  "id": "367609f4-dbee-41a6-b270-9e5c7940257c",
-                                  "name": "Define coil spec. Drawings?",
-                                  "start_date": "2026-06-05",
-                                  "end_date": "2026-06-18",
-                                  "status": "Completed",
-                                  "owner": "",
-                                  "notes": "[2026-06-16]: Got the first result. Aluminum coil used for locker has the same or better performance. Asked Wendy to evaluate current coil with Al material ",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": 6,
-                                  "baseline_end": "2026-06-12",
-                                  "delay_notes": "",
-                                  "revisions": [
-                                    {
-                                      "rev": "B",
-                                      "date": "2026-06-15",
-                                      "end": "2026-06-18",
-                                      "slip": 4,
-                                      "reason": "Working with Wendy to calculate the aluminum coil performance. Doing fit tesst in 3D"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "id": "921a1c7e-ded9-4ab7-9d2e-6cac094f41d0",
-                                  "name": "Request for quotes. Send dwgs",
-                                  "start_date": "2026-06-19",
-                                  "end_date": "2026-06-23",
-                                  "status": "Completed",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": null,
-                                  "baseline_end": null,
-                                  "delay_notes": "",
-                                  "revisions": []
-                                },
-                                {
-                                  "id": "24854f67-9a32-4621-b3cf-0ac91777202e",
-                                  "name": "Get quotes/Timelines from supplier",
-                                  "start_date": "2026-06-24",
-                                  "end_date": "2026-06-30",
-                                  "status": "In Progress",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": null,
-                                  "baseline_end": null,
-                                  "delay_notes": "",
-                                  "revisions": []
-                                },
-                                {
-                                  "id": "0f347230-d351-45ad-aedd-7e289d5111b8",
-                                  "name": "Request samples- Send PO",
-                                  "start_date": "2026-07-01",
-                                  "end_date": "2026-07-07",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": null,
-                                  "baseline_end": null,
-                                  "delay_notes": "",
-                                  "revisions": []
-                                },
-                                {
-                                  "id": "1dbbab09-7297-421d-84e4-10f043ec4f88",
-                                  "name": "Receive samples",
-                                  "start_date": "2026-07-08",
-                                  "end_date": "2026-09-23",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": null,
-                                  "baseline_end": null,
-                                  "delay_notes": "",
-                                  "revisions": []
-                                }
-                              ],
-                              "expanded": true,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": null,
-                              "baseline_end": null,
-                              "delay_notes": "",
-                              "revisions": []
-                            },
-                            {
-                              "id": "6a5ac8a0-79cb-4a6f-be16-1b9f564a6765",
-                              "name": "LT Aluminum coil",
-                              "start_date": "2026-09-24",
-                              "end_date": "2026-09-24",
-                              "status": "Not Started",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [
-                                {
-                                  "id": "303c3343-1f99-47ce-bc06-a90980310ebe",
-                                  "name": "Define coil spec",
-                                  "start_date": "2026-09-24",
-                                  "end_date": "2026-09-24",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": null,
-                                  "baseline_end": null,
-                                  "delay_notes": "",
-                                  "revisions": []
-                                }
-                              ],
+                              "children": [],
                               "expanded": false,
                               "dates_locked": false,
                               "predecessor_id": null,
@@ -1468,7 +1358,7 @@
                               "revisions": []
                             }
                           ],
-                          "expanded": true,
+                          "expanded": false,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": 6,
@@ -1567,7 +1457,7 @@
                               "revisions": []
                             }
                           ],
-                          "expanded": false,
+                          "expanded": true,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": 31,
@@ -1585,7 +1475,7 @@
                           "notes": "",
                           "is_parallel": false,
                           "children": [],
-                          "expanded": false,
+                          "expanded": true,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": null,
@@ -1621,7 +1511,7 @@
                           "notes": "",
                           "is_parallel": false,
                           "children": [],
-                          "expanded": false,
+                          "expanded": true,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": null,
@@ -1639,7 +1529,7 @@
                           "notes": "",
                           "is_parallel": false,
                           "children": [],
-                          "expanded": false,
+                          "expanded": true,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": null,
@@ -1657,7 +1547,7 @@
                           "notes": "",
                           "is_parallel": false,
                           "children": [],
-                          "expanded": false,
+                          "expanded": true,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": null,
@@ -1677,19 +1567,19 @@
                     {
                       "id": "825ab1a8-9ab8-4453-995c-9d878c50b815",
                       "name": "Case VAVE activities",
-                      "start_date": "2026-06-05",
-                      "end_date": "2026-06-12",
-                      "status": "In Progress",
+                      "start_date": "2026-07-30",
+                      "end_date": "2026-08-06",
+                      "status": "Not Started",
                       "owner": "",
                       "notes": "",
-                      "is_parallel": true,
+                      "is_parallel": false,
                       "children": [
                         {
                           "id": "18b80bc1-5b4d-41ab-a205-265b7c1e601c",
                           "name": "Plastic Deck Pans w/ updated return air",
-                          "start_date": "2026-06-05",
-                          "end_date": "2026-06-05",
-                          "status": "In Progress",
+                          "start_date": "2026-07-30",
+                          "end_date": "2026-07-30",
+                          "status": "Not Started",
                           "owner": "",
                           "notes": "",
                           "is_parallel": false,
@@ -1705,9 +1595,9 @@
                         {
                           "id": "f2cbdd06-1464-4af8-9d79-bbe979f618e2",
                           "name": "Roll form the ctr uprights. ",
-                          "start_date": "2026-06-08",
-                          "end_date": "2026-06-08",
-                          "status": "In Progress",
+                          "start_date": "2026-07-31",
+                          "end_date": "2026-07-31",
+                          "status": "Not Started",
                           "owner": "",
                           "notes": "",
                           "is_parallel": false,
@@ -1723,9 +1613,9 @@
                         {
                           "id": "c97795f7-1b00-49e8-87e6-09bba3c6ba69",
                           "name": "Remove bracket near back panel. ",
-                          "start_date": "2026-06-09",
-                          "end_date": "2026-06-09",
-                          "status": "In Progress",
+                          "start_date": "2026-08-03",
+                          "end_date": "2026-08-03",
+                          "status": "Not Started",
                           "owner": "",
                           "notes": "",
                           "is_parallel": false,
@@ -1741,9 +1631,9 @@
                         {
                           "id": "bd51cf33-8508-415f-962c-635f28b37e66",
                           "name": "Remove Louvers on the side trim",
-                          "start_date": "2026-06-10",
-                          "end_date": "2026-06-10",
-                          "status": "In Progress",
+                          "start_date": "2026-08-04",
+                          "end_date": "2026-08-04",
+                          "status": "Not Started",
                           "owner": "",
                           "notes": "",
                           "is_parallel": false,
@@ -1759,9 +1649,9 @@
                         {
                           "id": "cad659e3-f074-406f-bd01-b773f887cf9a",
                           "name": "LED drive bracket removal",
-                          "start_date": "2026-06-11",
-                          "end_date": "2026-06-11",
-                          "status": "In Progress",
+                          "start_date": "2026-08-05",
+                          "end_date": "2026-08-05",
+                          "status": "Not Started",
                           "owner": "",
                           "notes": "",
                           "is_parallel": false,
@@ -1777,9 +1667,9 @@
                         {
                           "id": "8b8e4cea-9461-46ac-a1b2-ce00a09edb59",
                           "name": "Shorten the bracket where case power comes in",
-                          "start_date": "2026-06-12",
-                          "end_date": "2026-06-12",
-                          "status": "In Progress",
+                          "start_date": "2026-08-06",
+                          "end_date": "2026-08-06",
+                          "status": "Not Started",
                           "owner": "",
                           "notes": "",
                           "is_parallel": false,
@@ -3251,94 +3141,6 @@
         {
           "ts": "2026-06-24 10:52",
           "text": "Renamed 'New Task' \u2192 'Control box redesign'"
-        },
-        {
-          "ts": "2026-06-24 12:52",
-          "text": "Added task 'New Task' under 'Aluminum coil'"
-        },
-        {
-          "ts": "2026-06-24 12:53",
-          "text": "Renamed 'New Task' \u2192 'MT Aluminum coil'"
-        },
-        {
-          "ts": "2026-06-24 12:54",
-          "text": "'Request for quotes. MT/LT': status \u2192 Completed"
-        },
-        {
-          "ts": "2026-06-24 12:54",
-          "text": "Added task 'New Task' under 'Aluminum coil'"
-        },
-        {
-          "ts": "2026-06-24 12:54",
-          "text": "Renamed 'New Task' \u2192 'LT Aluminum coil'"
-        },
-        {
-          "ts": "2026-06-24 12:54",
-          "text": "Added task 'New Task' under 'LT Aluminum coil'"
-        },
-        {
-          "ts": "2026-06-24 12:54",
-          "text": "Renamed 'New Task' \u2192 'Define coil spec'"
-        },
-        {
-          "ts": "2026-06-24 13:45",
-          "text": "Added task 'New Task' under 'MT Aluminum coil'"
-        },
-        {
-          "ts": "2026-06-24 13:46",
-          "text": "Renamed 'New Task' \u2192 'Get quotes/Timelines from supplier'"
-        },
-        {
-          "ts": "2026-06-24 13:46",
-          "text": "Renamed 'Request for quotes. MT/LT' \u2192 'Request for quotes. Send dwgs'"
-        },
-        {
-          "ts": "2026-06-24 13:47",
-          "text": "'Request for quotes. Send dwgs': end 2026-06-26 \u2192 2026-06-23"
-        },
-        {
-          "ts": "2026-06-24 13:47",
-          "text": "'Get quotes/Timelines from supplier': end 2026-06-24 \u2192 2026-06-30"
-        },
-        {
-          "ts": "2026-06-24 13:47",
-          "text": "Added task 'New Task' under 'MT Aluminum coil'"
-        },
-        {
-          "ts": "2026-06-24 13:48",
-          "text": "Renamed 'New Task' \u2192 'Request samples- Send PO'"
-        },
-        {
-          "ts": "2026-06-24 13:48",
-          "text": "'Request samples- Send PO': end 2026-07-01 \u2192 2026-07-07"
-        },
-        {
-          "ts": "2026-06-24 13:49",
-          "text": "Added task 'New Task' under 'MT Aluminum coil'"
-        },
-        {
-          "ts": "2026-06-24 13:49",
-          "text": "Renamed 'New Task' \u2192 'Receive samples'"
-        },
-        {
-          "ts": "2026-06-24 13:50",
-          "text": "'Case VAVE activities': parallel mode ON"
-        },
-        {
-          "ts": "2026-06-24 13:50",
-          "text": "'Case VAVE activities': start 2026-07-31 \u2192 2026-06-05"
-        },
-        {
-          "ts": "2026-06-24 13:50",
-          "text": "'Case VAVE activities': end 2026-08-07 \u2192 2026-06-12"
-        },
-        {
-          "ts": "2026-06-24 13:50",
-          "text": "'Case VAVE activities': status \u2192 In Progress"
-        },
-        {
-          "ts": "2026-06-24 13:51",
-          "text": "'Receive samples': end 2026-07-08 \u2192 2026-09-23"
         }
       ],
       "notes": [

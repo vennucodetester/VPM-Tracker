@@ -930,7 +930,7 @@
                   "revisions": []
                 }
               ],
-              "expanded": false,
+              "expanded": true,
               "dates_locked": false,
               "predecessor_id": null,
               "baseline_duration": 176,
@@ -942,7 +942,7 @@
               "id": "42a627d0-168f-4e7d-bddc-3cbf26222b7c",
               "name": "DG- VAVE short term",
               "start_date": "2026-04-13",
-              "end_date": "2026-09-24",
+              "end_date": "2026-10-15",
               "status": "In Progress",
               "owner": "",
               "notes": "",
@@ -1062,7 +1062,7 @@
                   "id": "358242de-cc15-4e9e-a730-1f802c048f49",
                   "name": "VAVE activities",
                   "start_date": "2026-06-05",
-                  "end_date": "2026-09-24",
+                  "end_date": "2026-10-15",
                   "status": "In Progress",
                   "owner": "",
                   "notes": "",
@@ -1072,7 +1072,7 @@
                       "id": "f51f83c3-2aee-4e73-be19-117f2a009b07",
                       "name": "Cassette VAVE activities",
                       "start_date": "2026-06-05",
-                      "end_date": "2026-09-24",
+                      "end_date": "2026-10-15",
                       "status": "In Progress",
                       "owner": "",
                       "notes": "",
@@ -1307,7 +1307,7 @@
                           "id": "2b6cc908-19e0-418d-bb5d-a59afbe46d48",
                           "name": "Aluminum coil",
                           "start_date": "2026-06-05",
-                          "end_date": "2026-09-24",
+                          "end_date": "2026-10-15",
                           "status": "In Progress",
                           "owner": "",
                           "notes": "",
@@ -1317,7 +1317,7 @@
                               "id": "7cc97bb0-89e9-4004-8214-da579ac1693d",
                               "name": "MT Aluminum coil",
                               "start_date": "2026-06-05",
-                              "end_date": "2026-09-23",
+                              "end_date": "2026-10-07",
                               "status": "In Progress",
                               "owner": "",
                               "notes": "",
@@ -1420,9 +1420,64 @@
                                   "baseline_end": null,
                                   "delay_notes": "",
                                   "revisions": []
+                                },
+                                {
+                                  "id": "67862d68-5a70-4595-a9d2-bae197e9b13c",
+                                  "name": "Lab testing",
+                                  "start_date": "2026-09-24",
+                                  "end_date": "2026-10-07",
+                                  "status": "Not Started",
+                                  "owner": "",
+                                  "notes": "",
+                                  "is_parallel": false,
+                                  "children": [
+                                    {
+                                      "id": "9df2ca63-2b3e-4da3-8d65-5a2af7cab6a2",
+                                      "name": "NSF",
+                                      "start_date": "2026-09-24",
+                                      "end_date": "2026-09-30",
+                                      "status": "Not Started",
+                                      "owner": "",
+                                      "notes": "",
+                                      "is_parallel": false,
+                                      "children": [],
+                                      "expanded": false,
+                                      "dates_locked": false,
+                                      "predecessor_id": null,
+                                      "baseline_duration": null,
+                                      "baseline_end": null,
+                                      "delay_notes": "",
+                                      "revisions": []
+                                    },
+                                    {
+                                      "id": "c1d4eb90-01d4-46c7-8085-70a8e5a4ecb7",
+                                      "name": "DOE",
+                                      "start_date": "2026-10-01",
+                                      "end_date": "2026-10-07",
+                                      "status": "Not Started",
+                                      "owner": "",
+                                      "notes": "",
+                                      "is_parallel": false,
+                                      "children": [],
+                                      "expanded": false,
+                                      "dates_locked": false,
+                                      "predecessor_id": null,
+                                      "baseline_duration": null,
+                                      "baseline_end": null,
+                                      "delay_notes": "",
+                                      "revisions": []
+                                    }
+                                  ],
+                                  "expanded": false,
+                                  "dates_locked": false,
+                                  "predecessor_id": null,
+                                  "baseline_duration": null,
+                                  "baseline_end": null,
+                                  "delay_notes": "",
+                                  "revisions": []
                                 }
                               ],
-                              "expanded": true,
+                              "expanded": false,
                               "dates_locked": false,
                               "predecessor_id": null,
                               "baseline_duration": null,
@@ -1433,23 +1488,150 @@
                             {
                               "id": "6a5ac8a0-79cb-4a6f-be16-1b9f564a6765",
                               "name": "LT Aluminum coil",
-                              "start_date": "2026-09-24",
-                              "end_date": "2026-09-24",
-                              "status": "Not Started",
+                              "start_date": "2026-06-05",
+                              "end_date": "2026-10-15",
+                              "status": "In Progress",
                               "owner": "",
                               "notes": "",
-                              "is_parallel": false,
+                              "is_parallel": true,
                               "children": [
                                 {
                                   "id": "303c3343-1f99-47ce-bc06-a90980310ebe",
                                   "name": "Define coil spec",
-                                  "start_date": "2026-09-24",
-                                  "end_date": "2026-09-24",
+                                  "start_date": "2026-06-05",
+                                  "end_date": "2026-06-26",
+                                  "status": "In Progress",
+                                  "owner": "",
+                                  "notes": "",
+                                  "is_parallel": false,
+                                  "children": [],
+                                  "expanded": false,
+                                  "dates_locked": false,
+                                  "predecessor_id": null,
+                                  "baseline_duration": null,
+                                  "baseline_end": null,
+                                  "delay_notes": "",
+                                  "revisions": []
+                                },
+                                {
+                                  "id": "0d69362f-e6a2-44a1-ad48-bbedf4e68132",
+                                  "name": "Request for quotes. Send dwgs",
+                                  "start_date": "2026-06-29",
+                                  "end_date": "2026-07-01",
+                                  "status": "Completed",
+                                  "owner": "",
+                                  "notes": "",
+                                  "is_parallel": false,
+                                  "children": [],
+                                  "expanded": false,
+                                  "dates_locked": false,
+                                  "predecessor_id": null,
+                                  "baseline_duration": null,
+                                  "baseline_end": null,
+                                  "delay_notes": "",
+                                  "revisions": []
+                                },
+                                {
+                                  "id": "c1060806-4c9c-4071-ab7c-e15b8dfbdddb",
+                                  "name": "Get quotes/Timelines from supplier",
+                                  "start_date": "2026-07-02",
+                                  "end_date": "2026-07-08",
                                   "status": "Not Started",
                                   "owner": "",
                                   "notes": "",
                                   "is_parallel": false,
                                   "children": [],
+                                  "expanded": false,
+                                  "dates_locked": false,
+                                  "predecessor_id": null,
+                                  "baseline_duration": null,
+                                  "baseline_end": null,
+                                  "delay_notes": "",
+                                  "revisions": []
+                                },
+                                {
+                                  "id": "da3548fa-aa75-496f-a514-9456e23ca361",
+                                  "name": "Request samples- Send PO",
+                                  "start_date": "2026-07-09",
+                                  "end_date": "2026-07-15",
+                                  "status": "Not Started",
+                                  "owner": "",
+                                  "notes": "",
+                                  "is_parallel": false,
+                                  "children": [],
+                                  "expanded": false,
+                                  "dates_locked": false,
+                                  "predecessor_id": null,
+                                  "baseline_duration": null,
+                                  "baseline_end": null,
+                                  "delay_notes": "",
+                                  "revisions": []
+                                },
+                                {
+                                  "id": "791c2777-614e-46f2-b5ce-09c6061d5c17",
+                                  "name": "Receive samples",
+                                  "start_date": "2026-07-16",
+                                  "end_date": "2026-10-01",
+                                  "status": "Not Started",
+                                  "owner": "",
+                                  "notes": "",
+                                  "is_parallel": false,
+                                  "children": [],
+                                  "expanded": false,
+                                  "dates_locked": false,
+                                  "predecessor_id": null,
+                                  "baseline_duration": null,
+                                  "baseline_end": null,
+                                  "delay_notes": "",
+                                  "revisions": []
+                                },
+                                {
+                                  "id": "9838f15a-f176-4344-8c09-871b3ba8f738",
+                                  "name": "Lab testing",
+                                  "start_date": "2026-10-02",
+                                  "end_date": "2026-10-15",
+                                  "status": "Not Started",
+                                  "owner": "",
+                                  "notes": "",
+                                  "is_parallel": false,
+                                  "children": [
+                                    {
+                                      "id": "84810735-d2fa-4c2c-83ea-b5c868e1bac8",
+                                      "name": "NSF",
+                                      "start_date": "2026-10-02",
+                                      "end_date": "2026-10-08",
+                                      "status": "Not Started",
+                                      "owner": "",
+                                      "notes": "",
+                                      "is_parallel": false,
+                                      "children": [],
+                                      "expanded": false,
+                                      "dates_locked": false,
+                                      "predecessor_id": null,
+                                      "baseline_duration": null,
+                                      "baseline_end": null,
+                                      "delay_notes": "",
+                                      "revisions": []
+                                    },
+                                    {
+                                      "id": "27326d58-76e2-4d5d-af47-f5b68fe15124",
+                                      "name": "DOE",
+                                      "start_date": "2026-10-09",
+                                      "end_date": "2026-10-15",
+                                      "status": "Not Started",
+                                      "owner": "",
+                                      "notes": "",
+                                      "is_parallel": false,
+                                      "children": [],
+                                      "expanded": false,
+                                      "dates_locked": false,
+                                      "predecessor_id": null,
+                                      "baseline_duration": null,
+                                      "baseline_end": null,
+                                      "delay_notes": "",
+                                      "revisions": []
+                                    }
+                                  ],
                                   "expanded": false,
                                   "dates_locked": false,
                                   "predecessor_id": null,
@@ -1468,7 +1650,7 @@
                               "revisions": []
                             }
                           ],
-                          "expanded": true,
+                          "expanded": false,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": 6,
@@ -1967,7 +2149,7 @@
                       "revisions": []
                     }
                   ],
-                  "expanded": false,
+                  "expanded": true,
                   "dates_locked": false,
                   "predecessor_id": null,
                   "baseline_duration": 14,
@@ -3339,6 +3521,74 @@
         {
           "ts": "2026-06-24 13:51",
           "text": "'Receive samples': end 2026-07-08 \u2192 2026-09-23"
+        },
+        {
+          "ts": "2026-06-24 13:52",
+          "text": "Added task 'New Task' under 'MT Aluminum coil'"
+        },
+        {
+          "ts": "2026-06-24 13:52",
+          "text": "Renamed 'New Task' \u2192 'Lab testing'"
+        },
+        {
+          "ts": "2026-06-24 13:56",
+          "text": "Added task 'New Task' under 'Lab testing'"
+        },
+        {
+          "ts": "2026-06-24 13:56",
+          "text": "Renamed 'New Task' \u2192 'NSF'"
+        },
+        {
+          "ts": "2026-06-24 13:57",
+          "text": "Added task 'New Task' under 'Lab testing'"
+        },
+        {
+          "ts": "2026-06-24 13:57",
+          "text": "Renamed 'New Task' \u2192 'DOE'"
+        },
+        {
+          "ts": "2026-06-24 13:57",
+          "text": "Pasted 6 task(s): 'Define coil spec. Drawings?', 'Request for quotes. Send dwgs', 'Get quotes/Timelines from supplier' +3 more"
+        },
+        {
+          "ts": "2026-06-24 13:57",
+          "text": "Deleted task 'Define coil spec. Drawings?'"
+        },
+        {
+          "ts": "2026-06-24 13:57",
+          "text": "'LT Aluminum coil': parallel mode ON"
+        },
+        {
+          "ts": "2026-06-24 13:57",
+          "text": "'LT Aluminum coil': start 2026-09-28 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-24 13:57",
+          "text": "'LT Aluminum coil': end 2027-01-05 \u2192 2026-09-14"
+        },
+        {
+          "ts": "2026-06-24 13:57",
+          "text": "'LT Aluminum coil': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-06-24 16:47",
+          "text": "'NSF': end 2026-09-24 \u2192 2026-09-30"
+        },
+        {
+          "ts": "2026-06-24 16:47",
+          "text": "'DOE': end 2026-10-01 \u2192 2026-10-07"
+        },
+        {
+          "ts": "2026-06-24 16:49",
+          "text": "'Define coil spec': end 2026-06-05 \u2192 2026-06-26"
+        },
+        {
+          "ts": "2026-06-24 16:49",
+          "text": "'NSF': end 2026-10-02 \u2192 2026-10-08"
+        },
+        {
+          "ts": "2026-06-24 16:49",
+          "text": "'DOE': end 2026-10-09 \u2192 2026-10-15"
         }
       ],
       "notes": [

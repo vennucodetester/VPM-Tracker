@@ -1,9 +1,5 @@
-4/23
+1. When i press enter, new line gets created but indent and outdent not working
+2. When i create a new line, from right click, i get an option asking if this will count as delay or not. But whenever i create a new line, it is only because of my improper project planning and not a delay. So it should not ask me that question. But after that task is created with a start and end date, the default should be " on track". And the second time i change any line, it should automatically flag that as a delay and ask me to enter the data. And currently, if i enter and create new line, i am not seeing any on track/delay tracking on delay column. 
+3. on my visual tab. i rather see the list of all things that i changed this week instead of "closed since section"
 
-Gantt chart crash. 
-  File "C:\Users\ccbefb\OneDrive - Hussmann Corporation\Desktop\VPM\CODE\vpm_tracker\ui\gantt_chart.py", line 1072, in _on_task_double_clicked
-    self.main_window.tabs.setCurrentIndex(0)
-    ^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'ProjectWidget' object has no attribute 'tabs'
-
-2. I need to clear predecessor option on the right click as well. When selected it will make everything blank. Right now there is no option to do anything like that
+4. You currently have one critical path on visual tab. that lays out entire critical path. Give me the next 2 critical paths just like that so i have the top 3 critical paths all the time. 

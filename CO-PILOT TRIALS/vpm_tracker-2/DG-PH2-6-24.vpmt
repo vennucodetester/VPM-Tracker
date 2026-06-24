@@ -930,7 +930,7 @@
                   "revisions": []
                 }
               ],
-              "expanded": false,
+              "expanded": true,
               "dates_locked": false,
               "predecessor_id": null,
               "baseline_duration": 176,
@@ -942,7 +942,7 @@
               "id": "42a627d0-168f-4e7d-bddc-3cbf26222b7c",
               "name": "DG- VAVE short term",
               "start_date": "2026-04-13",
-              "end_date": "2026-09-24",
+              "end_date": "2026-10-15",
               "status": "In Progress",
               "owner": "",
               "notes": "",
@@ -1062,7 +1062,7 @@
                   "id": "358242de-cc15-4e9e-a730-1f802c048f49",
                   "name": "VAVE activities",
                   "start_date": "2026-06-05",
-                  "end_date": "2026-09-24",
+                  "end_date": "2026-10-15",
                   "status": "In Progress",
                   "owner": "",
                   "notes": "",
@@ -1072,7 +1072,7 @@
                       "id": "f51f83c3-2aee-4e73-be19-117f2a009b07",
                       "name": "Cassette VAVE activities",
                       "start_date": "2026-06-05",
-                      "end_date": "2026-09-24",
+                      "end_date": "2026-10-15",
                       "status": "In Progress",
                       "owner": "",
                       "notes": "",
@@ -1143,9 +1143,9 @@
                         },
                         {
                           "id": "88f4ea07-9217-4c68-9cab-7b1872b7af31",
-                          "name": "Removing parts/clamps from design",
+                          "name": "S/M - 1 (Removing parts/clamps from design)",
                           "start_date": "2026-06-05",
-                          "end_date": "2026-06-24",
+                          "end_date": "2026-07-10",
                           "status": "In Progress",
                           "owner": "",
                           "notes": "",
@@ -1202,6 +1202,42 @@
                                   "reason": "Setting up the vibration test. Should get results by end of day tomorrow"
                                 }
                               ]
+                            },
+                            {
+                              "id": "571076ed-c90b-4b74-8be2-f46cdf6712e8",
+                              "name": "ECO process",
+                              "start_date": "2026-06-25",
+                              "end_date": "2026-07-09",
+                              "status": "Not Started",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": false,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": null,
+                              "baseline_end": null,
+                              "delay_notes": "",
+                              "revisions": []
+                            },
+                            {
+                              "id": "5826cf51-3be9-4d39-b073-2d8e8d2f43d9",
+                              "name": "Implementation",
+                              "start_date": "2026-07-10",
+                              "end_date": "2026-07-10",
+                              "status": "Not Started",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": false,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": 0,
+                              "baseline_end": "2026-07-09",
+                              "delay_notes": "",
+                              "revisions": []
                             }
                           ],
                           "expanded": false,
@@ -1307,7 +1343,7 @@
                           "id": "2b6cc908-19e0-418d-bb5d-a59afbe46d48",
                           "name": "Aluminum coil",
                           "start_date": "2026-06-05",
-                          "end_date": "2026-09-24",
+                          "end_date": "2026-10-15",
                           "status": "In Progress",
                           "owner": "",
                           "notes": "",
@@ -1317,7 +1353,7 @@
                               "id": "7cc97bb0-89e9-4004-8214-da579ac1693d",
                               "name": "MT Aluminum coil",
                               "start_date": "2026-06-05",
-                              "end_date": "2026-09-23",
+                              "end_date": "2026-10-07",
                               "status": "In Progress",
                               "owner": "",
                               "notes": "",
@@ -1420,9 +1456,64 @@
                                   "baseline_end": null,
                                   "delay_notes": "",
                                   "revisions": []
+                                },
+                                {
+                                  "id": "67862d68-5a70-4595-a9d2-bae197e9b13c",
+                                  "name": "Lab testing",
+                                  "start_date": "2026-09-24",
+                                  "end_date": "2026-10-07",
+                                  "status": "Not Started",
+                                  "owner": "",
+                                  "notes": "",
+                                  "is_parallel": false,
+                                  "children": [
+                                    {
+                                      "id": "9df2ca63-2b3e-4da3-8d65-5a2af7cab6a2",
+                                      "name": "NSF",
+                                      "start_date": "2026-09-24",
+                                      "end_date": "2026-09-30",
+                                      "status": "Not Started",
+                                      "owner": "",
+                                      "notes": "",
+                                      "is_parallel": false,
+                                      "children": [],
+                                      "expanded": false,
+                                      "dates_locked": false,
+                                      "predecessor_id": null,
+                                      "baseline_duration": null,
+                                      "baseline_end": null,
+                                      "delay_notes": "",
+                                      "revisions": []
+                                    },
+                                    {
+                                      "id": "c1d4eb90-01d4-46c7-8085-70a8e5a4ecb7",
+                                      "name": "DOE",
+                                      "start_date": "2026-10-01",
+                                      "end_date": "2026-10-07",
+                                      "status": "Not Started",
+                                      "owner": "",
+                                      "notes": "",
+                                      "is_parallel": false,
+                                      "children": [],
+                                      "expanded": false,
+                                      "dates_locked": false,
+                                      "predecessor_id": null,
+                                      "baseline_duration": null,
+                                      "baseline_end": null,
+                                      "delay_notes": "",
+                                      "revisions": []
+                                    }
+                                  ],
+                                  "expanded": false,
+                                  "dates_locked": false,
+                                  "predecessor_id": null,
+                                  "baseline_duration": null,
+                                  "baseline_end": null,
+                                  "delay_notes": "",
+                                  "revisions": []
                                 }
                               ],
-                              "expanded": true,
+                              "expanded": false,
                               "dates_locked": false,
                               "predecessor_id": null,
                               "baseline_duration": null,
@@ -1433,23 +1524,150 @@
                             {
                               "id": "6a5ac8a0-79cb-4a6f-be16-1b9f564a6765",
                               "name": "LT Aluminum coil",
-                              "start_date": "2026-09-24",
-                              "end_date": "2026-09-24",
-                              "status": "Not Started",
+                              "start_date": "2026-06-05",
+                              "end_date": "2026-10-15",
+                              "status": "In Progress",
                               "owner": "",
                               "notes": "",
-                              "is_parallel": false,
+                              "is_parallel": true,
                               "children": [
                                 {
                                   "id": "303c3343-1f99-47ce-bc06-a90980310ebe",
                                   "name": "Define coil spec",
-                                  "start_date": "2026-09-24",
-                                  "end_date": "2026-09-24",
+                                  "start_date": "2026-06-05",
+                                  "end_date": "2026-06-26",
+                                  "status": "In Progress",
+                                  "owner": "",
+                                  "notes": "",
+                                  "is_parallel": false,
+                                  "children": [],
+                                  "expanded": false,
+                                  "dates_locked": false,
+                                  "predecessor_id": null,
+                                  "baseline_duration": null,
+                                  "baseline_end": null,
+                                  "delay_notes": "",
+                                  "revisions": []
+                                },
+                                {
+                                  "id": "0d69362f-e6a2-44a1-ad48-bbedf4e68132",
+                                  "name": "Request for quotes. Send dwgs",
+                                  "start_date": "2026-06-29",
+                                  "end_date": "2026-07-01",
+                                  "status": "Completed",
+                                  "owner": "",
+                                  "notes": "",
+                                  "is_parallel": false,
+                                  "children": [],
+                                  "expanded": false,
+                                  "dates_locked": false,
+                                  "predecessor_id": null,
+                                  "baseline_duration": null,
+                                  "baseline_end": null,
+                                  "delay_notes": "",
+                                  "revisions": []
+                                },
+                                {
+                                  "id": "c1060806-4c9c-4071-ab7c-e15b8dfbdddb",
+                                  "name": "Get quotes/Timelines from supplier",
+                                  "start_date": "2026-07-02",
+                                  "end_date": "2026-07-08",
                                   "status": "Not Started",
                                   "owner": "",
                                   "notes": "",
                                   "is_parallel": false,
                                   "children": [],
+                                  "expanded": false,
+                                  "dates_locked": false,
+                                  "predecessor_id": null,
+                                  "baseline_duration": null,
+                                  "baseline_end": null,
+                                  "delay_notes": "",
+                                  "revisions": []
+                                },
+                                {
+                                  "id": "da3548fa-aa75-496f-a514-9456e23ca361",
+                                  "name": "Request samples- Send PO",
+                                  "start_date": "2026-07-09",
+                                  "end_date": "2026-07-15",
+                                  "status": "Not Started",
+                                  "owner": "",
+                                  "notes": "",
+                                  "is_parallel": false,
+                                  "children": [],
+                                  "expanded": false,
+                                  "dates_locked": false,
+                                  "predecessor_id": null,
+                                  "baseline_duration": null,
+                                  "baseline_end": null,
+                                  "delay_notes": "",
+                                  "revisions": []
+                                },
+                                {
+                                  "id": "791c2777-614e-46f2-b5ce-09c6061d5c17",
+                                  "name": "Receive samples",
+                                  "start_date": "2026-07-16",
+                                  "end_date": "2026-10-01",
+                                  "status": "Not Started",
+                                  "owner": "",
+                                  "notes": "",
+                                  "is_parallel": false,
+                                  "children": [],
+                                  "expanded": false,
+                                  "dates_locked": false,
+                                  "predecessor_id": null,
+                                  "baseline_duration": null,
+                                  "baseline_end": null,
+                                  "delay_notes": "",
+                                  "revisions": []
+                                },
+                                {
+                                  "id": "9838f15a-f176-4344-8c09-871b3ba8f738",
+                                  "name": "Lab testing",
+                                  "start_date": "2026-10-02",
+                                  "end_date": "2026-10-15",
+                                  "status": "Not Started",
+                                  "owner": "",
+                                  "notes": "",
+                                  "is_parallel": false,
+                                  "children": [
+                                    {
+                                      "id": "84810735-d2fa-4c2c-83ea-b5c868e1bac8",
+                                      "name": "NSF",
+                                      "start_date": "2026-10-02",
+                                      "end_date": "2026-10-08",
+                                      "status": "Not Started",
+                                      "owner": "",
+                                      "notes": "",
+                                      "is_parallel": false,
+                                      "children": [],
+                                      "expanded": false,
+                                      "dates_locked": false,
+                                      "predecessor_id": null,
+                                      "baseline_duration": null,
+                                      "baseline_end": null,
+                                      "delay_notes": "",
+                                      "revisions": []
+                                    },
+                                    {
+                                      "id": "27326d58-76e2-4d5d-af47-f5b68fe15124",
+                                      "name": "DOE",
+                                      "start_date": "2026-10-09",
+                                      "end_date": "2026-10-15",
+                                      "status": "Not Started",
+                                      "owner": "",
+                                      "notes": "",
+                                      "is_parallel": false,
+                                      "children": [],
+                                      "expanded": false,
+                                      "dates_locked": false,
+                                      "predecessor_id": null,
+                                      "baseline_duration": null,
+                                      "baseline_end": null,
+                                      "delay_notes": "",
+                                      "revisions": []
+                                    }
+                                  ],
                                   "expanded": false,
                                   "dates_locked": false,
                                   "predecessor_id": null,
@@ -1468,7 +1686,7 @@
                               "revisions": []
                             }
                           ],
-                          "expanded": true,
+                          "expanded": false,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": 6,
@@ -1576,28 +1794,10 @@
                           "revisions": []
                         },
                         {
-                          "id": "b82af882-6dcd-41ae-bbe7-790637dedeb9",
-                          "name": "Evap shroud simplification design",
-                          "start_date": "2026-07-24",
-                          "end_date": "2026-07-24",
-                          "status": "Not Started",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": false,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": null,
-                          "baseline_end": null,
-                          "delay_notes": "",
-                          "revisions": []
-                        },
-                        {
                           "id": "f4d0d326-e7b7-44b6-999e-75e6ab9386cd",
                           "name": "Cassette base - MTY Design",
-                          "start_date": "2026-07-27",
-                          "end_date": "2026-07-27",
+                          "start_date": "2026-07-24",
+                          "end_date": "2026-07-24",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -1614,14 +1814,51 @@
                         {
                           "id": "7acadc69-eb2b-4748-ba12-479e1b3f452c",
                           "name": "New cheaper Carel controller",
-                          "start_date": "2026-07-28",
-                          "end_date": "2026-07-28",
+                          "start_date": "2026-07-27",
+                          "end_date": "2026-07-27",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
                           "is_parallel": false,
                           "children": [],
                           "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": null,
+                          "baseline_end": null,
+                          "delay_notes": "",
+                          "revisions": []
+                        },
+                        {
+                          "id": "ad48a19d-2d9f-41b7-a646-904c75df8431",
+                          "name": "New Task",
+                          "start_date": "2026-07-28",
+                          "end_date": "2026-07-28",
+                          "status": "Not Started",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [
+                            {
+                              "id": "e6554fb8-24ce-417d-8b13-1645e37445b2",
+                              "name": "New Task",
+                              "start_date": "2026-07-28",
+                              "end_date": "2026-07-28",
+                              "status": "Not Started",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": true,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": null,
+                              "baseline_end": null,
+                              "delay_notes": "",
+                              "revisions": []
+                            }
+                          ],
+                          "expanded": true,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": null,
@@ -1648,15 +1885,106 @@
                           "revisions": []
                         },
                         {
-                          "id": "5f33dc4f-34c0-4ec0-8fcd-fd86fce07027",
-                          "name": "Control box redesign",
-                          "start_date": "2026-07-30",
-                          "end_date": "2026-07-30",
-                          "status": "Not Started",
+                          "id": "cc13f2dd-a382-4f9f-911b-948693dbd960",
+                          "name": "S/m - 2 (Control box redesign, evap shroud, compress base, cond. shroud)",
+                          "start_date": "2026-06-05",
+                          "end_date": "2026-08-06",
+                          "status": "In Progress",
                           "owner": "",
                           "notes": "",
-                          "is_parallel": false,
-                          "children": [],
+                          "is_parallel": true,
+                          "children": [
+                            {
+                              "id": "5f33dc4f-34c0-4ec0-8fcd-fd86fce07027",
+                              "name": "Design finalize",
+                              "start_date": "2026-06-05",
+                              "end_date": "2026-06-23",
+                              "status": "Completed",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": false,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": null,
+                              "baseline_end": null,
+                              "delay_notes": "",
+                              "revisions": []
+                            },
+                            {
+                              "id": "b82af882-6dcd-41ae-bbe7-790637dedeb9",
+                              "name": "Part samples",
+                              "start_date": "2026-06-24",
+                              "end_date": "2026-07-14",
+                              "status": "In Progress",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": false,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": null,
+                              "baseline_end": null,
+                              "delay_notes": "",
+                              "revisions": []
+                            },
+                            {
+                              "id": "2cab32ae-7f26-44c3-a1cc-fa85f6da4cc6",
+                              "name": "Transit test",
+                              "start_date": "2026-07-15",
+                              "end_date": "2026-07-21",
+                              "status": "Not Started",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": false,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": null,
+                              "baseline_end": null,
+                              "delay_notes": "",
+                              "revisions": []
+                            },
+                            {
+                              "id": "d871607c-6f26-4f24-a625-3d6382fd1e69",
+                              "name": "Vibration test",
+                              "start_date": "2026-07-22",
+                              "end_date": "2026-07-23",
+                              "status": "Not Started",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": false,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": null,
+                              "baseline_end": null,
+                              "delay_notes": "",
+                              "revisions": []
+                            },
+                            {
+                              "id": "6626322b-d394-47c0-ac14-c2688c16ab9b",
+                              "name": "ECO Process",
+                              "start_date": "2026-07-24",
+                              "end_date": "2026-08-06",
+                              "status": "Not Started",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": false,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": null,
+                              "baseline_end": null,
+                              "delay_notes": "",
+                              "revisions": []
+                            }
+                          ],
                           "expanded": false,
                           "dates_locked": false,
                           "predecessor_id": null,
@@ -1967,7 +2295,7 @@
                       "revisions": []
                     }
                   ],
-                  "expanded": false,
+                  "expanded": true,
                   "dates_locked": false,
                   "predecessor_id": null,
                   "baseline_duration": 14,
@@ -3339,6 +3667,202 @@
         {
           "ts": "2026-06-24 13:51",
           "text": "'Receive samples': end 2026-07-08 \u2192 2026-09-23"
+        },
+        {
+          "ts": "2026-06-24 13:52",
+          "text": "Added task 'New Task' under 'MT Aluminum coil'"
+        },
+        {
+          "ts": "2026-06-24 13:52",
+          "text": "Renamed 'New Task' \u2192 'Lab testing'"
+        },
+        {
+          "ts": "2026-06-24 13:56",
+          "text": "Added task 'New Task' under 'Lab testing'"
+        },
+        {
+          "ts": "2026-06-24 13:56",
+          "text": "Renamed 'New Task' \u2192 'NSF'"
+        },
+        {
+          "ts": "2026-06-24 13:57",
+          "text": "Added task 'New Task' under 'Lab testing'"
+        },
+        {
+          "ts": "2026-06-24 13:57",
+          "text": "Renamed 'New Task' \u2192 'DOE'"
+        },
+        {
+          "ts": "2026-06-24 13:57",
+          "text": "Pasted 6 task(s): 'Define coil spec. Drawings?', 'Request for quotes. Send dwgs', 'Get quotes/Timelines from supplier' +3 more"
+        },
+        {
+          "ts": "2026-06-24 13:57",
+          "text": "Deleted task 'Define coil spec. Drawings?'"
+        },
+        {
+          "ts": "2026-06-24 13:57",
+          "text": "'LT Aluminum coil': parallel mode ON"
+        },
+        {
+          "ts": "2026-06-24 13:57",
+          "text": "'LT Aluminum coil': start 2026-09-28 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-24 13:57",
+          "text": "'LT Aluminum coil': end 2027-01-05 \u2192 2026-09-14"
+        },
+        {
+          "ts": "2026-06-24 13:57",
+          "text": "'LT Aluminum coil': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-06-24 16:47",
+          "text": "'NSF': end 2026-09-24 \u2192 2026-09-30"
+        },
+        {
+          "ts": "2026-06-24 16:47",
+          "text": "'DOE': end 2026-10-01 \u2192 2026-10-07"
+        },
+        {
+          "ts": "2026-06-24 16:49",
+          "text": "'Define coil spec': end 2026-06-05 \u2192 2026-06-26"
+        },
+        {
+          "ts": "2026-06-24 16:49",
+          "text": "'NSF': end 2026-10-02 \u2192 2026-10-08"
+        },
+        {
+          "ts": "2026-06-24 16:49",
+          "text": "'DOE': end 2026-10-09 \u2192 2026-10-15"
+        },
+        {
+          "ts": "2026-06-24 17:08",
+          "text": "Added task 'New Task' under 'Removing parts/clamps from design'"
+        },
+        {
+          "ts": "2026-06-24 17:08",
+          "text": "Renamed 'New Task' \u2192 'ECO process'"
+        },
+        {
+          "ts": "2026-06-24 17:08",
+          "text": "'ECO process': end 2026-06-25 \u2192 2026-07-08"
+        },
+        {
+          "ts": "2026-06-24 17:08",
+          "text": "Added task 'New Task' under 'Removing parts/clamps from design'"
+        },
+        {
+          "ts": "2026-06-24 17:08",
+          "text": "Renamed 'New Task' \u2192 'Implementation'"
+        },
+        {
+          "ts": "2026-06-24 17:09",
+          "text": "'ECO process': end 2026-07-08 \u2192 2026-07-09"
+        },
+        {
+          "ts": "2026-06-24 17:09",
+          "text": "Renamed 'Removing parts/clamps from design' \u2192 'S/M - 1Removing parts/clamps from design'"
+        },
+        {
+          "ts": "2026-06-24 17:10",
+          "text": "Renamed 'S/M - 1Removing parts/clamps from design' \u2192 'S/M - 1 Removing parts/clamps from design'"
+        },
+        {
+          "ts": "2026-06-24 17:10",
+          "text": "Renamed 'S/M - 1 Removing parts/clamps from design' \u2192 'S/M - 1 (Removing parts/clamps from design)'"
+        },
+        {
+          "ts": "2026-06-24 17:10",
+          "text": "Added task 'New Task' under 'Cassette VAVE activities'"
+        },
+        {
+          "ts": "2026-06-24 17:10",
+          "text": "Renamed 'New Task' \u2192 'S/m - 2'"
+        },
+        {
+          "ts": "2026-06-24 17:11",
+          "text": "Renamed 'S/m - 2' \u2192 'S/m - 2 (Control box redesign, evap shroud, compress base, cond. shroud)'"
+        },
+        {
+          "ts": "2026-06-24 17:12",
+          "text": "Renamed 'Control box redesign' \u2192 'Design finalize'"
+        },
+        {
+          "ts": "2026-06-24 17:12",
+          "text": "Renamed 'Evap shroud simplification design' \u2192 'Part samples'"
+        },
+        {
+          "ts": "2026-06-24 17:12",
+          "text": "Added task 'New Task' under 'S/m - 2 (Control box redesign, evap shroud, compress base, cond. shroud)'"
+        },
+        {
+          "ts": "2026-06-24 17:14",
+          "text": "Renamed 'New Task' \u2192 'Transit test'"
+        },
+        {
+          "ts": "2026-06-24 17:14",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-24 17:14",
+          "text": "Renamed 'New Task' \u2192 'Vibration test'"
+        },
+        {
+          "ts": "2026-06-24 17:14",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-24 17:14",
+          "text": "Renamed 'New Task' \u2192 'ECO Process'"
+        },
+        {
+          "ts": "2026-06-24 17:15",
+          "text": "'S/m - 2 (Control box redesign, evap shroud, compress base, cond. shroud)': parallel mode ON"
+        },
+        {
+          "ts": "2026-06-24 17:15",
+          "text": "'S/m - 2 (Control box redesign, evap shroud, compress base, cond. shroud)': start 2026-07-29 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-24 17:15",
+          "text": "'S/m - 2 (Control box redesign, evap shroud, compress base, cond. shroud)': end 2026-08-04 \u2192 2026-06-11"
+        },
+        {
+          "ts": "2026-06-24 17:15",
+          "text": "'S/m - 2 (Control box redesign, evap shroud, compress base, cond. shroud)': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-06-24 17:15",
+          "text": "'Design finalize': end 2026-06-05 \u2192 2026-06-23"
+        },
+        {
+          "ts": "2026-06-24 17:15",
+          "text": "'Design finalize': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-06-24 17:16",
+          "text": "'Part samples': end 2026-06-24 \u2192 2026-07-14"
+        },
+        {
+          "ts": "2026-06-24 17:16",
+          "text": "'Transit test': end 2026-07-15 \u2192 2026-07-21"
+        },
+        {
+          "ts": "2026-06-24 17:16",
+          "text": "'Vibration test': end 2026-07-22 \u2192 2026-07-23"
+        },
+        {
+          "ts": "2026-06-24 17:16",
+          "text": "'ECO Process': end 2026-07-24 \u2192 2026-08-06"
+        },
+        {
+          "ts": "2026-06-24 17:16",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-24 17:20",
+          "text": "Added task 'New Task' under 'New Task'"
         }
       ],
       "notes": [

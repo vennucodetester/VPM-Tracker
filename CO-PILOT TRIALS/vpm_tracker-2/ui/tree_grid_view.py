@@ -8,9 +8,13 @@ from PyQt6.QtGui import QAction, QColor, QBrush, QKeySequence
 
 from vpm_tracker_core import Columns, Colors, AppConstants, Status
 from models.task_node import TaskNode
-from ui.dialogs import BulkEditDialog, BulkPasteDialog, ImpactDialog, LinkTaskDialog
+from ui.dialogs import BulkEditDialog, BulkPasteDialog, ImpactReviewDialog, LinkTaskDialog
 from ui.header_filter import FilterHeaderView
 from utils.workday_calculator import WorkdayCalculator
+
+# Drag payload from the docked notes pad (see ui/notes_panel.py). Kept as a
+# bare string literal to avoid importing the pad here (one-way dependency).
+NOTE_MIME = "application/x-vpm-note"
 
 class DateDelegate(QStyledItemDelegate):
     def createEditor(self, parent, option, index):
@@ -500,6 +504,10 @@ class TreeGridView(QTreeWidget):
     # activity journal. NOTE: must be emitted while this widget's signals
     # are NOT blocked (on_item_changed queues lines and flushes at the end).
     journal_event = pyqtSignal(str)
+    # Emitted with the raw dragged text after a note from the docked pad has
+    # been consumed (promoted to a task or appended to a task's notes), so the
+    # pad can drop that line.
+    note_consumed = pyqtSignal(str)
 
     # Task clipboard for cut/copy/paste. Class-level on purpose: it is
     # shared by every project tab, which is what makes cross-project
@@ -1035,7 +1043,7 @@ class TreeGridView(QTreeWidget):
             expand_all_action = QAction("Expand All", self)
             expand_all_action.triggered.connect(lambda: self.expand_all_selected(selected_items))
             menu.addAction(expand_all_action)
-            
+
             menu.addSeparator()
             
             # Indent / Outdent (Smart)
@@ -1117,6 +1125,157 @@ class TreeGridView(QTreeWidget):
             menu.addAction(paste_root_action)
             
         menu.exec(self.viewport().mapToGlobal(position))
+
+    def _simulate_impact(self, node, new_start=None, new_end=None):
+        """Non-destructively compute the effect of changing `node`'s start OR
+        end date. Pass exactly one of new_start / new_end.
+
+        Clones the whole project, applies the change, re-runs the REAL
+        scheduler, and diffs against the current state. Because it uses the
+        same scheduler the live edit will use — including predecessor links —
+        the reported 'final date' is truthful, not a guess.
+
+        Returns a payload dict for ImpactReviewDialog, or None when the date
+        did not actually change.
+        """
+        from datetime import datetime
+        from utils.scheduler import schedule
+        try:
+            from utils.critical_path import CriticalPathAnalyzer
+        except Exception:
+            CriticalPathAnalyzer = None
+
+        def _cal_delta(a, b):
+            try:
+                return (datetime.strptime(b, "%Y-%m-%d")
+                        - datetime.strptime(a, "%Y-%m-%d")).days
+            except (ValueError, TypeError):
+                return 0
+
+        # No-op guard.
+        if new_start is not None and new_start == node.start_date:
+            return None
+        if new_end is not None and new_end == node.end_date:
+            return None
+
+        live = self.get_all_nodes_flat()
+        old_end = {n.id: n.end_date for n in live}
+        old_name = {n.id: n.name for n in live}
+        project_end_old = max((e for e in old_end.values() if e), default=None)
+
+        # Deep clone via serialize/deserialize (preserves ids + links).
+        clone_roots = [TaskNode.from_dict(r.to_dict()) for r in self.root_nodes]
+        cmap = {}
+
+        def _index(nodes):
+            for n in nodes:
+                cmap[n.id] = n
+                _index(n.children)
+        _index(clone_roots)
+
+        target = cmap.get(node.id)
+        if target is None:
+            return None
+
+        # Apply the hypothetical change to the clone and pin it so the
+        # scheduler keeps it (an inline-editable date is always user-owned).
+        if new_start is not None:
+            if target.start_date and target.end_date:
+                dur = WorkdayCalculator.calculate_duration(
+                    target.start_date, target.end_date)
+                target.start_date = new_start
+                target.end_date = WorkdayCalculator.add_workdays(new_start, dur)
+            else:
+                target.start_date = new_start
+            d = _cal_delta(node.start_date, new_start) if node.start_date else 0
+            change_desc = (f"start <b>{node.start_date}</b> → <b>{new_start}</b>"
+                           f"  ({'+' if d > 0 else ''}{d} days)")
+        else:
+            target.set_date('end', new_end, force=True)
+            d = _cal_delta(node.end_date, new_end) if node.end_date else 0
+            change_desc = (f"end <b>{node.end_date}</b> → <b>{new_end}</b>"
+                           f"  ({'+' if d > 0 else ''}{d} days)")
+        target.dates_locked = True
+        node_new_end = target.end_date
+
+        schedule(clone_roots)
+
+        new_end_map = {nid: n.end_date for nid, n in cmap.items()}
+        project_end_new = max((e for e in new_end_map.values() if e), default=None)
+
+        # Critical-path ids on the resulting plan → "drives end date" flag.
+        critical = set()
+        if CriticalPathAnalyzer is not None:
+            try:
+                res = CriticalPathAnalyzer(clone_roots).analyze()
+                critical = (set(res.get('critical_path_ids', set()))
+                            | set(res.get('critical_parent_ids', set())))
+            except Exception:
+                critical = set()
+
+        # Per-task shift list (everything whose end moved), excluding the
+        # edited node itself (shown in the header).
+        impacts = []
+        for nid, ne in new_end_map.items():
+            if nid == node.id:
+                continue
+            oe = old_end.get(nid)
+            if oe and ne and oe != ne:
+                impacts.append({
+                    'name': old_name.get(nid, cmap[nid].name),
+                    'old_end': oe,
+                    'new_end': ne,
+                    'on_chain': nid in critical,
+                })
+        impacts.sort(key=lambda d: d['new_end'])
+
+        # Delay vs baseline — only meaningful when the duration changed (end
+        # edits). Mirrors DelayDelegate: slip not yet covered by a revision.
+        delay_slip = 0
+        delay_rev = ""
+        if (new_end is not None and node.baseline_duration is not None
+                and not node.children):
+            try:
+                new_dur = WorkdayCalculator.calculate_duration(
+                    target.start_date, node_new_end)
+                total_diff = int(new_dur) - node.baseline_duration
+                delay_slip = max(0, total_diff - node.logged_slip())
+            except (ValueError, TypeError):
+                delay_slip = 0
+            if delay_slip > 0:
+                delay_rev = chr(ord('B') + len(node.revisions))
+
+        return {
+            'task_name': node.name,
+            'change_desc': change_desc,
+            'project_end_old': project_end_old,
+            'project_end_new': project_end_new,
+            'project_delta': (_cal_delta(project_end_old, project_end_new)
+                              if project_end_old and project_end_new else 0),
+            'impacts': impacts,
+            'delay_slip': delay_slip,
+            'delay_rev': delay_rev,
+            'node_new_end': node_new_end,
+        }
+
+    def _log_delay_from_review(self, node, item, review, dialog, journal_lines):
+        """Record a delay revision when the just-applied edit slipped past the
+        baseline. Shared by the End and Duration handlers so both behave
+        identically (mirrors DelayDelegate's revision shape)."""
+        if review.get('delay_slip', 0) <= 0:
+            return
+        from datetime import datetime as _dt
+        node.revisions.append({
+            "rev": review.get('delay_rev', '?'),
+            "date": _dt.now().strftime("%Y-%m-%d"),
+            "end": review.get('node_new_end', node.end_date or ""),
+            "slip": review.get('delay_slip', 0),
+            "reason": dialog.delay_reason or "",
+        })
+        item.update_from_node()
+        journal_lines.append(
+            f"Delay logged — '{node.name}' +{review.get('delay_slip', 0)}d: "
+            f"{dialog.delay_reason or '(no reason given)'}")
 
     def editItem(self, item: QTreeWidgetItem, column: int = 0):
         if not isinstance(item, TaskTreeWidgetItem):
@@ -1738,53 +1897,13 @@ class TreeGridView(QTreeWidget):
                     self.blockSignals(False)
                     return
                 
-                # 1. Simulate Impact
-                impacts = node.simulate_date_change(text)
-                
-                if impacts:
-                    # 2. Show Dialog
-                    dialog = ImpactDialog(impacts, self)
-                    if dialog.exec():
-                        if dialog.result_action == "update_all":
-                            # Standard Ripple: set this node's start, then
-                            # re-run the scheduler so children (Radio ON →
-                            # snap to parent.start; Radio OFF → chain from
-                            # prev sibling) and downstream predecessors all
-                            # update in one pass.
-                            old_start = node.start_date
-                            old_end = node.end_date
-                            # Preserve duration while shifting start
-                            if old_start and old_end and text != old_start:
-                                dur = WorkdayCalculator.calculate_duration(old_start, old_end)
-                                node.start_date = text
-                                node.end_date = WorkdayCalculator.add_workdays(text, dur)
-                            else:
-                                node.start_date = text
-                            node.update_status_from_dates()
-                            self.recalculate_all_dates()
-                            self.validate_child_dates(item)
-                            self.refresh_entire_tree()
-                        elif dialog.result_action == "keep_others":
-                            # Gap: shift only this node, leave siblings alone.
-                            old_start = node.start_date
-                            old_end = node.end_date
-                            if old_start and old_end:
-                                dur = WorkdayCalculator.calculate_duration(old_start, old_end)
-                                node.start_date = text
-                                node.end_date = WorkdayCalculator.add_workdays(text, dur)
-                            else:
-                                node.start_date = text
-                            node.update_status_from_dates()
-                            # Re-run scheduler so explicit-predecessor successors
-                            # still resolve (gap suppresses sibling-chain ripple only).
-                            self.recalculate_all_dates()
-                            self.refresh_entire_tree()
-                    else:
-                        # Cancel: Revert text
-                        item.setText(Columns.START, node.start_date)
-                else:
-                    # No downstream impact — set date and re-run scheduler
-                    # so this node's own children move with it.
+                # 1. Simulate the impact non-destructively (the REAL scheduler
+                #    on a clone) so the popup can show the true project-end
+                #    effect — including predecessor-link ripple.
+                review = self._simulate_impact(node, new_start=text)
+
+                if review is None:
+                    # Date didn't actually move → apply directly, no popup.
                     old_start = node.start_date
                     old_end = node.end_date
                     if old_start and old_end and text != old_start:
@@ -1797,21 +1916,63 @@ class TreeGridView(QTreeWidget):
                     self.recalculate_all_dates()
                     self.validate_child_dates(item)
                     self.refresh_entire_tree()
+                else:
+                    # 2. Show the informative review popup. It leads with whether
+                    #    the project end date slips or holds, then lists every
+                    #    task that shifts. OK applies; Cancel reverts.
+                    dialog = ImpactReviewDialog(review, self)
+                    if dialog.exec() and dialog.result_action:
+                        if dialog.result_action == "update_all":
+                            # Standard ripple: move this start, re-run the
+                            # scheduler so children and downstream predecessors
+                            # all update in one pass.
+                            old_start = node.start_date
+                            old_end = node.end_date
+                            if old_start and old_end and text != old_start:
+                                dur = WorkdayCalculator.calculate_duration(old_start, old_end)
+                                node.start_date = text
+                                node.end_date = WorkdayCalculator.add_workdays(text, dur)
+                            else:
+                                node.start_date = text
+                            node.update_status_from_dates()
+                            self.recalculate_all_dates()
+                            self.validate_child_dates(item)
+                            self.refresh_entire_tree()
+                        elif dialog.result_action == "keep_others":
+                            # Gap: shift only this task, leave siblings alone.
+                            old_start = node.start_date
+                            old_end = node.end_date
+                            if old_start and old_end:
+                                dur = WorkdayCalculator.calculate_duration(old_start, old_end)
+                                node.start_date = text
+                                node.end_date = WorkdayCalculator.add_workdays(text, dur)
+                            else:
+                                node.start_date = text
+                            node.update_status_from_dates()
+                            self.recalculate_all_dates()
+                            self.refresh_entire_tree()
+                    else:
+                        # Cancel: revert the typed text.
+                        item.setText(Columns.START, node.start_date)
                     
             elif column == Columns.END:
                 # End date is always editable — it controls duration, not the
-                # start anchor. Predecessor links only own the start.
-                node.set_date('end', text)
-                self.validate_child_dates(item)
-                # BUG FIX: must re-run the scheduler so predecessor_id successors
-                # pick up the new end date. refresh_entire_tree() alone only repaints.
-                self.recalculate_all_dates()
-                self.refresh_entire_tree()
-                self.blockSignals(False)
-                try:
-                    self._prompt_delay_reason_if_needed(node)
-                finally:
-                    self.blockSignals(True)
+                # start anchor. Show the COMBINED popup: impact + final-date
+                # headline, plus the delay-reason box when this push slips past
+                # the baseline. One OK reviews, applies, and logs the delay.
+                review = self._simulate_impact(node, new_end=text)
+                if review is not None:
+                    dialog = ImpactReviewDialog(review, self)
+                    if dialog.exec() and dialog.result_action:
+                        node.set_date('end', text)
+                        self.validate_child_dates(item)
+                        self.recalculate_all_dates()
+                        self.refresh_entire_tree()
+                        self._log_delay_from_review(
+                            node, item, review, dialog, journal_lines)
+                    else:
+                        # Cancel: revert the typed end date.
+                        item.setText(Columns.END, node.end_date or "")
             elif column == Columns.STATUS: 
                 node.set_status(text)
                 # Status change might affect parent, refresh tree
@@ -1834,21 +1995,27 @@ class TreeGridView(QTreeWidget):
             elif column == Columns.NOTES: node.notes = text
             elif column == Columns.DELAY: pass  # read-only, skip
             elif column == Columns.DURATION:
+                # A duration change is just an end-date move, so it gets the
+                # SAME combined popup as an End edit (impact + final-date
+                # headline + delay reason). The handler tail re-normalizes the
+                # Duration cell, so cancels/invalid input need no manual revert.
                 try:
                     days = int(text)
-                    node.set_duration(days)
-                    # BUG FIX: duration change shifts end_date, which must
-                    # ripple through predecessor_id successors. refresh alone
-                    # only repaints — we also need to re-run the scheduler.
-                    self.recalculate_all_dates()
-                    self.refresh_entire_tree()
-                    self.blockSignals(False)
-                    try:
-                        self._prompt_delay_reason_if_needed(node)
-                    finally:
-                        self.blockSignals(True)
                 except ValueError:
-                    pass # Ignore invalid input
+                    days = None
+                if days is not None and node.start_date:
+                    new_end = WorkdayCalculator.add_workdays(
+                        node.start_date, days if days >= 1 else 1)
+                    review = self._simulate_impact(node, new_end=new_end)
+                    if review is not None:
+                        dialog = ImpactReviewDialog(review, self)
+                        if dialog.exec() and dialog.result_action:
+                            node.set_duration(days)
+                            self.validate_child_dates(item)
+                            self.recalculate_all_dates()
+                            self.refresh_entire_tree()
+                            self._log_delay_from_review(
+                                node, item, review, dialog, journal_lines)
             
             # Refresh duration (it's calculated)
             item.setText(Columns.DURATION, node.duration)
@@ -2027,16 +2194,152 @@ class TreeGridView(QTreeWidget):
                     parent_item.update_from_node()
             # else Ignore: do nothing
 
+    def dragEnterEvent(self, event):
+        # Accept note lines dragged from the docked pad; otherwise fall back to
+        # the tree's normal internal-move behavior.
+        if event.mimeData().hasFormat(NOTE_MIME):
+            event.acceptProposedAction()
+            return
+        super().dragEnterEvent(event)
+
+    def dragMoveEvent(self, event):
+        if event.mimeData().hasFormat(NOTE_MIME):
+            event.acceptProposedAction()
+            return
+        super().dragMoveEvent(event)
+
     def dropEvent(self, event):
+        # A note dragged out of the pad: drop ON a task → append to its Notes;
+        # drop on empty space → promote to a new, auto-scheduled task.
+        if event.mimeData().hasFormat(NOTE_MIME):
+            self._handle_note_drop(event)
+            return
+
         # Let Qt handle the visual move
         super().dropEvent(event)
-        
+
         # Now sync the internal TaskNode hierarchy to match the visual QTreeWidget hierarchy
         self.sync_hierarchy()
-        
+
         # Trigger date updates
         self.recalculate_all_dates()
-        
+
+    # ------------------------------------------------------------------
+    # Notes-pad drop handling (promote a note to a task / a task's notes)
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _parse_owner_tags(text: str):
+        """Pull @owner tags out of a note line. Returns (clean_name, owner)
+        where owner is '/'-joined to match the app's owner convention."""
+        import re
+        tags = re.findall(r'@([\w.\-]+)', text)
+        clean = re.sub(r'\s*@[\w.\-]+', '', text).strip()
+        owner = "/".join(tags)
+        return (clean or text), owner
+
+    def _handle_note_drop(self, event):
+        raw = bytes(event.mimeData().data(NOTE_MIME)).decode("utf-8", "replace")
+        lines = [l for l in raw.split("\n") if l.strip()]
+        if not lines:
+            event.ignore()
+            return
+        event.acceptProposedAction()
+
+        pos = event.position().toPoint()
+        target = self.itemAt(pos)
+        col = self.columnAt(pos.x())
+
+        # Drop on the Notes column of a task → attach to that task's notes.
+        # Drop anywhere else on a task → insert a new task right after it.
+        # Drop below all rows → append a new task at the end.
+        if isinstance(target, TaskTreeWidgetItem) and col == Columns.NOTES:
+            self._append_lines_to_notes(target, lines)
+        else:
+            anchor = target if isinstance(target, TaskTreeWidgetItem) else None
+            self._promote_lines_to_tasks(lines, anchor_item=anchor)
+
+        # Tell the pad to drop the line(s) it handed us.
+        self.note_consumed.emit(raw)
+
+    def _append_lines_to_notes(self, item: 'TaskTreeWidgetItem', lines):
+        """Drop on a task's Notes column: append each line to its Notes,
+        timestamped the same way the Notes editor does."""
+        from datetime import datetime
+        stamp = datetime.now().strftime("[%Y-%m-%d] ")
+        node = item.node
+        addition = "\n".join(stamp + l for l in lines)
+        node.notes = (node.notes + "\n" + addition) if node.notes else addition
+        was = self.blockSignals(True)
+        try:
+            item.update_from_node()
+        finally:
+            self.blockSignals(was)
+        self.journal_event.emit(f"Added note to '{node.name}' from the pad")
+        self.item_changed_signal.emit(node)
+        self._flash_item(item)
+        self._show_link_hint(f"Note added to '{node.name}'.")
+
+    def _promote_lines_to_tasks(self, lines, anchor_item=None):
+        """Each line becomes a new task. If dropped on a row, the task is
+        inserted right after it at the same level (so it lands in context);
+        otherwise it's appended at the end. Auto-chained off the previous task
+        so it gets real dates. @tags set the owner."""
+        was = self.blockSignals(True)
+        last = None
+        try:
+            if isinstance(anchor_item, TaskTreeWidgetItem):
+                anchor_node = anchor_item.node
+                parent_node = anchor_node.parent
+                siblings = parent_node.children if parent_node else self.root_nodes
+                ui_parent = anchor_item.parent()
+                try:
+                    idx = siblings.index(anchor_node) + 1
+                except ValueError:
+                    idx = len(siblings)
+                prev = anchor_node
+                for off, line in enumerate(lines):
+                    name, owner = self._parse_owner_tags(line)
+                    new_node = TaskNode(name, parent=parent_node)
+                    new_node.update_from_previous_sibling(prev)
+                    if owner:
+                        new_node.owner = owner
+                    siblings.insert(idx + off, new_node)
+                    new_item = TaskTreeWidgetItem(new_node)
+                    if ui_parent:
+                        ui_parent.insertChild(
+                            ui_parent.indexOfChild(anchor_item) + 1 + off, new_item)
+                    else:
+                        self.insertTopLevelItem(
+                            self.indexOfTopLevelItem(anchor_item) + 1 + off, new_item)
+                    prev = new_node
+                    last = new_node
+            else:
+                prev = self.root_nodes[-1] if self.root_nodes else None
+                for line in lines:
+                    name, owner = self._parse_owner_tags(line)
+                    new_node = TaskNode(name)
+                    if prev is not None:
+                        new_node.update_from_previous_sibling(prev)
+                    if owner:
+                        new_node.owner = owner
+                    self.root_nodes.append(new_node)
+                    self.add_node_to_tree(new_node, self.invisibleRootItem())
+                    prev = new_node
+                    last = new_node
+        finally:
+            self.blockSignals(was)
+
+        self.recalculate_all_dates()
+        self.refresh_entire_tree()
+        self.update_filter_options()
+        if last is not None:
+            self.journal_event.emit(f"Promoted {len(lines)} note(s) to task(s)")
+            self.item_changed_signal.emit(last)
+            # Scroll to & flash the new task so it never looks like it vanished.
+            self.jump_to_node_id(last.id)
+            self._show_link_hint(f"Note promoted to task '{last.name}'.")
+
     def sync_hierarchy(self):
         # Rebuild root_nodes list and parent/child relationships based on visual order
         new_roots = []
