@@ -12,7 +12,7 @@ from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QFileDialog, QMessageBox,
     QTabWidget, QInputDialog, QMenu,
 )
-from PyQt6.QtGui import QAction
+from PyQt6.QtGui import QAction, QKeySequence, QShortcut
 from PyQt6.QtCore import Qt, QSettings
 
 from ui.project_widget import ProjectWidget
@@ -50,6 +50,7 @@ class MainWindow(QMainWindow):
         self.layout.addWidget(self.project_tabs)
 
         self.setup_menu()
+        self._setup_global_shortcuts()
 
         # Start with one empty project so the window isn't blank.
         self._add_project_from_data("Project 1", {}, [])
@@ -61,6 +62,11 @@ class MainWindow(QMainWindow):
         self._autosave_timer = QTimer(self)
         self._autosave_timer.timeout.connect(self._autosave)
         self._autosave_timer.start(3 * 60 * 1000)
+
+    def _setup_global_shortcuts(self):
+        self._notepad_shortcut = QShortcut(QKeySequence("Ctrl+Space"), self)
+        self._notepad_shortcut.setContext(Qt.ShortcutContext.ApplicationShortcut)
+        self._notepad_shortcut.activated.connect(self._quick_capture)
 
     def _autosave(self):
         if not self.current_filepath or not self.unsaved_changes:
@@ -257,7 +263,6 @@ class MainWindow(QMainWindow):
         edit_menu.addAction(search_action)
 
         capture_action = QAction("Quick Capture to Inbox…", self)
-        capture_action.setShortcut("Ctrl+Space")
         capture_action.triggered.connect(self._quick_capture)
         edit_menu.addAction(capture_action)
 

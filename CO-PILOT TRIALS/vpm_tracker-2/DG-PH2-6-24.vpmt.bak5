@@ -1143,9 +1143,9 @@
                         },
                         {
                           "id": "88f4ea07-9217-4c68-9cab-7b1872b7af31",
-                          "name": "Removing parts/clamps from design",
+                          "name": "S/M - 1 (Removing parts/clamps from design)",
                           "start_date": "2026-06-05",
-                          "end_date": "2026-06-24",
+                          "end_date": "2026-07-10",
                           "status": "In Progress",
                           "owner": "",
                           "notes": "",
@@ -1202,6 +1202,42 @@
                                   "reason": "Setting up the vibration test. Should get results by end of day tomorrow"
                                 }
                               ]
+                            },
+                            {
+                              "id": "571076ed-c90b-4b74-8be2-f46cdf6712e8",
+                              "name": "ECO process",
+                              "start_date": "2026-06-25",
+                              "end_date": "2026-07-09",
+                              "status": "Not Started",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": false,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": null,
+                              "baseline_end": null,
+                              "delay_notes": "",
+                              "revisions": []
+                            },
+                            {
+                              "id": "5826cf51-3be9-4d39-b073-2d8e8d2f43d9",
+                              "name": "Implementation",
+                              "start_date": "2026-07-10",
+                              "end_date": "2026-07-10",
+                              "status": "Not Started",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": false,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": 0,
+                              "baseline_end": "2026-07-09",
+                              "delay_notes": "",
+                              "revisions": []
                             }
                           ],
                           "expanded": false,
@@ -1758,28 +1794,10 @@
                           "revisions": []
                         },
                         {
-                          "id": "b82af882-6dcd-41ae-bbe7-790637dedeb9",
-                          "name": "Evap shroud simplification design",
-                          "start_date": "2026-07-24",
-                          "end_date": "2026-07-24",
-                          "status": "Not Started",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": false,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": null,
-                          "baseline_end": null,
-                          "delay_notes": "",
-                          "revisions": []
-                        },
-                        {
                           "id": "f4d0d326-e7b7-44b6-999e-75e6ab9386cd",
                           "name": "Cassette base - MTY Design",
-                          "start_date": "2026-07-27",
-                          "end_date": "2026-07-27",
+                          "start_date": "2026-07-24",
+                          "end_date": "2026-07-24",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -1796,8 +1814,8 @@
                         {
                           "id": "7acadc69-eb2b-4748-ba12-479e1b3f452c",
                           "name": "New cheaper Carel controller",
-                          "start_date": "2026-07-28",
-                          "end_date": "2026-07-28",
+                          "start_date": "2026-07-27",
+                          "end_date": "2026-07-27",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -1814,8 +1832,8 @@
                         {
                           "id": "a992b977-c4c5-47a9-8049-e3c0451c60d5",
                           "name": "New Harness design",
-                          "start_date": "2026-07-29",
-                          "end_date": "2026-07-29",
+                          "start_date": "2026-07-28",
+                          "end_date": "2026-07-28",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -1830,16 +1848,71 @@
                           "revisions": []
                         },
                         {
-                          "id": "5f33dc4f-34c0-4ec0-8fcd-fd86fce07027",
-                          "name": "Control box redesign",
-                          "start_date": "2026-07-30",
-                          "end_date": "2026-07-30",
+                          "id": "cc13f2dd-a382-4f9f-911b-948693dbd960",
+                          "name": "S/m - 2 (Control box redesign, evap shroud, compress base, cond. shroud)",
+                          "start_date": "2026-07-29",
+                          "end_date": "2026-07-31",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
                           "is_parallel": false,
-                          "children": [],
-                          "expanded": false,
+                          "children": [
+                            {
+                              "id": "5f33dc4f-34c0-4ec0-8fcd-fd86fce07027",
+                              "name": "Design finalize",
+                              "start_date": "2026-07-29",
+                              "end_date": "2026-07-29",
+                              "status": "Not Started",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": false,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": null,
+                              "baseline_end": null,
+                              "delay_notes": "",
+                              "revisions": []
+                            },
+                            {
+                              "id": "b82af882-6dcd-41ae-bbe7-790637dedeb9",
+                              "name": "Part samples",
+                              "start_date": "2026-07-30",
+                              "end_date": "2026-07-30",
+                              "status": "Not Started",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": false,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": null,
+                              "baseline_end": null,
+                              "delay_notes": "",
+                              "revisions": []
+                            },
+                            {
+                              "id": "2cab32ae-7f26-44c3-a1cc-fa85f6da4cc6",
+                              "name": "New Task",
+                              "start_date": "2026-07-31",
+                              "end_date": "2026-07-31",
+                              "status": "Not Started",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": true,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": null,
+                              "baseline_end": null,
+                              "delay_notes": "",
+                              "revisions": []
+                            }
+                          ],
+                          "expanded": true,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": null,
@@ -3589,6 +3662,66 @@
         {
           "ts": "2026-06-24 16:49",
           "text": "'DOE': end 2026-10-09 \u2192 2026-10-15"
+        },
+        {
+          "ts": "2026-06-24 17:08",
+          "text": "Added task 'New Task' under 'Removing parts/clamps from design'"
+        },
+        {
+          "ts": "2026-06-24 17:08",
+          "text": "Renamed 'New Task' \u2192 'ECO process'"
+        },
+        {
+          "ts": "2026-06-24 17:08",
+          "text": "'ECO process': end 2026-06-25 \u2192 2026-07-08"
+        },
+        {
+          "ts": "2026-06-24 17:08",
+          "text": "Added task 'New Task' under 'Removing parts/clamps from design'"
+        },
+        {
+          "ts": "2026-06-24 17:08",
+          "text": "Renamed 'New Task' \u2192 'Implementation'"
+        },
+        {
+          "ts": "2026-06-24 17:09",
+          "text": "'ECO process': end 2026-07-08 \u2192 2026-07-09"
+        },
+        {
+          "ts": "2026-06-24 17:09",
+          "text": "Renamed 'Removing parts/clamps from design' \u2192 'S/M - 1Removing parts/clamps from design'"
+        },
+        {
+          "ts": "2026-06-24 17:10",
+          "text": "Renamed 'S/M - 1Removing parts/clamps from design' \u2192 'S/M - 1 Removing parts/clamps from design'"
+        },
+        {
+          "ts": "2026-06-24 17:10",
+          "text": "Renamed 'S/M - 1 Removing parts/clamps from design' \u2192 'S/M - 1 (Removing parts/clamps from design)'"
+        },
+        {
+          "ts": "2026-06-24 17:10",
+          "text": "Added task 'New Task' under 'Cassette VAVE activities'"
+        },
+        {
+          "ts": "2026-06-24 17:10",
+          "text": "Renamed 'New Task' \u2192 'S/m - 2'"
+        },
+        {
+          "ts": "2026-06-24 17:11",
+          "text": "Renamed 'S/m - 2' \u2192 'S/m - 2 (Control box redesign, evap shroud, compress base, cond. shroud)'"
+        },
+        {
+          "ts": "2026-06-24 17:12",
+          "text": "Renamed 'Control box redesign' \u2192 'Design finalize'"
+        },
+        {
+          "ts": "2026-06-24 17:12",
+          "text": "Renamed 'Evap shroud simplification design' \u2192 'Part samples'"
+        },
+        {
+          "ts": "2026-06-24 17:12",
+          "text": "Added task 'New Task' under 'S/m - 2 (Control box redesign, evap shroud, compress base, cond. shroud)'"
         }
       ],
       "notes": [

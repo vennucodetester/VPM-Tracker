@@ -95,7 +95,7 @@ class ProjectWidget(QWidget):
 
     def _on_inner_tab_changed(self, index: int):
         if index == 1:  # Visuals
-            self.gantt_view.load_nodes(self.tree_view.root_nodes)
+            self.gantt_view.load_nodes(self.tree_view.root_nodes, self.journal)
 
     def _jump_to_task(self, node_id: str):
         """Click on a task name in Visuals → show that row in the Tracker."""
@@ -107,7 +107,16 @@ class ProjectWidget(QWidget):
         """Called when this project's tab becomes visible."""
         self._activate_config()
         if self.inner_tabs.currentIndex() == 1:
-            self.gantt_view.load_nodes(self.tree_view.root_nodes)
+            self.gantt_view.load_nodes(self.tree_view.root_nodes, self.journal)
+
+    def set_display_font_size(self, size: int):
+        """Apply one readable font size across this project's main surfaces."""
+        self.tree_view.set_display_font_size(size)
+        self.gantt_view.set_display_font_size(size)
+        self.timeline.setFont(self.tree_view.font())
+        if hasattr(self.timeline, "canvas"):
+            self.timeline.canvas.setFont(self.tree_view.font())
+            self.timeline.canvas.refresh()
 
     def close_project(self):
         """Called before the tab is removed — release per-project state."""

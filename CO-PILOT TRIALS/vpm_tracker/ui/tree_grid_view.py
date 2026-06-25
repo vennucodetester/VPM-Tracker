@@ -333,6 +333,11 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
                     delay_text = "On track"
             except (ValueError, TypeError):
                 pass
+        elif self.node.start_date and self.node.end_date and self.node.duration:
+            # Older files may not have baseline fields. Treat a blank delay
+            # state as healthy instead of leaving the user staring at empty
+            # cells that look unfinished.
+            delay_text = "On track"
         # Parents: their "delay" is just a rollup of children — show it
         # muted with a ↑ marker so one slip never reads as two.
         is_parent = bool(self.node.children)
@@ -379,7 +384,7 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
             self.setForeground(col, QBrush(status_color))
 
         # Delay column color (overrides status color for this column)
-        if self.node.baseline_duration is not None:
+        if self.node.baseline_duration is not None or delay_text == "On track":
             if is_parent and delay_diff > 0:
                 self.setForeground(Columns.DELAY, QBrush(QColor("#9E9E9E")))  # gray rollup
             elif delay_diff > 0:
@@ -583,6 +588,15 @@ class TreeGridView(QTreeWidget):
         self.setAcceptDrops(True)
         self.setDragDropMode(QAbstractItemView.DragDropMode.InternalMove)
         self.setDefaultDropAction(Qt.DropAction.MoveAction)
+        self.setTabKeyNavigation(False)
+        self.viewport().installEventFilter(self)
+
+    def set_display_font_size(self, size: int):
+        font = self.font()
+        font.setPointSize(max(8, min(18, int(size))))
+        font.setBold(True)
+        self.setFont(font)
+        self.viewport().update()
 
     def event(self, e):
         """Intercept Tab/Shift+Tab before Qt's focus system and the view's
@@ -599,6 +613,21 @@ class TreeGridView(QTreeWidget):
                     self.outdent_smart(current)
                 return True
         return super().event(e)
+
+    def eventFilter(self, obj, e):
+        """The viewport can receive Tab before the QTreeWidget itself does."""
+        if (obj is self.viewport()
+                and e.type() == QEvent.Type.KeyPress
+                and e.key() in (Qt.Key.Key_Tab, Qt.Key.Key_Backtab)
+                and self.state() != QAbstractItemView.State.EditingState):
+            current = self.currentItem()
+            if isinstance(current, TaskTreeWidgetItem):
+                if e.key() == Qt.Key.Key_Tab:
+                    self.indent_smart(current)
+                else:
+                    self.outdent_smart(current)
+                return True
+        return super().eventFilter(obj, e)
 
     def keyPressEvent(self, event):
         if self.linking_mode and event.key() == Qt.Key.Key_Escape:
@@ -655,6 +684,7 @@ class TreeGridView(QTreeWidget):
         except ValueError:
             idx = len(siblings)
         siblings.insert(idx, new_node)
+        self._baseline_new_task_on_track(new_node)
 
         was_blocked = self.blockSignals(True)
         try:
@@ -673,6 +703,18 @@ class TreeGridView(QTreeWidget):
         self.item_changed_signal.emit(new_node)
         self.setCurrentItem(new_item)
         self.editItem(new_item, Columns.TREE)
+
+    def _baseline_new_task_on_track(self, node: TaskNode):
+        """Newly inserted planning rows are not delays by themselves."""
+        if not self.has_baseline():
+            return
+        try:
+            node.baseline_duration = int(node.duration)
+        except (ValueError, TypeError):
+            node.baseline_duration = None
+        node.baseline_end = node.end_date
+        node.revisions = []
+        node.delay_notes = ""
 
     def quick_capture(self, text: str):
         """Drop a dateless task into the 'Inbox' root group (created on
@@ -1645,22 +1687,7 @@ class TreeGridView(QTreeWidget):
             self.root_nodes.append(new_node)
             self.add_node_to_tree(new_node, self.invisibleRootItem())
             
-        # Scenario choice: a baseline exists, so the user decides whether this
-        # new task counts against the plan or is just a restructure.
-        #   Yes → baseline 0d: its whole duration reads as slip, and the delay
-        #         reason popup fires when they set its duration.
-        #   No  → baseline stays None: Delay column blank until next Set Baseline.
-        if self.has_baseline():
-            reply = QMessageBox.question(
-                self, "Count as delay?",
-                f"A baseline is set on this project.\n\n"
-                f"Should '{new_node.name}' count as a delay to the plan?\n\n"
-                "Yes — its duration will show as slip (you'll be asked why).\n"
-                "No — it's a plan change; its Delay column stays blank.",
-                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
-            if reply == QMessageBox.StandardButton.Yes:
-                new_node.baseline_duration = 0
-                new_node.baseline_end = new_node.start_date
+        self._baseline_new_task_on_track(new_node)
 
         where = f" under '{parent_node.name}'" if parent_node else ""
         self.journal_event.emit(f"Added task '{new_node.name}'{where}")

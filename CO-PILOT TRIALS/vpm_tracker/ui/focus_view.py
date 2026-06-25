@@ -1,19 +1,14 @@
 """
-FocusView — replaces the Gantt chart in the Visuals tab.
+FocusView: a practical project cockpit.
 
-Two stacked panels, both rebuilt from the task tree every time the tab
-is shown:
-
-1. "What drives my end date" — the driver chain (critical path) rendered
-   as a sentence of pills, the single task to push on, and a watch list
-   of near-critical tasks with little slack.
-2. "This week" board — Overdue / Due this week / Starting next week,
-   each with owner names, so the user knows who to chase.
+It answers two questions:
+1. What timeline paths can move the project end date?
+2. What should I pay attention to right now, and what changed recently?
 """
 from datetime import datetime, timedelta
+from html import escape
 
-from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
-                             QFrame, QScrollArea)
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QScrollArea
 from PyQt6.QtCore import Qt, pyqtSignal
 
 from utils.workday_calculator import WorkdayCalculator
@@ -40,26 +35,30 @@ def _flatten(roots):
         for n in nodes:
             out.append(n)
             walk(n.children)
+
     walk(roots)
     return out
 
 
 def _link(node):
-    """Task name as a clickable anchor carrying the node id."""
-    return (f"<a href='{node.id}' style='color:inherit; "
-            f"text-decoration:none;'>{node.name}</a>")
+    return (
+        f"<a href='{node.id}' style='color:inherit; text-decoration:none;'>"
+        f"{escape(node.name)}</a>"
+    )
 
 
 class FocusView(QWidget):
-    # Emits the node id when the user clicks a task name → jump to Tracker.
     task_activated = pyqtSignal(str)
 
     def __init__(self, parent=None):
         super().__init__(parent)
         self.root_nodes = []
+        self.journal = []
+        self.base_font_size = 13
 
         outer = QVBoxLayout(self)
         outer.setContentsMargins(0, 0, 0, 0)
+
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setFrameShape(QFrame.Shape.NoFrame)
@@ -82,7 +81,8 @@ class FocusView(QWidget):
         frame = QFrame()
         frame.setStyleSheet(
             "QFrame { background: #f7f6f3; border-radius: 10px; }"
-            "QLabel { background: transparent; }")
+            "QLabel { background: transparent; }"
+        )
         lay = QVBoxLayout(frame)
         lay.setContentsMargins(14, 12, 14, 12)
         lay.setSpacing(8)
@@ -92,44 +92,44 @@ class FocusView(QWidget):
     def _clear(frame):
         lay = frame.layout()
         while lay.count():
-            it = lay.takeAt(0)
-            w = it.widget()
-            if w:
-                w.deleteLater()
+            item = lay.takeAt(0)
+            widget = item.widget()
+            if widget:
+                widget.deleteLater()
 
     def _label(self, html, size=13):
+        adjusted = max(9, size + (self.base_font_size - 13))
         lbl = QLabel(html)
         lbl.setWordWrap(True)
         lbl.setTextFormat(Qt.TextFormat.RichText)
-        lbl.setStyleSheet(f"font-size: {size}px; color: #202020;")
+        lbl.setStyleSheet(f"font-size: {adjusted}px; color: #202020;")
         lbl.setOpenExternalLinks(False)
         lbl.linkActivated.connect(self.task_activated.emit)
         return lbl
 
-    # ------------------------------------------------------------------
-    # Public API (mirrors the old GanttChartWidget)
-    # ------------------------------------------------------------------
-
-    def load_nodes(self, root_nodes):
+    def load_nodes(self, root_nodes, journal=None):
         self.root_nodes = root_nodes or []
+        if journal is not None:
+            self.journal = list(journal)
         self._rebuild()
 
-    # ------------------------------------------------------------------
-    # Driver-chain analysis
-    # ------------------------------------------------------------------
+    def set_display_font_size(self, size: int):
+        self.base_font_size = max(9, min(18, int(size)))
+        self._rebuild()
+
+    # ---------------- timeline logic ----------------
 
     def _driver_of(self, node, node_map):
-        """The task whose finish dictates this task's start (scheduler mirror)."""
         if node.predecessor_id and node.predecessor_id in node_map:
             return node_map[node.predecessor_id]
         if node.parent:
-            sibs = node.parent.children
+            siblings = node.parent.children
             try:
-                idx = sibs.index(node)
+                idx = siblings.index(node)
             except ValueError:
                 return None
             if not node.is_parallel and idx > 0:
-                return sibs[idx - 1]
+                return siblings[idx - 1]
             return self._driver_of(node.parent, node_map)
         try:
             idx = self.root_nodes.index(node)
@@ -141,7 +141,6 @@ class FocusView(QWidget):
 
     @staticmethod
     def _defining_leaf(node):
-        """Descend to the leaf whose end date defines this node's end."""
         while node.children:
             dated = [c for c in node.children if c.end_date]
             if not dated:
@@ -149,68 +148,78 @@ class FocusView(QWidget):
             node = max(dated, key=lambda c: c.end_date)
         return node
 
-    def _compute_chain(self, all_nodes, node_map):
-        leaves = [n for n in all_nodes if not n.children and n.end_date]
-        if not leaves:
-            return []
-        end_task = max(leaves, key=lambda n: n.end_date)
-        chain = [end_task]
-        seen = {end_task.id}
-        cur = end_task
+    def _chain_for_terminal(self, terminal, node_map):
+        chain = [terminal]
+        seen = {terminal.id}
+        current = terminal
         while True:
-            d = self._driver_of(cur, node_map)
-            if d is None:
+            driver = self._driver_of(current, node_map)
+            if driver is None:
                 break
-            d = self._defining_leaf(d)
-            if d.id in seen:
+            driver = self._defining_leaf(driver)
+            if driver.id in seen:
                 break
-            chain.append(d)
-            seen.add(d.id)
-            cur = d
+            chain.append(driver)
+            seen.add(driver.id)
+            current = driver
         chain.reverse()
         return chain
 
+    def _compute_chains(self, all_nodes, node_map, limit=3):
+        leaves = sorted(
+            (n for n in all_nodes if not n.children and n.end_date),
+            key=lambda n: n.end_date,
+            reverse=True,
+        )
+        chains = []
+        seen = set()
+        for leaf in leaves:
+            chain = self._chain_for_terminal(leaf, node_map)
+            key = tuple(n.id for n in chain)
+            if chain and key not in seen:
+                chains.append(chain)
+                seen.add(key)
+            if len(chains) >= limit:
+                break
+        return chains
+
     def _compute_slack(self, all_nodes, node_map, project_end):
-        """slack[node.id] = workdays its downstream terminal end sits before
-        the project end. 0 = critical: any slip moves the project."""
         successors = {}
-        for n in all_nodes:
-            d = self._driver_of(n, node_map)
-            if d is not None:
-                successors.setdefault(d.id, []).append(n)
+        for node in all_nodes:
+            driver = self._driver_of(node, node_map)
+            if driver is not None:
+                successors.setdefault(driver.id, []).append(node)
 
         memo = {}
 
-        def terminal_end(n, guard):
-            if n.id in memo:
-                return memo[n.id]
-            if n.id in guard:
-                return n.end_date or ""
-            guard.add(n.id)
-            succ = successors.get(n.id, [])
-            best = n.end_date or ""
-            for s in succ:
-                t = terminal_end(s, guard)
-                if t > best:
-                    best = t
-            memo[n.id] = best
+        def terminal_end(node, guard):
+            if node.id in memo:
+                return memo[node.id]
+            if node.id in guard:
+                return node.end_date or ""
+            guard.add(node.id)
+            best = node.end_date or ""
+            for succ in successors.get(node.id, []):
+                end = terminal_end(succ, guard)
+                if end > best:
+                    best = end
+            memo[node.id] = best
             return best
 
         slack = {}
-        for n in all_nodes:
-            t_end = terminal_end(n, set())
-            if not t_end or not project_end:
+        for node in all_nodes:
+            end = terminal_end(node, set())
+            if not end or not project_end:
                 continue
-            if t_end >= project_end:
-                slack[n.id] = 0
+            if end >= project_end:
+                slack[node.id] = 0
             else:
-                slack[n.id] = max(
-                    0, WorkdayCalculator.calculate_duration(t_end, project_end) - 1)
+                slack[node.id] = max(
+                    0, WorkdayCalculator.calculate_duration(end, project_end) - 1
+                )
         return slack
 
-    # ------------------------------------------------------------------
-    # Rendering
-    # ------------------------------------------------------------------
+    # ---------------- rendering ----------------
 
     def _rebuild(self):
         all_nodes = _flatten(self.root_nodes)
@@ -222,80 +231,87 @@ class FocusView(QWidget):
         self._clear(self.chain_panel)
         lay = self.chain_panel.layout()
 
-        chain = self._compute_chain(all_nodes, node_map)
-        if not chain:
+        chains = self._compute_chains(all_nodes, node_map, limit=3)
+        if not chains:
             lay.addWidget(self._label("No scheduled tasks yet."))
             return
 
         project_end = max((n.end_date or "" for n in all_nodes), default="")
         today = datetime.now().date()
+        primary = chains[0]
 
         lay.addWidget(self._label(
-            f"Project ends <b>{_fmt(project_end)}</b> because of this chain:",
-            size=14))
+            f"Project ends <b>{_fmt(project_end)}</b>. These are the top timeline paths:",
+            size=14,
+        ))
 
-        # Chain pills (first not-completed task = the active driver, in red)
-        push_task = next((t for t in chain if t.status != "Completed"), None)
-        pills = []
-        for t in chain:
-            if t.status == "Completed":
-                style = "background:#E1F5EE; color:#085041;"
-                tag = "done"
-            elif t is push_task:
-                style = ("background:#FCEBEB; color:#791F1F; "
-                         "border:2px solid #E24B4A;")
-                e = _parse(t.end_date)
-                if e and e >= today:
-                    left = WorkdayCalculator.calculate_duration(
-                        today.strftime(DATE_FMT), t.end_date)
-                    tag = f"{left}d left"
+        def render_chain(chain, rank):
+            push_task = next((t for t in chain if t.status != "Completed"), None)
+            pills = []
+            for task in chain:
+                if task.status == "Completed":
+                    style = "background:#E1F5EE; color:#085041;"
+                    tag = "done"
+                elif task is push_task and rank == 1:
+                    style = "background:#FCEBEB; color:#791F1F; border:2px solid #E24B4A;"
+                    end = _parse(task.end_date)
+                    if end and end >= today:
+                        left = WorkdayCalculator.calculate_duration(
+                            today.strftime(DATE_FMT), task.end_date
+                        )
+                        tag = f"{left}d left"
+                    else:
+                        tag = "overdue"
                 else:
-                    tag = "overdue"
-            else:
-                style = "background:#ECEAE4; color:#444441;"
-                tag = f"{t.duration}d"
-            pills.append(
-                f"<span style='{style} padding:3px 8px; border-radius:6px; "
-                f"white-space:nowrap;'>{_link(t)} · {tag}</span>")
-        lay.addWidget(self._label(
-            " <span style='color:#888'>→</span> ".join(pills)))
+                    style = "background:#ECEAE4; color:#444441;"
+                    tag = f"{task.duration}d"
+                pills.append(
+                    f"<span style='{style} padding:3px 8px; border-radius:6px; "
+                    f"white-space:nowrap;'>{_link(task)} - {tag}</span>"
+                )
+            name = "Critical path" if rank == 1 else f"Path {rank}"
+            chain_end = chain[-1].end_date if chain else project_end
+            return (
+                f"<b>{name}</b> <span style='color:#777'>(ends {_fmt(chain_end)})</span><br>"
+                + " <span style='color:#888'>-&gt;</span> ".join(pills)
+            )
 
-        # Push-here card
+        for rank, chain in enumerate(chains, start=1):
+            lay.addWidget(self._label(render_chain(chain, rank), size=13))
+
+        push_task = next((t for t in primary if t.status != "Completed"), None)
         if push_task:
-            owner = f" ({push_task.owner})" if push_task.owner else ""
+            owner = f" ({escape(push_task.owner)})" if push_task.owner else ""
             lay.addWidget(self._label(
-                f"<span style='color:#A32D2D; font-weight:bold;'>Push here:"
-                f"</span> <b>{_link(push_task)}</b>{owner} — every workday "
-                f"saved here moves the project end a day earlier.", size=13))
+                f"<span style='color:#A32D2D; font-weight:bold;'>Push here:</span> "
+                f"<b>{_link(push_task)}</b>{owner} - every workday saved here "
+                f"moves the project end a day earlier.",
+                size=13,
+            ))
 
-        # Watch list: near-critical leaves not already in the chain
         slack = self._compute_slack(all_nodes, node_map, project_end)
-        chain_ids = {t.id for t in chain}
+        chain_ids = {task.id for chain in chains for task in chain}
         watch = sorted(
-            (n for n in all_nodes
-             if not n.children and n.status != "Completed"
-             and n.id not in chain_ids and 0 < slack.get(n.id, 999) <= 5),
-            key=lambda n: slack[n.id])[:3]
+            (
+                n for n in all_nodes
+                if not n.children
+                and n.status != "Completed"
+                and n.id not in chain_ids
+                and 0 < slack.get(n.id, 999) <= 5
+            ),
+            key=lambda n: slack[n.id],
+        )[:3]
         if watch:
             rows = "<br>".join(
-                f"• {_link(n)} — only <b>{slack[n.id]}d</b> of slack"
-                for n in watch)
+                f"- {_link(n)} - only <b>{slack[n.id]}d</b> of slack"
+                for n in watch
+            )
             lay.addWidget(self._label(
-                f"<span style='color:#854F0B; font-weight:bold;'>Watch list:"
-                f"</span> if these slip past their slack they join the chain "
-                f"and push {_fmt(project_end)}.<br>{rows}", size=13))
-
-        # Permission to ignore the rest
-        open_leaves = [n for n in all_nodes
-                       if not n.children and n.status != "Completed"]
-        relaxed = [n for n in open_leaves
-                   if n.id not in chain_ids
-                   and n not in watch and slack.get(n.id, 999) > 5]
-        if relaxed:
-            lay.addWidget(self._label(
-                f"<span style='color:#888'>The other {len(relaxed)} open "
-                f"task(s) have comfortable slack — a few days there won't "
-                f"move your end date.</span>", size=12))
+                f"<span style='color:#854F0B; font-weight:bold;'>Watch list:</span> "
+                f"if these slip past their slack they join the chain and push "
+                f"{_fmt(project_end)}.<br>{rows}",
+                size=13,
+            ))
 
     def _build_week_panel(self, all_nodes):
         self._clear(self.week_panel)
@@ -306,29 +322,27 @@ class FocusView(QWidget):
         week_end = week_start + timedelta(days=6)
         next_start = week_start + timedelta(days=7)
         next_end = next_start + timedelta(days=6)
+        last_week_start = week_start - timedelta(days=7)
+        last_week_end = week_start - timedelta(days=1)
+        prior_week_start = week_start - timedelta(days=14)
+        prior_week_end = week_start - timedelta(days=8)
 
-        closed_start = week_start - timedelta(days=14)
-
-        overdue, due_week, starting, closed = [], [], [], []
-        for n in all_nodes:
-            if n.children:
+        overdue, due_week, starting = [], [], []
+        for node in all_nodes:
+            if node.children or node.status == "Completed":
                 continue
-            s, e = _parse(n.start_date), _parse(n.end_date)
-            if n.status == "Completed":
-                if e and closed_start <= e <= today:
-                    closed.append(n)
-                continue
-            if e and e < today:
-                overdue.append(n)
-            elif e and today <= e <= week_end:
-                due_week.append(n)
-            elif s and next_start <= s <= next_end:
-                starting.append(n)
+            start, end = _parse(node.start_date), _parse(node.end_date)
+            if end and end < today:
+                overdue.append(node)
+            elif end and today <= end <= week_end:
+                due_week.append(node)
+            elif start and next_start <= start <= next_end:
+                starting.append(node)
 
-        lay.addWidget(self._label("<b>This week</b>", size=14))
-
+        lay.addWidget(self._label("<b>Focus board</b>", size=14))
         cols = QHBoxLayout()
         cols.setSpacing(10)
+
         for title, color, items, date_of, prefix in (
             ("Overdue", "#A32D2D", sorted(overdue, key=lambda n: n.end_date or ""),
              lambda n: n.end_date, "due"),
@@ -336,34 +350,88 @@ class FocusView(QWidget):
              lambda n: n.end_date, "due"),
             ("Starting next week", "#0F6E56", sorted(starting, key=lambda n: n.start_date or ""),
              lambda n: n.start_date, "starts"),
-            (f"Closed since {closed_start.strftime('%b %d')}", "#5F5E5A",
-             sorted(closed, key=lambda n: n.end_date or "", reverse=True),
-             lambda n: n.end_date, "done"),
         ):
-            card = QFrame()
-            card.setStyleSheet(
-                "QFrame { background: #ffffff; border-radius: 8px; }"
-                "QLabel { background: transparent; }")
-            clay = QVBoxLayout(card)
-            clay.setContentsMargins(10, 8, 10, 8)
-            clay.setSpacing(4)
-            head = QLabel(title)
-            head.setStyleSheet(
-                f"font-size:12px; font-weight:bold; color:{color};")
-            clay.addWidget(head)
-            if items:
-                for n in items[:8]:
-                    owner = f" · {n.owner}" if n.owner else ""
-                    clay.addWidget(self._label(
-                        f"{_link(n)}<br><span style='color:#999; font-size:11px;'>"
-                        f"{prefix} {_fmt(date_of(n))}{owner}</span>", size=12))
-                if len(items) > 8:
-                    clay.addWidget(self._label(
-                        f"<span style='color:#999'>+{len(items) - 8} more…</span>",
-                        size=11))
-            else:
-                clay.addWidget(self._label(
-                    "<span style='color:#bbb'>none</span>", size=12))
-            clay.addStretch()
-            cols.addWidget(card, 1)
+            cols.addWidget(self._task_card(title, color, items, date_of, prefix), 1)
+
+        cols.addWidget(self._journal_card(
+            f"Changes last week ({last_week_start.strftime('%b %d')}-{last_week_end.strftime('%b %d')})",
+            self._journal_entries_between(last_week_start, last_week_end),
+        ), 1)
+        cols.addWidget(self._journal_card(
+            f"Changes week before ({prior_week_start.strftime('%b %d')}-{prior_week_end.strftime('%b %d')})",
+            self._journal_entries_between(prior_week_start, prior_week_end),
+        ), 1)
         lay.addLayout(cols)
+
+    def _task_card(self, title, color, items, date_of, prefix):
+        card = QFrame()
+        card.setStyleSheet(
+            "QFrame { background: #ffffff; border-radius: 8px; }"
+            "QLabel { background: transparent; }"
+        )
+        lay = QVBoxLayout(card)
+        lay.setContentsMargins(10, 8, 10, 8)
+        lay.setSpacing(4)
+        head = QLabel(title)
+        head.setStyleSheet(f"font-size:12px; font-weight:bold; color:{color};")
+        lay.addWidget(head)
+        if items:
+            for node in items[:8]:
+                owner = f" - {escape(node.owner)}" if node.owner else ""
+                lay.addWidget(self._label(
+                    f"{_link(node)}<br><span style='color:#999; font-size:11px;'>"
+                    f"{prefix} {_fmt(date_of(node))}{owner}</span>",
+                    size=12,
+                ))
+            if len(items) > 8:
+                lay.addWidget(self._label(
+                    f"<span style='color:#999'>+{len(items) - 8} more...</span>",
+                    size=11,
+                ))
+        else:
+            lay.addWidget(self._label("<span style='color:#bbb'>none</span>", size=12))
+        lay.addStretch()
+        return card
+
+    def _journal_card(self, title, entries):
+        card = QFrame()
+        card.setStyleSheet(
+            "QFrame { background: #ffffff; border-radius: 8px; }"
+            "QLabel { background: transparent; }"
+        )
+        lay = QVBoxLayout(card)
+        lay.setContentsMargins(10, 8, 10, 8)
+        lay.setSpacing(4)
+        head = QLabel(title)
+        head.setStyleSheet("font-size:12px; font-weight:bold; color:#5F5E5A;")
+        lay.addWidget(head)
+        if entries:
+            for entry in entries[:8]:
+                ts = escape(entry.get("ts", ""))
+                text = escape(entry.get("text", ""))
+                lay.addWidget(self._label(
+                    f"<span style='color:#999'>{ts}</span><br>{text}",
+                    size=11,
+                ))
+            if len(entries) > 8:
+                lay.addWidget(self._label(
+                    f"<span style='color:#999'>+{len(entries) - 8} more...</span>",
+                    size=11,
+                ))
+        else:
+            lay.addWidget(self._label("<span style='color:#bbb'>none</span>", size=12))
+        lay.addStretch()
+        return card
+
+    def _journal_entries_between(self, start, end):
+        entries = []
+        for entry in self.journal:
+            ts = entry.get("ts", "")
+            try:
+                day = datetime.strptime(ts[:10], DATE_FMT).date()
+            except (ValueError, TypeError):
+                continue
+            if start <= day <= end:
+                entries.append(entry)
+        entries.sort(key=lambda e: e.get("ts", ""), reverse=True)
+        return entries

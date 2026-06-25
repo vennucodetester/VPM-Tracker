@@ -10,9 +10,10 @@ Tracker + Visuals tab pair. MainWindow:
 import os
 from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QFileDialog, QMessageBox,
-    QTabWidget, QInputDialog, QMenu,
+    QTabWidget, QInputDialog, QMenu, QDialog, QPlainTextEdit,
+    QPushButton, QHBoxLayout, QLabel,
 )
-from PyQt6.QtGui import QAction
+from PyQt6.QtGui import QAction, QFont
 from PyQt6.QtCore import Qt, QSettings
 
 from ui.project_widget import ProjectWidget
@@ -33,6 +34,9 @@ class MainWindow(QMainWindow):
         self.unsaved_changes = False
         self.settings = QSettings("VPM", "VPMTracker")
         self._search_dialog = None
+        self._notepad_dialog = None
+        self._notepad_text = None
+        self.display_font_size = int(self.settings.value("display_font_size", 10) or 10)
 
         self.central_widget = QWidget()
         self.setCentralWidget(self.central_widget)
@@ -54,6 +58,7 @@ class MainWindow(QMainWindow):
         # Start with one empty project so the window isn't blank.
         self._add_project_from_data("Project 1", {}, [])
         self._seed_test_data(self.project_tabs.widget(0))
+        self._set_font_size(self.display_font_size)
 
         # Autosave: every 3 minutes, if a file path exists and there are
         # unsaved changes, save silently. A crash costs minutes, not a day.
@@ -86,6 +91,7 @@ class MainWindow(QMainWindow):
         index = self.project_tabs.addTab(proj, name)
         self.project_tabs.setCurrentIndex(index)
         proj.activate()
+        proj.set_display_font_size(self.display_font_size)
         return proj
 
     def _seed_test_data(self, proj: ProjectWidget):
@@ -255,9 +261,9 @@ class MainWindow(QMainWindow):
         search_action.triggered.connect(self._show_search)
         edit_menu.addAction(search_action)
 
-        capture_action = QAction("Quick Capture to Inbox…", self)
+        capture_action = QAction("Project Notepad…", self)
         capture_action.setShortcut("Ctrl+Space")
-        capture_action.triggered.connect(self._quick_capture)
+        capture_action.triggered.connect(self._show_notepad)
         edit_menu.addAction(capture_action)
 
         edit_menu.addSeparator()
@@ -278,6 +284,21 @@ class MainWindow(QMainWindow):
         calendar_action = QAction("Calendar Settings…", self)
         calendar_action.triggered.connect(self.open_calendar_settings)
         options_menu.addAction(calendar_action)
+
+        view_menu = menu.addMenu("View")
+        bigger_font_action = QAction("Increase Font Size", self)
+        bigger_font_action.setShortcut("Ctrl++")
+        bigger_font_action.triggered.connect(lambda: self._change_font_size(1))
+        view_menu.addAction(bigger_font_action)
+
+        smaller_font_action = QAction("Decrease Font Size", self)
+        smaller_font_action.setShortcut("Ctrl+-")
+        smaller_font_action.triggered.connect(lambda: self._change_font_size(-1))
+        view_menu.addAction(smaller_font_action)
+
+        reset_font_action = QAction("Reset Font Size", self)
+        reset_font_action.triggered.connect(lambda: self._set_font_size(10))
+        view_menu.addAction(reset_font_action)
 
     def _undo_active(self):
         proj = self.active_project()
@@ -312,19 +333,90 @@ class MainWindow(QMainWindow):
         proj.tree_view.recalculate_all_dates()
         proj.tree_view.refresh_entire_tree()
         if proj.inner_tabs.currentIndex() == 1:
-            proj.gantt_view.load_nodes(proj.tree_view.root_nodes)
+            proj.gantt_view.load_nodes(proj.tree_view.root_nodes, proj.journal)
 
-    def _quick_capture(self):
-        """One-line capture box → lands in the active project's Inbox."""
+    def _change_font_size(self, delta: int):
+        self._set_font_size(self.display_font_size + delta)
+
+    def _set_font_size(self, size: int):
+        self.display_font_size = max(8, min(18, int(size)))
+        self.settings.setValue("display_font_size", self.display_font_size)
+        font = QFont(self.font())
+        font.setPointSize(self.display_font_size)
+        self.setFont(font)
+        for proj in self.all_projects():
+            proj.set_display_font_size(self.display_font_size)
+        self.statusBar().showMessage(f"Font size: {self.display_font_size}", 1500)
+
+    def _show_notepad(self):
+        """Reusable scratchpad. Ctrl+Space opens it; closing only hides it."""
         proj = self.active_project()
         if not proj:
             return
-        text, ok = QInputDialog.getText(
-            self, "Quick capture",
-            "Thought / task (goes to Inbox, no dates):")
-        if ok and text.strip():
-            proj.tree_view.quick_capture(text)
-            self.statusBar().showMessage("Captured to Inbox", 2000)
+
+        if self._notepad_dialog is None:
+            self._build_notepad()
+
+        self._notepad_dialog.show()
+        self._notepad_dialog.raise_()
+        self._notepad_dialog.activateWindow()
+        self._notepad_text.setFocus()
+
+    def _build_notepad(self):
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Project Notepad")
+        dialog.resize(520, 380)
+        dialog.setModal(False)
+
+        layout = QVBoxLayout(dialog)
+        hint = QLabel(
+            "Type quick notes here. Close hides this window; your text stays until you clear it."
+        )
+        hint.setStyleSheet("color: #777;")
+        layout.addWidget(hint)
+
+        self._notepad_text = QPlainTextEdit()
+        self._notepad_text.setPlaceholderText(
+            "One idea per line works best. Use 'Send lines to Inbox' when ready."
+        )
+        layout.addWidget(self._notepad_text)
+
+        buttons = QHBoxLayout()
+        send_btn = QPushButton("Send lines to Inbox")
+        clear_btn = QPushButton("Clear")
+        close_btn = QPushButton("Close")
+        buttons.addWidget(send_btn)
+        buttons.addStretch()
+        buttons.addWidget(clear_btn)
+        buttons.addWidget(close_btn)
+        layout.addLayout(buttons)
+
+        send_btn.clicked.connect(self._send_notepad_to_inbox)
+        clear_btn.clicked.connect(self._notepad_text.clear)
+        close_btn.clicked.connect(dialog.hide)
+
+        def hide_instead_of_close(event):
+            event.ignore()
+            dialog.hide()
+
+        dialog.closeEvent = hide_instead_of_close
+        self._notepad_dialog = dialog
+
+    def _send_notepad_to_inbox(self):
+        proj = self.active_project()
+        if not proj or self._notepad_text is None:
+            return
+        lines = [
+            line.strip()
+            for line in self._notepad_text.toPlainText().splitlines()
+            if line.strip()
+        ]
+        if not lines:
+            return
+        for line in lines:
+            proj.tree_view.quick_capture(line)
+        self._notepad_text.clear()
+        self.statusBar().showMessage(f"Sent {len(lines)} line(s) to Inbox", 2000)
 
     # ---------------- global search ----------------
     def _show_search(self):

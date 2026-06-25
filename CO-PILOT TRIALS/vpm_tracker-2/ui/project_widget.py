@@ -9,7 +9,7 @@ settings against the active project.
 import uuid
 from typing import Dict, List
 
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QTabWidget, QSplitter
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QTabWidget, QSplitter, QDialog
 from PyQt6.QtCore import pyqtSignal, Qt
 from PyQt6.QtGui import QKeySequence, QShortcut
 
@@ -84,29 +84,37 @@ class ProjectWidget(QWidget):
         # same rows, same scroll, same collapse state — the timeline asks
         # the grid where each row is, so they can never drift apart.
         self.timeline = TimelineContainer(self.tree_view)
-        # Per-project notes pad, docked on the right. Hidden until the user
-        # opens it (Ctrl+Space). Lives outside the task tree entirely.
-        self.notes_panel = NotesPanel()
-        self.notes_panel.setVisible(False)
         tracker_split = QSplitter(Qt.Orientation.Horizontal)
         tracker_split.addWidget(self.tree_view)
         tracker_split.addWidget(self.timeline)
-        tracker_split.addWidget(self.notes_panel)
         # The grid (left) is the home view and never collapses. The bar chart
         # and the notes pad are BOTH collapsible — drag their handle fully in,
         # or use the chart's Hide button.
         tracker_split.setCollapsible(0, False)
         tracker_split.setCollapsible(1, True)
-        tracker_split.setCollapsible(2, True)
         # Default layout: grid dominant, bar chart a slim strip, notes hidden.
         # Extra width always goes to the grid; the user widens the chart or pad
         # only when they want to.
         tracker_split.setStretchFactor(0, 1)
         tracker_split.setStretchFactor(1, 0)
-        tracker_split.setStretchFactor(2, 0)
-        tracker_split.setSizes([1000, 240, 0])
+        tracker_split.setSizes([1000, 240])
         self.tracker_split = tracker_split
         self.inner_tabs.addTab(tracker_split, "Tracker")
+
+        self.notes_dialog = QDialog(self)
+        self.notes_dialog.setWindowTitle(f"Project Notepad - {self.name}")
+        self.notes_dialog.resize(520, 520)
+        self.notes_dialog.setModal(False)
+        notes_layout = QVBoxLayout(self.notes_dialog)
+        notes_layout.setContentsMargins(0, 0, 0, 0)
+        self.notes_panel = NotesPanel()
+        notes_layout.addWidget(self.notes_panel)
+
+        def hide_notes(event):
+            event.ignore()
+            self.notes_dialog.hide()
+
+        self.notes_dialog.closeEvent = hide_notes
 
         # Promoting a note into the grid removes it from the pad; pad edits
         # flow into the same undo history as task changes.
@@ -129,17 +137,16 @@ class ProjectWidget(QWidget):
         self.tree_view.jump_to_node_id(node_id)
 
     def show_notes_and_capture(self):
-        """Reveal the docked notes pad on the Tracker tab and focus the
-        fast-capture box. Wired to Ctrl+Space and the search 'open note'."""
+        """Show the notes pad as a floating notepad window.
+
+        Closing it only hides it; the same widget stays alive, so its text
+        remains in the background and is still saved with the project.
+        """
         self.inner_tabs.setCurrentIndex(0)  # Tracker tab
-        self.notes_panel.setVisible(True)
-        # Give the pad a usable width, taken from the GRID so the bar chart
-        # doesn't move when the pad opens.
-        sizes = self.tracker_split.sizes()
-        if len(sizes) == 3 and sizes[2] < 80:
-            notes_w = 300
-            grid_w = max(320, sizes[0] - notes_w)
-            self.tracker_split.setSizes([grid_w, sizes[1], notes_w])
+        self.notes_dialog.setWindowTitle(f"Project Notepad - {self.name}")
+        self.notes_dialog.show()
+        self.notes_dialog.raise_()
+        self.notes_dialog.activateWindow()
         self.notes_panel.focus_capture()
 
     # ---- lifecycle ----
