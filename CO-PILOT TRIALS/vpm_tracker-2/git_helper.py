@@ -1,91 +1,306 @@
 """
-Git Helper v2 — Simple Git GUI with built-in instructions.
-Pull, Stage All, Commit, Push — that's it for daily use.
-Auto-sets up new repos when you paste a GitHub link.
+Git Helper v3 - Smart Sync + Safe Restore.
+
+A small PyQt6 app for non-technical GitHub workflows:
+- one Sync button for normal work,
+- plain-English status,
+- non-interactive git commands,
+- safe restore points that create new commits instead of rewriting history.
 """
-import sys
-import os
-import subprocess
 import datetime
+import os
+import re
+import subprocess
+import sys
+from dataclasses import dataclass, field
 
+from PyQt6.QtCore import QObject, Qt, QThread, QTimer, pyqtSignal
+from PyQt6.QtGui import QBrush, QColor, QFont, QPalette
 from PyQt6.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-    QSplitter, QGroupBox, QPushButton, QLineEdit, QPlainTextEdit,
-    QTreeWidget, QTreeWidgetItem, QLabel, QDialog, QFileDialog,
-    QMessageBox, QInputDialog, QTextEdit,
+    QApplication,
+    QComboBox,
+    QDialog,
+    QFormLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMainWindow,
+    QMessageBox,
+    QPlainTextEdit,
+    QPushButton,
+    QSplitter,
+    QTextEdit,
+    QTreeWidget,
+    QTreeWidgetItem,
+    QVBoxLayout,
+    QWidget,
+    QInputDialog,
 )
-from PyQt6.QtGui import QFont, QColor, QBrush, QPalette
-from PyQt6.QtCore import Qt
 
-
-# ============================================================================
-# HOW TO USE — always-visible instructions
-# ============================================================================
 
 INSTRUCTIONS = """\
 HOW TO USE THIS APP
 
-DAILY WORKFLOW (do these in order):
-  1. Click [Pull] — gets the latest files from GitHub
-  2. Do your work (edit files, run your app, etc.)
-  3. Click [Stage All] — prepares all your changes
-  4. Type a short note in the commit box
-     (e.g. "updated log file")
-  5. Click [Commit] — saves your changes locally
-  6. Click [Push] — sends everything to GitHub
+DAILY WORKFLOW:
+  1. Type a short note if you want one.
+  2. Click [Sync].
 
-FIRST TIME SETUP (new project folder):
-  1. Put this app (GitHelper.exe) in your project folder
-  2. Open the app — it will ask for your GitHub link
-  3. Paste the link
-     (e.g. https://github.com/you/project.git)
-  4. Click OK — done. Everything is set up.
+Sync saves your changes, gets GitHub's latest files, and sends your work up.
+If nothing changed, it simply says everything is already up to date.
 
-THAT'S IT. The buttons below the line are advanced
-and you can ignore them.
+RESTORE POINTS:
+  - Every successful Sync is a save point.
+  - Snapshot Now creates a named save point before risky work.
+  - Go Back safely brings an old version back as a new change.
+
+If a conflict appears, choose Keep Mine or Keep GitHub's for each file.
+Advanced buttons are still available, but daily use should only need Sync.
 """
 
 
-# ============================================================================
-# GIT RUNNER — subprocess wrapper for git CLI
-# ============================================================================
+@dataclass
+class GitResult:
+    success: bool
+    output: str = ""
+    friendly: str = ""
+
+
+@dataclass
+class RepoState:
+    branch: str = "main"
+    dirty: bool = False
+    conflicted: bool = False
+    ahead: int = 0
+    behind: int = 0
+    has_remote: bool = False
+    upstream: bool = False
+    remote_checked: bool = False
+    remote_reachable: bool = True
+    remote_error: str = ""
+    changed_files: list = field(default_factory=list)
+
+
+FRIENDLY_ERRORS = [
+    (
+        ("would be overwritten by merge", "local changes would be overwritten"),
+        "Your local changes need to be saved before GitHub's changes can be brought in. Sync can usually fix this by saving first.",
+    ),
+    (
+        ("fetch first", "rejected", "remote contains work"),
+        "GitHub has newer changes. Sync will get those first, then send your work again.",
+    ),
+    (
+        ("divergent branches", "need to specify how to reconcile"),
+        "Your computer and GitHub both have new work. Sync will combine them without opening a text editor.",
+    ),
+    (
+        ("please tell me who you are", "unable to auto-detect email address"),
+        "Git needs your name and email once before it can save changes.",
+    ),
+    (
+        ("authentication failed", "could not read username", "terminal prompts disabled", "repository not found"),
+        "You need to sign in to GitHub once. Open GitHub Desktop or run a GitHub sign-in from a terminal, then try Sync again.",
+    ),
+    (
+        ("unrelated histories",),
+        "This folder and the GitHub repo were started separately. Setup will combine them safely.",
+    ),
+    (
+        ("index.lock",),
+        "Git is locked, often because OneDrive or another Git command touched it. Close other Git tools and try again.",
+    ),
+    (
+        ("conflict", "merge conflict", "unmerged"),
+        "The same file changed in two places. Choose which version to keep, then Sync can finish.",
+    ),
+]
+
+
+def friendly_error(output):
+    text = (output or "").lower()
+    for needles, message in FRIENDLY_ERRORS:
+        if any(needle in text for needle in needles):
+            return message
+    return "Something unexpected happened. The technical details are below."
+
 
 class GitRunner:
-    """Wraps all git operations via subprocess. Returns (success, output) tuples."""
+    """Small, non-interactive wrapper around git."""
 
     def __init__(self, repo_path):
         self.repo_path = repo_path
+        self.last_remote_checked = False
+        self.last_remote_reachable = True
+        self.last_remote_error = ""
 
-    def _run(self, args, timeout=30):
-        """Run a git command and return (success: bool, output: str)."""
+    def _git_env(self):
+        env = os.environ.copy()
+        env.update(
+            {
+                "GIT_TERMINAL_PROMPT": "0",
+                "GIT_ASKPASS": "echo",
+                "GIT_EDITOR": "true",
+                "GIT_MERGE_AUTOEDIT": "no",
+            }
+        )
+        return env
+
+    def _run(self, args, timeout=45):
         try:
-            kwargs = dict(
-                cwd=self.repo_path,
-                capture_output=True,
-                text=True,
-                timeout=timeout,
-            )
+            kwargs = {
+                "cwd": self.repo_path or None,
+                "capture_output": True,
+                "text": True,
+                "timeout": timeout,
+                "env": self._git_env(),
+            }
             if sys.platform == "win32":
                 kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW
             result = subprocess.run(["git"] + args, **kwargs)
-            output = (result.stdout or "") + (result.stderr or "")
-            return (result.returncode == 0, output.strip())
+            output = ((result.stdout or "") + (result.stderr or "")).strip()
+            return GitResult(result.returncode == 0, output, friendly_error(output))
         except subprocess.TimeoutExpired:
-            return (False, "Command timed out. If push/pull needs auth, run git from terminal first.")
+            return GitResult(
+                False,
+                "Command timed out.",
+                "Git took too long. If this was a GitHub login step, sign in once and try again.",
+            )
         except FileNotFoundError:
-            return (False, "git is not installed or not in PATH.")
+            return GitResult(
+                False,
+                "git is not installed or not in PATH.",
+                "Git is not installed. Install Git for Windows, then reopen this app.",
+            )
+
+    def git_installed(self):
+        return self._run(["--version"]).success
 
     def is_git_repo(self):
-        ok, _ = self._run(["rev-parse", "--is-inside-work-tree"])
-        return ok
+        return self._run(["rev-parse", "--is-inside-work-tree"]).success
 
-    # --- Daily operations ---
+    def init(self):
+        return self._run(["init"])
 
-    def pull(self):
-        return self._run(["pull"], timeout=60)
+    def current_branch(self):
+        result = self._run(["rev-parse", "--abbrev-ref", "HEAD"])
+        return result.output.strip() if result.success and result.output.strip() != "HEAD" else "main"
 
-    def push(self):
-        return self._run(["push"], timeout=60)
+    def set_branch_main(self):
+        return self._run(["branch", "-M", "main"])
+
+    def config_get(self, key, global_scope=False):
+        args = ["config"]
+        if global_scope:
+            args.append("--global")
+        args.append(key)
+        return self._run(args)
+
+    def config_set(self, key, value, global_scope=False):
+        args = ["config"]
+        if global_scope:
+            args.append("--global")
+        args += [key, value]
+        return self._run(args)
+
+    def ensure_credential_helper(self):
+        if sys.platform != "win32":
+            return GitResult(True, "")
+        current = self.config_get("credential.helper", global_scope=True)
+        if current.success and current.output.strip():
+            return current
+        result = self.config_set("credential.helper", "manager", global_scope=True)
+        if result.success:
+            return result
+        return self.config_set("credential.helper", "manager-core", global_scope=True)
+
+    def remotes(self):
+        return self._run(["remote", "-v"])
+
+    def has_remote(self):
+        return bool(self.remotes().output.strip())
+
+    def add_or_set_origin(self, url):
+        if "origin" in self.remotes().output:
+            return self._run(["remote", "set-url", "origin", url])
+        return self._run(["remote", "add", "origin", url])
+
+    def fetch(self):
+        result = self._run(["fetch", "--prune", "origin"], timeout=25)
+        self.last_remote_checked = True
+        self.last_remote_reachable = result.success
+        self.last_remote_error = "" if result.success else result.friendly
+        return result
+
+    def remote_branch_exists(self, branch="main"):
+        result = self._run(["ls-remote", "--heads", "origin", branch], timeout=25)
+        return result.success and bool(result.output.strip())
+
+    def remote_tracking_exists(self, branch=None):
+        branch = branch or self.current_branch()
+        return self._run(["rev-parse", "--verify", f"origin/{branch}"]).success
+
+    def upstream_exists(self):
+        return self._run(["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"]).success
+
+    def status_porcelain(self):
+        return self._run(["status", "--porcelain=v1"])
+
+    def changed_files(self):
+        result = self.status_porcelain()
+        files = []
+        conflicted = False
+        if not result.success:
+            return files, conflicted
+        for line in result.output.splitlines():
+            if len(line) < 4:
+                continue
+            code = line[:2]
+            path = line[3:]
+            if code in ("UU", "AA", "DD", "AU", "UA", "DU", "UD") or "U" in code:
+                conflicted = True
+            files.append((code, path))
+        return files, conflicted
+
+    def dirty(self):
+        return bool(self.status_porcelain().output.strip())
+
+    def merge_in_progress(self):
+        return self._run(["rev-parse", "-q", "--verify", "MERGE_HEAD"]).success
+
+    def has_unresolved_conflicts(self):
+        _, conflicted = self.changed_files()
+        return conflicted or self.merge_in_progress()
+
+    def ahead_behind(self):
+        if not self.upstream_exists():
+            return 0, 0
+        result = self._run(["rev-list", "--left-right", "--count", "HEAD...@{u}"])
+        if not result.success:
+            return 0, 0
+        parts = result.output.split()
+        if len(parts) >= 2 and parts[0].isdigit() and parts[1].isdigit():
+            return int(parts[0]), int(parts[1])
+        return 0, 0
+
+    def repo_state(self, fetch_remote=False):
+        files, conflicted = self.changed_files()
+        if fetch_remote and self.has_remote():
+            self.fetch()
+        ahead, behind = self.ahead_behind()
+        return RepoState(
+            branch=self.current_branch(),
+            dirty=bool(files),
+            conflicted=conflicted,
+            ahead=ahead,
+            behind=behind,
+            has_remote=self.has_remote(),
+            upstream=self.upstream_exists(),
+            remote_checked=self.last_remote_checked,
+            remote_reachable=self.last_remote_reachable,
+            remote_error=self.last_remote_error,
+            changed_files=files,
+        )
 
     def stage_all(self):
         return self._run(["add", "-A"])
@@ -99,33 +314,41 @@ class GitRunner:
     def commit(self, message):
         return self._run(["commit", "-m", message])
 
-    def status(self):
-        return self._run(["status", "--porcelain=v1"])
+    def commit_if_needed(self, message):
+        if not self.dirty():
+            return GitResult(True, "No local changes to save.")
+        staged = self.stage_all()
+        if not staged.success:
+            return staged
+        committed = self.commit(message)
+        if committed.success:
+            return committed
+        if "nothing to commit" in committed.output.lower():
+            return GitResult(True, committed.output, "No local changes to save.")
+        return committed
 
-    def current_branch(self):
-        return self._run(["rev-parse", "--abbrev-ref", "HEAD"])
+    def pull_no_edit(self, allow_unrelated=False):
+        args = ["pull", "--no-edit", "--no-rebase", "origin", self.current_branch()]
+        if allow_unrelated:
+            args.insert(1, "--allow-unrelated-histories")
+        return self._run(args, timeout=45)
 
-    def branch_info(self):
-        return self._run(["branch", "-vv"])
+    def merge_fetched_remote(self):
+        branch = self.current_branch()
+        if not self.remote_tracking_exists(branch):
+            return GitResult(True, "No GitHub branch exists yet.")
+        return self._run(["merge", "--no-edit", f"origin/{branch}"], timeout=45)
 
-    def log(self, count=20):
-        return self._run(["log", "--oneline", f"-n{count}"])
+    def push(self):
+        if self.upstream_exists():
+            return self._run(["push"], timeout=45)
+        return self._run(["push", "-u", "origin", self.current_branch()], timeout=45)
 
-    # --- First-time setup ---
+    def stash_save(self, message="Temporary save before Sync"):
+        return self._run(["stash", "push", "-u", "-m", message])
 
-    def init(self):
-        return self._run(["init"])
-
-    def add_remote(self, url):
-        return self._run(["remote", "add", "origin", url])
-
-    def set_branch_main(self):
-        return self._run(["branch", "-M", "main"])
-
-    def push_first(self):
-        return self._run(["push", "-u", "origin", "main"], timeout=60)
-
-    # --- Advanced (hidden by default) ---
+    def stash_pop(self):
+        return self._run(["stash", "pop"])
 
     def diff_file(self, filepath):
         return self._run(["diff", "--", filepath])
@@ -133,205 +356,315 @@ class GitRunner:
     def diff_staged_file(self, filepath):
         return self._run(["diff", "--cached", "--", filepath])
 
-    def stash_save(self, message=""):
-        args = ["stash", "push"]
-        if message:
-            args += ["-m", message]
-        return self._run(args)
+    def log(self, count=20):
+        return self._run(["log", "--oneline", f"-n{count}"])
 
-    def stash_list(self):
-        return self._run(["stash", "list"])
-
-    def stash_pop(self):
-        return self._run(["stash", "pop"])
+    def restore_points(self, count=50):
+        fmt = "%H%x1f%ad%x1f%s"
+        return self._run(["log", f"--pretty=format:{fmt}", "--date=local", f"-n{count}"])
 
     def create_tag(self, name, message=""):
-        args = ["tag", "-a", name]
-        if message:
-            args += ["-m", message]
-        else:
-            args += ["-m", name]
-        return self._run(args)
+        msg = message or name
+        return self._run(["tag", "-a", name, "-m", msg])
 
     def list_tags(self):
         return self._run(["tag", "--sort=-creatordate"])
 
     def push_tags(self):
-        return self._run(["push", "--tags"], timeout=60)
+        return self._run(["push", "--tags"], timeout=90)
 
+    def checkout_ours(self, file_path):
+        return self._run(["checkout", "--ours", "--", file_path])
 
-# ============================================================================
-# DIFF DIALOG — modal file diff viewer
-# ============================================================================
+    def checkout_theirs(self, file_path):
+        return self._run(["checkout", "--theirs", "--", file_path])
+
+    def conflict_sides(self, file_path):
+        result = self._run(["ls-files", "-u", "--", file_path])
+        if not result.success:
+            return True, True
+        stages = set()
+        for line in result.output.splitlines():
+            parts = line.split()
+            if len(parts) >= 3 and parts[2].isdigit():
+                stages.add(parts[2])
+        return "2" in stages, "3" in stages
+
+    def remove_file(self, file_path):
+        return self._run(["rm", "-f", "--", file_path])
+
+    def merge_abort(self):
+        return self._run(["merge", "--abort"])
+
+    def checkout_file_from_commit(self, commit_hash, file_path):
+        return self._run(["checkout", commit_hash, "--", file_path])
+
+    def tracked_files(self, ref="HEAD"):
+        result = self._run(["ls-tree", "-r", "--name-only", ref])
+        if not result.success:
+            return []
+        return [line.strip() for line in result.output.splitlines() if line.strip()]
+
+    def remove_tracked_file(self, file_path):
+        return self._run(["rm", "-f", "--", file_path])
+
 
 class DiffDialog(QDialog):
     def __init__(self, filename, diff_text, parent=None):
         super().__init__(parent)
         self.setWindowTitle(f"Diff: {filename}")
-        self.resize(750, 520)
+        self.resize(780, 540)
         layout = QVBoxLayout(self)
         text_edit = QPlainTextEdit()
         text_edit.setReadOnly(True)
         text_edit.setFont(QFont("Consolas", 10))
         text_edit.setPlainText(diff_text)
         layout.addWidget(text_edit)
-        btn_close = QPushButton("Close")
-        btn_close.clicked.connect(self.close)
-        layout.addWidget(btn_close)
+        close = QPushButton("Close")
+        close.clicked.connect(self.close)
+        layout.addWidget(close)
 
 
-# ============================================================================
-# MAIN WINDOW — Simplified Git Helper
-# ============================================================================
+class RestoreDialog(QDialog):
+    def __init__(self, files, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Go Back to a Version")
+        self.resize(520, 160)
+        self.scope = "whole"
+        self.file_path = ""
+
+        layout = QVBoxLayout(self)
+        form = QFormLayout()
+        self.scope_combo = QComboBox()
+        self.scope_combo.addItems(["Whole project", "One file"])
+        self.file_combo = QComboBox()
+        self.file_combo.addItems(files)
+        self.file_combo.setEnabled(False)
+        self.scope_combo.currentIndexChanged.connect(
+            lambda idx: self.file_combo.setEnabled(idx == 1)
+        )
+        form.addRow("Restore:", self.scope_combo)
+        form.addRow("File:", self.file_combo)
+        layout.addLayout(form)
+
+        row = QHBoxLayout()
+        ok = QPushButton("Continue")
+        cancel = QPushButton("Cancel")
+        ok.clicked.connect(self.accept)
+        cancel.clicked.connect(self.reject)
+        row.addStretch()
+        row.addWidget(ok)
+        row.addWidget(cancel)
+        layout.addLayout(row)
+
+    def accept(self):
+        self.scope = "file" if self.scope_combo.currentIndex() == 1 else "whole"
+        self.file_path = self.file_combo.currentText()
+        super().accept()
+
+
+class IdentityDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Tell Git Who You Are")
+        self.resize(430, 150)
+        layout = QVBoxLayout(self)
+        label = QLabel("Git needs your name and email once before it can save changes.")
+        label.setWordWrap(True)
+        layout.addWidget(label)
+        form = QFormLayout()
+        self.name_edit = QLineEdit()
+        self.email_edit = QLineEdit()
+        form.addRow("Name:", self.name_edit)
+        form.addRow("Email:", self.email_edit)
+        layout.addLayout(form)
+        row = QHBoxLayout()
+        ok = QPushButton("Save")
+        cancel = QPushButton("Cancel")
+        ok.clicked.connect(self.accept)
+        cancel.clicked.connect(self.reject)
+        row.addStretch()
+        row.addWidget(ok)
+        row.addWidget(cancel)
+        layout.addLayout(row)
+
+    def values(self):
+        return self.name_edit.text().strip(), self.email_edit.text().strip()
+
+
+class GitTaskWorker(QObject):
+    progress = pyqtSignal(str)
+    details = pyqtSignal(str)
+    finished = pyqtSignal(dict)
+
+    def __init__(self, task_fn):
+        super().__init__()
+        self.task_fn = task_fn
+
+    def run(self):
+        try:
+            result = self.task_fn(self.progress.emit, self.details.emit)
+        except Exception as exc:
+            result = {
+                "success": False,
+                "message": "Something unexpected happened while Git was working.",
+                "details": str(exc),
+            }
+        self.finished.emit(result)
+
 
 class GitHelperWindow(QMainWindow):
-    def __init__(self, repo_path):
+    task_result_ready = pyqtSignal(dict)
+    worker_cleanup_ready = pyqtSignal()
+
+    def __init__(self, repo_path, startup_notes=None):
         super().__init__()
         self.repo_path = repo_path
         self.git = GitRunner(repo_path)
-        self.setWindowTitle(f"Git Helper — {os.path.basename(repo_path)}")
-        self.resize(1000, 680)
+        self.onedrive_warning_dismissed = False
+        self.worker_thread = None
+        self.worker = None
+        self.pending_finished_fn = None
+        self.worker_disable_sync = True
+        self.setWindowTitle(f"Git Helper - {os.path.basename(repo_path)}")
+        self.resize(1120, 760)
+        self.task_result_ready.connect(
+            self._handle_task_result,
+            Qt.ConnectionType.QueuedConnection,
+        )
+        self.worker_cleanup_ready.connect(
+            self._clear_worker,
+            Qt.ConnectionType.QueuedConnection,
+        )
         self._build_ui()
+        if startup_notes:
+            self.write_details("Startup checks:\n" + "\n".join(startup_notes))
         self.refresh_status()
 
     def _build_ui(self):
         central = QWidget()
         self.setCentralWidget(central)
         main_layout = QVBoxLayout(central)
-        main_layout.setContentsMargins(6, 6, 6, 6)
+        main_layout.setContentsMargins(8, 8, 8, 8)
 
-        # --- Top bar: branch info + refresh ---
         top_bar = QHBoxLayout()
+        self.status_label = QLabel("Status: Checking...")
+        self.status_label.setFont(QFont("Segoe UI", 12, weight=QFont.Weight.Bold))
         self.branch_label = QLabel("Branch: ...")
-        self.branch_label.setFont(QFont("Consolas", 10))
+        self.cloud_label = QLabel("")
+        self.cloud_label.setStyleSheet("color: #8a5a00; font-weight: bold;")
+        refresh = QPushButton("Refresh")
+        refresh.clicked.connect(self.do_refresh)
+        top_bar.addWidget(self.status_label, stretch=2)
         top_bar.addWidget(self.branch_label)
+        top_bar.addWidget(self.cloud_label)
         top_bar.addStretch()
-        btn_refresh = QPushButton("Refresh")
-        btn_refresh.clicked.connect(self.refresh_status)
-        top_bar.addWidget(btn_refresh)
+        top_bar.addWidget(refresh)
         main_layout.addLayout(top_bar)
 
-        # --- Splitter: left (actions) | right (instructions + output) ---
         splitter = QSplitter(Qt.Orientation.Horizontal)
         main_layout.addWidget(splitter, stretch=1)
 
-        # ============ LEFT PANEL ============
         left = QWidget()
         left_layout = QVBoxLayout(left)
-        left_layout.setContentsMargins(0, 0, 4, 0)
+        left_layout.setContentsMargins(0, 0, 6, 0)
 
-        # --- Main buttons (the daily workflow) ---
-        grp_main = QGroupBox("Daily Workflow")
-        main_btns_lay = QVBoxLayout(grp_main)
+        sync_group = QGroupBox("Daily Workflow")
+        sync_layout = QVBoxLayout(sync_group)
+        self.commit_msg = QLineEdit()
+        self.commit_msg.setPlaceholderText("Optional note, such as 'updated schedule'")
+        sync_layout.addWidget(self.commit_msg)
+        self.btn_sync = QPushButton("Sync")
+        self.btn_sync.setMinimumHeight(46)
+        self.btn_sync.setStyleSheet("font-size: 14pt; font-weight: bold; background: #e9f7ef;")
+        self.btn_sync.clicked.connect(self.do_sync)
+        sync_layout.addWidget(self.btn_sync)
+        self.progress_pane = QPlainTextEdit()
+        self.progress_pane.setReadOnly(True)
+        self.progress_pane.setMaximumHeight(130)
+        self.progress_pane.setFont(QFont("Segoe UI", 9))
+        sync_layout.addWidget(self.progress_pane)
 
-        row_remote = QHBoxLayout()
-        self.btn_pull = QPushButton("1. Pull")
-        self.btn_push = QPushButton("6. Push")
-        self.btn_pull.clicked.connect(self.do_pull)
-        self.btn_push.clicked.connect(self.do_push)
-        self.btn_pull.setMinimumHeight(32)
-        self.btn_push.setMinimumHeight(32)
-        row_remote.addWidget(self.btn_pull)
-        row_remote.addWidget(self.btn_push)
-        main_btns_lay.addLayout(row_remote)
-
-        # File list
         self.file_list = QTreeWidget()
         self.file_list.setHeaderLabels(["Status", "File"])
-        self.file_list.setColumnWidth(0, 50)
-        self.file_list.setFont(QFont("Consolas", 9))
+        self.file_list.setColumnWidth(0, 110)
         self.file_list.setRootIsDecorated(False)
-        self.file_list.setMaximumHeight(180)
-        main_btns_lay.addWidget(self.file_list)
+        self.file_list.setFont(QFont("Segoe UI", 9))
+        sync_layout.addWidget(self.file_list)
+        left_layout.addWidget(sync_group)
 
-        # Stage All button (the main one)
-        self.btn_stage_all = QPushButton("3. Stage All")
-        self.btn_stage_all.setMinimumHeight(32)
-        self.btn_stage_all.clicked.connect(self.do_stage_all)
-        main_btns_lay.addWidget(self.btn_stage_all)
+        restore_group = QGroupBox("Restore Points")
+        restore_layout = QVBoxLayout(restore_group)
+        self.restore_list = QTreeWidget()
+        self.restore_list.setHeaderLabels(["Date / Time", "Note", "Details"])
+        self.restore_list.setColumnWidth(0, 180)
+        self.restore_list.setColumnWidth(1, 220)
+        self.restore_list.setRootIsDecorated(False)
+        restore_layout.addWidget(self.restore_list)
+        restore_row = QHBoxLayout()
+        snapshot = QPushButton("Snapshot Now")
+        restore = QPushButton("Go Back")
+        snapshot.clicked.connect(self.do_snapshot)
+        restore.clicked.connect(self.do_restore)
+        restore_row.addWidget(snapshot)
+        restore_row.addWidget(restore)
+        restore_layout.addLayout(restore_row)
+        left_layout.addWidget(restore_group)
 
-        # Commit row
-        self.commit_msg = QLineEdit()
-        self.commit_msg.setPlaceholderText("4. Type a short note here...")
-        main_btns_lay.addWidget(self.commit_msg)
-        self.btn_commit = QPushButton("5. Commit")
-        self.btn_commit.setMinimumHeight(32)
-        self.btn_commit.clicked.connect(self.do_commit)
-        self.commit_msg.textChanged.connect(
-            lambda txt: self.btn_commit.setEnabled(bool(txt.strip()))
-        )
-        self.btn_commit.setEnabled(False)
-        main_btns_lay.addWidget(self.btn_commit)
-
-        left_layout.addWidget(grp_main)
-
-        # --- Advanced section (collapsed by default) ---
         self.btn_show_advanced = QPushButton("Show Advanced Options...")
-        self.btn_show_advanced.setStyleSheet("color: #666; font-size: 9pt;")
         self.btn_show_advanced.clicked.connect(self._toggle_advanced)
         left_layout.addWidget(self.btn_show_advanced)
-
         self.grp_advanced = QGroupBox("Advanced")
-        adv_lay = QVBoxLayout(self.grp_advanced)
-
-        row_adv1 = QHBoxLayout()
-        btn_stage_sel = QPushButton("Stage Selected")
-        btn_unstage = QPushButton("Unstage")
-        btn_log = QPushButton("View Log")
-        btn_stage_sel.clicked.connect(self.do_stage_selected)
-        btn_unstage.clicked.connect(self.do_unstage_selected)
-        btn_log.clicked.connect(self.do_view_log)
-        row_adv1.addWidget(btn_stage_sel)
-        row_adv1.addWidget(btn_unstage)
-        row_adv1.addWidget(btn_log)
-        adv_lay.addLayout(row_adv1)
-
-        row_adv2 = QHBoxLayout()
-        btn_diff = QPushButton("Diff")
-        btn_stash = QPushButton("Stash")
-        btn_stash_pop = QPushButton("Pop Stash")
-        btn_diff.clicked.connect(self.do_diff_selected)
-        btn_stash.clicked.connect(self.do_stash_save)
-        btn_stash_pop.clicked.connect(self.do_stash_pop)
-        row_adv2.addWidget(btn_diff)
-        row_adv2.addWidget(btn_stash)
-        row_adv2.addWidget(btn_stash_pop)
-        adv_lay.addLayout(row_adv2)
-
-        row_adv3 = QHBoxLayout()
-        btn_tag = QPushButton("Create Tag")
-        btn_push_tags = QPushButton("Push Tags")
-        btn_tag.clicked.connect(self.do_create_tag)
-        btn_push_tags.clicked.connect(self.do_push_tags)
-        row_adv3.addWidget(btn_tag)
-        row_adv3.addWidget(btn_push_tags)
-        adv_lay.addLayout(row_adv3)
-
+        adv = QVBoxLayout(self.grp_advanced)
+        row1 = QHBoxLayout()
+        for text, slot in [
+            ("Pull", self.do_pull),
+            ("Stage All", self.do_stage_all),
+            ("Commit", self.do_commit),
+            ("Push", self.do_push),
+        ]:
+            btn = QPushButton(text)
+            btn.clicked.connect(slot)
+            row1.addWidget(btn)
+        adv.addLayout(row1)
+        row2 = QHBoxLayout()
+        for text, slot in [
+            ("Stage Selected", self.do_stage_selected),
+            ("Unstage", self.do_unstage_selected),
+            ("Diff", self.do_diff_selected),
+            ("Log", self.do_view_log),
+        ]:
+            btn = QPushButton(text)
+            btn.clicked.connect(slot)
+            row2.addWidget(btn)
+        adv.addLayout(row2)
+        row3 = QHBoxLayout()
+        for text, slot in [
+            ("Stash", self.do_stash_save),
+            ("Pop Stash", self.do_stash_pop),
+            ("Create Tag", self.do_create_tag),
+            ("Push Tags", self.do_push_tags),
+        ]:
+            btn = QPushButton(text)
+            btn.clicked.connect(slot)
+            row3.addWidget(btn)
+        adv.addLayout(row3)
         self.grp_advanced.setVisible(False)
         left_layout.addWidget(self.grp_advanced)
 
-        left_layout.addStretch()
-
-        # ============ RIGHT PANEL — instructions (top) + output (bottom) ============
         right = QWidget()
         right_layout = QVBoxLayout(right)
-        right_layout.setContentsMargins(4, 0, 0, 0)
-
-        # Instructions (always visible)
+        right_layout.setContentsMargins(6, 0, 0, 0)
         instructions_box = QTextEdit()
         instructions_box.setReadOnly(True)
         instructions_box.setFont(QFont("Consolas", 9))
         instructions_box.setPlainText(INSTRUCTIONS)
-        instructions_box.setMaximumHeight(320)
-        instructions_box.setStyleSheet(
-            "background-color: #fffff0; border: 1px solid #ddd; padding: 8px;"
-        )
+        instructions_box.setMaximumHeight(230)
+        instructions_box.setStyleSheet("background-color: #fffff0; border: 1px solid #ddd; padding: 8px;")
         right_layout.addWidget(instructions_box)
-
-        # Output pane (below instructions)
-        out_label = QLabel("Output:")
-        out_label.setFont(QFont("Consolas", 9, weight=QFont.Weight.Bold))
-        right_layout.addWidget(out_label)
+        details_label = QLabel("Details:")
+        details_label.setFont(QFont("Segoe UI", 9, weight=QFont.Weight.Bold))
+        right_layout.addWidget(details_label)
         self.output_pane = QPlainTextEdit()
         self.output_pane.setReadOnly(True)
         self.output_pane.setFont(QFont("Consolas", 9))
@@ -339,59 +672,110 @@ class GitHelperWindow(QMainWindow):
 
         splitter.addWidget(left)
         splitter.addWidget(right)
-        splitter.setSizes([380, 580])
-
-        # Status bar
+        splitter.setSizes([540, 560])
         self.statusBar().showMessage(f"Repo: {self.repo_path}")
-
-        # Stylesheet
-        self.setStyleSheet("""
+        self.setStyleSheet(
+            """
             QGroupBox {
-                font-weight: bold; border: 1px solid #ccc; border-radius: 4px;
-                margin-top: 8px; padding-top: 16px;
+                font-weight: bold;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                margin-top: 8px;
+                padding-top: 16px;
             }
-            QGroupBox::title {
-                subcontrol-origin: margin; left: 10px; padding: 0 4px;
-            }
+            QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 4px; }
             QPushButton {
-                padding: 5px 12px; border: 1px solid #ccc; border-radius: 3px;
+                padding: 6px 12px;
+                border: 1px solid #bbb;
+                border-radius: 3px;
                 background: #f5f5f5;
             }
-            QPushButton:hover { background: #e0e0e0; }
-            QPushButton:pressed { background: #d0d0d0; }
+            QPushButton:hover { background: #e7e7e7; }
+            QPushButton:pressed { background: #d4d4d4; }
             QPushButton:disabled { color: #aaa; }
-        """)
-
-    # ------------------------------------------------------------------
-    # Toggle advanced section
-    # ------------------------------------------------------------------
+            """
+        )
 
     def _toggle_advanced(self):
         visible = not self.grp_advanced.isVisible()
         self.grp_advanced.setVisible(visible)
-        self.btn_show_advanced.setText(
-            "Hide Advanced Options" if visible else "Show Advanced Options..."
-        )
+        self.btn_show_advanced.setText("Hide Advanced Options" if visible else "Show Advanced Options...")
 
-    # ------------------------------------------------------------------
-    # Helper: run a git op, display output, refresh
-    # ------------------------------------------------------------------
+    def write_progress(self, message):
+        self.progress_pane.appendPlainText(message)
+        QApplication.processEvents()
 
-    def _run_and_display(self, cmd_label, runner_fn):
+    def write_details(self, message):
         ts = datetime.datetime.now().strftime("%H:%M:%S")
-        self.output_pane.appendPlainText(f"\n>>> git {cmd_label}  [{ts}]")
-        success, output = runner_fn()
-        self.output_pane.appendPlainText(output if output else "(no output)")
-        if success:
-            self.statusBar().showMessage(f"OK: git {cmd_label}", 5000)
-        else:
-            self.statusBar().showMessage(f"FAILED: git {cmd_label}", 5000)
-            if "CONFLICT" in output:
-                QMessageBox.warning(
-                    self, "Merge Conflict",
-                    "Merge conflicts detected. Resolve them manually, then stage and commit."
-                )
+        self.output_pane.appendPlainText(f"\n[{ts}] {message}")
+        QApplication.processEvents()
+
+    def start_git_task(self, task_fn, finished_fn, disable_sync=True):
+        if self.worker_thread is not None:
+            self.statusBar().showMessage("Git is already working. Please wait.", 4000)
+            return
+        self.pending_finished_fn = finished_fn
+        self.worker_disable_sync = disable_sync
+        if disable_sync:
+            self.btn_sync.setEnabled(False)
+        self.worker_thread = QThread(self)
+        self.worker = GitTaskWorker(task_fn)
+        self.worker.moveToThread(self.worker_thread)
+        self.worker.progress.connect(self.write_progress)
+        self.worker.details.connect(self.write_details)
+        self.worker.finished.connect(
+            self.task_result_ready.emit,
+            Qt.ConnectionType.QueuedConnection,
+        )
+        self.worker.finished.connect(self.worker_thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.worker_thread.finished.connect(self.worker_thread.deleteLater)
+        self.worker_thread.finished.connect(
+            self.worker_cleanup_ready.emit,
+            Qt.ConnectionType.QueuedConnection,
+        )
+        self.worker_thread.started.connect(self.worker.run)
+        self.worker_thread.start()
+
+    def _handle_task_result(self, result):
+        if self.pending_finished_fn is not None:
+            self.pending_finished_fn(result)
+
+    def _clear_worker(self):
+        self.worker = None
+        self.worker_thread = None
+        self.pending_finished_fn = None
+        if self.worker_disable_sync:
+            self.btn_sync.setEnabled(True)
         self.refresh_status()
+
+    def auto_message(self, prefix="Update"):
+        note = self.commit_msg.text().strip()
+        if note:
+            return note
+        stamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+        return f"{prefix} {stamp}"
+
+    def _run_and_display(self, label, fn):
+        self.write_details(f">>> {label}")
+
+        def task(progress, details):
+            result = fn()
+            details(result.output or "(no output)")
+            return {
+                "success": result.success,
+                "message": result.friendly,
+            }
+
+        def finished(result):
+            if not result.get("success"):
+                QMessageBox.warning(
+                    self,
+                    "Git Helper",
+                    f"{result.get('message', 'Git could not finish.')}\n\nDetails are shown in the Details panel.",
+                )
+
+        self.start_git_task(task, finished, disable_sync=False)
 
     def _get_checked_files(self):
         files = []
@@ -401,225 +785,574 @@ class GitHelperWindow(QMainWindow):
                 files.append(item.text(1))
         return files
 
-    # ------------------------------------------------------------------
-    # Refresh file list + branch info
-    # ------------------------------------------------------------------
-
     def refresh_status(self):
+        state = self.git.repo_state()
+        self.branch_label.setText(f"Branch: {state.branch}")
+        self.cloud_label.setText("In OneDrive" if is_cloud_path(self.repo_path) else "")
         self.file_list.clear()
-        ok, branch = self.git.current_branch()
-        if ok:
-            ok2, detail = self.git.branch_info()
-            tracking = ""
-            if ok2:
-                for line in detail.splitlines():
-                    if line.startswith("*"):
-                        tracking = line[2:].strip()
-                        break
-            self.branch_label.setText(f"Branch: {tracking if tracking else branch.strip()}")
 
-        ok, raw = self.git.status()
-        if not ok:
-            return
-        for line in raw.splitlines():
-            if len(line) < 4:
-                continue
-            idx_st = line[0]
-            wrk_st = line[1]
-            filepath = line[3:]
-            display = f"{idx_st}{wrk_st}".strip()
-            item = QTreeWidgetItem([display, filepath])
+        if state.conflicted:
+            self.status_label.setText("Red: Conflict - needs your choice")
+            self.status_label.setStyleSheet("color: #a40000;")
+        elif state.dirty:
+            self.status_label.setText(f"Yellow: You have {len(state.changed_files)} change(s) not sent yet")
+            self.status_label.setStyleSheet("color: #8a6500;")
+        elif state.behind:
+            self.status_label.setText(f"Blue: GitHub has {state.behind} newer change(s)")
+            self.status_label.setStyleSheet("color: #0059b3;")
+        elif state.ahead:
+            self.status_label.setText(f"Yellow: {state.ahead} saved change(s) not sent yet")
+            self.status_label.setStyleSheet("color: #8a6500;")
+        elif state.remote_checked and not state.remote_reachable:
+            self.status_label.setText("Warning: Can't reach GitHub - showing local only")
+            self.status_label.setStyleSheet("color: #8a5a00;")
+        else:
+            self.status_label.setText("Green: Up to date")
+            self.status_label.setStyleSheet("color: #137333;")
+
+        for code, path in state.changed_files:
+            word = self._plain_status_word(code)
+            item = QTreeWidgetItem([word, path])
             item.setFlags(item.flags() | Qt.ItemFlag.ItemIsUserCheckable)
             item.setCheckState(0, Qt.CheckState.Unchecked)
-            color_map = {
-                "M": QColor(200, 120, 0),
-                "A": QColor(0, 150, 0),
-                "D": QColor(200, 0, 0),
-                "?": QColor(128, 128, 128),
-                "R": QColor(0, 100, 200),
-                "U": QColor(180, 0, 180),
-            }
-            dominant = idx_st if idx_st != " " else wrk_st
-            c = color_map.get(dominant)
-            if c:
-                item.setForeground(0, QBrush(c))
-                item.setForeground(1, QBrush(c))
+            color = {
+                "New": QColor(0, 130, 0),
+                "Edited": QColor(190, 110, 0),
+                "Deleted": QColor(180, 0, 0),
+                "Conflict": QColor(170, 0, 170),
+                "Renamed": QColor(0, 90, 170),
+            }.get(word, QColor(90, 90, 90))
+            item.setForeground(0, QBrush(color))
+            item.setForeground(1, QBrush(color))
             self.file_list.addTopLevelItem(item)
 
-    # ------------------------------------------------------------------
-    # Slot methods — daily workflow
-    # ------------------------------------------------------------------
+        self.refresh_restore_points()
+
+    def do_refresh(self):
+        self.write_progress("Checking GitHub...")
+
+        def task(progress, details):
+            result = self.git.fetch()
+            details(result.output or result.friendly)
+            if result.success:
+                progress("GitHub check finished.")
+                return {"success": True, "message": "Status refreshed."}
+            progress("Can't reach GitHub right now. Showing local status only.")
+            return {"success": False, "message": result.friendly, "offline": True}
+
+        def finished(result):
+            if not result.get("success") and not result.get("offline"):
+                QMessageBox.warning(self, "Refresh", result.get("message", "Could not refresh."))
+
+        self.start_git_task(task, finished, disable_sync=False)
+
+    def _plain_status_word(self, code):
+        if "U" in code or code in ("AA", "DD"):
+            return "Conflict"
+        if "D" in code:
+            return "Deleted"
+        if "A" in code or "?" in code:
+            return "New"
+        if "R" in code:
+            return "Renamed"
+        return "Edited"
+
+    def refresh_restore_points(self):
+        self.restore_list.clear()
+        result = self.git.restore_points(40)
+        if not result.success:
+            return
+        for line in result.output.splitlines():
+            parts = line.split("\x1f")
+            if len(parts) != 3:
+                continue
+            commit_hash, date_text, subject = parts
+            item = QTreeWidgetItem([date_text, subject, commit_hash[:10]])
+            item.setData(0, Qt.ItemDataRole.UserRole, commit_hash)
+            self.restore_list.addTopLevelItem(item)
+
+    def do_sync(self):
+        if self.worker_thread is not None:
+            self.statusBar().showMessage("Git is already working. Please wait.", 4000)
+            return
+        self.progress_pane.clear()
+        self.write_progress("Checking the project...")
+        if not ensure_identity(self.git, self):
+            self.write_progress("Stopped: Git still needs your name and email.")
+            return
+        if not self.git.has_remote():
+            if not ask_for_remote(self.git, self):
+                self.write_progress("Stopped: GitHub link is still missing.")
+                return
+
+        if is_cloud_path(self.repo_path) and not self.onedrive_warning_dismissed:
+            self.show_cloud_warning()
+
+        if self.git.repo_state().conflicted:
+            self.handle_conflicts()
+            if self.git.repo_state().conflicted:
+                self.write_progress("Stopped: a conflict still needs your choice.")
+                return
+
+        commit_message = self.auto_message()
+
+        def task(progress, details):
+            progress("Checking GitHub...")
+            fetched = self.git.fetch()
+            details(fetched.output or fetched.friendly)
+            if not fetched.success:
+                progress("Can't reach GitHub right now. Your local files were not changed.")
+                return {"success": False, "offline": True, "message": fetched.friendly}
+
+            state = self.git.repo_state()
+            if state.conflicted:
+                return {"success": False, "conflict": True, "message": "A conflict needs your choice."}
+
+            progress("Saving your changes...")
+            saved = self.git.commit_if_needed(commit_message)
+            details(saved.output or saved.friendly)
+            if not saved.success:
+                return {"success": False, "message": saved.friendly}
+
+            for attempt in range(3):
+                progress("Getting GitHub's latest...")
+                merge = self.git.merge_fetched_remote()
+                details(merge.output or merge.friendly)
+                if not merge.success:
+                    text = merge.output.lower()
+                    if "conflict" in text or "unmerged" in text:
+                        return {"success": False, "conflict": True, "message": merge.friendly}
+                    if "would be overwritten" in text:
+                        stash = self.git.stash_save()
+                        details(stash.output or stash.friendly)
+                        if not stash.success:
+                            return {"success": False, "message": stash.friendly}
+                        merge = self.git.merge_fetched_remote()
+                        details(merge.output or merge.friendly)
+                        pop = self.git.stash_pop()
+                        details(pop.output or pop.friendly)
+                        if not merge.success or not pop.success:
+                            combined = (merge.output or "") + "\n" + (pop.output or "")
+                            if "conflict" in combined.lower() or "unmerged" in combined.lower():
+                                return {"success": False, "conflict": True, "message": friendly_error(combined)}
+                            return {"success": False, "message": friendly_error(combined)}
+                    else:
+                        return {"success": False, "message": merge.friendly}
+
+                state = self.git.repo_state()
+                if state.conflicted:
+                    return {"success": False, "conflict": True, "message": "A conflict needs your choice."}
+
+                progress("Sending your work up...")
+                push = self.git.push()
+                details(push.output or push.friendly)
+                if push.success:
+                    progress("Everything is in sync.")
+                    return {"success": True, "message": "Everything is in sync."}
+                text = push.output.lower()
+                if "rejected" in text or "fetch first" in text:
+                    progress("GitHub moved while we were syncing, so trying once more...")
+                    fetch_again = self.git.fetch()
+                    details(fetch_again.output or fetch_again.friendly)
+                    if not fetch_again.success:
+                        return {"success": False, "offline": True, "message": fetch_again.friendly}
+                    continue
+                return {"success": False, "message": push.friendly}
+
+            return {
+                "success": False,
+                "message": "GitHub kept changing while Sync was running. Try Sync again in a moment.",
+            }
+
+        def finished(result):
+            if result.get("success"):
+                self.commit_msg.clear()
+                return
+            if result.get("conflict"):
+                self.write_progress("A conflict needs your choice.")
+                self.handle_conflicts()
+                if not self.git.repo_state().conflicted:
+                    self.write_progress("Conflict choices saved. Finishing Sync...")
+                    QTimer.singleShot(200, self.do_sync)
+                return
+            if result.get("offline"):
+                QMessageBox.warning(self, "Sync", result.get("message", "Can't reach GitHub right now."))
+                return
+            QMessageBox.warning(self, "Sync", result.get("message", "Sync could not finish."))
+
+        self.start_git_task(task, finished)
+
+    def handle_conflicts(self):
+        files, _ = self.git.changed_files()
+        conflict_files = [path for code, path in files if "U" in code or code in ("AA", "DD")]
+        if not conflict_files:
+            return
+        for path in conflict_files:
+            while True:
+                has_mine, has_github = self.git.conflict_sides(path)
+                box = QMessageBox(self)
+                box.setWindowTitle("Choose a Version")
+                if not has_mine or not has_github:
+                    box.setText(
+                        f"This file was deleted in one place and edited in another:\n\n{path}\n\n"
+                        "Choose whether to keep the file or keep it deleted."
+                    )
+                    mine_text = "Keep Deleted" if not has_mine else "Keep Mine"
+                    github_text = "Keep Deleted" if not has_github else "Keep GitHub's"
+                else:
+                    box.setText(
+                        f"The same file changed in two places:\n\n{path}\n\n"
+                        "Choose which version to keep. You can also look at the differences first."
+                    )
+                    mine_text = "Keep Mine"
+                    github_text = "Keep GitHub's"
+                keep_mine = box.addButton(mine_text, QMessageBox.ButtonRole.AcceptRole)
+                keep_github = box.addButton(github_text, QMessageBox.ButtonRole.DestructiveRole)
+                look = box.addButton("Let Me Look", QMessageBox.ButtonRole.HelpRole)
+                stop = box.addButton("Stop", QMessageBox.ButtonRole.RejectRole)
+                box.exec()
+                clicked = box.clickedButton()
+                if clicked == look:
+                    diff = self.git.diff_file(path)
+                    DiffDialog(path, diff.output or "(No differences to show.)", self).exec()
+                    continue
+                if clicked == stop:
+                    return
+                if clicked == keep_mine:
+                    result = self.git.checkout_ours(path) if has_mine else self.git.remove_file(path)
+                elif clicked == keep_github:
+                    result = self.git.checkout_theirs(path) if has_github else self.git.remove_file(path)
+                else:
+                    return
+                break
+            self.write_details(result.output or result.friendly)
+            if not result.success:
+                QMessageBox.warning(self, "Conflict", result.friendly)
+                return
+            staged = self.git.stage_files([path])
+            self.write_details(staged.output or staged.friendly)
+            if not staged.success:
+                return
+        finish = self.git.commit("Finish combining GitHub changes")
+        self.write_details(finish.output or finish.friendly)
+
+    def show_cloud_warning(self):
+        self.onedrive_warning_dismissed = True
+        choice = QMessageBox.question(
+            self,
+            "OneDrive Warning",
+            "This project is inside a cloud-synced folder. GitHub should be your backup for code projects; "
+            "cloud sync can interrupt Git while it is saving. Keep this folder open on only one computer at a time.\n\n"
+            "Do you want this app to ask Windows to keep the hidden .git folder on this device?",
+        )
+        if choice == QMessageBox.StandardButton.Yes:
+            result = protect_git_folder(self.repo_path)
+            self.write_details(result.output or result.friendly)
+
+    def do_snapshot(self):
+        if self.git.has_unresolved_conflicts():
+            QMessageBox.warning(self, "Snapshot Now", "Finish the current Sync first, then make a snapshot.")
+            return
+        name, ok = QInputDialog.getText(self, "Snapshot Now", "Name this restore point:")
+        if not ok or not name.strip():
+            return
+        message = f"Snapshot: {name.strip()}"
+        commit = self.git.commit_if_needed(message)
+        self.write_details(commit.output or commit.friendly)
+        safe_tag = "snapshot-" + re.sub(r"[^A-Za-z0-9._-]+", "-", name.strip()).strip("-")
+        tag = self.git.create_tag(safe_tag, name.strip())
+        self.write_details(tag.output or tag.friendly)
+        if commit.success and tag.success:
+            self.write_progress("Snapshot saved.")
+        self.refresh_status()
+
+    def do_restore(self):
+        if self.git.has_unresolved_conflicts():
+            QMessageBox.warning(self, "Go Back", "Finish the current Sync first, then restore a version.")
+            return
+        item = self.restore_list.currentItem()
+        if not item:
+            QMessageBox.information(self, "Go Back", "Choose a restore point first.")
+            return
+        commit_hash = item.data(0, Qt.ItemDataRole.UserRole)
+        files = self.git.tracked_files(commit_hash)
+        dlg = RestoreDialog(files, self)
+        if dlg.exec() != QDialog.DialogCode.Accepted:
+            return
+        scope_text = "the whole project" if dlg.scope == "whole" else dlg.file_path
+        confirm = QMessageBox.question(
+            self,
+            "Confirm Restore",
+            f"This will bring back {scope_text} from:\n{item.text(0)}\n\n"
+            "It will save that as a new change. Your current version stays in history. Continue?",
+        )
+        if confirm != QMessageBox.StandardButton.Yes:
+            return
+
+        if self.git.dirty():
+            saved = self.git.commit_if_needed(f"Save current work before restore {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}")
+            self.write_details(saved.output or saved.friendly)
+            if not saved.success:
+                QMessageBox.warning(self, "Go Back", "Your current edits could not be saved first. Restore was stopped.")
+                self.refresh_status()
+                return
+
+        if dlg.scope == "file":
+            result = self.git.checkout_file_from_commit(commit_hash, dlg.file_path)
+            self.write_details(result.output or result.friendly)
+        else:
+            result = self.restore_whole_project(commit_hash)
+        if not result.success:
+            QMessageBox.warning(self, "Go Back", result.friendly)
+            self.refresh_status()
+            return
+        commit = self.git.commit_if_needed(f"Restore version from {item.text(0)}")
+        self.write_details(commit.output or commit.friendly)
+        if commit.success:
+            QMessageBox.information(self, "Go Back", "That version has been brought back safely as a new change.")
+        self.refresh_status()
+
+    def restore_whole_project(self, commit_hash):
+        old_files = set(self.git.tracked_files(commit_hash))
+        current_files = set(self.git.tracked_files("HEAD"))
+        result = self.git._run(["checkout", commit_hash, "--", "."])
+        self.write_details(result.output or result.friendly)
+        if not result.success:
+            return result
+        for file_path in sorted(current_files - old_files):
+            removed = self.git.remove_tracked_file(file_path)
+            self.write_details(removed.output or removed.friendly)
+            if not removed.success:
+                return removed
+        return self.git.stage_all()
 
     def do_pull(self):
-        self._run_and_display("pull", self.git.pull)
+        self._run_and_display("pull", self.git.pull_no_edit)
 
     def do_push(self):
         self._run_and_display("push", self.git.push)
 
     def do_stage_all(self):
-        self._run_and_display("add -A", self.git.stage_all)
+        self._run_and_display("add all changes", self.git.stage_all)
 
     def do_commit(self):
-        msg = self.commit_msg.text().strip()
-        if not msg:
-            QMessageBox.warning(self, "Commit", "Please enter a commit message.")
-            return
-        self._run_and_display(f'commit -m "{msg}"', lambda: self.git.commit(msg))
+        message = self.auto_message()
+        self._run_and_display("commit", lambda: self.git.commit_if_needed(message))
         self.commit_msg.clear()
-
-    # ------------------------------------------------------------------
-    # Slot methods — advanced
-    # ------------------------------------------------------------------
 
     def do_stage_selected(self):
         files = self._get_checked_files()
         if not files:
             self.statusBar().showMessage("No files selected", 3000)
             return
-        self._run_and_display(
-            f"add -- {' '.join(files)}",
-            lambda: self.git.stage_files(files),
-        )
+        self._run_and_display("stage selected", lambda: self.git.stage_files(files))
 
     def do_unstage_selected(self):
         files = self._get_checked_files()
         if not files:
             self.statusBar().showMessage("No files selected", 3000)
             return
-        self._run_and_display(
-            f"restore --staged -- {' '.join(files)}",
-            lambda: self.git.unstage_files(files),
-        )
+        self._run_and_display("unstage selected", lambda: self.git.unstage_files(files))
 
     def do_view_log(self):
-        self._run_and_display("log --oneline -20", lambda: self.git.log(20))
+        self._run_and_display("show recent restore points", lambda: self.git.log(20))
 
     def do_diff_selected(self):
         files = self._get_checked_files()
         if not files:
-            QMessageBox.information(self, "Diff", "Select a file first (checkbox).")
+            QMessageBox.information(self, "Diff", "Choose a file first.")
             return
-        for f in files:
-            ok, diff_text = self.git.diff_file(f)
-            if not diff_text.strip():
-                ok, diff_text = self.git.diff_staged_file(f)
-            if not diff_text.strip():
-                diff_text = "(No changes or file is untracked)"
-            dlg = DiffDialog(f, diff_text, self)
-            dlg.exec()
+        for file_path in files:
+            diff = self.git.diff_file(file_path)
+            if not diff.output.strip():
+                diff = self.git.diff_staged_file(file_path)
+            DiffDialog(file_path, diff.output or "(No changes to show.)", self).exec()
 
     def do_stash_save(self):
-        msg, ok = QInputDialog.getText(self, "Stash", "Stash message (optional):")
+        msg, ok = QInputDialog.getText(self, "Stash", "Temporary save note:")
         if ok:
-            self._run_and_display(
-                f'stash push -m "{msg}"',
-                lambda: self.git.stash_save(msg),
-            )
+            self._run_and_display("temporary save", lambda: self.git.stash_save(msg or "Temporary save"))
 
     def do_stash_pop(self):
-        self._run_and_display("stash pop", self.git.stash_pop)
+        self._run_and_display("restore temporary save", self.git.stash_pop)
 
     def do_create_tag(self):
-        tag_name, ok = QInputDialog.getText(self, "Create Tag", "Tag name (e.g. v3.2.7):")
+        tag_name, ok = QInputDialog.getText(self, "Create Tag", "Tag name:")
         if not ok or not tag_name.strip():
             return
         tag_msg, ok2 = QInputDialog.getText(self, "Tag Message", "Tag message:")
         if ok2:
-            self._run_and_display(
-                f'tag -a {tag_name.strip()} -m "{tag_msg}"',
-                lambda: self.git.create_tag(tag_name.strip(), tag_msg),
-            )
+            self._run_and_display("create tag", lambda: self.git.create_tag(tag_name.strip(), tag_msg))
 
     def do_push_tags(self):
-        self._run_and_display("push --tags", self.git.push_tags)
+        self._run_and_display("push tags", self.git.push_tags)
 
 
-# ============================================================================
-# REPO DETECTION + AUTO-SETUP
-# ============================================================================
+def is_cloud_path(path):
+    resolved = os.path.normcase(os.path.abspath(path))
+    env_keys = [
+        "OneDrive",
+        "OneDriveConsumer",
+        "OneDriveCommercial",
+        "DROPBOX",
+        "GOOGLE_DRIVE",
+    ]
+    roots = [os.environ.get(key) for key in env_keys if os.environ.get(key)]
+    home = os.path.expanduser("~")
+    roots += [
+        os.path.join(home, "OneDrive"),
+        os.path.join(home, "Dropbox"),
+        os.path.join(home, "Google Drive"),
+        os.path.join(home, "My Drive"),
+    ]
+    return any(resolved.startswith(os.path.normcase(os.path.abspath(root))) for root in roots if root)
 
-def detect_or_setup_repo():
-    """
-    Find a git repo in script dir or cwd.
-    If none found: ask for GitHub URL and set everything up automatically.
-    """
-    runner = GitRunner("")
+
+def protect_git_folder(repo_path):
+    git_folder = os.path.join(repo_path, ".git")
+    if not os.path.isdir(git_folder):
+        return GitResult(True, "No .git folder found to protect.")
+    if sys.platform != "win32":
+        return GitResult(True, "Cloud protection is only needed on Windows in this helper.")
+    try:
+        kwargs = {
+            "cwd": repo_path,
+            "capture_output": True,
+            "text": True,
+            "timeout": 30,
+        }
+        kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW
+        result = subprocess.run(["attrib", "+P", "-U", ".git", "/S", "/D"], **kwargs)
+        output = ((result.stdout or "") + (result.stderr or "")).strip()
+        if result.returncode == 0:
+            return GitResult(True, output or "Asked Windows to keep the .git folder on this device.")
+        return GitResult(False, output, "Windows could not change the OneDrive setting for the .git folder.")
+    except subprocess.TimeoutExpired:
+        return GitResult(False, "attrib timed out.", "Windows took too long changing the OneDrive setting.")
+    except FileNotFoundError:
+        return GitResult(False, "attrib was not found.", "Windows could not find the tool used for OneDrive protection.")
+
+
+def ensure_identity(runner, parent=None, notes=None):
+    local_name = runner.config_get("user.name")
+    local_email = runner.config_get("user.email")
+    global_name = runner.config_get("user.name", global_scope=True)
+    global_email = runner.config_get("user.email", global_scope=True)
+    has_local_identity = local_name.success and local_name.output.strip() and local_email.success and local_email.output.strip()
+    has_global_identity = global_name.success and global_name.output.strip() and global_email.success and global_email.output.strip()
+    if has_local_identity or has_global_identity:
+        return True
+    dlg = IdentityDialog(parent)
+    if dlg.exec() != QDialog.DialogCode.Accepted:
+        return False
+    user_name, user_email = dlg.values()
+    if not user_name or not user_email:
+        QMessageBox.warning(parent, "Identity Needed", "Please enter both a name and an email.")
+        return False
+    set_name = runner.config_set("user.name", user_name, global_scope=True)
+    set_email = runner.config_set("user.email", user_email, global_scope=True)
+    if notes is not None:
+        notes.append("Saved your Git name and email.")
+    return set_name.success and set_email.success
+
+
+def ask_for_remote(runner, parent=None):
+    url, ok = QInputDialog.getText(
+        parent,
+        "GitHub Link Needed",
+        "Paste the GitHub repo link for this project:",
+    )
+    if not ok or not url.strip():
+        return False
+    result = runner.add_or_set_origin(url.strip())
+    if not result.success:
+        QMessageBox.warning(parent, "GitHub Link", result.friendly)
+        return False
+    return True
+
+
+def setup_repo(target_folder, parent=None):
+    runner = GitRunner(target_folder)
+    notes = []
+    init = runner.init()
+    notes.append(init.output or "Created a Git repository.")
+    runner.set_branch_main()
+    if not ask_for_remote(runner, parent):
+        return "", notes
+    fetch = runner.fetch()
+    notes.append(fetch.output or "Checked GitHub for existing files.")
+    remote_has_main = runner.remote_branch_exists("main")
+    if remote_has_main:
+        pull = runner.pull_no_edit(allow_unrelated=True)
+        notes.append(pull.output or pull.friendly)
+        if not pull.success and "conflict" in pull.output.lower():
+            QMessageBox.warning(
+                parent,
+                "Setup Needs Your Choice",
+                "GitHub already has files that overlap with this folder. The main window will open so you can choose which versions to keep.",
+            )
+            return target_folder, notes
+        elif not pull.success:
+            QMessageBox.warning(parent, "Setup", pull.friendly)
+            return target_folder, notes
+    commit = runner.commit_if_needed("Initial project setup")
+    notes.append(commit.output or commit.friendly)
+    push = runner.push()
+    notes.append(push.output or push.friendly)
+    if push.success:
+        QMessageBox.information(parent, "Setup Complete", "Your project is connected to GitHub.")
+    else:
+        QMessageBox.warning(parent, "Setup", push.friendly)
+    return target_folder, notes
+
+
+def detect_or_setup_repo(parent=None):
+    runner = GitRunner(os.getcwd())
+    if not runner.git_installed():
+        QMessageBox.critical(
+            parent,
+            "Git Missing",
+            "Git is not installed. Install Git for Windows from https://git-scm.com/download/win, then reopen this app.",
+        )
+        return "", []
+
     candidates = [
-        os.path.dirname(os.path.abspath(sys.argv[0] if getattr(sys, 'frozen', False) else __file__)),
+        os.path.dirname(os.path.abspath(sys.argv[0] if getattr(sys, "frozen", False) else __file__)),
         os.getcwd(),
     ]
+    startup_notes = []
     for path in candidates:
         runner.repo_path = path
         if runner.is_git_repo():
-            return path
+            ensure_identity(runner, parent, startup_notes)
+            runner.ensure_credential_helper()
+            if not runner.has_remote():
+                ask_for_remote(runner, parent)
+            if runner.current_branch() != "main":
+                runner.set_branch_main()
+                startup_notes.append("Standardized the branch name to main.")
+            if is_cloud_path(path):
+                startup_notes.append("This project is inside a cloud-synced folder. GitHub is the safer backup for code projects.")
+            return path, startup_notes
 
-    # No git repo found — offer to set one up
-    # Use the first candidate (the folder the exe/script is in)
     target_folder = candidates[0] if os.path.isdir(candidates[0]) else candidates[1]
-
-    url, ok = QInputDialog.getText(
-        None,
-        "Set Up New Project",
-        f"No git repo found in:\n{target_folder}\n\n"
-        "Paste your GitHub link below to set it up:\n"
-        "(e.g. https://github.com/yourname/project.git)",
+    result = QMessageBox.question(
+        parent,
+        "Set Up Project",
+        f"No Git repository was found in:\n{target_folder}\n\nSet this folder up with GitHub now?",
     )
-    if not ok or not url.strip():
-        return ""
+    if result != QMessageBox.StandardButton.Yes:
+        return "", []
+    ensure_identity(runner, parent, startup_notes)
+    path, notes = setup_repo(target_folder, parent)
+    startup_notes.extend(notes)
+    return path, startup_notes
 
-    url = url.strip()
-    runner.repo_path = target_folder
-    results = []
-
-    # Step 1: git init
-    ok1, out1 = runner.init()
-    results.append(f"git init: {'OK' if ok1 else 'FAILED'}\n{out1}")
-
-    # Step 2: git remote add origin <url>
-    ok2, out2 = runner.add_remote(url)
-    results.append(f"git remote add origin: {'OK' if ok2 else 'FAILED'}\n{out2}")
-
-    # Step 3: git add -A
-    ok3, out3 = runner.stage_all()
-    results.append(f"git add -A: {'OK' if ok3 else 'FAILED'}\n{out3}")
-
-    # Step 4: git commit -m "Initial commit"
-    ok4, out4 = runner.commit("Initial commit")
-    results.append(f"git commit: {'OK' if ok4 else 'FAILED'}\n{out4}")
-
-    # Step 5: git branch -M main
-    ok5, out5 = runner.set_branch_main()
-    results.append(f"git branch -M main: {'OK' if ok5 else 'FAILED'}\n{out5}")
-
-    # Step 6: git push -u origin main
-    ok6, out6 = runner.push_first()
-    results.append(f"git push: {'OK' if ok6 else 'FAILED'}\n{out6}")
-
-    all_ok = ok1 and ok2 and ok3 and ok4 and ok5 and ok6
-    summary = "\n\n".join(results)
-    if all_ok:
-        QMessageBox.information(
-            None, "Setup Complete",
-            f"Your project is set up and pushed to GitHub!\n\n{summary}"
-        )
-    else:
-        QMessageBox.warning(
-            None, "Setup Partially Complete",
-            f"Some steps had issues. You may need to push manually later.\n\n{summary}"
-        )
-
-    return target_folder
-
-
-# ============================================================================
-# MAIN
-# ============================================================================
 
 def main():
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
 
-    # Light palette
     palette = QPalette()
     palette.setColor(QPalette.ColorRole.Window, QColor(245, 245, 245))
     palette.setColor(QPalette.ColorRole.WindowText, QColor(30, 30, 30))
@@ -632,15 +1365,12 @@ def main():
     palette.setColor(QPalette.ColorRole.HighlightedText, QColor(255, 255, 255))
     app.setPalette(palette)
 
-    repo_path = detect_or_setup_repo()
+    repo_path, notes = detect_or_setup_repo()
     if not repo_path:
-        QMessageBox.critical(
-            None, "Git Helper",
-            "No repository set up. Exiting."
-        )
+        QMessageBox.critical(None, "Git Helper", "No repository set up. Exiting.")
         sys.exit(1)
 
-    win = GitHelperWindow(repo_path)
+    win = GitHelperWindow(repo_path, notes)
     win.show()
     sys.exit(app.exec())
 
