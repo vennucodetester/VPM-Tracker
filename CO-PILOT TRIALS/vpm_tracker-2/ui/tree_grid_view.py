@@ -670,10 +670,8 @@ class TreeGridView(QTreeWidget):
         finally:
             self.blockSignals(was_blocked)
 
-        self.recalculate_all_dates()
-        self.refresh_entire_tree()
         self.journal_event.emit(f"Added task '{new_node.name}'")
-        self.item_changed_signal.emit(new_node)
+        self.commit_structure_change(new_node)
         self.setCurrentItem(new_item)
         self.editItem(new_item, Columns.TREE)
 
@@ -836,63 +834,6 @@ class TreeGridView(QTreeWidget):
                 self.jump_to_predecessor(item)
                 return
         super().mouseDoubleClickEvent(event)
-
-    def dropEvent(self, event):
-        # Get the item being moved
-        source_item = self.currentItem()
-        if not source_item:
-            return
-            
-        # Get the target
-        target_item = self.itemAt(event.position().toPoint())
-        drop_indicator = self.dropIndicatorPosition()
-        
-        # Perform the default move first to update UI
-        super().dropEvent(event)
-        
-        # Now update the data model (TaskNodes)
-        source_node = source_item.node
-        
-        # Remove from old parent
-        if source_node.parent:
-            if source_node in source_node.parent.children:
-                source_node.parent.children.remove(source_node)
-                # Update old parent dates
-                source_node.parent.update_dates_from_children()
-        elif source_node in self.root_nodes:
-            self.root_nodes.remove(source_node)
-            
-        # Find new parent
-        new_parent_item = source_item.parent()
-        if new_parent_item:
-            new_parent_node = new_parent_item.node
-            source_node.parent = new_parent_node
-            
-            # Insert at correct index
-            idx = new_parent_item.indexOfChild(source_item)
-            new_parent_node.children.insert(idx, source_node)
-            
-            # Update new parent dates
-            new_parent_node.update_dates_from_children()
-            
-            # Smart Default: If new parent was sequential, it might need to become parallel?
-            # Or if we drop into a parent, it should become parallel?
-            # Let's reuse add_child logic if possible, but we are inserting at specific index.
-            # Let's reuse add_child logic if possible, but we are inserting at specific index.
-            # FIX: Do NOT force parent to be parallel. This breaks the parent's link to its predecessor.
-            # if not new_parent_node.is_parallel:
-            #     new_parent_node.is_parallel = True
-                
-        else:
-            # Moved to root
-            source_node.parent = None
-            # Find index in root
-            idx = self.indexOfTopLevelItem(source_item)
-            self.root_nodes.insert(idx, source_node)
-            
-        # Recalculate dates for the whole tree to ensure sequencing is correct
-        self.recalculate_all_dates()
-        self.item_changed_signal.emit(source_node)
 
     def load_project(self, nodes: list[TaskNode]):
         self.blockSignals(True)
@@ -1403,11 +1344,10 @@ class TreeGridView(QTreeWidget):
 
     def toggle_date_lock(self, item: TaskTreeWidgetItem):
         item.node.dates_locked = not item.node.dates_locked
-        item.update_from_node()
         self.journal_event.emit(
             f"'{item.node.name}': manual date "
             f"{'set' if item.node.dates_locked else 'unset'}")
-        self.item_changed_signal.emit(item.node)
+        self.commit_structure_change(item.node)
 
     def link_selected_tasks(self, items):
         """
@@ -1436,9 +1376,8 @@ class TreeGridView(QTreeWidget):
                 
                 # Manual link: Set Start = Prev.End
                 curr_item.node.update_from_previous_sibling(prev_item.node)
-                curr_item.update_from_node()
-                self.item_changed_signal.emit(curr_item.node)
                 
+        self.commit_structure_change(items[-1].node if items else None)
         QMessageBox.information(self, "Tasks Linked", f"Linked {len(items)} tasks.\nStart dates aligned sequentially.")
 
 
@@ -1456,8 +1395,7 @@ class TreeGridView(QTreeWidget):
             
             parent_item.setExpanded(True)
             if lines:
-                self.item_changed_signal.emit(parent_node)
-            self.update_filter_options()
+                self.commit_structure_change(parent_node)
 
     def bulk_set_status(self, items: list[QTreeWidgetItem]):
         # Get status options from Enum
@@ -1526,9 +1464,7 @@ class TreeGridView(QTreeWidget):
             return
 
         node.predecessor_id = new_pred_id if new_pred_id else None
-        self.recalculate_all_dates()
-        self.refresh_entire_tree()
-        self.item_changed_signal.emit(node)
+        self.commit_structure_change(node)
 
     def clear_link(self, item: TaskTreeWidgetItem):
         self._apply_predecessor_change(item.node, None)
@@ -1564,6 +1500,19 @@ class TreeGridView(QTreeWidget):
         """Delegate to the shared scheduler (see utils.scheduler)."""
         from utils.scheduler import schedule
         schedule(self.root_nodes)
+
+    def commit_structure_change(self, node: TaskNode = None):
+        """Recalculate and repaint after any hierarchy/date mutation.
+
+        The scheduler updates the model; refresh_entire_tree makes the screen
+        match it immediately. Centralizing this keeps every structure edit from
+        leaving stale dates behind.
+        """
+        self.recalculate_all_dates()
+        self.refresh_entire_tree()
+        self.update_filter_options()
+        if node is not None:
+            self.item_changed_signal.emit(node)
 
     # ---- Baseline / Delay tracking ----
 
@@ -1664,8 +1613,7 @@ class TreeGridView(QTreeWidget):
 
         where = f" under '{parent_node.name}'" if parent_node else ""
         self.journal_event.emit(f"Added task '{new_node.name}'{where}")
-        self.item_changed_signal.emit(new_node)
-        self.update_filter_options()
+        self.commit_structure_change(new_node)
 
     def delete_task(self, item: QTreeWidgetItem):
         if not item: return
@@ -1685,12 +1633,8 @@ class TreeGridView(QTreeWidget):
 
         # Removal changes sibling anchoring — re-run the scheduler and
         # repaint (date propagation is the scheduler's job, see task_node).
-        self.recalculate_all_dates()
-        self.refresh_entire_tree()
-
         self.journal_event.emit(f"Deleted task '{node.name}'")
-        self.item_changed_signal.emit(node) # Emit deleted node (or parent) for update
-        self.update_filter_options()
+        self.commit_structure_change(node)
 
     # ------------------------------------------------------------------
     # Cut / Copy / Paste (within and across project tabs)
@@ -1741,8 +1685,7 @@ class TreeGridView(QTreeWidget):
         for n in self.get_all_nodes_flat():
             if n.predecessor_id in removed:
                 n.predecessor_id = None
-        self.recalculate_all_dates()
-        self.refresh_entire_tree()
+        self.commit_structure_change(tops[0].node)
 
     def paste_tasks(self, anchor_item: QTreeWidgetItem = None):
         """Paste clipboard subtrees as siblings after anchor_item
@@ -1813,13 +1756,10 @@ class TreeGridView(QTreeWidget):
         finally:
             self.blockSignals(was_blocked)
 
-        self.recalculate_all_dates()
-        self.refresh_entire_tree()
-        self.update_filter_options()
         names = ", ".join(f"'{n.name}'" for n in nodes[:3])
         more = f" +{len(nodes) - 3} more" if len(nodes) > 3 else ""
         self.journal_event.emit(f"Pasted {len(nodes)} task(s): {names}{more}")
-        self.item_changed_signal.emit(nodes[0])
+        self.commit_structure_change(nodes[0])
 
         if cleared:
             QMessageBox.information(
@@ -2221,8 +2161,9 @@ class TreeGridView(QTreeWidget):
         # Now sync the internal TaskNode hierarchy to match the visual QTreeWidget hierarchy
         self.sync_hierarchy()
 
-        # Trigger date updates
-        self.recalculate_all_dates()
+        current = self.currentItem()
+        node = current.node if isinstance(current, TaskTreeWidgetItem) else None
+        self.commit_structure_change(node)
 
     # ------------------------------------------------------------------
     # Notes-pad drop handling (promote a note to a task / a task's notes)
@@ -2330,12 +2271,9 @@ class TreeGridView(QTreeWidget):
         finally:
             self.blockSignals(was)
 
-        self.recalculate_all_dates()
-        self.refresh_entire_tree()
-        self.update_filter_options()
         if last is not None:
             self.journal_event.emit(f"Promoted {len(lines)} note(s) to task(s)")
-            self.item_changed_signal.emit(last)
+            self.commit_structure_change(last)
             # Scroll to & flash the new task so it never looks like it vanished.
             self.jump_to_node_id(last.id)
             self._show_link_hint(f"Note promoted to task '{last.name}'.")
@@ -2376,7 +2314,7 @@ class TreeGridView(QTreeWidget):
     def indent_task(self, item):
         self._indent_item_internal(item)
         self.sync_hierarchy()
-        self.recalculate_all_dates()
+        self.commit_structure_change(item.node if isinstance(item, TaskTreeWidgetItem) else None)
 
     def _indent_item_internal(self, item):
         # Move item to be a child of the previous sibling
@@ -2399,7 +2337,7 @@ class TreeGridView(QTreeWidget):
     def outdent_task(self, item):
         self._outdent_item_internal(item)
         self.sync_hierarchy()
-        self.recalculate_all_dates()
+        self.commit_structure_change(item.node if isinstance(item, TaskTreeWidgetItem) else None)
 
     def _outdent_item_internal(self, item):
         # Move item to be a sibling of its parent
@@ -2426,7 +2364,7 @@ class TreeGridView(QTreeWidget):
             self._indent_item_internal(item)
             
         self.sync_hierarchy()
-        self.recalculate_all_dates()
+        self.commit_structure_change(sorted_items[-1].node if sorted_items else None)
 
     def outdent_selected_tasks(self, items):
         # Sort items by visual order
@@ -2436,7 +2374,7 @@ class TreeGridView(QTreeWidget):
             self._outdent_item_internal(item)
             
         self.sync_hierarchy()
-        self.recalculate_all_dates()
+        self.commit_structure_change(sorted_items[-1].node if sorted_items else None)
 
     def _get_sorted_selection(self, items):
         """Returns the items sorted by their appearance in the tree."""

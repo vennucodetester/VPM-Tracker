@@ -13,7 +13,7 @@ is shown:
 from datetime import datetime, timedelta
 
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
-                             QFrame, QScrollArea)
+                             QFrame, QScrollArea, QComboBox, QMenu)
 from PyQt6.QtCore import Qt, pyqtSignal
 
 from utils.workday_calculator import WorkdayCalculator
@@ -67,13 +67,24 @@ def _link(node):
 class FocusView(QWidget):
     # Emits the node id when the user clicks a task name → jump to Tracker.
     task_activated = pyqtSignal(str)
+    task_action_requested = pyqtSignal(str, str)
 
     def __init__(self, parent=None):
         super().__init__(parent)
         self.root_nodes = []
+        self.owner_filter = ""
 
         outer = QVBoxLayout(self)
         outer.setContentsMargins(0, 0, 0, 0)
+        top = QHBoxLayout()
+        top.setContentsMargins(12, 8, 12, 0)
+        top.addWidget(QLabel("Owner:"))
+        self.owner_combo = QComboBox()
+        self.owner_combo.setMinimumWidth(180)
+        self.owner_combo.currentTextChanged.connect(self._on_owner_changed)
+        top.addWidget(self.owner_combo)
+        top.addStretch()
+        outer.addLayout(top)
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setFrameShape(QFrame.Shape.NoFrame)
@@ -85,6 +96,8 @@ class FocusView(QWidget):
         self.layout_body.setContentsMargins(16, 12, 16, 16)
         self.layout_body.setSpacing(14)
 
+        self.digest_label = self._label("", size=12)
+        self.layout_body.addWidget(self.digest_label)
         self.chain_panel = self._make_panel()
         self.week_panel = self._make_panel()
         self.layout_body.addWidget(self.chain_panel)
@@ -111,14 +124,53 @@ class FocusView(QWidget):
             if w:
                 w.deleteLater()
 
-    def _label(self, html, size=13):
+    def _label(self, html, size=13, node=None):
         lbl = QLabel(html)
         lbl.setWordWrap(True)
         lbl.setTextFormat(Qt.TextFormat.RichText)
         lbl.setStyleSheet(f"font-size: {size}px; color: #202020;")
         lbl.setOpenExternalLinks(False)
         lbl.linkActivated.connect(self.task_activated.emit)
+        if node is not None:
+            lbl.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+            lbl.customContextMenuRequested.connect(
+                lambda pos, n=node, w=lbl: self._task_menu(n, w, pos))
+            tip = self._delay_tooltip(node)
+            if tip:
+                lbl.setToolTip(tip)
         return lbl
+
+    def _task_menu(self, node, widget, pos):
+        menu = QMenu(self)
+        menu.addAction("Mark Completed", lambda: self.task_action_requested.emit(node.id, "complete"))
+        menu.addAction("Log delay reason...", lambda: self.task_action_requested.emit(node.id, "delay"))
+        menu.addAction("Jump to Tracker", lambda: self.task_activated.emit(node.id))
+        menu.exec(widget.mapToGlobal(pos))
+
+    def _on_owner_changed(self, text):
+        self.owner_filter = "" if text == "All owners" else text
+        self._rebuild()
+
+    def _owners_from(self, nodes):
+        owners = set()
+        for n in nodes:
+            for part in (n.owner or "").replace(",", "/").split("/"):
+                part = part.strip()
+                if part:
+                    owners.add(part)
+        return sorted(owners)
+
+    def _owner_matches(self, node):
+        if not self.owner_filter:
+            return True
+        owners = [p.strip() for p in (node.owner or "").replace(",", "/").split("/")]
+        return self.owner_filter in owners
+
+    @staticmethod
+    def _delay_tooltip(node):
+        if getattr(node, "revisions", None) or getattr(node, "delay_notes", ""):
+            return node.revision_trail()
+        return ""
 
     # ------------------------------------------------------------------
     # Public API (mirrors the old GanttChartWidget)
@@ -128,7 +180,24 @@ class FocusView(QWidget):
         # Drop the Inbox group entirely — it holds dateless notes, not plan
         # tasks, so it must not influence the driver chain or the week board.
         self.root_nodes = [r for r in (root_nodes or []) if not _is_inbox(r)]
+        self._refresh_owner_combo()
         self._rebuild()
+
+    def _refresh_owner_combo(self):
+        current = self.owner_filter
+        owners = self._owners_from(_flatten(self.root_nodes))
+        self.owner_combo.blockSignals(True)
+        try:
+            self.owner_combo.clear()
+            self.owner_combo.addItem("All owners")
+            self.owner_combo.addItems(owners)
+            if current and current in owners:
+                self.owner_combo.setCurrentText(current)
+            else:
+                self.owner_filter = ""
+                self.owner_combo.setCurrentText("All owners")
+        finally:
+            self.owner_combo.blockSignals(False)
 
     # ------------------------------------------------------------------
     # Driver-chain analysis
@@ -231,8 +300,29 @@ class FocusView(QWidget):
     def _rebuild(self):
         all_nodes = _flatten(self.root_nodes)
         node_map = {n.id: n for n in all_nodes}
+        self._build_digest(all_nodes, node_map)
         self._build_chain_panel(all_nodes, node_map)
-        self._build_week_panel(all_nodes)
+        self._build_week_panel(all_nodes, node_map)
+
+    def _build_digest(self, all_nodes, node_map):
+        today = datetime.now().date()
+        week_end = today - timedelta(days=today.weekday()) + timedelta(days=6)
+        leaves = [n for n in all_nodes if not n.children]
+        project_end = max((n.end_date or "" for n in leaves), default="")
+        overdue = [
+            n for n in leaves
+            if n.status != "Completed" and _parse(n.end_date) and _parse(n.end_date) < today
+        ]
+        due_week = [
+            n for n in leaves
+            if n.status != "Completed" and _parse(n.end_date) and today <= _parse(n.end_date) <= week_end
+        ]
+        ready = self._ready_to_start(all_nodes, node_map)
+        self.digest_label.setText(
+            f"Project ends <b>{_fmt(project_end)}</b> · "
+            f"{len(overdue)} overdue · {len(due_week)} due this week · "
+            f"{len(ready)} ready to start"
+        )
 
     def _build_chain_panel(self, all_nodes, node_map):
         self._clear(self.chain_panel)
@@ -282,7 +372,8 @@ class FocusView(QWidget):
             lay.addWidget(self._label(
                 f"<span style='color:#A32D2D; font-weight:bold;'>Push here:"
                 f"</span> <b>{_link(push_task)}</b>{owner} — every workday "
-                f"saved here moves the project end a day earlier.", size=13))
+                f"saved here moves the project end a day earlier.", size=13,
+                node=push_task))
 
         # Watch list: near-critical leaves not already in the chain
         slack = self._compute_slack(all_nodes, node_map, project_end)
@@ -313,7 +404,17 @@ class FocusView(QWidget):
                 f"task(s) have comfortable slack — a few days there won't "
                 f"move your end date.</span>", size=12))
 
-    def _build_week_panel(self, all_nodes):
+    def _ready_to_start(self, all_nodes, node_map):
+        ready = []
+        for n in all_nodes:
+            if n.children or n.status != "Not Started" or not self._owner_matches(n):
+                continue
+            driver = self._driver_of(n, node_map)
+            if driver is None or driver.status == "Completed":
+                ready.append(n)
+        return sorted(ready, key=lambda n: n.start_date or "")
+
+    def _build_week_panel(self, all_nodes, node_map):
         self._clear(self.week_panel)
         lay = self.week_panel.layout()
 
@@ -327,7 +428,7 @@ class FocusView(QWidget):
 
         overdue, due_week, starting, closed = [], [], [], []
         for n in all_nodes:
-            if n.children:
+            if n.children or not self._owner_matches(n):
                 continue
             s, e = _parse(n.start_date), _parse(n.end_date)
             if n.status == "Completed":
@@ -343,9 +444,12 @@ class FocusView(QWidget):
 
         lay.addWidget(self._label("<b>This week</b>", size=14))
 
+        ready = self._ready_to_start(all_nodes, node_map)
         cols = QHBoxLayout()
         cols.setSpacing(10)
         for title, color, items, date_of, prefix in (
+            ("Ready to start", "#0B5C85", ready,
+             lambda n: n.start_date, "starts"),
             ("Overdue", "#A32D2D", sorted(overdue, key=lambda n: n.end_date or ""),
              lambda n: n.end_date, "due"),
             ("Due this week", "#854F0B", sorted(due_week, key=lambda n: n.end_date or ""),
@@ -370,9 +474,12 @@ class FocusView(QWidget):
             if items:
                 for n in items[:8]:
                     owner = f" · {n.owner}" if n.owner else ""
+                    date_label = f"{prefix} {_fmt(date_of(n))}"
+                    if title == "Due this week" and _parse(date_of(n)) == today:
+                        date_label = "<b>today</b>"
                     clay.addWidget(self._label(
                         f"{_link(n)}<br><span style='color:#999; font-size:11px;'>"
-                        f"{prefix} {_fmt(date_of(n))}{owner}</span>", size=12))
+                        f"{date_label}{owner}</span>", size=12, node=n))
                 if len(items) > 8:
                     clay.addWidget(self._label(
                         f"<span style='color:#999'>+{len(items) - 8} more…</span>",

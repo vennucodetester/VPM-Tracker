@@ -315,8 +315,8 @@ class MainWindow(QMainWindow):
         proj = self.active_project()
         if not proj:
             return
-        proj.tree_view.recalculate_all_dates()
-        proj.tree_view.refresh_entire_tree()
+        node = proj.tree_view.root_nodes[0] if proj.tree_view.root_nodes else None
+        proj.tree_view.commit_structure_change(node)
         if proj.inner_tabs.currentIndex() == 1:
             proj.gantt_view.load_nodes(proj.tree_view.root_nodes)
 
@@ -559,7 +559,8 @@ class MainWindow(QMainWindow):
         from ui.calendar_dialog import CalendarSettingsDialog
         dialog = CalendarSettingsDialog(self)
         if dialog.exec():
-            proj.tree_view.recalculate_all_dates()
+            node = proj.tree_view.root_nodes[0] if proj.tree_view.root_nodes else None
+            proj.tree_view.commit_structure_change(node)
 
     # ---------------- data change tracking ----------------
     def on_data_changed(self):
