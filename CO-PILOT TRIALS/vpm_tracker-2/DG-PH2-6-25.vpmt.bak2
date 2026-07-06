@@ -16,7 +16,7 @@
           "id": "1e2b5e14-dde1-45b3-ab74-2bd700915385",
           "name": "DG- Phase 2",
           "start_date": "2026-04-13",
-          "end_date": "2027-02-05",
+          "end_date": "2026-12-30",
           "status": "In Progress",
           "owner": "",
           "notes": "",
@@ -36,7 +36,7 @@
                   "id": "700f421f-afd2-48b9-a0b1-f9a69f74dc15",
                   "name": "Engineering Concept development",
                   "start_date": "2026-04-13",
-                  "end_date": "2026-07-30",
+                  "end_date": "2026-07-24",
                   "status": "In Progress",
                   "owner": "",
                   "notes": "",
@@ -82,7 +82,7 @@
                       "id": "13a8a1f3-01a6-4178-a1ed-f69346b704f7",
                       "name": "CAE",
                       "start_date": "2026-05-15",
-                      "end_date": "2026-07-17",
+                      "end_date": "2026-07-24",
                       "status": "In Progress",
                       "owner": "",
                       "notes": "",
@@ -92,7 +92,7 @@
                           "id": "045acf53-7b8f-4811-88dd-08a05c1ad77b",
                           "name": "CFD",
                           "start_date": "2026-05-15",
-                          "end_date": "2026-06-25",
+                          "end_date": "2026-07-02",
                           "status": "In Progress",
                           "owner": "",
                           "notes": "",
@@ -157,7 +157,7 @@
                               "id": "74a45722-2731-4381-afa8-dfdccace1af9",
                               "name": "3Dr + 4Dr",
                               "start_date": "2026-05-15",
-                              "end_date": "2026-06-25",
+                              "end_date": "2026-07-02",
                               "status": "In Progress",
                               "owner": "",
                               "notes": "[2026-06-08]: Got the initial CFD with acrylic partition off. See high temps on the 3Dr right side. Want another run with it off. ",
@@ -185,7 +185,7 @@
                                   "id": "f722314d-71d9-468f-a09f-7081e92276d3",
                                   "name": "Trial 2",
                                   "start_date": "2026-06-08",
-                                  "end_date": "2026-06-25",
+                                  "end_date": "2026-07-02",
                                   "status": "In Progress",
                                   "owner": "",
                                   "notes": "[2026-06-16] just make sure you remember this\n[2026-06-16] test file",
@@ -211,6 +211,13 @@
                                       "end": "2026-06-25",
                                       "slip": 4,
                                       "reason": "xyz"
+                                    },
+                                    {
+                                      "rev": "D",
+                                      "date": "2026-06-30",
+                                      "end": "2026-07-02",
+                                      "slip": 5,
+                                      "reason": "CFD had some issues. Getting wrong air flow patterns at specific spots. Ravi asked for couple more days to fix it"
                                     }
                                   ]
                                 }
@@ -235,8 +242,8 @@
                         {
                           "id": "25b8b9aa-ea50-4b1e-a74b-d1ff3c27f291",
                           "name": "FEA - Structural changes",
-                          "start_date": "2026-06-26",
-                          "end_date": "2026-07-17",
+                          "start_date": "2026-07-03",
+                          "end_date": "2026-07-24",
                           "status": "Completed",
                           "owner": "",
                           "notes": "",
@@ -245,8 +252,8 @@
                             {
                               "id": "718fb328-40d4-4564-b2fb-985216930bcc",
                               "name": "Trial 1",
-                              "start_date": "2026-06-26",
-                              "end_date": "2026-07-06",
+                              "start_date": "2026-07-03",
+                              "end_date": "2026-07-13",
                               "status": "Completed",
                               "owner": "",
                               "notes": "[2026-05-13]: Got the result but failed. Need trial 2 \n[2026-05-05]: Delay with FEA results. Moved from 5/4 to 5/8",
@@ -263,8 +270,8 @@
                             {
                               "id": "d63f45ca-1c0a-4e72-82e2-9ee7cb32c862",
                               "name": "Trial 2",
-                              "start_date": "2026-07-07",
-                              "end_date": "2026-07-15",
+                              "start_date": "2026-07-14",
+                              "end_date": "2026-07-22",
                               "status": "Completed",
                               "owner": "",
                               "notes": "",
@@ -281,8 +288,8 @@
                             {
                               "id": "8dd64ab5-0d25-4c5d-9f4d-5906067f7992",
                               "name": "Trial 3",
-                              "start_date": "2026-07-16",
-                              "end_date": "2026-07-17",
+                              "start_date": "2026-07-23",
+                              "end_date": "2026-07-24",
                               "status": "Completed",
                               "owner": "",
                               "notes": "",
@@ -317,8 +324,8 @@
                     {
                       "id": "84d6e893-fe45-4d63-b342-7be1fc0c01c4",
                       "name": "3D model updates",
-                      "start_date": "2026-07-20",
-                      "end_date": "2026-07-22",
+                      "start_date": "2026-07-14",
+                      "end_date": "2026-07-16",
                       "status": "Completed",
                       "owner": "",
                       "notes": "",
@@ -326,7 +333,7 @@
                       "children": [],
                       "expanded": false,
                       "dates_locked": false,
-                      "predecessor_id": "8dd64ab5-0d25-4c5d-9f4d-5906067f7992",
+                      "predecessor_id": "718fb328-40d4-4564-b2fb-985216930bcc",
                       "baseline_duration": 3,
                       "baseline_end": "2026-07-15",
                       "delay_notes": "",
@@ -335,8 +342,8 @@
                     {
                       "id": "aecc1f1e-91e5-49e9-bcce-1b7616036af0",
                       "name": "Engineering Drawings",
-                      "start_date": "2026-07-20",
-                      "end_date": "2026-07-24",
+                      "start_date": "2026-07-14",
+                      "end_date": "2026-07-20",
                       "status": "Not Started",
                       "owner": "",
                       "notes": "[2026-06-08]: Waiting to get a direction on the plug. Brett sent out a matrix document listing out timing and cost associated with each design ",
@@ -344,7 +351,7 @@
                       "children": [],
                       "expanded": false,
                       "dates_locked": false,
-                      "predecessor_id": "8dd64ab5-0d25-4c5d-9f4d-5906067f7992",
+                      "predecessor_id": "718fb328-40d4-4564-b2fb-985216930bcc",
                       "baseline_duration": 5,
                       "baseline_end": "2026-07-17",
                       "delay_notes": "",
@@ -353,8 +360,8 @@
                     {
                       "id": "680f05c4-7098-4100-a663-c35613e4682c",
                       "name": "TC workflow",
-                      "start_date": "2026-07-27",
-                      "end_date": "2026-07-28",
+                      "start_date": "2026-07-21",
+                      "end_date": "2026-07-22",
                       "status": "Not Started",
                       "owner": "",
                       "notes": "",
@@ -427,7 +434,7 @@
                       "id": "aa6643e1-3a95-4bb6-9df7-389d91fda8f7",
                       "name": "Test requests",
                       "start_date": "2026-05-15",
-                      "end_date": "2026-07-27",
+                      "end_date": "2026-07-21",
                       "status": "Completed",
                       "owner": "",
                       "notes": "",
@@ -436,8 +443,8 @@
                         {
                           "id": "6b9c216c-0f8f-4854-ac35-332c80ebd5f5",
                           "name": "Model shop request",
-                          "start_date": "2026-07-27",
-                          "end_date": "2026-07-27",
+                          "start_date": "2026-07-21",
+                          "end_date": "2026-07-21",
                           "status": "Completed",
                           "owner": "",
                           "notes": "",
@@ -481,9 +488,9 @@
                     {
                       "id": "634adcc2-d8a5-4837-8887-9d22387be7d0",
                       "name": "Concept design review",
-                      "start_date": "2026-07-27",
-                      "end_date": "2026-07-28",
-                      "status": "Not Started",
+                      "start_date": "2026-07-21",
+                      "end_date": "2026-07-22",
+                      "status": "Completed",
                       "owner": "",
                       "notes": "",
                       "is_parallel": false,
@@ -499,8 +506,8 @@
                     {
                       "id": "c088ebfd-a310-409b-8dca-b4cf8310138f",
                       "name": "Kit work - Phase 1",
-                      "start_date": "2026-07-29",
-                      "end_date": "2026-07-29",
+                      "start_date": "2026-07-23",
+                      "end_date": "2026-07-23",
                       "status": "Not Started",
                       "owner": "",
                       "notes": "",
@@ -517,8 +524,8 @@
                     {
                       "id": "61118dc9-0554-410e-8461-eb031fef80da",
                       "name": "Kit work - Phase 2",
-                      "start_date": "2026-07-30",
-                      "end_date": "2026-07-30",
+                      "start_date": "2026-07-24",
+                      "end_date": "2026-07-24",
                       "status": "Not Started",
                       "owner": "",
                       "notes": "",
@@ -546,7 +553,7 @@
                   "name": "Model shop work",
                   "start_date": "2026-06-08",
                   "end_date": "2026-07-03",
-                  "status": "In Progress",
+                  "status": "Completed",
                   "owner": "",
                   "notes": "",
                   "is_parallel": false,
@@ -574,7 +581,7 @@
                       "name": "MS - Structural case. Work complete",
                       "start_date": "2026-06-08",
                       "end_date": "2026-07-03",
-                      "status": "In Progress",
+                      "status": "Completed",
                       "owner": "",
                       "notes": "[2026-06-16]: Do not have a room available right now. Might take another week or so to get the room",
                       "is_parallel": false,
@@ -939,1632 +946,10 @@
               "revisions": []
             },
             {
-              "id": "42a627d0-168f-4e7d-bddc-3cbf26222b7c",
-              "name": "DG- VAVE short term",
-              "start_date": "2026-04-13",
-              "end_date": "2027-02-05",
-              "status": "In Progress",
-              "owner": "",
-              "notes": "",
-              "is_parallel": true,
-              "children": [
-                {
-                  "id": "64dbfb30-79bc-482b-902a-4cf4e0d32352",
-                  "name": "Prep - Order parts",
-                  "start_date": "2026-04-13",
-                  "end_date": "2026-06-04",
-                  "status": "Completed",
-                  "owner": "",
-                  "notes": "",
-                  "is_parallel": false,
-                  "children": [
-                    {
-                      "id": "6e1b8ab3-407b-4eff-9136-247b4bfb3102",
-                      "name": "VAVE brain storm session",
-                      "start_date": "2026-04-13",
-                      "end_date": "2026-05-01",
-                      "status": "Completed",
-                      "owner": "",
-                      "notes": "",
-                      "is_parallel": false,
-                      "children": [],
-                      "expanded": false,
-                      "dates_locked": false,
-                      "predecessor_id": null,
-                      "baseline_duration": 15,
-                      "baseline_end": "2026-05-01",
-                      "delay_notes": "",
-                      "revisions": []
-                    },
-                    {
-                      "id": "cb89ddcf-165c-49ed-93b6-c3adb9b85957",
-                      "name": "Parts list to sourcing for quotes",
-                      "start_date": "2026-05-04",
-                      "end_date": "2026-05-07",
-                      "status": "Completed",
-                      "owner": "",
-                      "notes": "",
-                      "is_parallel": false,
-                      "children": [],
-                      "expanded": false,
-                      "dates_locked": false,
-                      "predecessor_id": null,
-                      "baseline_duration": 4,
-                      "baseline_end": "2026-05-07",
-                      "delay_notes": "",
-                      "revisions": []
-                    },
-                    {
-                      "id": "89a010e6-7c80-4751-95d3-4e50146fdbab",
-                      "name": "Order parts - Lab testing",
-                      "start_date": "2026-05-08",
-                      "end_date": "2026-06-04",
-                      "status": "Completed",
-                      "owner": "",
-                      "notes": "",
-                      "is_parallel": false,
-                      "children": [
-                        {
-                          "id": "45c96fd5-f4ea-4726-8175-ab3f14acd7ee",
-                          "name": "Cassettes",
-                          "start_date": "2026-05-08",
-                          "end_date": "2026-05-21",
-                          "status": "Completed",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": false,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": 10,
-                          "baseline_end": "2026-05-21",
-                          "delay_notes": "",
-                          "revisions": []
-                        },
-                        {
-                          "id": "092732aa-d043-4637-b552-6cb709fbef40",
-                          "name": "Cases",
-                          "start_date": "2026-05-22",
-                          "end_date": "2026-06-04",
-                          "status": "Completed",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": false,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": 10,
-                          "baseline_end": "2026-06-04",
-                          "delay_notes": "",
-                          "revisions": []
-                        }
-                      ],
-                      "expanded": false,
-                      "dates_locked": false,
-                      "predecessor_id": null,
-                      "baseline_duration": 20,
-                      "baseline_end": "2026-06-04",
-                      "delay_notes": "",
-                      "revisions": []
-                    }
-                  ],
-                  "expanded": false,
-                  "dates_locked": false,
-                  "predecessor_id": null,
-                  "baseline_duration": 39,
-                  "baseline_end": "2026-06-04",
-                  "delay_notes": "",
-                  "revisions": []
-                },
-                {
-                  "id": "358242de-cc15-4e9e-a730-1f802c048f49",
-                  "name": "VAVE activities",
-                  "start_date": "2026-06-05",
-                  "end_date": "2027-02-05",
-                  "status": "In Progress",
-                  "owner": "",
-                  "notes": "",
-                  "is_parallel": false,
-                  "children": [
-                    {
-                      "id": "f51f83c3-2aee-4e73-be19-117f2a009b07",
-                      "name": "Cassette VAVE activities",
-                      "start_date": "2026-06-05",
-                      "end_date": "2027-01-28",
-                      "status": "In Progress",
-                      "owner": "",
-                      "notes": "",
-                      "is_parallel": true,
-                      "children": [
-                        {
-                          "id": "9e3dbcc8-8ce6-4c50-87af-2ad08fb948e4",
-                          "name": "CAP Tube testing/ Check valve",
-                          "start_date": "2026-06-05",
-                          "end_date": "2026-07-23",
-                          "status": "In Progress",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": true,
-                          "children": [
-                            {
-                              "id": "0c01ef10-de1d-4740-92b7-85e620907127",
-                              "name": "Hot box  Validation - MT",
-                              "start_date": "2026-06-05",
-                              "end_date": "2026-07-01",
-                              "status": "In Progress",
-                              "owner": "",
-                              "notes": "[2026-06-23]: Initial baseline run done. Should get a captube result by tomorrow",
-                              "is_parallel": false,
-                              "children": [
-                                {
-                                  "id": "230407a9-97f9-4d24-a65f-3df10461b50a",
-                                  "name": "Baseline run",
-                                  "start_date": "2026-06-05",
-                                  "end_date": "2026-06-23",
-                                  "status": "Completed",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": 1,
-                                  "baseline_end": "2026-06-29",
-                                  "delay_notes": "",
-                                  "revisions": [
-                                    {
-                                      "rev": "B",
-                                      "date": "2026-06-25",
-                                      "end": "2026-06-23",
-                                      "slip": 12,
-                                      "reason": "Lab just got to this now."
-                                    }
-                                  ]
-                                },
-                                {
-                                  "id": "7862d501-0ec9-4ce7-be7f-2aeef1016a00",
-                                  "name": "Captube trial 1",
-                                  "start_date": "2026-06-24",
-                                  "end_date": "2026-06-25",
-                                  "status": "Completed",
-                                  "owner": "",
-                                  "notes": "[2026-06-25]: High superheat. Cut the captube down by 10in ",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": 1,
-                                  "baseline_end": "2026-06-08",
-                                  "delay_notes": "",
-                                  "revisions": [
-                                    {
-                                      "rev": "B",
-                                      "date": "2026-06-25",
-                                      "end": "2026-06-26",
-                                      "slip": 2,
-                                      "reason": "Taking longer than i originally thought"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "id": "6eaaa9f0-c428-4459-bb52-b2311a93ad5c",
-                                  "name": "Captube trial 2",
-                                  "start_date": "2026-06-26",
-                                  "end_date": "2026-07-01",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": 1,
-                                  "baseline_end": "2026-06-09",
-                                  "delay_notes": "",
-                                  "revisions": [
-                                    {
-                                      "rev": "B",
-                                      "date": "2026-06-25",
-                                      "end": "2026-07-02",
-                                      "slip": 3,
-                                      "reason": "Initial estimate. not delay"
-                                    }
-                                  ]
-                                }
-                              ],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": 10,
-                              "baseline_end": "2026-06-18",
-                              "delay_notes": "",
-                              "revisions": [
-                                {
-                                  "rev": "B",
-                                  "date": "2026-06-23",
-                                  "end": "2026-06-26",
-                                  "slip": 6,
-                                  "reason": "The lab didnt get to this testing until late last week. They wanted MS to do the cap tube changes but Chris went and told them that the Lab request calls for baseline run. So lab should be able to start testing right away."
-                                }
-                              ]
-                            },
-                            {
-                              "id": "91298fbd-deef-42c4-8616-4a2dc1e5572c",
-                              "name": "Check valve removal",
-                              "start_date": "2026-06-05",
-                              "end_date": "2026-07-08",
-                              "status": "In Progress",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": true,
-                              "children": [
-                                {
-                                  "id": "e407b09f-ca1d-4585-892c-c0b69ceb83f7",
-                                  "name": "MS request - LT unit",
-                                  "start_date": "2026-06-05",
-                                  "end_date": "2026-06-29",
-                                  "status": "In Progress",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": 1,
-                                  "baseline_end": "2026-07-03",
-                                  "delay_notes": "",
-                                  "revisions": [
-                                    {
-                                      "rev": "B",
-                                      "date": "2026-06-25",
-                                      "end": "2026-06-29",
-                                      "slip": 16,
-                                      "reason": "no delay"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "id": "2cb5d4a9-7340-41a3-98fa-3ee04a6ba92b",
-                                  "name": "Hot box testing.",
-                                  "start_date": "2026-07-02",
-                                  "end_date": "2026-07-08",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": "6eaaa9f0-c428-4459-bb52-b2311a93ad5c",
-                                  "baseline_duration": 1,
-                                  "baseline_end": "2026-07-03",
-                                  "delay_notes": "",
-                                  "revisions": [
-                                    {
-                                      "rev": "B",
-                                      "date": "2026-06-25",
-                                      "end": "2026-07-08",
-                                      "slip": 4,
-                                      "reason": "no delay"
-                                    }
-                                  ]
-                                }
-                              ],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": 1,
-                              "baseline_end": "2026-07-02",
-                              "delay_notes": "",
-                              "revisions": []
-                            },
-                            {
-                              "id": "3fd7436c-5d51-4ea5-bb33-dd5d5c811f86",
-                              "name": "Lab testing - 2Dr MT (C1)",
-                              "start_date": "2026-06-24",
-                              "end_date": "2026-07-23",
-                              "status": "In Progress",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [
-                                {
-                                  "id": "a03f4414-8ea3-42aa-879c-8ade19b75242",
-                                  "name": "Lab request",
-                                  "start_date": "2026-06-24",
-                                  "end_date": "2026-06-25",
-                                  "status": "In Progress",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": true,
-                                  "predecessor_id": null,
-                                  "baseline_duration": 1,
-                                  "baseline_end": "2026-07-09",
-                                  "delay_notes": "",
-                                  "revisions": [
-                                    {
-                                      "rev": "B",
-                                      "date": "2026-06-25",
-                                      "end": "2026-06-26",
-                                      "slip": 30,
-                                      "reason": "No delay here."
-                                    }
-                                  ]
-                                },
-                                {
-                                  "id": "71856328-ba0f-44d9-b305-9c6ba54d8a39",
-                                  "name": "Case in the room",
-                                  "start_date": "2026-07-02",
-                                  "end_date": "2026-07-02",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": "0c01ef10-de1d-4740-92b7-85e620907127",
-                                  "baseline_duration": 1,
-                                  "baseline_end": "2026-07-06",
-                                  "delay_notes": "",
-                                  "revisions": []
-                                },
-                                {
-                                  "id": "2ae9fdcc-7ad2-4834-84f4-abaea732133b",
-                                  "name": "Instrumentation",
-                                  "start_date": "2026-07-03",
-                                  "end_date": "2026-07-09",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": 1,
-                                  "baseline_end": "2026-07-07",
-                                  "delay_notes": "",
-                                  "revisions": [
-                                    {
-                                      "rev": "B",
-                                      "date": "2026-06-25",
-                                      "end": "2026-07-10",
-                                      "slip": 4,
-                                      "reason": "no delay"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "id": "3ea20d13-115d-4aa7-9287-8593afbb277a",
-                                  "name": "NSF",
-                                  "start_date": "2026-07-10",
-                                  "end_date": "2026-07-16",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": 1,
-                                  "baseline_end": "2026-07-08",
-                                  "delay_notes": "",
-                                  "revisions": [
-                                    {
-                                      "rev": "B",
-                                      "date": "2026-06-25",
-                                      "end": "2026-07-17",
-                                      "slip": 4,
-                                      "reason": "no delay"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "id": "26553198-f974-4067-a104-dbe3a81f3d14",
-                                  "name": "DOE",
-                                  "start_date": "2026-07-17",
-                                  "end_date": "2026-07-23",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": 1,
-                                  "baseline_end": "2026-07-09",
-                                  "delay_notes": "",
-                                  "revisions": [
-                                    {
-                                      "rev": "B",
-                                      "date": "2026-06-25",
-                                      "end": "2026-07-24",
-                                      "slip": 4,
-                                      "reason": "no delay"
-                                    }
-                                  ]
-                                }
-                              ],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": 1,
-                              "baseline_end": "2026-07-03",
-                              "delay_notes": "",
-                              "revisions": []
-                            }
-                          ],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": 20,
-                          "baseline_end": "2026-07-02",
-                          "delay_notes": "",
-                          "revisions": []
-                        },
-                        {
-                          "id": "88f4ea07-9217-4c68-9cab-7b1872b7af31",
-                          "name": "S/M - 1 (Removing parts/clamps from design)",
-                          "start_date": "2026-06-08",
-                          "end_date": "2026-07-13",
-                          "status": "In Progress",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": true,
-                          "children": [
-                            {
-                              "id": "f54ca2b6-c809-4033-823a-dbf94d406808",
-                              "name": "Transit test",
-                              "start_date": "2026-06-08",
-                              "end_date": "2026-06-17",
-                              "status": "Completed",
-                              "owner": "",
-                              "notes": "[2026-06-16]: Tecumseh just sent additional sm parts. Would like to test it all at once on the transit test.  \n[2026-06-15]: Chris already put in a lab test request ",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": 6,
-                              "baseline_end": "2026-06-12",
-                              "delay_notes": "",
-                              "revisions": [
-                                {
-                                  "rev": "B",
-                                  "date": "2026-06-15",
-                                  "end": "2026-06-16",
-                                  "slip": 2,
-                                  "reason": "Lab couldnt get to it yet. Dave not here. Will get an update from him later this week when he gets back"
-                                }
-                              ]
-                            },
-                            {
-                              "id": "f655aef4-19e9-484a-a8d8-2c157dbc045b",
-                              "name": "Vibration/sound test",
-                              "start_date": "2026-06-18",
-                              "end_date": "2026-06-25",
-                              "status": "Completed",
-                              "owner": "",
-                              "notes": "[2026-06-15]: Chris put in the request ",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": 5,
-                              "baseline_end": "2026-06-19",
-                              "delay_notes": "",
-                              "revisions": [
-                                {
-                                  "rev": "B",
-                                  "date": "2026-06-23",
-                                  "end": "2026-06-24",
-                                  "slip": 1,
-                                  "reason": "Setting up the vibration test. Should get results by end of day tomorrow"
-                                }
-                              ]
-                            },
-                            {
-                              "id": "571076ed-c90b-4b74-8be2-f46cdf6712e8",
-                              "name": "ECO process",
-                              "start_date": "2026-06-26",
-                              "end_date": "2026-07-10",
-                              "status": "Not Started",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": null,
-                              "baseline_end": null,
-                              "delay_notes": "",
-                              "revisions": []
-                            },
-                            {
-                              "id": "5826cf51-3be9-4d39-b073-2d8e8d2f43d9",
-                              "name": "Implementation",
-                              "start_date": "2026-07-13",
-                              "end_date": "2026-07-13",
-                              "status": "Not Started",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": 0,
-                              "baseline_end": "2026-07-09",
-                              "delay_notes": "",
-                              "revisions": []
-                            }
-                          ],
-                          "expanded": false,
-                          "dates_locked": true,
-                          "predecessor_id": null,
-                          "baseline_duration": 11,
-                          "baseline_end": "2026-06-19",
-                          "delay_notes": "",
-                          "revisions": []
-                        },
-                        {
-                          "id": "cc13f2dd-a382-4f9f-911b-948693dbd960",
-                          "name": "S/m - 2 (Control box redesign, evap shroud, compress base, cond. shroud)",
-                          "start_date": "2026-06-05",
-                          "end_date": "2026-08-06",
-                          "status": "In Progress",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": true,
-                          "children": [
-                            {
-                              "id": "5f33dc4f-34c0-4ec0-8fcd-fd86fce07027",
-                              "name": "Design finalize",
-                              "start_date": "2026-06-05",
-                              "end_date": "2026-06-23",
-                              "status": "Completed",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": null,
-                              "baseline_end": null,
-                              "delay_notes": "",
-                              "revisions": []
-                            },
-                            {
-                              "id": "b82af882-6dcd-41ae-bbe7-790637dedeb9",
-                              "name": "Part samples",
-                              "start_date": "2026-06-24",
-                              "end_date": "2026-07-14",
-                              "status": "In Progress",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": null,
-                              "baseline_end": null,
-                              "delay_notes": "",
-                              "revisions": []
-                            },
-                            {
-                              "id": "2cab32ae-7f26-44c3-a1cc-fa85f6da4cc6",
-                              "name": "Transit test",
-                              "start_date": "2026-07-15",
-                              "end_date": "2026-07-21",
-                              "status": "Not Started",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": null,
-                              "baseline_end": null,
-                              "delay_notes": "",
-                              "revisions": []
-                            },
-                            {
-                              "id": "d871607c-6f26-4f24-a625-3d6382fd1e69",
-                              "name": "Vibration test",
-                              "start_date": "2026-07-22",
-                              "end_date": "2026-07-23",
-                              "status": "Not Started",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": null,
-                              "baseline_end": null,
-                              "delay_notes": "",
-                              "revisions": []
-                            },
-                            {
-                              "id": "6626322b-d394-47c0-ac14-c2688c16ab9b",
-                              "name": "ECO Process",
-                              "start_date": "2026-07-24",
-                              "end_date": "2026-08-06",
-                              "status": "Not Started",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": null,
-                              "baseline_end": null,
-                              "delay_notes": "",
-                              "revisions": []
-                            }
-                          ],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": null,
-                          "baseline_end": null,
-                          "delay_notes": "",
-                          "revisions": []
-                        },
-                        {
-                          "id": "beffec4a-f3ba-4e2e-ba22-725be0777308",
-                          "name": "New enclosure for 2.0",
-                          "start_date": "2026-06-05",
-                          "end_date": "2026-07-23",
-                          "status": "In Progress",
-                          "owner": "",
-                          "notes": "[2026-06-16] lkjad",
-                          "is_parallel": true,
-                          "children": [
-                            {
-                              "id": "42bf744e-546f-44eb-a7ad-fa940d1f7ec6",
-                              "name": "Concept design",
-                              "start_date": "2026-06-05",
-                              "end_date": "2026-06-19",
-                              "status": "Completed",
-                              "owner": "",
-                              "notes": "[2026-06-23]: Sent out quotes for roto molding. Waiting to hear back  ",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": 11,
-                              "baseline_end": "2026-06-19",
-                              "delay_notes": "",
-                              "revisions": []
-                            },
-                            {
-                              "id": "73ef9c1a-846a-4289-8508-932f4e352b92",
-                              "name": "Quotes",
-                              "start_date": "2026-06-22",
-                              "end_date": "2026-06-26",
-                              "status": "In Progress",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": 5,
-                              "baseline_end": "2026-06-26",
-                              "delay_notes": "",
-                              "revisions": []
-                            },
-                            {
-                              "id": "09c564ac-34ae-40db-817c-53d44825d8fb",
-                              "name": "Prototypes - 3D print",
-                              "start_date": "2026-06-22",
-                              "end_date": "2026-07-03",
-                              "status": "In Progress",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": "42bf744e-546f-44eb-a7ad-fa940d1f7ec6",
-                              "baseline_duration": 10,
-                              "baseline_end": "2026-07-03",
-                              "delay_notes": "",
-                              "revisions": []
-                            },
-                            {
-                              "id": "82e2859a-de47-4b1c-9452-8318485fff16",
-                              "name": "Initial Validation Test - on 2Dr case",
-                              "start_date": "2026-07-06",
-                              "end_date": "2026-07-17",
-                              "status": "Not Started",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": 10,
-                              "baseline_end": "2026-07-17",
-                              "delay_notes": "",
-                              "revisions": []
-                            },
-                            {
-                              "id": "67ff5d5e-ebb3-47ad-bd84-6faff741474b",
-                              "name": "Cut PO",
-                              "start_date": "2026-07-20",
-                              "end_date": "2026-07-20",
-                              "status": "Not Started",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": 1,
-                              "baseline_end": "2026-07-20",
-                              "delay_notes": "",
-                              "revisions": []
-                            },
-                            {
-                              "id": "fa7f1035-7e10-4810-847f-7e2a76f864b6",
-                              "name": "Prototype samples",
-                              "start_date": "2026-07-21",
-                              "end_date": "2026-07-21",
-                              "status": "Not Started",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": 1,
-                              "baseline_end": "2026-07-21",
-                              "delay_notes": "",
-                              "revisions": [
-                                {
-                                  "rev": "B",
-                                  "date": "2026-06-25",
-                                  "end": "2026-09-07",
-                                  "slip": 34,
-                                  "reason": ""
-                                },
-                                {
-                                  "rev": "C",
-                                  "date": "2026-06-25",
-                                  "end": "2026-09-07",
-                                  "slip": 0,
-                                  "reason": "no delay"
-                                }
-                              ]
-                            },
-                            {
-                              "id": "4fcb5218-d42e-41eb-a670-f7f4f114cb06",
-                              "name": "Lab testing",
-                              "start_date": "2026-07-22",
-                              "end_date": "2026-07-23",
-                              "status": "Not Started",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [
-                                {
-                                  "id": "d15d343e-0f79-49f4-bfba-548f3efa7290",
-                                  "name": "NSF",
-                                  "start_date": "2026-07-22",
-                                  "end_date": "2026-07-22",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": 1,
-                                  "baseline_end": "2026-07-23",
-                                  "delay_notes": "",
-                                  "revisions": [
-                                    {
-                                      "rev": "B",
-                                      "date": "2026-06-25",
-                                      "end": "2026-09-14",
-                                      "slip": 4,
-                                      "reason": "no delay"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "id": "368c2dc2-3c2f-4b55-bd2c-f89ba6b66d91",
-                                  "name": "DOE",
-                                  "start_date": "2026-07-23",
-                                  "end_date": "2026-07-23",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": 1,
-                                  "baseline_end": "2026-07-24",
-                                  "delay_notes": "",
-                                  "revisions": [
-                                    {
-                                      "rev": "B",
-                                      "date": "2026-06-25",
-                                      "end": "2026-09-28",
-                                      "slip": 9,
-                                      "reason": ""
-                                    }
-                                  ]
-                                }
-                              ],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": 1,
-                              "baseline_end": "2026-07-22",
-                              "delay_notes": "",
-                              "revisions": []
-                            }
-                          ],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": 31,
-                          "baseline_end": "2026-07-17",
-                          "delay_notes": "",
-                          "revisions": []
-                        },
-                        {
-                          "id": "2b6cc908-19e0-418d-bb5d-a59afbe46d48",
-                          "name": "Aluminum coil",
-                          "start_date": "2026-07-24",
-                          "end_date": "2026-12-03",
-                          "status": "Not Started",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": false,
-                          "children": [
-                            {
-                              "id": "7cc97bb0-89e9-4004-8214-da579ac1693d",
-                              "name": "MT Aluminum coil",
-                              "start_date": "2026-07-24",
-                              "end_date": "2026-11-25",
-                              "status": "Not Started",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [
-                                {
-                                  "id": "367609f4-dbee-41a6-b270-9e5c7940257c",
-                                  "name": "Define coil spec. Drawings?",
-                                  "start_date": "2026-07-24",
-                                  "end_date": "2026-08-06",
-                                  "status": "Completed",
-                                  "owner": "",
-                                  "notes": "[2026-06-16]: Got the first result. Aluminum coil used for locker has the same or better performance. Asked Wendy to evaluate current coil with Al material ",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": 6,
-                                  "baseline_end": "2026-06-12",
-                                  "delay_notes": "",
-                                  "revisions": [
-                                    {
-                                      "rev": "B",
-                                      "date": "2026-06-15",
-                                      "end": "2026-06-18",
-                                      "slip": 4,
-                                      "reason": "Working with Wendy to calculate the aluminum coil performance. Doing fit tesst in 3D"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "id": "921a1c7e-ded9-4ab7-9d2e-6cac094f41d0",
-                                  "name": "Request for quotes. Send dwgs",
-                                  "start_date": "2026-08-07",
-                                  "end_date": "2026-08-11",
-                                  "status": "Completed",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": null,
-                                  "baseline_end": null,
-                                  "delay_notes": "",
-                                  "revisions": []
-                                },
-                                {
-                                  "id": "24854f67-9a32-4621-b3cf-0ac91777202e",
-                                  "name": "Get quotes/Timelines from supplier",
-                                  "start_date": "2026-08-12",
-                                  "end_date": "2026-08-18",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": null,
-                                  "baseline_end": null,
-                                  "delay_notes": "",
-                                  "revisions": []
-                                },
-                                {
-                                  "id": "0f347230-d351-45ad-aedd-7e289d5111b8",
-                                  "name": "Request samples- Send PO",
-                                  "start_date": "2026-08-19",
-                                  "end_date": "2026-08-25",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": null,
-                                  "baseline_end": null,
-                                  "delay_notes": "",
-                                  "revisions": []
-                                },
-                                {
-                                  "id": "1dbbab09-7297-421d-84e4-10f043ec4f88",
-                                  "name": "Receive samples",
-                                  "start_date": "2026-08-26",
-                                  "end_date": "2026-11-11",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": null,
-                                  "baseline_end": null,
-                                  "delay_notes": "",
-                                  "revisions": []
-                                },
-                                {
-                                  "id": "67862d68-5a70-4595-a9d2-bae197e9b13c",
-                                  "name": "Lab testing",
-                                  "start_date": "2026-11-12",
-                                  "end_date": "2026-11-25",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [
-                                    {
-                                      "id": "9df2ca63-2b3e-4da3-8d65-5a2af7cab6a2",
-                                      "name": "NSF",
-                                      "start_date": "2026-11-12",
-                                      "end_date": "2026-11-18",
-                                      "status": "Not Started",
-                                      "owner": "",
-                                      "notes": "",
-                                      "is_parallel": false,
-                                      "children": [],
-                                      "expanded": false,
-                                      "dates_locked": false,
-                                      "predecessor_id": null,
-                                      "baseline_duration": null,
-                                      "baseline_end": null,
-                                      "delay_notes": "",
-                                      "revisions": []
-                                    },
-                                    {
-                                      "id": "c1d4eb90-01d4-46c7-8085-70a8e5a4ecb7",
-                                      "name": "DOE",
-                                      "start_date": "2026-11-19",
-                                      "end_date": "2026-11-25",
-                                      "status": "Not Started",
-                                      "owner": "",
-                                      "notes": "",
-                                      "is_parallel": false,
-                                      "children": [],
-                                      "expanded": false,
-                                      "dates_locked": false,
-                                      "predecessor_id": null,
-                                      "baseline_duration": null,
-                                      "baseline_end": null,
-                                      "delay_notes": "",
-                                      "revisions": []
-                                    }
-                                  ],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": null,
-                                  "baseline_end": null,
-                                  "delay_notes": "",
-                                  "revisions": []
-                                }
-                              ],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": null,
-                              "baseline_end": null,
-                              "delay_notes": "",
-                              "revisions": []
-                            },
-                            {
-                              "id": "6a5ac8a0-79cb-4a6f-be16-1b9f564a6765",
-                              "name": "LT Aluminum coil",
-                              "start_date": "2026-07-24",
-                              "end_date": "2026-12-03",
-                              "status": "Not Started",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": true,
-                              "children": [
-                                {
-                                  "id": "303c3343-1f99-47ce-bc06-a90980310ebe",
-                                  "name": "Define coil spec",
-                                  "start_date": "2026-07-24",
-                                  "end_date": "2026-08-14",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": null,
-                                  "baseline_end": null,
-                                  "delay_notes": "",
-                                  "revisions": []
-                                },
-                                {
-                                  "id": "0d69362f-e6a2-44a1-ad48-bbedf4e68132",
-                                  "name": "Request for quotes. Send dwgs",
-                                  "start_date": "2026-08-17",
-                                  "end_date": "2026-08-19",
-                                  "status": "Completed",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": null,
-                                  "baseline_end": null,
-                                  "delay_notes": "",
-                                  "revisions": []
-                                },
-                                {
-                                  "id": "c1060806-4c9c-4071-ab7c-e15b8dfbdddb",
-                                  "name": "Get quotes/Timelines from supplier",
-                                  "start_date": "2026-08-20",
-                                  "end_date": "2026-08-26",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": null,
-                                  "baseline_end": null,
-                                  "delay_notes": "",
-                                  "revisions": []
-                                },
-                                {
-                                  "id": "da3548fa-aa75-496f-a514-9456e23ca361",
-                                  "name": "Request samples- Send PO",
-                                  "start_date": "2026-08-27",
-                                  "end_date": "2026-09-02",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": null,
-                                  "baseline_end": null,
-                                  "delay_notes": "",
-                                  "revisions": []
-                                },
-                                {
-                                  "id": "791c2777-614e-46f2-b5ce-09c6061d5c17",
-                                  "name": "Receive samples",
-                                  "start_date": "2026-09-03",
-                                  "end_date": "2026-11-19",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": null,
-                                  "baseline_end": null,
-                                  "delay_notes": "",
-                                  "revisions": []
-                                },
-                                {
-                                  "id": "9838f15a-f176-4344-8c09-871b3ba8f738",
-                                  "name": "Lab testing",
-                                  "start_date": "2026-11-20",
-                                  "end_date": "2026-12-03",
-                                  "status": "Not Started",
-                                  "owner": "",
-                                  "notes": "",
-                                  "is_parallel": false,
-                                  "children": [
-                                    {
-                                      "id": "84810735-d2fa-4c2c-83ea-b5c868e1bac8",
-                                      "name": "NSF",
-                                      "start_date": "2026-11-20",
-                                      "end_date": "2026-11-26",
-                                      "status": "Not Started",
-                                      "owner": "",
-                                      "notes": "",
-                                      "is_parallel": false,
-                                      "children": [],
-                                      "expanded": false,
-                                      "dates_locked": false,
-                                      "predecessor_id": null,
-                                      "baseline_duration": null,
-                                      "baseline_end": null,
-                                      "delay_notes": "",
-                                      "revisions": []
-                                    },
-                                    {
-                                      "id": "27326d58-76e2-4d5d-af47-f5b68fe15124",
-                                      "name": "DOE",
-                                      "start_date": "2026-11-27",
-                                      "end_date": "2026-12-03",
-                                      "status": "Not Started",
-                                      "owner": "",
-                                      "notes": "",
-                                      "is_parallel": false,
-                                      "children": [],
-                                      "expanded": false,
-                                      "dates_locked": false,
-                                      "predecessor_id": null,
-                                      "baseline_duration": null,
-                                      "baseline_end": null,
-                                      "delay_notes": "",
-                                      "revisions": []
-                                    }
-                                  ],
-                                  "expanded": false,
-                                  "dates_locked": false,
-                                  "predecessor_id": null,
-                                  "baseline_duration": null,
-                                  "baseline_end": null,
-                                  "delay_notes": "",
-                                  "revisions": []
-                                }
-                              ],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": null,
-                              "baseline_end": null,
-                              "delay_notes": "",
-                              "revisions": []
-                            }
-                          ],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": 6,
-                          "baseline_end": "2026-06-12",
-                          "delay_notes": "",
-                          "revisions": []
-                        },
-                        {
-                          "id": "18edaf3f-10f6-44ba-982a-0cb977e97896",
-                          "name": "Gasket - Case-cassette; Cassette - enclosure",
-                          "start_date": "2026-12-04",
-                          "end_date": "2027-01-21",
-                          "status": "Not Started",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": false,
-                          "children": [
-                            {
-                              "id": "aeb339cd-6831-4be8-bf67-0d34d33fecb0",
-                              "name": "Concept design",
-                              "start_date": "2026-12-04",
-                              "end_date": "2026-12-24",
-                              "status": "Not Started",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": 11,
-                              "baseline_end": "2026-06-19",
-                              "delay_notes": "",
-                              "revisions": [
-                                {
-                                  "rev": "B",
-                                  "date": "2026-06-23",
-                                  "end": "2026-06-25",
-                                  "slip": 4,
-                                  "reason": "Gasket design goes with the enclosure design. Working with enclosure manufacturer to understand what their limitations/requirements are. Waiting to hear from them right now."
-                                }
-                              ]
-                            },
-                            {
-                              "id": "58814be9-2803-404c-8353-69605f1878d3",
-                              "name": "Quotes",
-                              "start_date": "2026-12-25",
-                              "end_date": "2026-12-31",
-                              "status": "Not Started",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": 5,
-                              "baseline_end": "2026-06-26",
-                              "delay_notes": "",
-                              "revisions": []
-                            },
-                            {
-                              "id": "2bfbea18-5f6a-486f-ac14-1f3e4c8cd87d",
-                              "name": "Prototypes",
-                              "start_date": "2026-12-25",
-                              "end_date": "2027-01-07",
-                              "status": "Not Started",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": "aeb339cd-6831-4be8-bf67-0d34d33fecb0",
-                              "baseline_duration": 10,
-                              "baseline_end": "2026-07-03",
-                              "delay_notes": "",
-                              "revisions": []
-                            },
-                            {
-                              "id": "1353bbaa-0901-43f1-9a57-1a742c4a4222",
-                              "name": "Initial Validation Test - on 2Dr case",
-                              "start_date": "2027-01-08",
-                              "end_date": "2027-01-21",
-                              "status": "Not Started",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": 10,
-                              "baseline_end": "2026-07-17",
-                              "delay_notes": "",
-                              "revisions": []
-                            }
-                          ],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": 31,
-                          "baseline_end": "2026-07-17",
-                          "delay_notes": "",
-                          "revisions": []
-                        },
-                        {
-                          "id": "f4d0d326-e7b7-44b6-999e-75e6ab9386cd",
-                          "name": "Cassette base - MTY Design",
-                          "start_date": "2027-01-22",
-                          "end_date": "2027-01-22",
-                          "status": "Not Started",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": false,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": 0,
-                          "baseline_end": "2026-07-20",
-                          "delay_notes": "",
-                          "revisions": []
-                        },
-                        {
-                          "id": "7acadc69-eb2b-4748-ba12-479e1b3f452c",
-                          "name": "New cheaper Carel controller",
-                          "start_date": "2027-01-25",
-                          "end_date": "2027-01-25",
-                          "status": "Not Started",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": false,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": null,
-                          "baseline_end": null,
-                          "delay_notes": "",
-                          "revisions": []
-                        },
-                        {
-                          "id": "ad48a19d-2d9f-41b7-a646-904c75df8431",
-                          "name": "New Task",
-                          "start_date": "2027-01-26",
-                          "end_date": "2027-01-27",
-                          "status": "Not Started",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": false,
-                          "children": [
-                            {
-                              "id": "a992b977-c4c5-47a9-8049-e3c0451c60d5",
-                              "name": "New Harness design",
-                              "start_date": "2027-01-26",
-                              "end_date": "2027-01-26",
-                              "status": "Not Started",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": null,
-                              "baseline_end": null,
-                              "delay_notes": "",
-                              "revisions": []
-                            },
-                            {
-                              "id": "e6554fb8-24ce-417d-8b13-1645e37445b2",
-                              "name": "New Task",
-                              "start_date": "2027-01-27",
-                              "end_date": "2027-01-27",
-                              "status": "Not Started",
-                              "owner": "",
-                              "notes": "",
-                              "is_parallel": false,
-                              "children": [],
-                              "expanded": false,
-                              "dates_locked": false,
-                              "predecessor_id": null,
-                              "baseline_duration": null,
-                              "baseline_end": null,
-                              "delay_notes": "",
-                              "revisions": []
-                            }
-                          ],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": null,
-                          "baseline_end": null,
-                          "delay_notes": "",
-                          "revisions": []
-                        },
-                        {
-                          "id": "8900d3d5-bea2-4e32-8cbe-81be3316a7d1",
-                          "name": "New Task",
-                          "start_date": "2027-01-28",
-                          "end_date": "2027-01-28",
-                          "status": "Not Started",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": false,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": 1,
-                          "baseline_end": "2026-07-29",
-                          "delay_notes": "",
-                          "revisions": []
-                        }
-                      ],
-                      "expanded": false,
-                      "dates_locked": false,
-                      "predecessor_id": null,
-                      "baseline_duration": null,
-                      "baseline_end": null,
-                      "delay_notes": "",
-                      "revisions": []
-                    },
-                    {
-                      "id": "825ab1a8-9ab8-4453-995c-9d878c50b815",
-                      "name": "Case VAVE activities",
-                      "start_date": "2027-01-29",
-                      "end_date": "2027-02-05",
-                      "status": "Not Started",
-                      "owner": "",
-                      "notes": "",
-                      "is_parallel": false,
-                      "children": [
-                        {
-                          "id": "18b80bc1-5b4d-41ab-a205-265b7c1e601c",
-                          "name": "Plastic Deck Pans w/ updated return air",
-                          "start_date": "2027-01-29",
-                          "end_date": "2027-01-29",
-                          "status": "Not Started",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": false,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": null,
-                          "baseline_end": null,
-                          "delay_notes": "",
-                          "revisions": []
-                        },
-                        {
-                          "id": "f2cbdd06-1464-4af8-9d79-bbe979f618e2",
-                          "name": "Roll form the ctr uprights. ",
-                          "start_date": "2027-02-01",
-                          "end_date": "2027-02-01",
-                          "status": "Not Started",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": false,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": null,
-                          "baseline_end": null,
-                          "delay_notes": "",
-                          "revisions": []
-                        },
-                        {
-                          "id": "c97795f7-1b00-49e8-87e6-09bba3c6ba69",
-                          "name": "Remove bracket near back panel. ",
-                          "start_date": "2027-02-02",
-                          "end_date": "2027-02-02",
-                          "status": "Not Started",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": false,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": 0,
-                          "baseline_end": "2026-07-23",
-                          "delay_notes": "",
-                          "revisions": []
-                        },
-                        {
-                          "id": "bd51cf33-8508-415f-962c-635f28b37e66",
-                          "name": "Remove Louvers on the side trim",
-                          "start_date": "2027-02-03",
-                          "end_date": "2027-02-03",
-                          "status": "Not Started",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": false,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": null,
-                          "baseline_end": null,
-                          "delay_notes": "",
-                          "revisions": []
-                        },
-                        {
-                          "id": "cad659e3-f074-406f-bd01-b773f887cf9a",
-                          "name": "LED drive bracket removal",
-                          "start_date": "2027-02-04",
-                          "end_date": "2027-02-04",
-                          "status": "Not Started",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": false,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": null,
-                          "baseline_end": null,
-                          "delay_notes": "",
-                          "revisions": []
-                        },
-                        {
-                          "id": "8b8e4cea-9461-46ac-a1b2-ce00a09edb59",
-                          "name": "Shorten the bracket where case power comes in",
-                          "start_date": "2027-02-05",
-                          "end_date": "2027-02-05",
-                          "status": "Not Started",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": false,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": null,
-                          "baseline_end": null,
-                          "delay_notes": "",
-                          "revisions": []
-                        }
-                      ],
-                      "expanded": false,
-                      "dates_locked": false,
-                      "predecessor_id": null,
-                      "baseline_duration": null,
-                      "baseline_end": null,
-                      "delay_notes": "",
-                      "revisions": []
-                    }
-                  ],
-                  "expanded": false,
-                  "dates_locked": false,
-                  "predecessor_id": null,
-                  "baseline_duration": 31,
-                  "baseline_end": "2026-07-17",
-                  "delay_notes": "",
-                  "revisions": []
-                }
-              ],
-              "expanded": false,
-              "dates_locked": false,
-              "predecessor_id": null,
-              "baseline_duration": 70,
-              "baseline_end": "2026-07-17",
-              "delay_notes": "",
-              "revisions": []
-            },
-            {
               "id": "4d277fdb-376b-4f15-b5a5-45cc73b5a580",
               "name": "DG 2.5 - Variable speed",
               "start_date": "2026-04-13",
-              "end_date": "2026-12-08",
+              "end_date": "2026-12-29",
               "status": "In Progress",
               "owner": "",
               "notes": "",
@@ -2574,7 +959,7 @@
                   "id": "6574dc8e-60c2-42bd-bd86-2c85ece1acef",
                   "name": "2.5.1 Cassette build",
                   "start_date": "2026-04-13",
-                  "end_date": "2026-07-01",
+                  "end_date": "2026-07-15",
                   "status": "In Progress",
                   "owner": "",
                   "notes": "",
@@ -2621,7 +1006,7 @@
                       "name": "Sheetmetal/ Copper parts",
                       "start_date": "2026-05-25",
                       "end_date": "2026-06-24",
-                      "status": "In Progress",
+                      "status": "Completed",
                       "owner": "",
                       "notes": "[2026-06-16]: Frank to get with James first and will get back on the timeline for this.  ",
                       "is_parallel": false,
@@ -2646,7 +1031,7 @@
                       "id": "e1c1f7e8-1aed-4666-b68b-032e34cb658a",
                       "name": "2.5.1 assembly",
                       "start_date": "2026-06-25",
-                      "end_date": "2026-07-01",
+                      "end_date": "2026-07-15",
                       "status": "In Progress",
                       "owner": "",
                       "notes": "",
@@ -2658,7 +1043,15 @@
                       "baseline_duration": 5,
                       "baseline_end": "2026-06-26",
                       "delay_notes": "",
-                      "revisions": []
+                      "revisions": [
+                        {
+                          "rev": "B",
+                          "date": "2026-06-30",
+                          "end": "2026-07-15",
+                          "slip": 10,
+                          "reason": "Compressors from danfoss are delayed. Parts are getting air shipped from china today."
+                        }
+                      ]
                     }
                   ],
                   "expanded": false,
@@ -2673,7 +1066,7 @@
                   "id": "76421711-e55e-42af-bc63-533450024ae4",
                   "name": "Engineering activities",
                   "start_date": "2026-05-11",
-                  "end_date": "2026-07-07",
+                  "end_date": "2026-07-28",
                   "status": "In Progress",
                   "owner": "",
                   "notes": "",
@@ -2683,7 +1076,7 @@
                       "id": "6732261b-131f-4845-8458-cb19da6a478f",
                       "name": "3D model - MTY release",
                       "start_date": "2026-05-11",
-                      "end_date": "2026-06-26",
+                      "end_date": "2026-07-17",
                       "status": "In Progress",
                       "owner": "",
                       "notes": "",
@@ -2709,14 +1102,21 @@
                           "end": "2026-06-26",
                           "slip": 4,
                           "reason": "same reason as before. put a wrong date before"
+                        },
+                        {
+                          "rev": "D",
+                          "date": "2026-06-30",
+                          "end": "2026-07-17",
+                          "slip": 15,
+                          "reason": "Brett needs to work on IO manual updates, then the VAVE activities and then will get to this 5Dr"
                         }
                       ]
                     },
                     {
                       "id": "edd4cc93-5aa4-478a-a944-73f0acff8ced",
                       "name": "2D Drawings",
-                      "start_date": "2026-06-29",
-                      "end_date": "2026-07-01",
+                      "start_date": "2026-07-20",
+                      "end_date": "2026-07-22",
                       "status": "Not Started",
                       "owner": "",
                       "notes": "",
@@ -2733,8 +1133,8 @@
                     {
                       "id": "32a584d2-c7a4-4cd9-b5a5-9efd25d991f6",
                       "name": "TC Release",
-                      "start_date": "2026-07-02",
-                      "end_date": "2026-07-07",
+                      "start_date": "2026-07-23",
+                      "end_date": "2026-07-28",
                       "status": "Not Started",
                       "owner": "",
                       "notes": "",
@@ -2760,8 +1160,8 @@
                 {
                   "id": "354ed61b-8e86-4d24-9ad2-a01860833236",
                   "name": "Proto Lab testing - (Design validation)",
-                  "start_date": "2026-07-08",
-                  "end_date": "2026-07-28",
+                  "start_date": "2026-07-29",
+                  "end_date": "2026-08-18",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -2770,8 +1170,8 @@
                     {
                       "id": "0f4f2d19-c6e9-407f-a4d9-058825116320",
                       "name": "2Dr LT C2",
-                      "start_date": "2026-07-08",
-                      "end_date": "2026-07-28",
+                      "start_date": "2026-07-29",
+                      "end_date": "2026-08-18",
                       "status": "Not Started",
                       "owner": "",
                       "notes": "",
@@ -2780,8 +1180,8 @@
                         {
                           "id": "d712d044-1ae7-478f-ae54-31a52887650e",
                           "name": "NSF & DOE",
-                          "start_date": "2026-07-08",
-                          "end_date": "2026-07-28",
+                          "start_date": "2026-07-29",
+                          "end_date": "2026-08-18",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -2816,8 +1216,8 @@
                 {
                   "id": "2aaed72a-cf3f-4c6d-9770-5ede072af0c8",
                   "name": "Tooling initiation",
-                  "start_date": "2026-07-29",
-                  "end_date": "2026-08-04",
+                  "start_date": "2026-08-19",
+                  "end_date": "2026-08-25",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -2834,8 +1234,8 @@
                 {
                   "id": "7b47bd93-ec65-4127-a8fe-21fdf7e0456f",
                   "name": "Parts delivery",
-                  "start_date": "2026-08-05",
-                  "end_date": "2026-09-29",
+                  "start_date": "2026-08-26",
+                  "end_date": "2026-10-20",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -2844,8 +1244,8 @@
                     {
                       "id": "6cdba85c-9df9-4aa5-9a6f-3d3b97ba22cd",
                       "name": "Enclosure",
-                      "start_date": "2026-08-05",
-                      "end_date": "2026-09-29",
+                      "start_date": "2026-08-26",
+                      "end_date": "2026-10-20",
                       "status": "Not Started",
                       "owner": "",
                       "notes": "",
@@ -2862,8 +1262,8 @@
                     {
                       "id": "9eeda49f-613a-4bb8-9204-7c9ad104d9f5",
                       "name": "Base",
-                      "start_date": "2026-08-05",
-                      "end_date": "2026-09-29",
+                      "start_date": "2026-08-26",
+                      "end_date": "2026-10-20",
                       "status": "Not Started",
                       "owner": "",
                       "notes": "",
@@ -2889,8 +1289,8 @@
                 {
                   "id": "62a6cad6-331b-4500-8ced-cdd50305fcfc",
                   "name": "Lab testing",
-                  "start_date": "2026-09-30",
-                  "end_date": "2026-12-08",
+                  "start_date": "2026-10-21",
+                  "end_date": "2026-12-29",
                   "status": "Not Started",
                   "owner": "",
                   "notes": "",
@@ -2899,8 +1299,8 @@
                     {
                       "id": "0a240944-ed54-4f1d-9365-65133c1d58aa",
                       "name": "5Dr LT C4",
-                      "start_date": "2026-09-30",
-                      "end_date": "2026-12-08",
+                      "start_date": "2026-10-21",
+                      "end_date": "2026-12-29",
                       "status": "Not Started",
                       "owner": "",
                       "notes": "",
@@ -2909,8 +1309,8 @@
                         {
                           "id": "52076cab-1808-4b5d-81b8-7b53c49ff978",
                           "name": "NSF",
-                          "start_date": "2026-09-30",
-                          "end_date": "2026-10-20",
+                          "start_date": "2026-10-21",
+                          "end_date": "2026-11-10",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -2927,8 +1327,8 @@
                         {
                           "id": "651d31cf-40e5-456c-9493-8322262b02cc",
                           "name": "DOE",
-                          "start_date": "2026-10-21",
-                          "end_date": "2026-11-10",
+                          "start_date": "2026-11-11",
+                          "end_date": "2026-12-01",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -2945,8 +1345,8 @@
                         {
                           "id": "a1ab8bfc-936a-4a80-9ca2-42966a87ef33",
                           "name": "UL",
-                          "start_date": "2026-11-11",
-                          "end_date": "2026-12-08",
+                          "start_date": "2026-12-02",
+                          "end_date": "2026-12-29",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -2972,8 +1372,8 @@
                     {
                       "id": "3c69a4fa-463d-4e36-9ad0-937e926fa6f1",
                       "name": "2Dr LT C3",
-                      "start_date": "2026-09-30",
-                      "end_date": "2026-11-10",
+                      "start_date": "2026-10-21",
+                      "end_date": "2026-12-01",
                       "status": "Not Started",
                       "owner": "",
                       "notes": "",
@@ -2982,8 +1382,8 @@
                         {
                           "id": "e802f1a5-83d4-4bef-b9ba-f0b28bf356cb",
                           "name": "NSF",
-                          "start_date": "2026-09-30",
-                          "end_date": "2026-10-20",
+                          "start_date": "2026-10-21",
+                          "end_date": "2026-11-10",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -3000,8 +1400,8 @@
                         {
                           "id": "71807d79-f120-48f3-83f6-6f34e69e7d36",
                           "name": "DOE",
-                          "start_date": "2026-10-21",
-                          "end_date": "2026-11-10",
+                          "start_date": "2026-11-11",
+                          "end_date": "2026-12-01",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -3027,8 +1427,8 @@
                     {
                       "id": "336d6ac2-abab-4080-8a01-c803b07e3c3d",
                       "name": "5Dr MT (Same as C4 )",
-                      "start_date": "2026-09-30",
-                      "end_date": "2026-12-08",
+                      "start_date": "2026-10-21",
+                      "end_date": "2026-12-29",
                       "status": "Not Started",
                       "owner": "",
                       "notes": "",
@@ -3037,8 +1437,8 @@
                         {
                           "id": "38cda6ad-74a9-457e-a771-f1a94e3c7704",
                           "name": "NSF",
-                          "start_date": "2026-09-30",
-                          "end_date": "2026-10-20",
+                          "start_date": "2026-10-21",
+                          "end_date": "2026-11-10",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -3055,8 +1455,8 @@
                         {
                           "id": "b6972167-e679-4b20-a0b6-05e7f928a234",
                           "name": "DOE",
-                          "start_date": "2026-10-21",
-                          "end_date": "2026-11-10",
+                          "start_date": "2026-11-11",
+                          "end_date": "2026-12-01",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -3073,8 +1473,8 @@
                         {
                           "id": "842f1b97-056b-4d7d-9d7f-52dc8186e0c1",
                           "name": "UL",
-                          "start_date": "2026-11-11",
-                          "end_date": "2026-12-08",
+                          "start_date": "2026-12-02",
+                          "end_date": "2026-12-29",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -3100,8 +1500,8 @@
                     {
                       "id": "54c08048-a304-4389-9a36-08cc70566a9a",
                       "name": "2Dr - MT (Same as C3)",
-                      "start_date": "2026-09-30",
-                      "end_date": "2026-11-10",
+                      "start_date": "2026-10-21",
+                      "end_date": "2026-12-01",
                       "status": "Not Started",
                       "owner": "",
                       "notes": "",
@@ -3110,8 +1510,8 @@
                         {
                           "id": "7629dac9-4b0b-4862-9bba-93587a18856b",
                           "name": "NSF",
-                          "start_date": "2026-09-30",
-                          "end_date": "2026-10-20",
+                          "start_date": "2026-10-21",
+                          "end_date": "2026-11-10",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -3128,8 +1528,8 @@
                         {
                           "id": "1cd35a54-f846-4fef-bb76-18540922e743",
                           "name": "DOE",
-                          "start_date": "2026-10-21",
-                          "end_date": "2026-11-10",
+                          "start_date": "2026-11-11",
+                          "end_date": "2026-12-01",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -4771,6 +3171,62 @@
         {
           "ts": "2026-06-25 10:51",
           "text": "Pasted 1 task(s): 'VAVE activities'"
+        },
+        {
+          "ts": "2026-06-25 10:59",
+          "text": "Deleted task 'DG- VAVE short term'"
+        },
+        {
+          "ts": "2026-06-30 11:27",
+          "text": "'Sheetmetal/ Copper parts': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-06-30 11:27",
+          "text": "'Sheetmetal/ Copper parts': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-06-30 11:27",
+          "text": "'Sheetmetal/ Copper parts': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-06-30 11:28",
+          "text": "Delay logged \u2014 '2.5.1 assembly' +10d: Compressors from danfoss are delayed. Parts are getting air shipped from china today."
+        },
+        {
+          "ts": "2026-06-30 11:28",
+          "text": "'2.5.1 assembly': end 2026-07-01 \u2192 2026-07-15"
+        },
+        {
+          "ts": "2026-06-30 11:33",
+          "text": "Delay logged \u2014 'Trial 2' +5d: CFD had some issues. Getting wrong air flow patterns at specific spots. Ravi asked for couple more days to fix it"
+        },
+        {
+          "ts": "2026-06-30 11:33",
+          "text": "'Trial 2': end 2026-06-25 \u2192 2026-07-02"
+        },
+        {
+          "ts": "2026-06-30 11:35",
+          "text": "Delay logged \u2014 '3D model - MTY release' +15d: Brett needs to work on IO manual updates, then the VAVE activities and then will get to this 5Dr"
+        },
+        {
+          "ts": "2026-06-30 11:35",
+          "text": "'3D model - MTY release': end 2026-06-26 \u2192 2026-07-17"
+        },
+        {
+          "ts": "2026-06-30 11:57",
+          "text": "'Concept design review': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-06-30 12:02",
+          "text": "'Test requests': parallel mode ON"
+        },
+        {
+          "ts": "2026-06-30 12:02",
+          "text": "'Test requests': parallel mode OFF"
+        },
+        {
+          "ts": "2026-06-30 12:05",
+          "text": "'MS - Structural case. Work complete': status \u2192 Completed"
         }
       ],
       "notes": [
@@ -4931,19 +3387,19 @@
                     {
                       "id": "5949924d-b968-4ed3-b0c4-f3ead2566455",
                       "name": "CAP Tube testing/ Check valve",
-                      "start_date": "2026-06-24",
-                      "end_date": "2026-09-16",
+                      "start_date": "2026-06-05",
+                      "end_date": "2026-07-22",
                       "status": "In Progress",
                       "owner": "",
                       "notes": "",
-                      "is_parallel": true,
+                      "is_parallel": false,
                       "children": [
                         {
                           "id": "2ecd4789-2916-47a2-bb2e-97b8b70e4a23",
                           "name": "Hot box  Validation - MT",
-                          "start_date": "2026-07-30",
-                          "end_date": "2026-08-25",
-                          "status": "Not Started",
+                          "start_date": "2026-06-05",
+                          "end_date": "2026-06-30",
+                          "status": "In Progress",
                           "owner": "",
                           "notes": "[2026-06-23]: Initial baseline run done. Should get a captube result by tomorrow",
                           "is_parallel": false,
@@ -4951,8 +3407,8 @@
                             {
                               "id": "b07cc3b7-abeb-4a73-bd76-07806355613e",
                               "name": "Baseline run",
-                              "start_date": "2026-07-30",
-                              "end_date": "2026-08-17",
+                              "start_date": "2026-06-05",
+                              "end_date": "2026-06-22",
                               "status": "Completed",
                               "owner": "",
                               "notes": "",
@@ -4977,8 +3433,8 @@
                             {
                               "id": "dbd5e91d-85b1-438c-b9bb-b4f7e624816e",
                               "name": "Captube trial 1",
-                              "start_date": "2026-08-18",
-                              "end_date": "2026-08-19",
+                              "start_date": "2026-06-23",
+                              "end_date": "2026-06-24",
                               "status": "Completed",
                               "owner": "",
                               "notes": "[2026-06-25]: High superheat. Cut the captube down by 10in ",
@@ -5003,9 +3459,9 @@
                             {
                               "id": "b25537d4-1ac6-461c-b63d-e09990a3f45b",
                               "name": "Captube trial 2",
-                              "start_date": "2026-08-20",
-                              "end_date": "2026-08-25",
-                              "status": "Not Started",
+                              "start_date": "2026-06-25",
+                              "end_date": "2026-06-30",
+                              "status": "In Progress",
                               "owner": "",
                               "notes": "",
                               "is_parallel": false,
@@ -5046,9 +3502,9 @@
                         {
                           "id": "8144df1b-b6d7-40ea-952e-a886b457c1bc",
                           "name": "Check valve removal",
-                          "start_date": "2026-07-30",
-                          "end_date": "2026-09-01",
-                          "status": "Not Started",
+                          "start_date": "2026-06-05",
+                          "end_date": "2026-07-07",
+                          "status": "In Progress",
                           "owner": "",
                           "notes": "",
                           "is_parallel": true,
@@ -5056,9 +3512,9 @@
                             {
                               "id": "157a479e-d665-4cf9-b8ed-33839851f112",
                               "name": "MS request - LT unit",
-                              "start_date": "2026-07-30",
-                              "end_date": "2026-08-21",
-                              "status": "Not Started",
+                              "start_date": "2026-06-05",
+                              "end_date": "2026-06-29",
+                              "status": "Completed",
                               "owner": "",
                               "notes": "",
                               "is_parallel": false,
@@ -5082,8 +3538,8 @@
                             {
                               "id": "fe23d55f-ecae-4691-b6e2-29f99167e8ab",
                               "name": "Hot box testing.",
-                              "start_date": "2026-08-26",
-                              "end_date": "2026-09-01",
+                              "start_date": "2026-07-01",
+                              "end_date": "2026-07-07",
                               "status": "Not Started",
                               "owner": "",
                               "notes": "",
@@ -5118,7 +3574,7 @@
                           "id": "16e8116d-92e5-4541-b3a6-f5ecfec050af",
                           "name": "Lab testing - 2Dr MT (C1)",
                           "start_date": "2026-06-24",
-                          "end_date": "2026-09-16",
+                          "end_date": "2026-07-22",
                           "status": "In Progress",
                           "owner": "",
                           "notes": "",
@@ -5129,7 +3585,7 @@
                               "name": "Lab request",
                               "start_date": "2026-06-24",
                               "end_date": "2026-06-25",
-                              "status": "In Progress",
+                              "status": "Completed",
                               "owner": "",
                               "notes": "",
                               "is_parallel": false,
@@ -5153,8 +3609,8 @@
                             {
                               "id": "437831e4-8403-48de-8230-4d16768f48c0",
                               "name": "Case in the room",
-                              "start_date": "2026-08-26",
-                              "end_date": "2026-08-26",
+                              "start_date": "2026-07-01",
+                              "end_date": "2026-07-01",
                               "status": "Not Started",
                               "owner": "",
                               "notes": "",
@@ -5171,8 +3627,8 @@
                             {
                               "id": "31ea1ad3-686f-4ca4-93db-c10dc16339bc",
                               "name": "Instrumentation",
-                              "start_date": "2026-08-27",
-                              "end_date": "2026-09-02",
+                              "start_date": "2026-07-02",
+                              "end_date": "2026-07-08",
                               "status": "Not Started",
                               "owner": "",
                               "notes": "",
@@ -5197,8 +3653,8 @@
                             {
                               "id": "c53f62fe-082b-4be5-8b2c-88f761c56019",
                               "name": "NSF",
-                              "start_date": "2026-09-03",
-                              "end_date": "2026-09-09",
+                              "start_date": "2026-07-09",
+                              "end_date": "2026-07-15",
                               "status": "Not Started",
                               "owner": "",
                               "notes": "",
@@ -5223,8 +3679,8 @@
                             {
                               "id": "a30c6acf-308b-4c0d-870a-1dfb592f6f7e",
                               "name": "DOE",
-                              "start_date": "2026-09-10",
-                              "end_date": "2026-09-16",
+                              "start_date": "2026-07-16",
+                              "end_date": "2026-07-22",
                               "status": "Not Started",
                               "owner": "",
                               "notes": "",
@@ -5257,7 +3713,7 @@
                         }
                       ],
                       "expanded": false,
-                      "dates_locked": false,
+                      "dates_locked": true,
                       "predecessor_id": null,
                       "baseline_duration": 20,
                       "baseline_end": "2026-07-02",
@@ -5331,7 +3787,7 @@
                           "name": "ECO process",
                           "start_date": "2026-06-26",
                           "end_date": "2026-07-10",
-                          "status": "Not Started",
+                          "status": "In Progress",
                           "owner": "",
                           "notes": "",
                           "is_parallel": false,
@@ -5487,7 +3943,7 @@
                       "end_date": "2026-09-28",
                       "status": "In Progress",
                       "owner": "",
-                      "notes": "[2026-06-16] lkjad",
+                      "notes": "",
                       "is_parallel": true,
                       "children": [
                         {
@@ -5513,9 +3969,9 @@
                           "name": "Quotes",
                           "start_date": "2026-06-22",
                           "end_date": "2026-06-26",
-                          "status": "In Progress",
+                          "status": "Completed",
                           "owner": "",
-                          "notes": "",
+                          "notes": "[2026-06-30]: Quotes dont look that good. Looking into other options. ",
                           "is_parallel": false,
                           "children": [],
                           "expanded": false,
@@ -5672,11 +4128,18 @@
                                   "end": "2026-09-28",
                                   "slip": 9,
                                   "reason": ""
+                                },
+                                {
+                                  "rev": "C",
+                                  "date": "2026-06-25",
+                                  "end": "2026-09-28",
+                                  "slip": 0,
+                                  "reason": "no delay"
                                 }
                               ]
                             }
                           ],
-                          "expanded": true,
+                          "expanded": false,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": 1,
@@ -5685,7 +4148,7 @@
                           "revisions": []
                         }
                       ],
-                      "expanded": true,
+                      "expanded": false,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 31,
@@ -6050,9 +4513,9 @@
                     },
                     {
                       "id": "ec8dc8f4-ed0c-4b7b-92c0-21cf03e80cce",
-                      "name": "Gasket - Case-cassette; Cassette - enclosure",
+                      "name": "Gasket - Case-cassette;",
                       "start_date": "2026-06-05",
-                      "end_date": "2026-07-23",
+                      "end_date": "2026-09-11",
                       "status": "In Progress",
                       "owner": "",
                       "notes": "",
@@ -6089,7 +4552,7 @@
                           "name": "Quotes",
                           "start_date": "2026-06-26",
                           "end_date": "2026-07-02",
-                          "status": "Not Started",
+                          "status": "In Progress",
                           "owner": "",
                           "notes": "",
                           "is_parallel": false,
@@ -6107,7 +4570,7 @@
                           "name": "Prototypes",
                           "start_date": "2026-06-26",
                           "end_date": "2026-07-09",
-                          "status": "Not Started",
+                          "status": "In Progress",
                           "owner": "",
                           "notes": "",
                           "is_parallel": false,
@@ -6137,6 +4600,128 @@
                           "baseline_end": "2026-07-17",
                           "delay_notes": "",
                           "revisions": []
+                        },
+                        {
+                          "id": "5e741992-6bcc-4f7f-b1d6-d4e108ee69c9",
+                          "name": "Issue PO",
+                          "start_date": "2026-07-24",
+                          "end_date": "2026-07-24",
+                          "status": "Not Started",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-07-24",
+                          "delay_notes": "",
+                          "revisions": []
+                        },
+                        {
+                          "id": "f70f3a45-efcb-4ab3-9024-047d7cc3c5f4",
+                          "name": "Initial samples",
+                          "start_date": "2026-07-27",
+                          "end_date": "2026-08-21",
+                          "status": "Not Started",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-07-27",
+                          "delay_notes": "",
+                          "revisions": [
+                            {
+                              "rev": "B",
+                              "date": "2026-06-25",
+                              "end": "2026-08-14",
+                              "slip": 14,
+                              "reason": "no delay"
+                            },
+                            {
+                              "rev": "C",
+                              "date": "2026-06-25",
+                              "end": "2026-08-21",
+                              "slip": 5,
+                              "reason": "no delay"
+                            }
+                          ]
+                        },
+                        {
+                          "id": "ecad700b-6bae-4931-8eb7-c003e93a9c85",
+                          "name": "Lab testing - Validation",
+                          "start_date": "2026-08-24",
+                          "end_date": "2026-09-11",
+                          "status": "Not Started",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [
+                            {
+                              "id": "56608c10-9c41-4bd6-a6c9-465aa8b99f0f",
+                              "name": "NSF",
+                              "start_date": "2026-08-24",
+                              "end_date": "2026-08-28",
+                              "status": "Not Started",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": false,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": 1,
+                              "baseline_end": "2026-07-29",
+                              "delay_notes": "",
+                              "revisions": [
+                                {
+                                  "rev": "B",
+                                  "date": "2026-06-25",
+                                  "end": "2026-08-28",
+                                  "slip": 4,
+                                  "reason": "no delay"
+                                }
+                              ]
+                            },
+                            {
+                              "id": "d312430e-7e53-418f-b15b-f39e21c91da4",
+                              "name": "DOE",
+                              "start_date": "2026-08-31",
+                              "end_date": "2026-09-11",
+                              "status": "Not Started",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": false,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": 1,
+                              "baseline_end": "2026-07-30",
+                              "delay_notes": "",
+                              "revisions": [
+                                {
+                                  "rev": "B",
+                                  "date": "2026-06-25",
+                                  "end": "2026-09-11",
+                                  "slip": 9,
+                                  "reason": "no delay"
+                                }
+                              ]
+                            }
+                          ],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-07-28",
+                          "delay_notes": "",
+                          "revisions": []
                         }
                       ],
                       "expanded": false,
@@ -6148,56 +4733,53 @@
                       "revisions": []
                     },
                     {
-                      "id": "0149ef1e-6d20-4ddb-9971-e3dff80f711f",
-                      "name": "Cassette base - MTY Design",
-                      "start_date": "2026-06-05",
-                      "end_date": "2026-06-05",
-                      "status": "In Progress",
-                      "owner": "",
-                      "notes": "",
-                      "is_parallel": true,
-                      "children": [],
-                      "expanded": false,
-                      "dates_locked": false,
-                      "predecessor_id": null,
-                      "baseline_duration": 0,
-                      "baseline_end": "2026-07-20",
-                      "delay_notes": "",
-                      "revisions": []
-                    },
-                    {
                       "id": "ba7b470f-08de-43b2-afe3-1684401a7fe8",
-                      "name": "New cheaper Carel controller",
+                      "name": "Cheaper Carel controller",
                       "start_date": "2026-06-05",
-                      "end_date": "2026-06-05",
+                      "end_date": "2026-08-26",
                       "status": "In Progress",
                       "owner": "",
                       "notes": "",
                       "is_parallel": true,
-                      "children": [],
-                      "expanded": false,
-                      "dates_locked": false,
-                      "predecessor_id": null,
-                      "baseline_duration": null,
-                      "baseline_end": null,
-                      "delay_notes": "",
-                      "revisions": []
-                    },
-                    {
-                      "id": "345a51e4-2253-4452-abac-64c1f9679797",
-                      "name": "New Task",
-                      "start_date": "2026-06-08",
-                      "end_date": "2026-06-09",
-                      "status": "In Progress",
-                      "owner": "",
-                      "notes": "",
-                      "is_parallel": false,
                       "children": [
                         {
-                          "id": "6f62d7b6-2bdf-44b7-825c-ab5ba1fd93c5",
-                          "name": "New Harness design",
-                          "start_date": "2026-06-08",
-                          "end_date": "2026-06-08",
+                          "id": "6ff9dc3a-411e-4553-bf4e-f11ed1ae14e3",
+                          "name": "Carel discussion - new part number initiation",
+                          "start_date": "2026-06-05",
+                          "end_date": "2026-06-22",
+                          "status": "Completed",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-06-08",
+                          "delay_notes": "",
+                          "revisions": [
+                            {
+                              "rev": "B",
+                              "date": "2026-06-25",
+                              "end": "2026-06-19",
+                              "slip": 10,
+                              "reason": ""
+                            },
+                            {
+                              "rev": "C",
+                              "date": "2026-06-25",
+                              "end": "2026-06-22",
+                              "slip": 1,
+                              "reason": ""
+                            }
+                          ]
+                        },
+                        {
+                          "id": "646fa80f-0fb8-41be-814c-d04cd160dedc",
+                          "name": "New wiring diagrams",
+                          "start_date": "2026-06-23",
+                          "end_date": "2026-07-06",
                           "status": "In Progress",
                           "owner": "",
                           "notes": "",
@@ -6206,17 +4788,147 @@
                           "expanded": false,
                           "dates_locked": false,
                           "predecessor_id": null,
-                          "baseline_duration": null,
-                          "baseline_end": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-06-22",
+                          "delay_notes": "",
+                          "revisions": [
+                            {
+                              "rev": "B",
+                              "date": "2026-06-25",
+                              "end": "2026-06-18",
+                              "slip": 9,
+                              "reason": ""
+                            }
+                          ]
+                        },
+                        {
+                          "id": "ca55feb2-7373-413f-8417-35f5fbc0a7c3",
+                          "name": "Quote",
+                          "start_date": "2026-07-07",
+                          "end_date": "2026-07-13",
+                          "status": "Not Started",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-06-19",
+                          "delay_notes": "",
+                          "revisions": [
+                            {
+                              "rev": "B",
+                              "date": "2026-06-25",
+                              "end": "2026-07-13",
+                              "slip": 4,
+                              "reason": ""
+                            }
+                          ]
+                        },
+                        {
+                          "id": "5020b99b-4e2f-453d-bd3d-90f28c2dfd48",
+                          "name": "Initiate Sample PO",
+                          "start_date": "2026-07-14",
+                          "end_date": "2026-07-20",
+                          "status": "Not Started",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-07-14",
+                          "delay_notes": "",
+                          "revisions": [
+                            {
+                              "rev": "B",
+                              "date": "2026-06-25",
+                              "end": "2026-07-20",
+                              "slip": 4,
+                              "reason": ""
+                            }
+                          ]
+                        },
+                        {
+                          "id": "7036997b-6326-4821-88d8-2e60b121c2d5",
+                          "name": "Samples",
+                          "start_date": "2026-07-21",
+                          "end_date": "2026-08-03",
+                          "status": "Not Started",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-07-14",
+                          "delay_notes": "",
+                          "revisions": [
+                            {
+                              "rev": "B",
+                              "date": "2026-06-25",
+                              "end": "2026-07-27",
+                              "slip": 9,
+                              "reason": ""
+                            }
+                          ]
+                        },
+                        {
+                          "id": "fb4fe944-cc3c-4ffc-823b-36921bcd9ce1",
+                          "name": "Bench testing",
+                          "start_date": "2026-08-04",
+                          "end_date": "2026-08-10",
+                          "status": "Not Started",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-07-28",
+                          "delay_notes": "",
+                          "revisions": [
+                            {
+                              "rev": "B",
+                              "date": "2026-06-25",
+                              "end": "2026-08-03",
+                              "slip": 4,
+                              "reason": ""
+                            }
+                          ]
+                        },
+                        {
+                          "id": "5f752d1f-b902-4e2f-9b81-b3edf9f64f60",
+                          "name": "Initiate production PO",
+                          "start_date": "2026-08-11",
+                          "end_date": "2026-08-11",
+                          "status": "Not Started",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-08-11",
                           "delay_notes": "",
                           "revisions": []
                         },
                         {
-                          "id": "d5dc875e-33cd-4fea-8437-18ba84d43afb",
-                          "name": "New Task",
-                          "start_date": "2026-06-09",
-                          "end_date": "2026-06-09",
-                          "status": "In Progress",
+                          "id": "a874a34d-1b6b-4fa8-b1e2-63f8154cd647",
+                          "name": "ECO process",
+                          "start_date": "2026-08-12",
+                          "end_date": "2026-08-25",
+                          "status": "Not Started",
                           "owner": "",
                           "notes": "",
                           "is_parallel": false,
@@ -6224,8 +4936,34 @@
                           "expanded": false,
                           "dates_locked": false,
                           "predecessor_id": null,
-                          "baseline_duration": null,
-                          "baseline_end": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-08-11",
+                          "delay_notes": "",
+                          "revisions": [
+                            {
+                              "rev": "B",
+                              "date": "2026-06-25",
+                              "end": "2026-08-24",
+                              "slip": 9,
+                              "reason": ""
+                            }
+                          ]
+                        },
+                        {
+                          "id": "ebb905fd-d488-4b10-a42b-9c0066267a40",
+                          "name": "Production release",
+                          "start_date": "2026-08-26",
+                          "end_date": "2026-08-26",
+                          "status": "Not Started",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-08-12",
                           "delay_notes": "",
                           "revisions": []
                         }
@@ -6239,25 +4977,106 @@
                       "revisions": []
                     },
                     {
-                      "id": "317c298e-d1af-4657-909e-477047ef500f",
-                      "name": "New Task",
-                      "start_date": "2026-06-10",
-                      "end_date": "2026-06-10",
+                      "id": "0149ef1e-6d20-4ddb-9971-e3dff80f711f",
+                      "name": "Cassette base - MTY Design",
+                      "start_date": "2026-06-05",
+                      "end_date": "2026-07-08",
                       "status": "In Progress",
                       "owner": "",
                       "notes": "",
-                      "is_parallel": false,
-                      "children": [],
+                      "is_parallel": true,
+                      "children": [
+                        {
+                          "id": "91cca349-efd6-4fd5-a9cd-d6f5a353b283",
+                          "name": "Initial concept design",
+                          "start_date": "2026-06-05",
+                          "end_date": "2026-07-03",
+                          "status": "In Progress",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-06-08",
+                          "delay_notes": "",
+                          "revisions": [
+                            {
+                              "rev": "B",
+                              "date": "2026-06-25",
+                              "end": "2026-07-03",
+                              "slip": 20,
+                              "reason": "no delay"
+                            }
+                          ]
+                        },
+                        {
+                          "id": "8cfd73b7-a252-472a-aeb7-c43b8b2b19e3",
+                          "name": "Cost analysis",
+                          "start_date": "2026-07-06",
+                          "end_date": "2026-07-06",
+                          "status": "Not Started",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-06-08",
+                          "delay_notes": "",
+                          "revisions": []
+                        },
+                        {
+                          "id": "a16026e8-c7c1-46d5-9335-812dc17dc161",
+                          "name": "Quotes",
+                          "start_date": "2026-07-07",
+                          "end_date": "2026-07-07",
+                          "status": "Not Started",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-06-09",
+                          "delay_notes": "",
+                          "revisions": []
+                        },
+                        {
+                          "id": "f41f4084-46fd-4c0d-abe6-4a66a74abdbc",
+                          "name": "Prototype - 3D",
+                          "start_date": "2026-07-08",
+                          "end_date": "2026-07-08",
+                          "status": "Not Started",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-06-08",
+                          "delay_notes": "",
+                          "revisions": []
+                        }
+                      ],
                       "expanded": false,
                       "dates_locked": false,
                       "predecessor_id": null,
-                      "baseline_duration": 1,
-                      "baseline_end": "2026-07-29",
+                      "baseline_duration": 0,
+                      "baseline_end": "2026-07-20",
                       "delay_notes": "",
                       "revisions": []
                     }
                   ],
-                  "expanded": true,
+                  "expanded": false,
                   "dates_locked": false,
                   "predecessor_id": null,
                   "baseline_duration": null,
@@ -6269,7 +5088,7 @@
                   "id": "02363461-6696-4fa2-b32f-9568b712cc55",
                   "name": "Case VAVE activities",
                   "start_date": "2026-06-05",
-                  "end_date": "2026-06-12",
+                  "end_date": "2026-07-10",
                   "status": "In Progress",
                   "owner": "",
                   "notes": "",
@@ -6279,7 +5098,7 @@
                       "id": "0666ca2c-efbd-410b-b618-091980be626a",
                       "name": "Plastic Deck Pans w/ updated return air",
                       "start_date": "2026-06-05",
-                      "end_date": "2026-06-05",
+                      "end_date": "2026-07-10",
                       "status": "In Progress",
                       "owner": "",
                       "notes": "",
@@ -6296,12 +5115,12 @@
                     {
                       "id": "7f4db833-dd64-46b5-8db3-432b2e04f2c3",
                       "name": "Roll form the ctr uprights. ",
-                      "start_date": "2026-06-08",
-                      "end_date": "2026-06-08",
+                      "start_date": "2026-06-05",
+                      "end_date": "2026-07-10",
                       "status": "In Progress",
                       "owner": "",
                       "notes": "",
-                      "is_parallel": false,
+                      "is_parallel": true,
                       "children": [],
                       "expanded": false,
                       "dates_locked": false,
@@ -6314,12 +5133,12 @@
                     {
                       "id": "b2b24259-963e-43a8-8169-5c4b56b7531c",
                       "name": "Remove bracket near back panel. ",
-                      "start_date": "2026-06-09",
-                      "end_date": "2026-06-09",
+                      "start_date": "2026-06-05",
+                      "end_date": "2026-07-10",
                       "status": "In Progress",
                       "owner": "",
                       "notes": "",
-                      "is_parallel": false,
+                      "is_parallel": true,
                       "children": [],
                       "expanded": false,
                       "dates_locked": false,
@@ -6327,17 +5146,25 @@
                       "baseline_duration": 0,
                       "baseline_end": "2026-07-23",
                       "delay_notes": "",
-                      "revisions": []
+                      "revisions": [
+                        {
+                          "rev": "B",
+                          "date": "2026-06-30",
+                          "end": "2026-07-10",
+                          "slip": 26,
+                          "reason": ""
+                        }
+                      ]
                     },
                     {
                       "id": "07593eca-e8cc-4319-b87e-1cc4cc113ab8",
                       "name": "Remove Louvers on the side trim",
-                      "start_date": "2026-06-10",
-                      "end_date": "2026-06-10",
+                      "start_date": "2026-06-05",
+                      "end_date": "2026-07-10",
                       "status": "In Progress",
                       "owner": "",
                       "notes": "",
-                      "is_parallel": false,
+                      "is_parallel": true,
                       "children": [],
                       "expanded": false,
                       "dates_locked": false,
@@ -6350,12 +5177,12 @@
                     {
                       "id": "aa3ff45e-e2b1-4d24-9052-1a5bbac17b15",
                       "name": "LED drive bracket removal",
-                      "start_date": "2026-06-11",
-                      "end_date": "2026-06-11",
+                      "start_date": "2026-06-05",
+                      "end_date": "2026-07-10",
                       "status": "In Progress",
                       "owner": "",
                       "notes": "",
-                      "is_parallel": false,
+                      "is_parallel": true,
                       "children": [],
                       "expanded": false,
                       "dates_locked": false,
@@ -6368,12 +5195,12 @@
                     {
                       "id": "fa23e4e0-663d-4033-88a3-7b02e06cde02",
                       "name": "Shorten the bracket where case power comes in",
-                      "start_date": "2026-06-12",
-                      "end_date": "2026-06-12",
+                      "start_date": "2026-06-05",
+                      "end_date": "2026-07-10",
                       "status": "In Progress",
                       "owner": "",
                       "notes": "",
-                      "is_parallel": false,
+                      "is_parallel": true,
                       "children": [],
                       "expanded": false,
                       "dates_locked": false,
@@ -6382,9 +5209,35 @@
                       "baseline_end": null,
                       "delay_notes": "",
                       "revisions": []
+                    },
+                    {
+                      "id": "ee58573b-0b79-4ad0-8e51-bc48623aedd6",
+                      "name": "Case bottom with no drain",
+                      "start_date": "2026-06-05",
+                      "end_date": "2026-07-10",
+                      "status": "In Progress",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": true,
+                      "children": [],
+                      "expanded": true,
+                      "dates_locked": false,
+                      "predecessor_id": null,
+                      "baseline_duration": 1,
+                      "baseline_end": "2026-07-13",
+                      "delay_notes": "",
+                      "revisions": [
+                        {
+                          "rev": "B",
+                          "date": "2026-06-30",
+                          "end": "2026-07-10",
+                          "slip": 25,
+                          "reason": ""
+                        }
+                      ]
                     }
                   ],
-                  "expanded": false,
+                  "expanded": true,
                   "dates_locked": false,
                   "predecessor_id": null,
                   "baseline_duration": null,
@@ -6579,6 +5432,498 @@
         {
           "ts": "2026-06-25 10:55",
           "text": "'DOE': end 2026-09-15 \u2192 2026-09-28"
+        },
+        {
+          "ts": "2026-06-25 10:55",
+          "text": "Delay logged \u2014 'DOE' 0d: no delay"
+        },
+        {
+          "ts": "2026-06-25 10:56",
+          "text": "Renamed 'Gasket - Case-cassette; Cassette - enclosure' \u2192 'Gasket - Case-cassette;'"
+        },
+        {
+          "ts": "2026-06-25 10:57",
+          "text": "Added task 'New Task' under 'Gasket - Case-cassette;'"
+        },
+        {
+          "ts": "2026-06-25 10:57",
+          "text": "Renamed 'New Task' \u2192 'Issue PO'"
+        },
+        {
+          "ts": "2026-06-25 10:57",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-25 10:57",
+          "text": "Renamed 'New Task' \u2192 'Initial samples'"
+        },
+        {
+          "ts": "2026-06-25 10:57",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-25 10:58",
+          "text": "Renamed 'New Task' \u2192 'Lab testing - Validation'"
+        },
+        {
+          "ts": "2026-06-25 10:58",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-25 10:58",
+          "text": "Renamed 'New Task' \u2192 'NSF'"
+        },
+        {
+          "ts": "2026-06-25 10:58",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-25 10:58",
+          "text": "Renamed 'New Task' \u2192 'DOE'"
+        },
+        {
+          "ts": "2026-06-25 11:00",
+          "text": "Delay logged \u2014 'Initial samples' +14d: no delay"
+        },
+        {
+          "ts": "2026-06-25 11:00",
+          "text": "'Initial samples': end 2026-07-27 \u2192 2026-08-14"
+        },
+        {
+          "ts": "2026-06-25 11:00",
+          "text": "Delay logged \u2014 'Initial samples' +5d: no delay"
+        },
+        {
+          "ts": "2026-06-25 11:00",
+          "text": "'Initial samples': end 2026-08-14 \u2192 2026-08-21"
+        },
+        {
+          "ts": "2026-06-25 11:00",
+          "text": "Delay logged \u2014 'NSF' +4d: no delay"
+        },
+        {
+          "ts": "2026-06-25 11:00",
+          "text": "'NSF': end 2026-08-24 \u2192 2026-08-28"
+        },
+        {
+          "ts": "2026-06-25 11:00",
+          "text": "Delay logged \u2014 'DOE' +9d: no delay"
+        },
+        {
+          "ts": "2026-06-25 11:00",
+          "text": "'DOE': end 2026-08-31 \u2192 2026-09-11"
+        },
+        {
+          "ts": "2026-06-25 11:11",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-25 11:11",
+          "text": "Renamed 'New Task' \u2192 'Carel discussion - new part number initiation'"
+        },
+        {
+          "ts": "2026-06-25 11:11",
+          "text": "Delay logged \u2014 'Carel discussion - new part number initiation' +10d: (no reason given)"
+        },
+        {
+          "ts": "2026-06-25 11:11",
+          "text": "'Carel discussion - new part number initiation': end 2026-06-05 \u2192 2026-06-19"
+        },
+        {
+          "ts": "2026-06-25 11:11",
+          "text": "'Carel discussion - new part number initiation': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-06-25 11:11",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-25 11:12",
+          "text": "Renamed 'New Task' \u2192 'New wiring diagrams'"
+        },
+        {
+          "ts": "2026-06-25 11:12",
+          "text": "Delay logged \u2014 'New wiring diagrams' +9d: (no reason given)"
+        },
+        {
+          "ts": "2026-06-25 11:12",
+          "text": "'New wiring diagrams': end 2026-06-05 \u2192 2026-06-18"
+        },
+        {
+          "ts": "2026-06-25 11:12",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-25 11:12",
+          "text": "Renamed 'New Task' \u2192 'Quote'"
+        },
+        {
+          "ts": "2026-06-25 11:12",
+          "text": "'Carel discussion - new part number initiation': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-06-25 11:12",
+          "text": "Delay logged \u2014 'Carel discussion - new part number initiation' +1d: (no reason given)"
+        },
+        {
+          "ts": "2026-06-25 11:12",
+          "text": "'Carel discussion - new part number initiation': end 2026-06-05 \u2192 2026-06-22"
+        },
+        {
+          "ts": "2026-06-25 11:13",
+          "text": "Delay logged \u2014 'Quote' +4d: (no reason given)"
+        },
+        {
+          "ts": "2026-06-25 11:13",
+          "text": "'Quote': end 2026-07-07 \u2192 2026-07-13"
+        },
+        {
+          "ts": "2026-06-25 11:13",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-25 11:13",
+          "text": "Renamed 'New Task' \u2192 'Samples'"
+        },
+        {
+          "ts": "2026-06-25 11:13",
+          "text": "Delay logged \u2014 'Samples' +9d: (no reason given)"
+        },
+        {
+          "ts": "2026-06-25 11:13",
+          "text": "'Samples': end 2026-07-14 \u2192 2026-07-27"
+        },
+        {
+          "ts": "2026-06-25 11:13",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-25 11:13",
+          "text": "Renamed 'New Task' \u2192 'Bench testing'"
+        },
+        {
+          "ts": "2026-06-25 11:13",
+          "text": "Delay logged \u2014 'Bench testing' +4d: (no reason given)"
+        },
+        {
+          "ts": "2026-06-25 11:13",
+          "text": "'Bench testing': end 2026-07-28 \u2192 2026-08-03"
+        },
+        {
+          "ts": "2026-06-25 11:13",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-25 11:14",
+          "text": "Renamed 'New Task' \u2192 'Initiate PO'"
+        },
+        {
+          "ts": "2026-06-25 11:14",
+          "text": "Renamed 'Initiate PO' \u2192 'Initiate production PO'"
+        },
+        {
+          "ts": "2026-06-25 11:14",
+          "text": "Delay logged \u2014 'Initiate production PO' +4d: (no reason given)"
+        },
+        {
+          "ts": "2026-06-25 11:14",
+          "text": "'Initiate production PO': end 2026-07-14 \u2192 2026-07-20"
+        },
+        {
+          "ts": "2026-06-25 11:15",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-25 11:16",
+          "text": "Renamed 'New Task' \u2192 'ECO process'"
+        },
+        {
+          "ts": "2026-06-25 11:16",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-25 11:16",
+          "text": "Renamed 'New Task' \u2192 'Production release'"
+        },
+        {
+          "ts": "2026-06-25 11:16",
+          "text": "Delay logged \u2014 'ECO process' +9d: (no reason given)"
+        },
+        {
+          "ts": "2026-06-25 11:16",
+          "text": "'ECO process': end 2026-08-11 \u2192 2026-08-24"
+        },
+        {
+          "ts": "2026-06-25 11:16",
+          "text": "Renamed 'New cheaper Carel controller' \u2192 'Cheaper Carel controller'"
+        },
+        {
+          "ts": "2026-06-25 11:16",
+          "text": "Renamed 'Initiate production PO' \u2192 'Initiate SamplePO'"
+        },
+        {
+          "ts": "2026-06-25 11:16",
+          "text": "Renamed 'Initiate SamplePO' \u2192 'Initiate Sample PO'"
+        },
+        {
+          "ts": "2026-06-25 11:17",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-25 11:17",
+          "text": "Renamed 'New Task' \u2192 'Initiate production PO'"
+        },
+        {
+          "ts": "2026-06-25 11:22",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-25 11:22",
+          "text": "Renamed 'New Task' \u2192 'Initial concept design'"
+        },
+        {
+          "ts": "2026-06-25 11:22",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-25 11:22",
+          "text": "Renamed 'New Task' \u2192 'Prototype - 3D'"
+        },
+        {
+          "ts": "2026-06-25 11:22",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-25 11:22",
+          "text": "Renamed 'New Task' \u2192 'Cost analysis'"
+        },
+        {
+          "ts": "2026-06-25 11:23",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-25 11:23",
+          "text": "Renamed 'New Task' \u2192 'Quotes'"
+        },
+        {
+          "ts": "2026-06-25 11:27",
+          "text": "Delay logged \u2014 'Initial concept design' +20d: no delay"
+        },
+        {
+          "ts": "2026-06-25 11:27",
+          "text": "'Initial concept design': end 2026-06-05 \u2192 2026-07-03"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'Plastic Deck Pans w/ updated return air': end 2026-06-05 \u2192 2026-07-10"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'Roll form the ctr uprights. ': parallel mode ON"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'Roll form the ctr uprights. ': start 2026-07-13 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'Roll form the ctr uprights. ': end 2026-07-13 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'Roll form the ctr uprights. ': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'Remove bracket near back panel. ': parallel mode ON"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'Remove bracket near back panel. ': start 2026-06-08 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'Remove bracket near back panel. ': end 2026-06-08 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'Remove Louvers on the side trim': parallel mode ON"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'Remove Louvers on the side trim': start 2026-06-08 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'Remove Louvers on the side trim': end 2026-06-08 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'LED drive bracket removal': parallel mode ON"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'LED drive bracket removal': start 2026-06-08 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'LED drive bracket removal': end 2026-06-08 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'Shorten the bracket where case power comes in': parallel mode ON"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'Shorten the bracket where case power comes in': start 2026-06-08 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'Shorten the bracket where case power comes in': end 2026-06-08 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'Roll form the ctr uprights. ': end 2026-06-05 \u2192 2026-07-10"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "Delay logged \u2014 'Remove bracket near back panel. ' +26d: (no reason given)"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "'Remove bracket near back panel. ': end 2026-06-05 \u2192 2026-07-10"
+        },
+        {
+          "ts": "2026-06-30 11:36",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-30 11:37",
+          "text": "'Remove Louvers on the side trim': end 2026-06-05 \u2192 2026-07-10"
+        },
+        {
+          "ts": "2026-06-30 11:37",
+          "text": "'LED drive bracket removal': end 2026-06-05 \u2192 2026-07-10"
+        },
+        {
+          "ts": "2026-06-30 11:37",
+          "text": "'Shorten the bracket where case power comes in': end 2026-06-05 \u2192 2026-07-10"
+        },
+        {
+          "ts": "2026-06-30 13:02",
+          "text": "'Hot box  Validation - MT': parallel mode ON"
+        },
+        {
+          "ts": "2026-06-30 13:02",
+          "text": "'Hot box  Validation - MT': parallel mode OFF"
+        },
+        {
+          "ts": "2026-06-30 13:02",
+          "text": "'Baseline run': parallel mode ON"
+        },
+        {
+          "ts": "2026-06-30 13:02",
+          "text": "'Baseline run': parallel mode OFF"
+        },
+        {
+          "ts": "2026-06-30 13:02",
+          "text": "'Baseline run': parallel mode ON"
+        },
+        {
+          "ts": "2026-06-30 13:02",
+          "text": "'Baseline run': parallel mode OFF"
+        },
+        {
+          "ts": "2026-06-30 13:02",
+          "text": "'Hot box  Validation - MT': parallel mode ON"
+        },
+        {
+          "ts": "2026-06-30 13:03",
+          "text": "'CAP Tube testing/ Check valve': parallel mode OFF"
+        },
+        {
+          "ts": "2026-06-30 13:03",
+          "text": "'CAP Tube testing/ Check valve': parallel mode ON"
+        },
+        {
+          "ts": "2026-06-30 13:03",
+          "text": "'CAP Tube testing/ Check valve': parallel mode OFF"
+        },
+        {
+          "ts": "2026-06-30 13:03",
+          "text": "'Hot box  Validation - MT': parallel mode OFF"
+        },
+        {
+          "ts": "2026-06-30 13:06",
+          "text": "'Baseline run': end 2026-08-17 \u2192 2026-08-14"
+        },
+        {
+          "ts": "2026-06-30 13:08",
+          "text": "'CAP Tube testing/ Check valve': end 2026-09-15 \u2192 2026-08-10"
+        },
+        {
+          "ts": "2026-06-30 13:08",
+          "text": "'CAP Tube testing/ Check valve': manual date set"
+        },
+        {
+          "ts": "2026-06-30 13:08",
+          "text": "'CAP Tube testing/ Check valve': start 2026-06-24 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-30 13:08",
+          "text": "'CAP Tube testing/ Check valve': end 2026-08-10 \u2192 2026-07-22"
+        },
+        {
+          "ts": "2026-06-30 13:09",
+          "text": "'Lab request': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-06-30 13:11",
+          "text": "'Quotes': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-06-30 13:13",
+          "text": "'MS request - LT unit': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-06-30 14:29",
+          "text": "Deleted task 'New Task'"
+        },
+        {
+          "ts": "2026-06-30 14:29",
+          "text": "Deleted task 'New Task'"
+        },
+        {
+          "ts": "2026-06-30 14:34",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-30 14:34",
+          "text": "Renamed 'New Task' \u2192 'Case bottom with no drain'"
+        },
+        {
+          "ts": "2026-06-30 14:34",
+          "text": "'Case bottom with no drain': parallel mode ON"
+        },
+        {
+          "ts": "2026-06-30 14:34",
+          "text": "'Case bottom with no drain': start 2026-07-13 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-30 14:34",
+          "text": "'Case bottom with no drain': end 2026-07-13 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-30 14:34",
+          "text": "'Case bottom with no drain': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-06-30 14:34",
+          "text": "Delay logged \u2014 'Case bottom with no drain' +25d: (no reason given)"
+        },
+        {
+          "ts": "2026-06-30 14:34",
+          "text": "'Case bottom with no drain': end 2026-06-05 \u2192 2026-07-10"
         }
       ],
       "notes": []
