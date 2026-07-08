@@ -720,6 +720,8 @@ class GitHelperWindow(QMainWindow):
         if startup_notes:
             self.write_details("Startup checks:\n" + "\n".join(startup_notes))
         self.refresh_status()
+        if is_cloud_path(self.repo_path) and not self.onedrive_warning_dismissed:
+            self.show_cloud_warning()
 
     def _build_ui(self):
         central = QWidget()
@@ -733,11 +735,14 @@ class GitHelperWindow(QMainWindow):
         self.branch_label = QLabel("Branch: ...")
         self.cloud_label = QLabel("")
         self.cloud_label.setStyleSheet("color: #8a5a00; font-weight: bold;")
+        self.version_label = QLabel(APP_DISPLAY_NAME)
+        self.version_label.setStyleSheet("color: #666; font-size: 9pt;")
         refresh = QPushButton("Refresh")
         refresh.clicked.connect(self.do_refresh)
         top_bar.addWidget(self.status_label, stretch=2)
         top_bar.addWidget(self.branch_label)
         top_bar.addWidget(self.cloud_label)
+        top_bar.addWidget(self.version_label)
         top_bar.addStretch()
         top_bar.addWidget(refresh)
         main_layout.addLayout(top_bar)
@@ -1238,15 +1243,10 @@ class GitHelperWindow(QMainWindow):
 
     def show_cloud_warning(self):
         self.onedrive_warning_dismissed = True
-        choice = QMessageBox.question(
-            self,
-            "OneDrive Warning",
-            "This project is inside a cloud-synced folder. GitHub should be your backup for code projects; "
-            "cloud sync can interrupt Git while it is saving. Keep this folder open on only one computer at a time.\n\n"
-            "Do you want this app to ask Windows to keep the hidden .git folder on this device?",
-        )
-        if choice == QMessageBox.StandardButton.Yes:
-            result = protect_git_folder(self.repo_path)
+        result = protect_git_folder(self.repo_path)
+        if result.success:
+            self.write_details("OneDrive detected. Git Helper automatically asked Windows to keep the hidden .git folder on this device.")
+        else:
             self.write_details(result.output or result.friendly)
 
     def do_snapshot(self):
