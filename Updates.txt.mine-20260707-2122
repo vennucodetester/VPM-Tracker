@@ -1,0 +1,5 @@
+Updates: VPM Tracker
+1. On the visual tab. I want to be able to double click and it should go directly to the line on the tracker tab so i know exactly what that task is. 
+2. On the tracker tab, i want to be able to right click on any line and be able to cut/copy and paste it either on the same project or a totally new project. And i want the predecessors to still exist between projects if thats even possible. And you need to do a thorough analysis here to understand what else could break if we did this and try to fix them. 
+3. On the visual tab i also want to see what all tasks have been closed from previous 2 weeks upto now. If today is June 10th. you could go all the way from May 25th (always start from Monday)
+4. I have more space on the visual tab to add more details. Think very carefully to understand what else can be added here that could be helpful. 
