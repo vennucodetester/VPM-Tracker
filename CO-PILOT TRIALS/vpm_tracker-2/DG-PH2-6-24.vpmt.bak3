@@ -3859,6 +3859,10 @@
         {
           "ts": "2026-06-24 17:16",
           "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-24 17:20",
+          "text": "Added task 'New Task' under 'New Task'"
         }
       ],
       "notes": [

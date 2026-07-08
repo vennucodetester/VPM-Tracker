@@ -1830,10 +1830,47 @@
                           "revisions": []
                         },
                         {
-                          "id": "a992b977-c4c5-47a9-8049-e3c0451c60d5",
-                          "name": "New Harness design",
+                          "id": "ad48a19d-2d9f-41b7-a646-904c75df8431",
+                          "name": "New Task",
                           "start_date": "2026-07-28",
                           "end_date": "2026-07-28",
+                          "status": "Not Started",
+                          "owner": "",
+                          "notes": "",
+                          "is_parallel": false,
+                          "children": [
+                            {
+                              "id": "e6554fb8-24ce-417d-8b13-1645e37445b2",
+                              "name": "New Task",
+                              "start_date": "2026-07-28",
+                              "end_date": "2026-07-28",
+                              "status": "Not Started",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": true,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": null,
+                              "baseline_end": null,
+                              "delay_notes": "",
+                              "revisions": []
+                            }
+                          ],
+                          "expanded": true,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": null,
+                          "baseline_end": null,
+                          "delay_notes": "",
+                          "revisions": []
+                        },
+                        {
+                          "id": "a992b977-c4c5-47a9-8049-e3c0451c60d5",
+                          "name": "New Harness design",
+                          "start_date": "2026-07-29",
+                          "end_date": "2026-07-29",
                           "status": "Not Started",
                           "owner": "",
                           "notes": "",
@@ -1851,7 +1888,7 @@
                           "id": "cc13f2dd-a382-4f9f-911b-948693dbd960",
                           "name": "S/m - 2 (Control box redesign, evap shroud, compress base, cond. shroud)",
                           "start_date": "2026-06-05",
-                          "end_date": "2026-06-29",
+                          "end_date": "2026-08-06",
                           "status": "In Progress",
                           "owner": "",
                           "notes": "",
@@ -1862,7 +1899,7 @@
                               "name": "Design finalize",
                               "start_date": "2026-06-05",
                               "end_date": "2026-06-23",
-                              "status": "In Progress",
+                              "status": "Completed",
                               "owner": "",
                               "notes": "",
                               "is_parallel": false,
@@ -1879,7 +1916,7 @@
                               "id": "b82af882-6dcd-41ae-bbe7-790637dedeb9",
                               "name": "Part samples",
                               "start_date": "2026-06-24",
-                              "end_date": "2026-06-24",
+                              "end_date": "2026-07-14",
                               "status": "In Progress",
                               "owner": "",
                               "notes": "",
@@ -1896,14 +1933,14 @@
                             {
                               "id": "2cab32ae-7f26-44c3-a1cc-fa85f6da4cc6",
                               "name": "Transit test",
-                              "start_date": "2026-06-25",
-                              "end_date": "2026-06-25",
+                              "start_date": "2026-07-15",
+                              "end_date": "2026-07-21",
                               "status": "Not Started",
                               "owner": "",
                               "notes": "",
                               "is_parallel": false,
                               "children": [],
-                              "expanded": true,
+                              "expanded": false,
                               "dates_locked": false,
                               "predecessor_id": null,
                               "baseline_duration": null,
@@ -1914,14 +1951,14 @@
                             {
                               "id": "d871607c-6f26-4f24-a625-3d6382fd1e69",
                               "name": "Vibration test",
-                              "start_date": "2026-06-26",
-                              "end_date": "2026-06-26",
+                              "start_date": "2026-07-22",
+                              "end_date": "2026-07-23",
                               "status": "Not Started",
                               "owner": "",
                               "notes": "",
                               "is_parallel": false,
                               "children": [],
-                              "expanded": true,
+                              "expanded": false,
                               "dates_locked": false,
                               "predecessor_id": null,
                               "baseline_duration": null,
@@ -1932,14 +1969,14 @@
                             {
                               "id": "6626322b-d394-47c0-ac14-c2688c16ab9b",
                               "name": "ECO Process",
-                              "start_date": "2026-06-29",
-                              "end_date": "2026-06-29",
+                              "start_date": "2026-07-24",
+                              "end_date": "2026-08-06",
                               "status": "Not Started",
                               "owner": "",
                               "notes": "",
                               "is_parallel": false,
                               "children": [],
-                              "expanded": true,
+                              "expanded": false,
                               "dates_locked": false,
                               "predecessor_id": null,
                               "baseline_duration": null,
@@ -1948,7 +1985,7 @@
                               "revisions": []
                             }
                           ],
-                          "expanded": true,
+                          "expanded": false,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": null,
@@ -3798,6 +3835,30 @@
         {
           "ts": "2026-06-24 17:15",
           "text": "'Design finalize': end 2026-06-05 \u2192 2026-06-23"
+        },
+        {
+          "ts": "2026-06-24 17:15",
+          "text": "'Design finalize': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-06-24 17:16",
+          "text": "'Part samples': end 2026-06-24 \u2192 2026-07-14"
+        },
+        {
+          "ts": "2026-06-24 17:16",
+          "text": "'Transit test': end 2026-07-15 \u2192 2026-07-21"
+        },
+        {
+          "ts": "2026-06-24 17:16",
+          "text": "'Vibration test': end 2026-07-22 \u2192 2026-07-23"
+        },
+        {
+          "ts": "2026-06-24 17:16",
+          "text": "'ECO Process': end 2026-07-24 \u2192 2026-08-06"
+        },
+        {
+          "ts": "2026-06-24 17:16",
+          "text": "Added task 'New Task'"
         }
       ],
       "notes": [

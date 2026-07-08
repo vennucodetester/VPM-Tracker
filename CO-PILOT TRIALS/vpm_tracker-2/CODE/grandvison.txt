@@ -1,0 +1,275 @@
+Architecture Overview
+
+  Stack:
+  - PyQt6 (desktop GUI - already used in main.py)
+  - JSON-based .vpmt files (portable, 5KB typical)
+  - Shared core module (vpm_tracker_core.py) used by both tracker + VPM app
+  - PyInstaller → single VPM_Tracker.exe (distribute to team)
+
+  Key Files:
+  vpm_tracker/
+  ├── tracker_app.py              # Main app entry
+  ├── vpm_tracker_core.py         # Shared data model
+  ├── ui/
+  │   ├── main_window.py          # Main window
+  │   ├── tree_grid_view.py       # Combined tree + editable grid
+  │   ├── formula_bar.py          # Excel-style formula editing
+  │   └── dialogs.py              # Date validation, bulk ops
+  ├── models/
+  │   ├── task_node.py            # Task hierarchy model
+  │   └── formula_engine.py       # Formula parser/evaluator
+  └── utils/
+      ├── vpmt_io.py              # Save/load .vpmt files
+      └── vpm_export.py           # Export to VPM format
+
+  ---
+  Phase 1: MVP (Core Functionality)
+
+  1.1 Tree Grid View (SolidEdge-style)
+
+  UI Layout:
+  ┌─────────────────────────────────────────────────────────────────┐
+  │ [File] [Edit] [View] [Help]                                     │
+  ├─────────────────────────────────────────────────────────────────┤
+  │ [📂Open] [💾Save] [➕Add] [🗑️Del] [🔍Search...] [🎨Colors]      │
+  ├─────────────────────────────────────────────────────────────────┤
+  │ Tree Hierarchy          │ Start      │ End        │ Status      │
+  ├─────────────────────────┼────────────┼────────────┼─────────────┤
+  │ 📂 Project Alpha        │ 2025-01-01 │ 2025-06-30 │ In Progress │ ◄─ Parent
+  │ ├─ 📦 Phase 1           │ 2025-01-01 │ 2025-02-15 │ Completed   │ ◄─ GREEN
+  │ │  ├─ 📄 Task 1.1       │ 2025-01-01 │ 2025-01-15 │ Completed   │ ◄─ GREEN
+  │ │  └─ 📄 Task 1.2       │ 2025-01-16 │ 2025-02-15 │ Completed   │ ◄─ GREEN
+  │ └─ 📦 Phase 2           │ 2025-02-16 │ [=Phase1+1]│ In Progress │ ◄─ FORMULA
+  │    ├─ 🔧 Task 2.1       │ 2025-02-16 │ 2025-03-01 │ Overdue     │ ◄─ RED
+  │    └─ 🔧 Task 2.2       │ 2025-03-02 │ [=Start+7] │ Pending     │ ◄─ ORANGE
+  ├─────────────────────────┴────────────┴────────────┴─────────────┤
+  │ Formula: =Start+7                      Selected: Task 2.2        │
+  └─────────────────────────────────────────────────────────────────┘
+
+  Implementation:
+  - Custom QTreeWidget merged with QTableWidget (single widget)
+  - Tree column: Icons (📂📦📄🔧), expand/collapse, drag-drop
+  - Data columns: Inline editing, date pickers, dropdowns
+  - Selection syncing between tree and grid
+
+  1.2 Core Features
+
+  | Feature         | Implementation                            | Excel Equivalent         |
+  |-----------------|-------------------------------------------|--------------------------|
+  | Add Subtask     | Right-click → Add Child                   | ✅ Same                   |
+  | Delete Task     | Options: Delete All / Promote Children    | ✅ Same                   |
+  | Timeline Rollup | Auto-calculate parent dates from children | ✅ Same                   |
+  | Lock Dates      | Lock flag + validation warnings           | ✅ Same                   |
+  | Smart Notes     | Auto-date [MM/DD]: on double-click        | ✅ Same                   |
+  | Dynamic Colors  | VBA-style priority coloring               | ✅ Improved (no breakage) |
+  | Duration        | Auto-calc (End - Start)                   | ✅ Same                   |
+  | Owner List      | Dropdown + editable list                  | ✅ Same                   |
+
+  1.3 Color Scheme (Priority-Based)
+
+  Priority 1: Overdue (Red)     - End < Today AND Status ≠ Completed
+  Priority 2: Completed (Green)  - Status = Completed
+  Priority 3: Leaf Tasks (Orange) - No children (action items)
+  Priority 4: Parent Tasks (Gray) - Has children (containers)
+
+  No filter breakage - colors update instantly via Python, no fragile Excel formulas.
+
+  ---
+  Phase 2: Advanced Features (Excel Pain Points)
+
+  2.1 Persistent Formulas ⭐ NEW - Excel can't do this
+
+  Problem in Excel: Formulas break when rows are deleted/filtered.
+
+  Solution:
+  # Store formulas as strings, evaluate dynamically
+  task.end_date_formula = "=Start+7"
+  task.end_date_formula = "=Parent.End+2"
+  task.end_date_formula = "=PrevSibling.End+1"
+
+  Formula Engine:
+  - Parser: Tokenize formulas (regex-based)
+  - Resolver: Find referenced tasks (parent, siblings, self)
+  - Evaluator: Bottom-up recursive evaluation
+  - Auto-update: When reference changes, cascade updates
+
+  Example:
+  Phase 1: Start=2025-01-01, End=2025-02-15
+  Phase 2: Start=[=Phase1.End+1], End=[=Start+30]
+
+  → When Phase 1 End changes to 2025-02-20
+  → Phase 2 Start auto-updates to 2025-02-21
+  → Phase 2 End auto-updates to 2025-03-23
+
+  2.2 Bulk Operations ⭐ NEW - Excel requires multiple clicks
+
+  Bulk Paste Children:
+  1. Right-click parent → "Bulk Paste Children"
+  2. Paste text list:
+     Requirements Gathering
+     System Design
+     Code Review
+     Testing
+     Documentation
+  3. → Creates 5 subtasks instantly (1 second vs 5 minutes in Excel)
+
+  Other Bulk Ops:
+  - Bulk status change (select multiple → change status for all)
+  - Bulk owner assignment
+  - Bulk date shift (move all dates by +X days)
+
+  2.3 Search & Filter ⭐ Excel filters break everything
+
+  Search Bar:
+  - Search by task name, owner, status
+  - Highlight matches in tree
+  - Navigate with Enter/F3
+
+  Filters (NON-DESTRUCTIVE):
+  - Filter by: Status, Owner, Date Range
+  - Filtered items hidden in view, NOT deleted
+  - Clear filters → all data restored
+  - No hierarchy corruption (unlike Excel)
+
+  2.4 Keyboard Shortcuts ⭐ Excel lacks this
+
+  | Shortcut        | Action                |
+  |-----------------|-----------------------|
+  | Ctrl+N          | New subtask           |
+  | Delete          | Delete selected       |
+  | F2              | Edit cell             |
+  | Tab / Shift+Tab | Indent / Outdent      |
+  | Ctrl+C/V        | Copy / Paste tasks    |
+  | Ctrl+F          | Search                |
+  | F5              | Refresh / Recalculate |
+  | Ctrl+S          | Save                  |
+
+  ---
+  Phase 3: Integration & Polish
+
+  3.1 VPM App Integration
+
+  Workflow:
+  1. Team edits MyProject.vpmt in Tracker app
+  2. Save file
+  3. Copy MyProject.vpmt to VPM-1/Projects/MyProject/ folder
+  4. Open VPM app → Auto-detects .vpmt file
+  5. Dashboard shows all tasks, notes, dates
+
+  Implementation in main.py:
+  # In project loading code
+  if os.path.exists(f"{project_folder}/MyProject.vpmt"):
+      # Load from .vpmt instead of Excel
+      from vpm_tracker_core import load_vpmt
+      tasks = load_vpmt(f"{project_folder}/MyProject.vpmt")
+  else:
+      # Fallback to Excel import
+      tasks = import_from_excel(...)
+
+  3.2 File Format (.vpmt)
+
+  {
+    "version": "1.0",
+    "project_name": "Project Alpha",
+    "last_modified": "2025-01-20T10:30:00",
+    "owner_list": ["Brett", "John", "Chris", "Sunil"],
+    "tasks": [
+      {
+        "id": 1,
+        "name": "Phase 1",
+        "start_date": "2025-01-01",
+        "end_date": "2025-02-15",
+        "formula_start": null,
+        "formula_end": null,
+        "status": "Completed",
+        "owner": "John",
+        "notes": "[01/15]: Completed ahead of schedule",
+        "level": 1,
+        "parent_id": null,
+        "dates_locked": false,
+        "children": [
+          {
+            "id": 2,
+            "name": "Task 1.1",
+            ...
+          }
+        ]
+      }
+    ]
+  }
+
+  3.3 Dark Theme UI
+
+  Colors:
+  - Background: #1e1e1e (dark gray)
+  - Selected row: Neon cyan accent
+  - Text: White/light gray
+  - Tree lines: Subtle gray
+  - Status colors: Red/Green/Orange/Gray (same as Excel)
+
+  Modern Look:
+  - Sleek borders, rounded corners
+  - Subtle shadows
+  - Icons with color accents
+  - Smooth animations (expand/collapse)
+
+  ---
+  Implementation Priorities
+
+  Must-Have (Week 1-2)
+
+  1. ✅ Tree grid view (combined tree + editable grid)
+  2. ✅ Add/delete tasks with validation
+  3. ✅ Timeline rollup (parent dates from children)
+  4. ✅ Lock dates + validation warnings
+  5. ✅ Dynamic coloring (4-priority system)
+  6. ✅ Save/load .vpmt files
+  7. ✅ Basic VPM export
+
+  High Priority (Week 3-4)
+
+  8. ✅ Smart notes (auto-date on double-click)
+  9. ✅ Formula support (=Start+7, =Parent.End+2)
+  10. ✅ Bulk paste children
+  11. ✅ Owner list management
+  12. ✅ Duration auto-calculation
+  13. ✅ Keyboard shortcuts
+  14. ✅ Search functionality
+
+  Nice-to-Have (Week 5+)
+
+  15. Filter by status/owner/date
+  16. Excel import (convert existing .xlsm files)
+  17. Excel export (for teams still using Excel)
+  18. Undo/redo
+  19. Auto-save
+  20. Gantt chart view (visual timeline)
+
+  ---
+  Benefits Over Excel
+
+  | Limitation               | Excel VBA                    | Desktop App                   |
+  |--------------------------|------------------------------|-------------------------------|
+  | Filters break hierarchy  | ❌ Yes, major issue           | ✅ No, non-destructive filters |
+  | Formulas break on delete | ❌ Yes, formulas lost         | ✅ No, stored as strings       |
+  | Slow with many tasks     | ❌ VBA overhead               | ✅ Native Python speed         |
+  | Bulk operations          | ❌ Click 50 times             | ✅ One paste operation         |
+  | Search                   | ❌ Excel search is basic      | ✅ Advanced search + highlight |
+  | Keyboard shortcuts       | ❌ Limited                    | ✅ Full custom shortcuts       |
+  | File size                | ❌ 100KB+ with macros         | ✅ 5KB JSON file               |
+  | Distribution             | ❌ Email .xlsm, enable macros | ✅ Single .exe, no setup       |
+  | Visual hierarchy         | ❌ Outline grouping confusing | ✅ Clear tree with icons       |
+  | Dark mode                | ❌ Not available              | ✅ Premium dark theme          |
+
+  ---
+  Next Steps
+
+  Would you like me to:
+
+  1. Start implementation - Begin with Phase 1 MVP (tree grid + core features)?
+  2. Refine plan - Discuss specific features or prioritize differently?
+  3. Prototype UI - Create mockup of main window first?
+  4. Start with formulas - Build formula engine first (most complex part)?
+
+  The app will be significantly faster and more reliable than Excel, with no filter/formula breakage issues. Team members get a single .exe file - no
+  installation, no macro warnings, just double-click and work.
