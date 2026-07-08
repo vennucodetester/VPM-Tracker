@@ -128,7 +128,9 @@ def friendly_error(output):
     for needles, message in FRIENDLY_ERRORS:
         if any(needle in text for needle in needles):
             return message
-    return "Something unexpected happened. The technical details are below."
+    if text.strip():
+        return "Git could not finish that step. The technical details are in the Details panel."
+    return "Git could not finish that step, but it did not return any technical details."
 
 
 def is_auth_error(output):
@@ -182,7 +184,8 @@ class GitRunner:
                 kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW
             result = subprocess.run(["git"] + args, **kwargs)
             output = ((result.stdout or "") + (result.stderr or "")).strip()
-            return GitResult(result.returncode == 0, output, friendly_error(output))
+            success = result.returncode == 0
+            return GitResult(success, output, "" if success else friendly_error(output))
         except subprocess.TimeoutExpired:
             return GitResult(
                 False,
@@ -884,6 +887,7 @@ class GitHelperWindow(QMainWindow):
 
     def write_details(self, message):
         ts = datetime.datetime.now().strftime("%H:%M:%S")
+        message = message if str(message or "").strip() else "(no output)"
         self.output_pane.appendPlainText(f"\n[{ts}] {message}")
         QApplication.processEvents()
 
