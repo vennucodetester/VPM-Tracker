@@ -4080,6 +4080,7 @@
         {
           "ts": "2026-06-24 17:20",
           "text": "Added task 'New Task' under 'New Task'"
+<<<<<<< HEAD
         },
         {
           "ts": "2026-06-24 22:08",
@@ -4736,6 +4737,8 @@
         {
           "ts": "2026-06-25 10:48",
           "text": "Renamed 'New Task' \u2192 'DOE'"
+=======
+>>>>>>> origin/main
         }
       ],
       "notes": [

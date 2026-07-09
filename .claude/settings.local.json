@@ -1,25 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git clone *)",
-      "Bash(git -C \"C:/Users/silam/OneDrive/Documents/VPM-Tracker\" pull origin main)",
-      "Bash(python -c ' *)",
-      "Bash(python tests/test_timeline_invariants.py)",
-      "Bash(python tests/test_predecessor_chain.py)",
-      "Bash(git add *)",
-      "Bash(git commit -m ' *)",
-      "Bash(git push *)",
-      "Bash(python build_vave.py)",
-      "Bash(python scripts/recalc.py \"C:\\\\Users\\\\silam\\\\OneDrive\\\\Documents\\\\VPM-Tracker\\\\MicroBlock 2.0 Estimated Cost.xlsx\")",
-      "Bash(python -)",
-      "Bash(python eol_bell_curves.py)",
-      "Bash(python build_eol_workbook.py)",
-      "Bash(python -c \"import sys; [print\\(l.encode\\('ascii','replace'\\).decode\\(\\)\\) for l in sys.stdin]\")",
-      "Bash(python build_eol_workbook_simple.py)",
-      "Bash(git pull *)",
-      "Bash(ls -la --time-style=long-iso git_helper.py \"CO-PILOT TRIALS/vpm_tracker-2/git_helper.py\" \"CO-PILOT TRIALS/vpm_tracker/git_helper.py\")",
-      "Bash(grep -l -i \"smart\\\\|def sync\\\\|traffic\\\\|restore point\\\\|onedrive\" git_helper.py \"CO-PILOT TRIALS/vpm_tracker-2/git_helper.py\" \"CO-PILOT TRIALS/vpm_tracker/git_helper.py\")",
-      "Bash(python -c \"import py_compile; py_compile.compile\\('git_helper.py', doraise=True\\); print\\('parses OK'\\)\")"
+      "Bash(git -C \"C:\\\\Users\\\\silam\\\\OneDrive\\\\Documents\\\\VPM-Tracker\\\\CO-PILOT TRIALS\\\\vpm_tracker-2\" remote -v)",
+      "Bash(git ls-remote *)",
+      "Bash(git ls-tree *)",
+      "Bash(git -C \"C:\\\\Users\\\\silam\\\\OneDrive\\\\Documents\\\\VPM-Tracker\" rev-parse --show-toplevel)",
+      "Bash(xargs wc -l)"
     ]
   }
 }

@@ -1,0 +1,167 @@
+{
+  "version": "1.1",
+  "metadata": {
+    "owners": [
+      "John",
+      "Sunil",
+      "Larry",
+      "Chris",
+      "Cody",
+      "Brett"
+    ],
+    "holidays": [
+      "2025-12-31",
+      "2025-11-28",
+      "2025-11-27",
+      "2025-12-24",
+      "2025-12-25",
+      "2026-01-01"
+    ],
+    "exclude_weekends": true
+  },
+  "tasks": [
+    {
+      "id": "51c97a71-6419-4f65-add6-ad229939296f",
+      "name": "Microblock 2.5",
+      "start_date": "2026-04-17",
+      "end_date": "2026-04-23",
+      "status": "In Progress",
+      "owner": "",
+      "notes": "",
+      "is_parallel": true,
+      "children": [
+        {
+          "id": "d251d374-a50d-4f12-804f-b2bb2c86dd59",
+          "name": "Design",
+          "start_date": "2026-04-17",
+          "end_date": "2026-04-23",
+          "status": "In Progress",
+          "owner": "",
+          "notes": "",
+          "is_parallel": true,
+          "children": [
+            {
+              "id": "95b821f9-e197-4a23-94a7-f55d99384dcc",
+              "name": "Foaming fixture",
+              "start_date": "2026-04-17",
+              "end_date": "2026-04-17",
+              "status": "Not Started",
+              "owner": "",
+              "notes": "",
+              "is_parallel": false,
+              "children": [],
+              "expanded": true,
+              "dates_locked": false,
+              "predecessor_id": null
+            },
+            {
+              "id": "155a1dea-c0c9-48a3-b53b-2bd371374020",
+              "name": "Base - no routing",
+              "start_date": "2026-04-20",
+              "end_date": "2026-04-20",
+              "status": "Not Started",
+              "owner": "",
+              "notes": "",
+              "is_parallel": false,
+              "children": [],
+              "expanded": true,
+              "dates_locked": false,
+              "predecessor_id": null
+            },
+            {
+              "id": "cf46d39b-407d-4c74-8b45-5f2babc030e2",
+              "name": "Evap tray angle > 1 deg",
+              "start_date": "2026-04-21",
+              "end_date": "2026-04-21",
+              "status": "Not Started",
+              "owner": "",
+              "notes": "",
+              "is_parallel": false,
+              "children": [],
+              "expanded": true,
+              "dates_locked": false,
+              "predecessor_id": null
+            },
+            {
+              "id": "ca6f8f05-ca1f-4aa0-b628-3de93d64dfa6",
+              "name": "Rerouting evap fan wires",
+              "start_date": "2026-04-22",
+              "end_date": "2026-04-22",
+              "status": "Not Started",
+              "owner": "",
+              "notes": "",
+              "is_parallel": false,
+              "children": [],
+              "expanded": true,
+              "dates_locked": false,
+              "predecessor_id": null
+            },
+            {
+              "id": "d0efaa59-63e6-4c2d-8d3b-33b6ed2a08d4",
+              "name": "Electrical harness",
+              "start_date": "2026-04-23",
+              "end_date": "2026-04-23",
+              "status": "Not Started",
+              "owner": "",
+              "notes": "",
+              "is_parallel": false,
+              "children": [],
+              "expanded": true,
+              "dates_locked": false,
+              "predecessor_id": null
+            }
+          ],
+          "expanded": true,
+          "dates_locked": false,
+          "predecessor_id": null
+        },
+        {
+          "id": "b3261134-897a-45c3-a50e-021ff30aa799",
+          "name": "Prototype",
+          "start_date": "2026-04-17",
+          "end_date": "2026-04-17",
+          "status": "Not Started",
+          "owner": "",
+          "notes": "",
+          "is_parallel": true,
+          "children": [
+            {
+              "id": "fde11d0c-a24d-4094-866c-25103850f738",
+              "name": "New Task",
+              "start_date": "2026-04-17",
+              "end_date": "2026-04-17",
+              "status": "Not Started",
+              "owner": "",
+              "notes": "",
+              "is_parallel": false,
+              "children": [],
+              "expanded": true,
+              "dates_locked": false,
+              "predecessor_id": null
+            }
+          ],
+          "expanded": true,
+          "dates_locked": false,
+          "predecessor_id": null
+        },
+        {
+          "id": "424fdaf4-cc02-490a-a780-7c8db6edd9b5",
+          "name": "Testing",
+          "start_date": "2026-04-20",
+          "end_date": "2026-04-20",
+          "status": "Not Started",
+          "owner": "",
+          "notes": "",
+          "is_parallel": false,
+          "children": [],
+          "expanded": true,
+          "dates_locked": false,
+          "predecessor_id": null
+        }
+      ],
+      "expanded": true,
+      "dates_locked": false,
+      "predecessor_id": null
+    }
+  ]
+}

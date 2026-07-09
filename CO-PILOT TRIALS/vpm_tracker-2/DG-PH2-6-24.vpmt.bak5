@@ -2178,19 +2178,31 @@
                         {
                           "id": "cc13f2dd-a382-4f9f-911b-948693dbd960",
                           "name": "S/m - 2 (Control box redesign, evap shroud, compress base, cond. shroud)",
+<<<<<<< HEAD
                           "start_date": "2027-01-25",
                           "end_date": "2027-03-26",
                           "status": "Not Started",
+=======
+                          "start_date": "2026-06-05",
+                          "end_date": "2026-06-29",
+                          "status": "In Progress",
+>>>>>>> origin/main
                           "owner": "",
                           "notes": "",
-                          "is_parallel": false,
+                          "is_parallel": true,
                           "children": [
                             {
                               "id": "5f33dc4f-34c0-4ec0-8fcd-fd86fce07027",
                               "name": "Design finalize",
+<<<<<<< HEAD
                               "start_date": "2027-01-25",
                               "end_date": "2027-02-10",
                               "status": "Completed",
+=======
+                              "start_date": "2026-06-05",
+                              "end_date": "2026-06-23",
+                              "status": "In Progress",
+>>>>>>> origin/main
                               "owner": "",
                               "notes": "",
                               "is_parallel": false,
@@ -2206,9 +2218,15 @@
                             {
                               "id": "b82af882-6dcd-41ae-bbe7-790637dedeb9",
                               "name": "Part samples",
+<<<<<<< HEAD
                               "start_date": "2027-02-11",
                               "end_date": "2027-03-03",
                               "status": "Not Started",
+=======
+                              "start_date": "2026-06-24",
+                              "end_date": "2026-06-24",
+                              "status": "In Progress",
+>>>>>>> origin/main
                               "owner": "",
                               "notes": "",
                               "is_parallel": false,
@@ -2224,8 +2242,49 @@
                             {
                               "id": "2cab32ae-7f26-44c3-a1cc-fa85f6da4cc6",
                               "name": "Transit test",
+<<<<<<< HEAD
                               "start_date": "2027-03-04",
                               "end_date": "2027-03-10",
+=======
+                              "start_date": "2026-06-25",
+                              "end_date": "2026-06-25",
+                              "status": "Not Started",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": true,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": null,
+                              "baseline_end": null,
+                              "delay_notes": "",
+                              "revisions": []
+                            },
+                            {
+                              "id": "d871607c-6f26-4f24-a625-3d6382fd1e69",
+                              "name": "Vibration test",
+                              "start_date": "2026-06-26",
+                              "end_date": "2026-06-26",
+                              "status": "Not Started",
+                              "owner": "",
+                              "notes": "",
+                              "is_parallel": false,
+                              "children": [],
+                              "expanded": true,
+                              "dates_locked": false,
+                              "predecessor_id": null,
+                              "baseline_duration": null,
+                              "baseline_end": null,
+                              "delay_notes": "",
+                              "revisions": []
+                            },
+                            {
+                              "id": "6626322b-d394-47c0-ac14-c2688c16ab9b",
+                              "name": "ECO Process",
+                              "start_date": "2026-06-29",
+                              "end_date": "2026-06-29",
+>>>>>>> origin/main
                               "status": "Not Started",
                               "owner": "",
                               "notes": "",
@@ -3961,6 +4020,7 @@
         {
           "ts": "2026-06-24 17:15",
           "text": "'Design finalize': end 2026-06-05 \u2192 2026-06-23"
+<<<<<<< HEAD
         },
         {
           "ts": "2026-06-24 17:15",
@@ -4581,6 +4641,8 @@
         {
           "ts": "2026-06-25 10:00",
           "text": "'New enclosure for 2.0': status \u2192 In Progress"
+=======
+>>>>>>> origin/main
         }
       ],
       "notes": [
