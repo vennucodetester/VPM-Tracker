@@ -1590,7 +1590,7 @@
                   "notes": "",
                   "is_parallel": false,
                   "children": [],
-                  "expanded": false,
+                  "expanded": true,
                   "dates_locked": false,
                   "predecessor_id": null,
                   "baseline_duration": 86,
@@ -1628,7 +1628,7 @@
                           "notes": "",
                           "is_parallel": false,
                           "children": [],
-                          "expanded": false,
+                          "expanded": true,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": 14,
@@ -1646,7 +1646,7 @@
                           "notes": "",
                           "is_parallel": false,
                           "children": [],
-                          "expanded": false,
+                          "expanded": true,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": 15,
@@ -1664,7 +1664,7 @@
                           "notes": "",
                           "is_parallel": false,
                           "children": [],
-                          "expanded": false,
+                          "expanded": true,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": 25,
@@ -1673,7 +1673,7 @@
                           "revisions": []
                         }
                       ],
-                      "expanded": false,
+                      "expanded": true,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 54,
@@ -1691,7 +1691,7 @@
                       "notes": "[2026-06-16] try 1",
                       "is_parallel": false,
                       "children": [],
-                      "expanded": false,
+                      "expanded": true,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 1,
@@ -1700,7 +1700,7 @@
                       "revisions": []
                     }
                   ],
-                  "expanded": false,
+                  "expanded": true,
                   "dates_locked": false,
                   "predecessor_id": null,
                   "baseline_duration": 55,
@@ -1709,7 +1709,7 @@
                   "revisions": []
                 }
               ],
-              "expanded": false,
+              "expanded": true,
               "dates_locked": false,
               "predecessor_id": null,
               "baseline_duration": 141,
@@ -3401,7 +3401,7 @@
                           "end_date": "2026-06-30",
                           "status": "In Progress",
                           "owner": "",
-                          "notes": "[2026-06-23]: Initial baseline run done. Should get a captube result by tomorrow",
+                          "notes": "[2026-07-07]: Cut 18\" off of the captube. no change on SH \n[2026-06-23]: Initial baseline run done. Should get a captube result by tomorrow",
                           "is_parallel": false,
                           "children": [
                             {
@@ -4353,7 +4353,7 @@
                               "name": "Define coil spec",
                               "start_date": "2026-06-05",
                               "end_date": "2026-06-26",
-                              "status": "In Progress",
+                              "status": "Completed",
                               "owner": "",
                               "notes": "",
                               "is_parallel": false,
@@ -5067,7 +5067,7 @@
                           "revisions": []
                         }
                       ],
-                      "expanded": false,
+                      "expanded": true,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 0,
@@ -5076,7 +5076,7 @@
                       "revisions": []
                     }
                   ],
-                  "expanded": false,
+                  "expanded": true,
                   "dates_locked": false,
                   "predecessor_id": null,
                   "baseline_duration": null,
@@ -5220,7 +5220,7 @@
                       "notes": "",
                       "is_parallel": true,
                       "children": [],
-                      "expanded": true,
+                      "expanded": false,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 1,
@@ -5246,7 +5246,7 @@
                       "notes": "",
                       "is_parallel": true,
                       "children": [],
-                      "expanded": true,
+                      "expanded": false,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 1,
@@ -5263,7 +5263,7 @@
                       ]
                     }
                   ],
-                  "expanded": true,
+                  "expanded": false,
                   "dates_locked": false,
                   "predecessor_id": null,
                   "baseline_duration": null,
@@ -5986,9 +5986,20 @@
         {
           "ts": "2026-06-30 14:44",
           "text": "'Structure review (Refer Tru case)': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-07 10:59",
+          "text": "'Define coil spec': status \u2192 Completed"
         }
       ],
-      "notes": []
+      "notes": [
+        "process in place to not dispatch if the store humidity is high. Atleast from one connect. we wont get money back. FEXA is fine. we can get that money back",
+        "Harness design - UL wire spec 10-32. or what. Also what colors do we need and the gage?",
+        "Sensor probe number. and the sensor part number. This is all on page 2",
+        "Page 3 0 - UL wire types for 12 and 18 gage wires. Want the exact part number you want mega fit and mini fit size. Any insulation needed on the ground terminal.",
+        "15amp cord. what UL requirements. For NEMA 5-15. They will send specs. for us to pick.",
+        "Fan - Taiko connectors instead of current connectors."
+      ]
     }
   ]
 }

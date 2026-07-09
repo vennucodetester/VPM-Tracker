@@ -10,10 +10,11 @@ import uuid
 from typing import Dict, List
 
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QTabWidget, QSplitter, QDialog
-from PyQt6.QtCore import pyqtSignal, Qt
+from PyQt6.QtCore import pyqtSignal, Qt, QTimer
 from PyQt6.QtGui import QKeySequence, QShortcut
 
 from models.task_node import TaskNode
+from vpm_tracker_core import Columns
 from ui.tree_grid_view import TreeGridView
 from ui.focus_view import FocusView
 from ui.timeline_pane import TimelineContainer
@@ -123,18 +124,46 @@ class ProjectWidget(QWidget):
 
         self.gantt_view = FocusView()  # name kept so callers don't change
         self.gantt_view.task_activated.connect(self._jump_to_task)
+        self.gantt_view.task_action_requested.connect(self._handle_focus_action)
         self.inner_tabs.addTab(self.gantt_view, "Visuals")
 
+        self._focus_refresh_timer = QTimer(self)
+        self._focus_refresh_timer.setSingleShot(True)
+        self._focus_refresh_timer.setInterval(1000)
+        self._focus_refresh_timer.timeout.connect(self._refresh_focus_if_visible)
         self.inner_tabs.currentChanged.connect(self._on_inner_tab_changed)
 
     def _on_inner_tab_changed(self, index: int):
         if index == 1:  # Visuals
             self.gantt_view.load_nodes(self.tree_view.root_nodes)
 
+    def _refresh_focus_if_visible(self):
+        if self.inner_tabs.currentIndex() == 1:
+            self.gantt_view.load_nodes(self.tree_view.root_nodes)
+
     def _jump_to_task(self, node_id: str):
         """Click on a task name in Visuals → show that row in the Tracker."""
         self.inner_tabs.setCurrentIndex(0)
         self.tree_view.jump_to_node_id(node_id)
+
+    def _handle_focus_action(self, node_id: str, action: str):
+        item = self.tree_view._find_item_by_id(node_id)
+        if not item:
+            return
+        node = item.node
+        if action == "complete":
+            if node.status != "Completed":
+                node.status = "Completed"
+                node.update_status_from_dates()
+                self.tree_view.journal_event.emit(
+                    f"'{node.name}': status set to Completed from Visuals")
+                self.tree_view.commit_structure_change(node)
+        elif action == "delay":
+            delay_delegate = self.tree_view.itemDelegateForColumn(Columns.DELAY)
+            if hasattr(delay_delegate, "_open_dialog"):
+                idx = self.tree_view.indexFromItem(item, Columns.DELAY)
+                delay_delegate._open_dialog(idx)
+        self.gantt_view.load_nodes(self.tree_view.root_nodes)
 
     def show_notes_and_capture(self):
         """Show the notes pad as a floating notepad window.
@@ -235,6 +264,8 @@ class ProjectWidget(QWidget):
         self.history.push(self._last_snapshot)
         self._last_snapshot = self.get_snapshot()
         self.project_changed.emit()
+        if self.inner_tabs.currentIndex() == 1:
+            self._focus_refresh_timer.start()
 
     def _on_note_consumed(self, raw: str):
         """A note was promoted into the grid. Drop it from the pad WITHOUT

@@ -1590,7 +1590,7 @@
                   "notes": "",
                   "is_parallel": false,
                   "children": [],
-                  "expanded": false,
+                  "expanded": true,
                   "dates_locked": false,
                   "predecessor_id": null,
                   "baseline_duration": 86,
@@ -1628,7 +1628,7 @@
                           "notes": "",
                           "is_parallel": false,
                           "children": [],
-                          "expanded": false,
+                          "expanded": true,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": 14,
@@ -1646,7 +1646,7 @@
                           "notes": "",
                           "is_parallel": false,
                           "children": [],
-                          "expanded": false,
+                          "expanded": true,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": 15,
@@ -1664,7 +1664,7 @@
                           "notes": "",
                           "is_parallel": false,
                           "children": [],
-                          "expanded": false,
+                          "expanded": true,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": 25,
@@ -1673,7 +1673,7 @@
                           "revisions": []
                         }
                       ],
-                      "expanded": false,
+                      "expanded": true,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 54,
@@ -1691,7 +1691,7 @@
                       "notes": "[2026-06-16] try 1",
                       "is_parallel": false,
                       "children": [],
-                      "expanded": false,
+                      "expanded": true,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 1,
@@ -1700,7 +1700,7 @@
                       "revisions": []
                     }
                   ],
-                  "expanded": false,
+                  "expanded": true,
                   "dates_locked": false,
                   "predecessor_id": null,
                   "baseline_duration": 55,
@@ -1709,7 +1709,7 @@
                   "revisions": []
                 }
               ],
-              "expanded": false,
+              "expanded": true,
               "dates_locked": false,
               "predecessor_id": null,
               "baseline_duration": 141,
@@ -3356,7 +3356,7 @@
                   "revisions": []
                 }
               ],
-              "expanded": true,
+              "expanded": false,
               "dates_locked": false,
               "predecessor_id": null,
               "baseline_duration": 39,
@@ -3401,7 +3401,7 @@
                           "end_date": "2026-06-30",
                           "status": "In Progress",
                           "owner": "",
-                          "notes": "[2026-06-23]: Initial baseline run done. Should get a captube result by tomorrow",
+                          "notes": "[2026-07-07]: Cut 18\" off of the captube. no change on SH \n[2026-06-23]: Initial baseline run done. Should get a captube result by tomorrow",
                           "is_parallel": false,
                           "children": [
                             {
@@ -3483,7 +3483,7 @@
                               ]
                             }
                           ],
-                          "expanded": true,
+                          "expanded": false,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": 10,
@@ -3562,7 +3562,7 @@
                               ]
                             }
                           ],
-                          "expanded": true,
+                          "expanded": false,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": 1,
@@ -3712,7 +3712,7 @@
                           "revisions": []
                         }
                       ],
-                      "expanded": true,
+                      "expanded": false,
                       "dates_locked": true,
                       "predecessor_id": null,
                       "baseline_duration": 20,
@@ -4353,7 +4353,7 @@
                               "name": "Define coil spec",
                               "start_date": "2026-06-05",
                               "end_date": "2026-06-26",
-                              "status": "In Progress",
+                              "status": "Completed",
                               "owner": "",
                               "notes": "",
                               "is_parallel": false,
@@ -4503,7 +4503,7 @@
                           "revisions": []
                         }
                       ],
-                      "expanded": true,
+                      "expanded": false,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 6,
@@ -5067,84 +5067,11 @@
                           "revisions": []
                         }
                       ],
-                      "expanded": false,
+                      "expanded": true,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 0,
                       "baseline_end": "2026-07-20",
-                      "delay_notes": "",
-                      "revisions": []
-                    },
-                    {
-                      "id": "345a51e4-2253-4452-abac-64c1f9679797",
-                      "name": "New Task",
-                      "start_date": "2026-07-09",
-                      "end_date": "2026-07-10",
-                      "status": "Not Started",
-                      "owner": "",
-                      "notes": "",
-                      "is_parallel": false,
-                      "children": [
-                        {
-                          "id": "6f62d7b6-2bdf-44b7-825c-ab5ba1fd93c5",
-                          "name": "New Harness design",
-                          "start_date": "2026-07-09",
-                          "end_date": "2026-07-09",
-                          "status": "Not Started",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": false,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": null,
-                          "baseline_end": null,
-                          "delay_notes": "",
-                          "revisions": []
-                        },
-                        {
-                          "id": "d5dc875e-33cd-4fea-8437-18ba84d43afb",
-                          "name": "New Task",
-                          "start_date": "2026-07-10",
-                          "end_date": "2026-07-10",
-                          "status": "Not Started",
-                          "owner": "",
-                          "notes": "",
-                          "is_parallel": false,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": null,
-                          "baseline_end": null,
-                          "delay_notes": "",
-                          "revisions": []
-                        }
-                      ],
-                      "expanded": false,
-                      "dates_locked": false,
-                      "predecessor_id": null,
-                      "baseline_duration": null,
-                      "baseline_end": null,
-                      "delay_notes": "",
-                      "revisions": []
-                    },
-                    {
-                      "id": "317c298e-d1af-4657-909e-477047ef500f",
-                      "name": "New Task",
-                      "start_date": "2026-07-13",
-                      "end_date": "2026-07-13",
-                      "status": "Not Started",
-                      "owner": "",
-                      "notes": "",
-                      "is_parallel": false,
-                      "children": [],
-                      "expanded": false,
-                      "dates_locked": false,
-                      "predecessor_id": null,
-                      "baseline_duration": 1,
-                      "baseline_end": "2026-07-29",
                       "delay_notes": "",
                       "revisions": []
                     }
@@ -5187,7 +5114,7 @@
                     },
                     {
                       "id": "7f4db833-dd64-46b5-8db3-432b2e04f2c3",
-                      "name": "Roll form the ctr uprights. ",
+                      "name": "Roll form/ Stamped the ctr uprights. ",
                       "start_date": "2026-06-05",
                       "end_date": "2026-07-10",
                       "status": "In Progress",
@@ -5282,6 +5209,58 @@
                       "baseline_end": null,
                       "delay_notes": "",
                       "revisions": []
+                    },
+                    {
+                      "id": "ee58573b-0b79-4ad0-8e51-bc48623aedd6",
+                      "name": "Case bottom with no drain",
+                      "start_date": "2026-06-05",
+                      "end_date": "2026-07-10",
+                      "status": "In Progress",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": true,
+                      "children": [],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": null,
+                      "baseline_duration": 1,
+                      "baseline_end": "2026-07-13",
+                      "delay_notes": "",
+                      "revisions": [
+                        {
+                          "rev": "B",
+                          "date": "2026-06-30",
+                          "end": "2026-07-10",
+                          "slip": 25,
+                          "reason": ""
+                        }
+                      ]
+                    },
+                    {
+                      "id": "cc6b451d-ad08-49c3-aaa0-b8286f815532",
+                      "name": "Structure review (Refer Tru case)",
+                      "start_date": "2026-06-05",
+                      "end_date": "2026-07-10",
+                      "status": "In Progress",
+                      "owner": "",
+                      "notes": "",
+                      "is_parallel": true,
+                      "children": [],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": null,
+                      "baseline_duration": 1,
+                      "baseline_end": "2026-07-13",
+                      "delay_notes": "",
+                      "revisions": [
+                        {
+                          "rev": "B",
+                          "date": "2026-06-30",
+                          "end": "2026-08-17",
+                          "slip": 25,
+                          "reason": ""
+                        }
+                      ]
                     }
                   ],
                   "expanded": false,
@@ -5931,9 +5910,91 @@
         {
           "ts": "2026-06-30 13:13",
           "text": "'MS request - LT unit': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-06-30 14:29",
+          "text": "Deleted task 'New Task'"
+        },
+        {
+          "ts": "2026-06-30 14:29",
+          "text": "Deleted task 'New Task'"
+        },
+        {
+          "ts": "2026-06-30 14:34",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-30 14:34",
+          "text": "Renamed 'New Task' \u2192 'Case bottom with no drain'"
+        },
+        {
+          "ts": "2026-06-30 14:34",
+          "text": "'Case bottom with no drain': parallel mode ON"
+        },
+        {
+          "ts": "2026-06-30 14:34",
+          "text": "'Case bottom with no drain': start 2026-07-13 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-30 14:34",
+          "text": "'Case bottom with no drain': end 2026-07-13 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-30 14:34",
+          "text": "'Case bottom with no drain': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-06-30 14:34",
+          "text": "Delay logged \u2014 'Case bottom with no drain' +25d: (no reason given)"
+        },
+        {
+          "ts": "2026-06-30 14:34",
+          "text": "'Case bottom with no drain': end 2026-06-05 \u2192 2026-07-10"
+        },
+        {
+          "ts": "2026-06-30 14:39",
+          "text": "Renamed 'Roll form the ctr uprights. ' \u2192 'Roll form/ Stamped the ctr uprights. '"
+        },
+        {
+          "ts": "2026-06-30 14:42",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-06-30 14:42",
+          "text": "Renamed 'New Task' \u2192 'Structure review (Refer Tru case)'"
+        },
+        {
+          "ts": "2026-06-30 14:42",
+          "text": "Delay logged \u2014 'Structure review (Refer Tru case)' +25d: (no reason given)"
+        },
+        {
+          "ts": "2026-06-30 14:42",
+          "text": "'Structure review (Refer Tru case)': end 2026-07-13 \u2192 2026-08-17"
+        },
+        {
+          "ts": "2026-06-30 14:44",
+          "text": "'Structure review (Refer Tru case)': parallel mode ON"
+        },
+        {
+          "ts": "2026-06-30 14:44",
+          "text": "'Structure review (Refer Tru case)': start 2026-07-13 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-06-30 14:44",
+          "text": "'Structure review (Refer Tru case)': end 2026-08-17 \u2192 2026-07-10"
+        },
+        {
+          "ts": "2026-06-30 14:44",
+          "text": "'Structure review (Refer Tru case)': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-07 10:59",
+          "text": "'Define coil spec': status \u2192 Completed"
         }
       ],
-      "notes": []
+      "notes": [
+        "process in place to not dispatch if the store humidity is high. Atleast from one connect. we wont get money back. FEXA is fine. we can get that money back"
+      ]
     }
   ]
 }
