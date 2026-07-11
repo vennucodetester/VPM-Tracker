@@ -208,3 +208,21 @@
 {"ts":"2026-07-09 16:19:23","sid":"0c6986","ev":"file_save","d":{"manual":true}}
 {"ts":"2026-07-09 22:05:35","sid":"0c6986","ev":"menu_action","d":{"name":"Export Current Project to Excel\u2026"}}
 {"ts":"2026-07-09 22:06:06","sid":"0c6986","ev":"excel_export","d":{"projects":1}}
+{"ts":"2026-07-11 13:21:01","sid":"c2793d","ev":"app_start","d":{"version":"2026.07.08-r1"}}
+{"ts":"2026-07-11 13:21:02","sid":"c2793d","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-11 13:21:03","sid":"c2793d","ev":"tab_switch","d":{"to":"project:1"}}
+{"ts":"2026-07-11 13:21:03","sid":"c2793d","ev":"file_open","d":{"path":"C:/Users/ccbefb/OneDrive - Hussmann Corporation/Desktop/VPM/CO-PILOT TRIALS/vpm_tracker-2/DG-PH2-6-25.vpmt","projects":2,"tasks":240}}
+{"ts":"2026-07-11 13:21:20","sid":"c2793d","ev":"tab_switch","d":{"to":"visuals"}}
+{"ts":"2026-07-11 13:21:22","sid":"c2793d","ev":"tab_switch","d":{"to":"tracker"}}
+{"ts":"2026-07-11 13:21:30","sid":"c2793d","ev":"menu_action","d":{"name":"Load\u2026"}}
+{"ts":"2026-07-11 13:22:27","sid":"c2793d","ev":"zoom","d":{"pct":130}}
+{"ts":"2026-07-11 13:22:28","sid":"c2793d","ev":"zoom","d":{"pct":120}}
+{"ts":"2026-07-11 13:22:34","sid":"c2793d","ev":"app_end","d":{"secs":92}}
+{"ts":"2026-07-11 13:23:59","sid":"e6dc06","ev":"app_start","d":{"version":"2026.07.08-r1"}}
+{"ts":"2026-07-11 13:24:00","sid":"e6dc06","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-11 13:24:00","sid":"e6dc06","ev":"tab_switch","d":{"to":"project:1"}}
+{"ts":"2026-07-11 13:24:00","sid":"e6dc06","ev":"file_open","d":{"path":"C:/Users/ccbefb/OneDrive - Hussmann Corporation/Desktop/VPM/CO-PILOT TRIALS/vpm_tracker-2/DG-PH2-6-25.vpmt","projects":2,"tasks":240}}
+{"ts":"2026-07-11 13:24:44","sid":"e6dc06","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-11 13:24:53","sid":"e6dc06","ev":"menu_action","d":{"name":"Save As\u2026"}}
+{"ts":"2026-07-11 13:25:33","sid":"e6dc06","ev":"file_save","d":{"manual":true}}
+{"ts":"2026-07-11 13:25:37","sid":"e6dc06","ev":"app_end","d":{"secs":97}}

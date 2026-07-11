@@ -1,2 +1,0 @@
-PyQt6>=6.4
-openpyxl>=3.1
