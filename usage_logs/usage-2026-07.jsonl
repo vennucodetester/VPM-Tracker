@@ -1,0 +1,259 @@
+{"ts":"2026-07-07 22:30:47","sid":"9bef26","ev":"app_start","d":{"version":"2026.07.08-r1"}}
+{"ts":"2026-07-07 22:30:49","sid":"9bef26","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-07 22:30:49","sid":"9bef26","ev":"file_open","d":{"path":"C:/Users/silam/OneDrive/Documents/VPM-Tracker/CO-PILOT TRIALS/vpm_tracker-2/DG-PH2-6-24.vpmt","projects":1,"tasks":163}}
+{"ts":"2026-07-07 22:31:10","sid":"9bef26","ev":"dialog","d":{"name":"delay_log","outcome":"cancel","ms_open":4426}}
+{"ts":"2026-07-07 22:33:09","sid":"9bef26","ev":"tab_switch","d":{"to":"visuals"}}
+{"ts":"2026-07-07 22:33:16","sid":"9bef26","ev":"tab_switch","d":{"to":"tracker"}}
+{"ts":"2026-07-07 22:33:20","sid":"9bef26","ev":"zoom","d":{"pct":110}}
+{"ts":"2026-07-07 22:33:20","sid":"9bef26","ev":"zoom","d":{"pct":120}}
+{"ts":"2026-07-07 22:33:21","sid":"9bef26","ev":"zoom","d":{"pct":130}}
+{"ts":"2026-07-07 22:33:21","sid":"9bef26","ev":"zoom","d":{"pct":140}}
+{"ts":"2026-07-07 22:33:24","sid":"9bef26","ev":"zoom","d":{"pct":150}}
+{"ts":"2026-07-07 22:33:24","sid":"9bef26","ev":"zoom","d":{"pct":160}}
+{"ts":"2026-07-07 22:33:26","sid":"9bef26","ev":"zoom","d":{"pct":150}}
+{"ts":"2026-07-07 22:33:26","sid":"9bef26","ev":"zoom","d":{"pct":140}}
+{"ts":"2026-07-07 22:33:26","sid":"9bef26","ev":"zoom","d":{"pct":130}}
+{"ts":"2026-07-07 22:33:34","sid":"9bef26","ev":"zoom","d":{"pct":140}}
+{"ts":"2026-07-07 22:33:34","sid":"9bef26","ev":"zoom","d":{"pct":150}}
+{"ts":"2026-07-07 22:33:35","sid":"9bef26","ev":"zoom","d":{"pct":160}}
+{"ts":"2026-07-07 22:33:35","sid":"9bef26","ev":"zoom","d":{"pct":170}}
+{"ts":"2026-07-07 22:33:36","sid":"9bef26","ev":"zoom","d":{"pct":180}}
+{"ts":"2026-07-07 22:33:36","sid":"9bef26","ev":"zoom","d":{"pct":190}}
+{"ts":"2026-07-07 22:33:38","sid":"9bef26","ev":"zoom","d":{"pct":200}}
+{"ts":"2026-07-07 22:33:38","sid":"9bef26","ev":"zoom","d":{"pct":200}}
+{"ts":"2026-07-07 22:33:38","sid":"9bef26","ev":"zoom","d":{"pct":200}}
+{"ts":"2026-07-07 22:33:38","sid":"9bef26","ev":"zoom","d":{"pct":200}}
+{"ts":"2026-07-07 22:33:38","sid":"9bef26","ev":"zoom","d":{"pct":200}}
+{"ts":"2026-07-07 22:33:39","sid":"9bef26","ev":"zoom","d":{"pct":200}}
+{"ts":"2026-07-07 22:33:39","sid":"9bef26","ev":"zoom","d":{"pct":200}}
+{"ts":"2026-07-07 22:33:39","sid":"9bef26","ev":"zoom","d":{"pct":200}}
+{"ts":"2026-07-07 22:33:39","sid":"9bef26","ev":"zoom","d":{"pct":200}}
+{"ts":"2026-07-07 22:33:39","sid":"9bef26","ev":"zoom","d":{"pct":200}}
+{"ts":"2026-07-07 22:33:42","sid":"9bef26","ev":"zoom","d":{"pct":190}}
+{"ts":"2026-07-07 22:33:42","sid":"9bef26","ev":"zoom","d":{"pct":180}}
+{"ts":"2026-07-07 22:33:42","sid":"9bef26","ev":"zoom","d":{"pct":170}}
+{"ts":"2026-07-07 22:33:43","sid":"9bef26","ev":"zoom","d":{"pct":160}}
+{"ts":"2026-07-07 22:33:43","sid":"9bef26","ev":"zoom","d":{"pct":150}}
+{"ts":"2026-07-07 22:33:43","sid":"9bef26","ev":"zoom","d":{"pct":140}}
+{"ts":"2026-07-07 22:35:02","sid":"9bef26","ev":"dialog","d":{"name":"notes_edit","outcome":"cancel","ms_open":1927}}
+{"ts":"2026-07-07 22:35:05","sid":"9bef26","ev":"zoom","d":{"pct":130}}
+{"ts":"2026-07-07 22:35:44","sid":"9bef26","ev":"app_end","d":{"secs":296}}
+{"ts":"2026-07-07 22:35:55","sid":"b7cc14","ev":"app_start","d":{"version":"2026.07.08-r1"}}
+{"ts":"2026-07-07 22:35:56","sid":"b7cc14","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-07 22:35:56","sid":"b7cc14","ev":"file_open","d":{"path":"C:/Users/silam/OneDrive/Documents/VPM-Tracker/CO-PILOT TRIALS/vpm_tracker-2/DG-PH2-6-24.vpmt","projects":1,"tasks":163}}
+{"ts":"2026-07-07 22:36:46","sid":"b7cc14","ev":"dialog","d":{"name":"delay_log","outcome":"cancel","ms_open":3100}}
+{"ts":"2026-07-07 22:38:33","sid":"b7cc14","ev":"menu_action","d":{"name":"Manage Owners\u2026"}}
+{"ts":"2026-07-07 22:38:33","sid":"b7cc14","ev":"error","d":{"where":"uncaught","type":"ImportError"}}
+{"ts":"2026-07-07 22:38:39","sid":"b7cc14","ev":"menu_action","d":{"name":"Manage Owners\u2026"}}
+{"ts":"2026-07-07 22:38:39","sid":"b7cc14","ev":"error","d":{"where":"uncaught","type":"ImportError"}}
+{"ts":"2026-07-07 22:38:44","sid":"b7cc14","ev":"menu_action","d":{"name":"Manage Owners\u2026"}}
+{"ts":"2026-07-07 22:38:44","sid":"b7cc14","ev":"error","d":{"where":"uncaught","type":"ImportError"}}
+{"ts":"2026-07-07 22:38:46","sid":"b7cc14","ev":"menu_action","d":{"name":"Manage Owners\u2026"}}
+{"ts":"2026-07-07 22:38:46","sid":"b7cc14","ev":"error","d":{"where":"uncaught","type":"ImportError"}}
+{"ts":"2026-07-07 22:38:50","sid":"b7cc14","ev":"menu_action","d":{"name":"Manage Owners\u2026"}}
+{"ts":"2026-07-07 22:38:50","sid":"b7cc14","ev":"error","d":{"where":"uncaught","type":"ImportError"}}
+{"ts":"2026-07-07 22:39:30","sid":"b7cc14","ev":"app_end","d":{"secs":215}}
+{"ts":"2026-07-07 22:39:38","sid":"291f32","ev":"app_start","d":{"version":"2026.07.08-r1"}}
+{"ts":"2026-07-07 22:39:39","sid":"291f32","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-07 22:39:39","sid":"291f32","ev":"file_open","d":{"path":"C:/Users/silam/OneDrive/Documents/VPM-Tracker/CO-PILOT TRIALS/vpm_tracker-2/DG-PH2-6-24.vpmt","projects":1,"tasks":163}}
+{"ts":"2026-07-07 22:41:56","sid":"291f32","ev":"app_end","d":{"secs":138}}
+{"ts":"2026-07-07 22:47:12","sid":"e68a43","ev":"app_start","d":{"version":"2026.07.08-r1"}}
+{"ts":"2026-07-07 22:47:14","sid":"e68a43","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-07 22:47:14","sid":"e68a43","ev":"file_open","d":{"path":"C:/Users/silam/OneDrive/Documents/VPM-Tracker/CO-PILOT TRIALS/vpm_tracker-2/DG-PH2-6-24.vpmt","projects":1,"tasks":163}}
+{"ts":"2026-07-07 22:47:26","sid":"e68a43","ev":"menu_action","d":{"name":"Font Bigger"}}
+{"ts":"2026-07-07 22:47:26","sid":"e68a43","ev":"zoom","d":{"pct":140}}
+{"ts":"2026-07-07 22:47:29","sid":"e68a43","ev":"menu_action","d":{"name":"Font Bigger"}}
+{"ts":"2026-07-07 22:47:29","sid":"e68a43","ev":"zoom","d":{"pct":150}}
+{"ts":"2026-07-07 22:47:33","sid":"e68a43","ev":"menu_action","d":{"name":"Font Bigger"}}
+{"ts":"2026-07-07 22:47:33","sid":"e68a43","ev":"zoom","d":{"pct":160}}
+{"ts":"2026-07-07 22:47:41","sid":"e68a43","ev":"menu_action","d":{"name":"Font Bigger"}}
+{"ts":"2026-07-07 22:47:41","sid":"e68a43","ev":"zoom","d":{"pct":170}}
+{"ts":"2026-07-07 22:47:45","sid":"e68a43","ev":"menu_action","d":{"name":"Font Bigger"}}
+{"ts":"2026-07-07 22:47:45","sid":"e68a43","ev":"zoom","d":{"pct":180}}
+{"ts":"2026-07-07 22:47:57","sid":"e68a43","ev":"menu_action","d":{"name":"Font Smaller"}}
+{"ts":"2026-07-07 22:47:57","sid":"e68a43","ev":"zoom","d":{"pct":170}}
+{"ts":"2026-07-07 22:47:58","sid":"e68a43","ev":"menu_action","d":{"name":"Font Smaller"}}
+{"ts":"2026-07-07 22:47:58","sid":"e68a43","ev":"zoom","d":{"pct":160}}
+{"ts":"2026-07-07 22:47:59","sid":"e68a43","ev":"tab_switch","d":{"to":"visuals"}}
+{"ts":"2026-07-07 22:48:01","sid":"e68a43","ev":"tab_switch","d":{"to":"tracker"}}
+{"ts":"2026-07-07 22:48:02","sid":"e68a43","ev":"menu_action","d":{"name":"Font Smaller"}}
+{"ts":"2026-07-07 22:48:02","sid":"e68a43","ev":"zoom","d":{"pct":150}}
+{"ts":"2026-07-07 22:48:03","sid":"e68a43","ev":"tab_switch","d":{"to":"visuals"}}
+{"ts":"2026-07-07 22:48:04","sid":"e68a43","ev":"tab_switch","d":{"to":"tracker"}}
+{"ts":"2026-07-07 22:48:07","sid":"e68a43","ev":"menu_action","d":{"name":"Font Smaller"}}
+{"ts":"2026-07-07 22:48:07","sid":"e68a43","ev":"zoom","d":{"pct":140}}
+{"ts":"2026-07-07 22:48:10","sid":"e68a43","ev":"menu_action","d":{"name":"Font Smaller"}}
+{"ts":"2026-07-07 22:48:10","sid":"e68a43","ev":"zoom","d":{"pct":130}}
+{"ts":"2026-07-07 22:48:22","sid":"e68a43","ev":"menu_action","d":{"name":"Font Smaller"}}
+{"ts":"2026-07-07 22:48:22","sid":"e68a43","ev":"zoom","d":{"pct":120}}
+{"ts":"2026-07-07 22:48:26","sid":"e68a43","ev":"menu_action","d":{"name":"Font Smaller"}}
+{"ts":"2026-07-07 22:48:26","sid":"e68a43","ev":"zoom","d":{"pct":110}}
+{"ts":"2026-07-07 22:48:26","sid":"e68a43","ev":"tab_switch","d":{"to":"visuals"}}
+{"ts":"2026-07-07 22:48:28","sid":"e68a43","ev":"tab_switch","d":{"to":"tracker"}}
+{"ts":"2026-07-07 22:48:30","sid":"e68a43","ev":"menu_action","d":{"name":"Font Smaller"}}
+{"ts":"2026-07-07 22:48:30","sid":"e68a43","ev":"zoom","d":{"pct":100}}
+{"ts":"2026-07-07 22:48:41","sid":"e68a43","ev":"menu_action","d":{"name":"Manage Waiting People\u2026"}}
+{"ts":"2026-07-07 22:49:56","sid":"e68a43","ev":"dialog","d":{"name":"waiting_people_manager","outcome":"ok","ms_open":74193}}
+{"ts":"2026-07-07 22:50:14","sid":"e68a43","ev":"file_save","d":{"manual":false}}
+{"ts":"2026-07-07 22:50:33","sid":"e68a43","ev":"quick_capture","d":{"via":"ctrl_space","kind":"note"}}
+{"ts":"2026-07-07 22:52:40","sid":"e68a43","ev":"menu_action","d":{"name":"Search Everything\u2026"}}
+{"ts":"2026-07-07 22:53:14","sid":"e68a43","ev":"file_save","d":{"manual":false}}
+{"ts":"2026-07-07 22:53:57","sid":"e68a43","ev":"menu_action","d":{"name":"Quick Capture"}}
+{"ts":"2026-07-07 22:58:37","sid":"e68a43","ev":"tab_switch","d":{"to":"visuals"}}
+{"ts":"2026-07-07 22:58:40","sid":"e68a43","ev":"tab_switch","d":{"to":"tracker"}}
+{"ts":"2026-07-07 22:58:43","sid":"e68a43","ev":"tab_switch","d":{"to":"visuals"}}
+{"ts":"2026-07-07 22:58:57","sid":"e68a43","ev":"tab_switch","d":{"to":"tracker"}}
+{"ts":"2026-07-07 23:11:50","sid":"7bc2b1","ev":"note_promoted","d":{"to":"task"}}
+{"ts":"2026-07-07 23:11:50","sid":"7bc2b1","ev":"task_add","d":{"via":"note_drop","count":1}}
+{"ts":"2026-07-07 23:11:50","sid":"7bc2b1","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-07 23:11:50","sid":"7bc2b1","ev":"file_open","d":{"path":"C:/Users/silam/OneDrive/Documents/VPM-Tracker/CO-PILOT TRIALS/vpm_tracker-2/DG-PH2-6-24.vpmt","projects":1,"tasks":163}}
+{"ts":"2026-07-07 23:11:50","sid":"7bc2b1","ev":"notes_pad_open","d":{}}
+{"ts":"2026-07-07 23:11:50","sid":"7bc2b1","ev":"quick_capture","d":{"via":"test","kind":"open_pad"}}
+{"ts":"2026-07-07 23:15:26","sid":"2fad77","ev":"app_start","d":{"version":"2026.07.08-r1"}}
+{"ts":"2026-07-07 23:15:27","sid":"2fad77","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-07 23:15:27","sid":"2fad77","ev":"file_open","d":{"path":"C:/Users/silam/OneDrive/Documents/VPM-Tracker/CO-PILOT TRIALS/vpm_tracker-2/DG-PH2-6-24.vpmt","projects":1,"tasks":163}}
+{"ts":"2026-07-07 23:15:32","sid":"e68a43","ev":"app_end","d":{"secs":1699}}
+{"ts":"2026-07-07 23:15:39","sid":"2fad77","ev":"notes_pad_open","d":{}}
+{"ts":"2026-07-07 23:15:39","sid":"2fad77","ev":"quick_capture","d":{"via":"ctrl_space","kind":"open_pad"}}
+{"ts":"2026-07-07 23:16:36","sid":"2fad77","ev":"tab_switch","d":{"to":"visuals"}}
+{"ts":"2026-07-07 23:16:38","sid":"2fad77","ev":"tab_switch","d":{"to":"tracker"}}
+{"ts":"2026-07-07 23:18:18","sid":"2fad77","ev":"menu_action","d":{"name":"Undo"}}
+{"ts":"2026-07-07 23:18:18","sid":"2fad77","ev":"undo","d":{}}
+{"ts":"2026-07-07 23:18:20","sid":"2fad77","ev":"menu_action","d":{"name":"Undo"}}
+{"ts":"2026-07-07 23:18:20","sid":"2fad77","ev":"undo","d":{}}
+{"ts":"2026-07-07 23:18:27","sid":"2fad77","ev":"file_save","d":{"manual":false}}
+{"ts":"2026-07-07 23:22:32","sid":"2fad77","ev":"menu_action","d":{"name":"Catch Up on Overdue"}}
+{"ts":"2026-07-07 23:22:32","sid":"2fad77","ev":"catchup_open","d":{"overdue":21}}
+{"ts":"2026-07-07 23:22:41","sid":"2fad77","ev":"dialog","d":{"name":"catchup","outcome":"cancel","ms_open":8987}}
+{"ts":"2026-07-07 23:23:00","sid":"2fad77","ev":"menu_action","d":{"name":"Catch Up on Overdue"}}
+{"ts":"2026-07-07 23:23:00","sid":"2fad77","ev":"catchup_open","d":{"overdue":21}}
+{"ts":"2026-07-07 23:26:05","sid":"2fad77","ev":"dialog","d":{"name":"catchup","outcome":"cancel","ms_open":185324}}
+{"ts":"2026-07-07 23:26:09","sid":"2fad77","ev":"menu_action","d":{"name":"Catch Up on Overdue"}}
+{"ts":"2026-07-07 23:26:09","sid":"2fad77","ev":"catchup_open","d":{"overdue":21}}
+{"ts":"2026-07-07 23:27:00","sid":"2fad77","ev":"dialog","d":{"name":"catchup","outcome":"cancel","ms_open":50656}}
+{"ts":"2026-07-07 23:27:06","sid":"2fad77","ev":"menu_action","d":{"name":"View Activity Journal\u2026"}}
+{"ts":"2026-07-07 23:27:20","sid":"2fad77","ev":"menu_action","d":{"name":"Open Notes Pad"}}
+{"ts":"2026-07-07 23:27:20","sid":"2fad77","ev":"notes_pad_open","d":{}}
+{"ts":"2026-07-07 23:27:20","sid":"2fad77","ev":"quick_capture","d":{"via":"menu","kind":"open_pad"}}
+{"ts":"2026-07-07 23:27:23","sid":"2fad77","ev":"notes_pad_open","d":{}}
+{"ts":"2026-07-07 23:27:23","sid":"2fad77","ev":"quick_capture","d":{"via":"ctrl_space","kind":"open_pad"}}
+{"ts":"2026-07-07 23:27:41","sid":"2fad77","ev":"menu_action","d":{"name":"Undo"}}
+{"ts":"2026-07-07 23:27:41","sid":"2fad77","ev":"undo","d":{}}
+{"ts":"2026-07-07 23:30:27","sid":"2fad77","ev":"file_save","d":{"manual":false}}
+{"ts":"2026-07-07 23:32:56","sid":"4c2014","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-07 23:32:56","sid":"4c2014","ev":"file_open","d":{"path":"C:/Users/silam/OneDrive/Documents/VPM-Tracker/CO-PILOT TRIALS/vpm_tracker-2/DG-PH2-6-24.vpmt","projects":1,"tasks":163}}
+{"ts":"2026-07-07 23:32:56","sid":"4c2014","ev":"catchup_open","d":{"overdue":2}}
+{"ts":"2026-07-07 23:33:19","sid":"7f56e0","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-07 23:33:19","sid":"7f56e0","ev":"file_open","d":{"path":"C:/Users/silam/OneDrive/Documents/VPM-Tracker/CO-PILOT TRIALS/vpm_tracker-2/DG-PH2-6-24.vpmt","projects":1,"tasks":163}}
+{"ts":"2026-07-07 23:33:19","sid":"7f56e0","ev":"catchup_open","d":{"overdue":2}}
+{"ts":"2026-07-07 23:33:19","sid":"7f56e0","ev":"catchup_apply","d":{"done":1,"pushed":1,"skipped":0}}
+{"ts":"2026-07-07 23:34:19","sid":"2fad77","ev":"app_end","d":{"secs":1132}}
+{"ts":"2026-07-07 23:34:26","sid":"4aa9da","ev":"app_start","d":{"version":"2026.07.08-r1"}}
+{"ts":"2026-07-07 23:34:27","sid":"4aa9da","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-07 23:34:27","sid":"4aa9da","ev":"file_open","d":{"path":"C:/Users/silam/OneDrive/Documents/VPM-Tracker/CO-PILOT TRIALS/vpm_tracker-2/DG-PH2-6-24.vpmt","projects":1,"tasks":163}}
+{"ts":"2026-07-07 23:34:40","sid":"4aa9da","ev":"menu_action","d":{"name":"Catch Up on Overdue"}}
+{"ts":"2026-07-07 23:34:40","sid":"4aa9da","ev":"catchup_open","d":{"overdue":21}}
+{"ts":"2026-07-07 23:41:24","sid":"4aa9da","ev":"dialog","d":{"name":"catchup","outcome":"cancel","ms_open":403694}}
+{"ts":"2026-07-07 23:41:26","sid":"4aa9da","ev":"app_end","d":{"secs":419}}
+{"ts":"2026-07-11 00:52:08","sid":"4a1b2b","ev":"app_start","d":{"version":"2026.07.08-r1"}}
+{"ts":"2026-07-11 00:52:09","sid":"4a1b2b","ev":"load_failed","d":{"type":"JSONDecodeError"}}
+{"ts":"2026-07-11 00:52:09","sid":"4a1b2b","ev":"warning_shown","d":{"name":"load_failed"}}
+{"ts":"2026-07-11 00:52:17","sid":"4a1b2b","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-11 00:52:17","sid":"4a1b2b","ev":"file_open","d":{"path":"C:/Users/silam/OneDrive/Documents/VPM-Tracker/SAVE FILES/DG Ph2-6-8-26.vpmt","projects":1,"tasks":144}}
+{"ts":"2026-07-11 00:52:24","sid":"bad0f9","ev":"app_start","d":{"version":"2026.07.08-r1"}}
+{"ts":"2026-07-11 00:52:25","sid":"bad0f9","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-11 00:52:25","sid":"bad0f9","ev":"file_open","d":{"path":"C:/Users/silam/OneDrive/Documents/VPM-Tracker/SAVE FILES/DG Ph2-6-8-26.vpmt","projects":1,"tasks":144}}
+{"ts":"2026-07-11 00:52:44","sid":"bad0f9","ev":"load_failed","d":{"type":"JSONDecodeError"}}
+{"ts":"2026-07-11 00:52:44","sid":"bad0f9","ev":"warning_shown","d":{"name":"load_failed"}}
+{"ts":"2026-07-11 00:53:02","sid":"bad0f9","ev":"menu_action","d":{"name":"Load\u2026"}}
+{"ts":"2026-07-11 00:53:29","sid":"bad0f9","ev":"tab_switch","d":{"to":"project:-1"}}
+{"ts":"2026-07-11 00:53:29","sid":"bad0f9","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-11 00:53:30","sid":"bad0f9","ev":"tab_switch","d":{"to":"project:1"}}
+{"ts":"2026-07-11 00:53:32","sid":"bad0f9","ev":"file_open","d":{"path":"C:/Users/silam/OneDrive/Documents/VPM-Tracker/CO-PILOT TRIALS/vpm_tracker-2/DG-PH2-6-25.vpmt","projects":2,"tasks":240}}
+{"ts":"2026-07-11 00:53:39","sid":"bad0f9","ev":"zoom","d":{"pct":110}}
+{"ts":"2026-07-11 00:53:39","sid":"bad0f9","ev":"zoom","d":{"pct":120}}
+{"ts":"2026-07-11 00:53:39","sid":"bad0f9","ev":"zoom","d":{"pct":130}}
+{"ts":"2026-07-11 00:53:39","sid":"bad0f9","ev":"zoom","d":{"pct":140}}
+{"ts":"2026-07-11 00:53:40","sid":"bad0f9","ev":"zoom","d":{"pct":130}}
+{"ts":"2026-07-11 00:53:59","sid":"bad0f9","ev":"zoom","d":{"pct":120}}
+{"ts":"2026-07-11 00:54:18","sid":"bad0f9","ev":"zoom","d":{"pct":110}}
+{"ts":"2026-07-11 00:54:19","sid":"bad0f9","ev":"zoom","d":{"pct":100}}
+{"ts":"2026-07-11 00:54:23","sid":"bad0f9","ev":"zoom","d":{"pct":110}}
+{"ts":"2026-07-11 00:54:44","sid":"bad0f9","ev":"task_delete","d":{"count":1}}
+{"ts":"2026-07-11 00:54:47","sid":"bad0f9","ev":"task_delete","d":{"count":1}}
+{"ts":"2026-07-11 00:55:14","sid":"bad0f9","ev":"indent","d":{"count":1}}
+{"ts":"2026-07-11 00:55:21","sid":"bad0f9","ev":"outdent","d":{"count":1}}
+{"ts":"2026-07-11 00:55:25","sid":"bad0f9","ev":"file_save","d":{"manual":false}}
+{"ts":"2026-07-11 00:55:27","sid":"bad0f9","ev":"task_delete","d":{"count":1}}
+{"ts":"2026-07-11 00:55:32","sid":"bad0f9","ev":"indent","d":{"count":1}}
+{"ts":"2026-07-11 00:55:32","sid":"bad0f9","ev":"indent","d":{"count":1}}
+{"ts":"2026-07-11 00:55:32","sid":"bad0f9","ev":"indent","d":{"count":1}}
+{"ts":"2026-07-11 00:55:33","sid":"bad0f9","ev":"indent","d":{"count":1}}
+{"ts":"2026-07-11 00:55:33","sid":"bad0f9","ev":"indent","d":{"count":1}}
+{"ts":"2026-07-11 00:55:33","sid":"bad0f9","ev":"indent","d":{"count":1}}
+{"ts":"2026-07-11 00:55:33","sid":"bad0f9","ev":"indent","d":{"count":1}}
+{"ts":"2026-07-11 00:55:40","sid":"bad0f9","ev":"task_delete","d":{"count":1}}
+{"ts":"2026-07-11 00:55:40","sid":"bad0f9","ev":"task_delete","d":{"count":1}}
+{"ts":"2026-07-11 00:55:40","sid":"bad0f9","ev":"task_delete","d":{"count":1}}
+{"ts":"2026-07-11 00:56:02","sid":"bad0f9","ev":"notes_pad_open","d":{}}
+{"ts":"2026-07-11 00:56:02","sid":"bad0f9","ev":"quick_capture","d":{"via":"ctrl_space","kind":"open_pad"}}
+{"ts":"2026-07-11 00:57:36","sid":"bad0f9","ev":"menu_action","d":{"name":"New Project Tab"}}
+{"ts":"2026-07-11 00:57:40","sid":"bad0f9","ev":"tab_switch","d":{"to":"project:2"}}
+{"ts":"2026-07-11 00:57:43","sid":"bad0f9","ev":"tab_switch","d":{"to":"visuals"}}
+{"ts":"2026-07-11 00:57:47","sid":"bad0f9","ev":"tab_switch","d":{"to":"tracker"}}
+{"ts":"2026-07-11 00:58:12","sid":"bad0f9","ev":"menu_action","d":{"name":"Export to Excel\u2026"}}
+{"ts":"2026-07-11 00:58:25","sid":"bad0f9","ev":"file_save","d":{"manual":false}}
+{"ts":"2026-07-11 01:00:12","sid":"bad0f9","ev":"tab_switch","d":{"to":"visuals"}}
+{"ts":"2026-07-11 01:00:13","sid":"bad0f9","ev":"tab_switch","d":{"to":"project:1"}}
+{"ts":"2026-07-11 01:00:29","sid":"bad0f9","ev":"tab_switch","d":{"to":"project:2"}}
+{"ts":"2026-07-11 01:00:32","sid":"bad0f9","ev":"tab_switch","d":{"to":"project:1"}}
+{"ts":"2026-07-11 01:01:25","sid":"bad0f9","ev":"file_save","d":{"manual":false}}
+{"ts":"2026-07-11 01:08:17","sid":"bad0f9","ev":"app_end","d":{"secs":952}}
+{"ts":"2026-07-11 01:08:22","sid":"4a1b2b","ev":"app_end","d":{"secs":973}}
+{"ts":"2026-07-11 12:33:32","sid":"fdae3f","ev":"app_start","d":{"version":"2026.07.08-r1"}}
+{"ts":"2026-07-11 12:33:36","sid":"fdae3f","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-11 12:33:36","sid":"fdae3f","ev":"tab_switch","d":{"to":"project:1"}}
+{"ts":"2026-07-11 12:33:36","sid":"fdae3f","ev":"file_open","d":{"path":"C:/Users/silam/OneDrive/Documents/VPM-Tracker/CO-PILOT TRIALS/vpm_tracker-2/DG-PH2-6-25.vpmt","projects":2,"tasks":240}}
+{"ts":"2026-07-11 12:33:43","sid":"fdae3f","ev":"zoom","d":{"pct":120}}
+{"ts":"2026-07-11 12:33:43","sid":"fdae3f","ev":"zoom","d":{"pct":130}}
+{"ts":"2026-07-11 12:33:44","sid":"fdae3f","ev":"zoom","d":{"pct":120}}
+{"ts":"2026-07-11 12:33:44","sid":"fdae3f","ev":"zoom","d":{"pct":110}}
+{"ts":"2026-07-11 12:37:05","sid":"fdae3f","ev":"notes_pad_open","d":{}}
+{"ts":"2026-07-11 12:37:05","sid":"fdae3f","ev":"quick_capture","d":{"via":"ctrl_space","kind":"open_pad"}}
+{"ts":"2026-07-11 12:37:50","sid":"fdae3f","ev":"note_promoted","d":{"to":"task"}}
+{"ts":"2026-07-11 12:37:50","sid":"fdae3f","ev":"task_add","d":{"via":"note_drop","count":1}}
+{"ts":"2026-07-11 12:38:02","sid":"fdae3f","ev":"task_delete","d":{"count":1}}
+{"ts":"2026-07-11 12:38:04","sid":"fdae3f","ev":"notes_pad_open","d":{}}
+{"ts":"2026-07-11 12:38:04","sid":"fdae3f","ev":"quick_capture","d":{"via":"ctrl_space","kind":"open_pad"}}
+{"ts":"2026-07-11 12:38:14","sid":"fdae3f","ev":"note_promoted","d":{"to":"task"}}
+{"ts":"2026-07-11 12:38:14","sid":"fdae3f","ev":"task_add","d":{"via":"note_drop","count":1}}
+{"ts":"2026-07-11 12:38:22","sid":"fdae3f","ev":"task_delete","d":{"count":1}}
+{"ts":"2026-07-11 12:39:36","sid":"fdae3f","ev":"file_save","d":{"manual":false}}
+{"ts":"2026-07-11 12:44:23","sid":"fdae3f","ev":"app_end","d":{"secs":651}}
+{"ts":"2026-07-11 12:45:07","sid":"186902","ev":"app_start","d":{"version":"2026.07.08-r1"}}
+{"ts":"2026-07-11 12:45:08","sid":"186902","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-11 12:45:08","sid":"186902","ev":"tab_switch","d":{"to":"project:1"}}
+{"ts":"2026-07-11 12:45:08","sid":"186902","ev":"file_open","d":{"path":"C:/Users/silam/OneDrive/Documents/VPM-Tracker/CO-PILOT TRIALS/vpm_tracker-2/DG-PH2-6-25.vpmt","projects":2,"tasks":240}}
+{"ts":"2026-07-11 12:45:13","sid":"186902","ev":"notes_pad_open","d":{}}
+{"ts":"2026-07-11 12:45:13","sid":"186902","ev":"quick_capture","d":{"via":"ctrl_space","kind":"open_pad"}}
+{"ts":"2026-07-11 12:45:20","sid":"186902","ev":"zoom","d":{"pct":100}}
+{"ts":"2026-07-11 12:45:47","sid":"186902","ev":"indent","d":{"count":1}}
+{"ts":"2026-07-11 12:45:52","sid":"186902","ev":"outdent","d":{"count":1}}
+{"ts":"2026-07-11 12:46:02","sid":"186902","ev":"task_delete","d":{"count":1}}
+{"ts":"2026-07-11 12:46:02","sid":"186902","ev":"task_delete","d":{"count":1}}
+{"ts":"2026-07-11 12:46:02","sid":"186902","ev":"task_delete","d":{"count":1}}
+{"ts":"2026-07-11 12:46:02","sid":"186902","ev":"task_delete","d":{"count":1}}
+{"ts":"2026-07-11 12:46:11","sid":"186902","ev":"app_end","d":{"secs":64}}
+{"ts":"2026-07-11 12:46:47","sid":"a76bbd","ev":"app_start","d":{"version":"2026.07.08-r1"}}
+{"ts":"2026-07-11 12:46:48","sid":"a76bbd","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-11 12:46:48","sid":"a76bbd","ev":"tab_switch","d":{"to":"project:1"}}
+{"ts":"2026-07-11 12:46:48","sid":"a76bbd","ev":"file_open","d":{"path":"C:/Users/silam/OneDrive/Documents/VPM-Tracker/CO-PILOT TRIALS/vpm_tracker-2/DG-PH2-6-25.vpmt","projects":2,"tasks":240}}
+{"ts":"2026-07-11 12:47:52","sid":"a76bbd","ev":"menu_action","d":{"name":"Save As\u2026"}}
+{"ts":"2026-07-11 12:48:16","sid":"a76bbd","ev":"file_save","d":{"manual":true}}
+{"ts":"2026-07-11 12:48:19","sid":"a76bbd","ev":"app_end","d":{"secs":92}}
+{"ts":"2026-07-11 12:52:11","sid":"2225db","ev":"app_start","d":{"version":"2026.07.08-r1"}}
+{"ts":"2026-07-11 12:52:12","sid":"2225db","ev":"tab_switch","d":{"to":"project:0"}}
+{"ts":"2026-07-11 12:52:12","sid":"2225db","ev":"tab_switch","d":{"to":"project:1"}}
+{"ts":"2026-07-11 12:52:12","sid":"2225db","ev":"file_open","d":{"path":"C:/Users/silam/OneDrive/Documents/VPM-Tracker/VPM_Tracker_Rev_2026.07.08-r1/Save files/DG-sample.vpmt","projects":2,"tasks":240}}
+{"ts":"2026-07-11 13:31:29","sid":"2225db","ev":"notes_pad_open","d":{}}
+{"ts":"2026-07-11 13:31:29","sid":"2225db","ev":"quick_capture","d":{"via":"ctrl_space","kind":"open_pad"}}
