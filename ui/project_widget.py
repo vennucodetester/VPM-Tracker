@@ -9,7 +9,7 @@ settings against the active project.
 import uuid
 from typing import Dict, List
 
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QTabWidget, QSplitter, QDialog
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QTabWidget, QSplitter, QDialog, QLabel
 from PyQt6.QtCore import pyqtSignal, Qt, QTimer, QSettings
 
 from models.task_node import TaskNode
@@ -96,7 +96,19 @@ class ProjectWidget(QWidget):
         tracker_split.setStretchFactor(1, 0)
         tracker_split.setSizes([1000, 240])
         self.tracker_split = tracker_split
-        self.inner_tabs.addTab(tracker_split, "Tracker")
+
+        self.tracker_tab = QWidget()
+        tracker_layout = QVBoxLayout(self.tracker_tab)
+        tracker_layout.setContentsMargins(0, 0, 0, 0)
+        tracker_layout.setSpacing(0)
+        tracker_layout.addWidget(tracker_split, 1)
+        self.vave_totals_label = QLabel()
+        self.vave_totals_label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        self.vave_totals_label.setStyleSheet(
+            "QLabel { padding: 6px 12px; font-weight: bold; border-top: 1px solid #c8c8c8; }"
+        )
+        tracker_layout.addWidget(self.vave_totals_label)
+        self.inner_tabs.addTab(self.tracker_tab, "Tracker")
 
         self.notes_dialog = QDialog(self)
         self.notes_dialog.setWindowTitle(f"Project Notepad - {self.name}")
@@ -135,6 +147,7 @@ class ProjectWidget(QWidget):
         self._focus_refresh_timer.timeout.connect(self._refresh_focus_if_visible)
         self.inner_tabs.currentChanged.connect(self._on_inner_tab_changed)
         self.tree_view.set_vave_enabled(self.is_vave)
+        self._update_vave_totals()
 
     def _on_inner_tab_changed(self, index: int):
         usage_logger.log("tab_switch", to="visuals" if index == 1 else "tracker")
@@ -147,6 +160,7 @@ class ProjectWidget(QWidget):
             return
         self.is_vave = enabled
         self.tree_view.set_vave_enabled(enabled)
+        self._update_vave_totals()
         self.log_event(f"VAVE Project {'enabled' if enabled else 'disabled'}")
         usage_logger.log("vave_toggle", on=enabled)
         self._on_tree_changed()
@@ -243,6 +257,7 @@ class ProjectWidget(QWidget):
                 self.notes_panel.load_notes(snap.get("notes") or [])
             self.is_vave = bool(snap.get("is_vave", False))
             self.tree_view.set_vave_enabled(self.is_vave)
+            self._update_vave_totals()
         finally:
             self._restoring = False
 
@@ -255,6 +270,7 @@ class ProjectWidget(QWidget):
         """
         self.history.clear()
         self._last_snapshot = self.get_snapshot()
+        self._update_vave_totals()
 
     def undo(self):
         if not self.history.can_undo():
@@ -264,6 +280,7 @@ class ProjectWidget(QWidget):
         if prev is not None:
             self.load_snapshot(prev)
             self._last_snapshot = prev
+            self._update_vave_totals()
             self.project_changed.emit()
 
     def redo(self):
@@ -274,6 +291,7 @@ class ProjectWidget(QWidget):
         if nxt is not None:
             self.load_snapshot(nxt)
             self._last_snapshot = nxt
+            self._update_vave_totals()
             self.project_changed.emit()
 
     def _on_tree_changed(self, *_):
@@ -291,6 +309,7 @@ class ProjectWidget(QWidget):
             return
         self.history.push(self._last_snapshot)
         self._last_snapshot = self.get_snapshot()
+        self._update_vave_totals()
         self.project_changed.emit()
         if self.inner_tabs.currentIndex() == 1:
             self._focus_refresh_timer.start()
@@ -306,6 +325,7 @@ class ProjectWidget(QWidget):
             self._batch_changed = False
             self.history.push(self._last_snapshot)
             self._last_snapshot = self.get_snapshot()
+            self._update_vave_totals()
             self.project_changed.emit()
             if self.inner_tabs.currentIndex() == 1:
                 self._focus_refresh_timer.start()
@@ -348,6 +368,22 @@ class ProjectWidget(QWidget):
         })
         if len(self.journal) > 2000:
             self.journal = self.journal[-2000:]
+
+    def _update_vave_totals(self):
+        if not getattr(self, "vave_totals_label", None):
+            return
+        if not self.is_vave:
+            self.vave_totals_label.hide()
+            return
+        potential = 0.0
+        realized = 0.0
+        for node in self.tree_view.get_all_nodes_flat():
+            potential += float(getattr(node, "vave_potential", None) or 0)
+            realized += float(getattr(node, "vave_realized", None) or 0)
+        self.vave_totals_label.setText(
+            f"Total Potential: ${potential:,.1f}     Total Realized: ${realized:,.1f}"
+        )
+        self.vave_totals_label.show()
 
     # ---- convenience used by MainWindow ----
     def to_persistable(self) -> Dict:

@@ -150,7 +150,7 @@ def export_projects(projects: List[Dict], filename: str):
             for money_col in VAVE_TASK_COLUMNS:
                 if money_col in task_columns:
                     cell = ws.cell(row=last_row, column=task_columns.index(money_col) + 1)
-                    cell.number_format = '$#,##0'
+                    cell.number_format = '$#,##0.0'
 
         # Set reasonable column widths
         widths = {

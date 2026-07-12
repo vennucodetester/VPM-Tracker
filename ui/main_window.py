@@ -1155,9 +1155,8 @@ class MainWindow(QMainWindow):
             QMessageBox.critical(self, "Error", f"Could not load file: {e}")
             return False
 
-        # Seatbelt: a file written by an older app version may lack newer
-        # data (baselines, delay logs, journal). Say so NOW, not days later.
-        if file_version != CURRENT_VERSION:
+        # Seatbelt for much older/unknown files. Small expected upgrades are quiet.
+        if self._should_warn_file_version(file_version, CURRENT_VERSION):
             usage_logger.log("warning_shown", name="older_file_version")
             QMessageBox.information(
                 self, "Older file version",
@@ -1203,6 +1202,18 @@ class MainWindow(QMainWindow):
             tasks=sum(len(p.tree_view.get_all_nodes_flat()) for p in self.all_projects()),
         )
         return True
+
+    def _should_warn_file_version(self, file_version: str, current_version: str) -> bool:
+        if file_version == current_version:
+            return False
+        try:
+            file_major, file_minor = [int(part) for part in str(file_version).split(".")[:2]]
+            current_major, current_minor = [int(part) for part in str(current_version).split(".")[:2]]
+        except (TypeError, ValueError):
+            return True
+        if file_major != current_major:
+            return True
+        return current_minor - file_minor > 1
 
     # ---------------- recent files ----------------
     def _recent_files(self) -> list:

@@ -43,7 +43,7 @@ def money_text(value) -> str:
     if value in ("", None):
         return ""
     try:
-        return f"${float(value):,.0f}"
+        return f"${float(value):,.1f}"
     except (TypeError, ValueError):
         return ""
 
