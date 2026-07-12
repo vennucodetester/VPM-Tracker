@@ -423,6 +423,10 @@ class TaskNode:
         manual = getattr(self, attr, None)
         if manual is not None:
             return manual
+        if attr == "vave_realized" and self.status == "Completed":
+            potential = self._vave_display_value("vave_potential")
+            if potential is not None:
+                return potential
         rolled = sum(
             float(value)
             for child in self.children
@@ -441,6 +445,10 @@ class TaskNode:
         manual = getattr(self, attr, None)
         if manual is not None:
             return float(manual)
+        if attr == "vave_realized" and self.status == "Completed":
+            potential = self._vave_display_value("vave_potential")
+            if potential is not None:
+                return float(potential)
         return sum(child._vave_total_value(attr) for child in self.children)
 
     # ------------------------------------------------------------------

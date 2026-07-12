@@ -30,7 +30,20 @@
 
 ---
 
+## ✅ IMPLEMENTED 2026-07-12 (all items). See per-item "Verified" notes below.
+## Deviations from scope:
+## - H1 $ format: user chose WHOLE dollars on bars (`$18,000`) over the grid's
+##   `.1f` (`$18,000.0`). Bars use `f"${v:,.0f}"`; grid cells keep money_text().
+## - Sync: added `self.timeline.refresh()` to project_widget.set_vave_enabled
+##   and the undo-restore path. The timeline only listened to item_changed_signal,
+##   which the VAVE toggle does NOT emit, so the dollar bar/labels would not have
+##   updated on toggle without this. (No new setting; VAVE-on is still read from
+##   the grid's Potential column via TimelineCanvas._vave_on.)
+
 ## H1. VAVE dollars on bar labels (leafs AND parents)
+# ✅ Verified: leaf `Trial 2 ($0 / $18,000)`; parent collapsed bar rolls up to
+#    the summed value; task with no $ = name only; VAVE off = name only. Applied
+#    to all three label sites (leaf, collapsed group, expanded box) + tooltip line.
 
 When the project is VAVE-enabled and Labels are on:
 - Any bar whose node has a non-None `vave_display_*` value gets the label
@@ -43,6 +56,9 @@ When the project is VAVE-enabled and Labels are on:
 - Tooltip: append a `Potential $X · Realized $Y` line when values exist.
 
 ## H2. Bottom "overall dollar bar"
+# ✅ Verified: DollarBar above the controls strip; text `Realized $6,500 of
+#    $28,700 (23%)`; Inbox excluded; hidden when VAVE off or potential total 0;
+#    green(realized)/amber(remaining); refreshes on item_changed_signal.
 
 A slim horizontal stacked bar in the TimelineContainer, directly above the
 controls strip, visible only when the project is VAVE-enabled and totals > 0:
@@ -54,6 +70,10 @@ controls strip, visible only when the project is VAVE-enabled and totals > 0:
 - Refresh on `item_changed_signal` (same hook the canvas already uses).
 
 ## H3. Slip shadows — behind an OFF-by-default "Slips" checkbox
+# ✅ Verified: `Slips` button starts UNCHECKED every session (never persisted on).
+#    Leaves with baseline_end != end_date get a ~40% ghost to baseline_end + a
+#    `+Nd` label (red when late); tooltip appends revision_trail(); parents get
+#    no ghost. Export reads show_slips at export time -> excluded unless on.
 
 New checkable button `Slips` in the controls strip (default UNCHECKED,
 NOT persisted checked across sessions — always starts off, deliberate):
@@ -68,6 +88,10 @@ NOT persisted checked across sessions — always starts off, deliberate):
   time (the leadership-safety rule).
 
 ## H4. Critical-chain outline
+# ✅ Verified: `Critical` button (default off). Outline set == the Visuals-tab
+#    CriticalPathAnalyzer result (critical_path_ids | critical_parent_ids),
+#    asserted equal in a headless test. 2px #B71C1C over leaf bars + group boxes;
+#    analysis re-run only while the toggle is on; legend gains `▭ critical chain`.
 
 New checkable button `Critical` in the controls strip (default off):
 - Run `CriticalPathAnalyzer` on the (non-Inbox) roots; bars whose node id is
@@ -78,6 +102,11 @@ New checkable button `Critical` in the controls strip (default off):
 - Legend gains `▭ critical chain` while active.
 
 ## H5. Export header block
+# ✅ Verified: title band above the month header — bold `name — Jul 12, 2026`;
+#    `1 of 4 tasks done · 1 late · Next milestone: Launch Jul 17` (adds
+#    `· N on critical chain late` when Critical is on); green VAVE line when
+#    enabled. Legend extends with Slip/Critical entries per toggle. Project name
+#    read live from the enclosing ProjectWidget (survives renames).
 
 `export_image()` gains a title band above the month header:
 - Line 1 (bold): project name — export date.
@@ -95,7 +124,17 @@ New checkable button `Critical` in the controls strip (default off):
   on bars — not requested; do not add.
 - Any auto-calculation between Baseline/Proposed/Potential — forbidden.
 
-## Acceptance checks
+## Acceptance checks — ALL PASSED (headless, 2026-07-12)
+# 1✅ VAVE off: labels name-only, no dollar bar (render path untouched).
+# 2✅ leaf `Trial 2 ($0 / $18,000)`; parent rolls up summed; no-$ task name only.
+# 3✅ dollar bar = grid rolled-up root totals; updated live after editing Realized $.
+# 4✅ Slips off default (no ghosts, clean export); on = ghosts + +Nd + trail tips;
+#    export gated on the toggle at export time.
+# 5✅ Critical set == Visuals-tab analyzer ids (asserted equal).
+# 6✅ Export PNG shows the header band with correct counts/totals (888x238 grew
+#    by the title band vs the plain header).
+# 7✅ Real pre-VAVE .vpmt backup boots in MainWindow, renders, exports; VAVE-off
+#    everywhere (dollar bar hidden, legacy nodes have vave fields = None).
 1. VAVE off → timeline pixel-identical to today; no dollar bar.
 2. VAVE on: leaf with $ shows `Name ($r / $p)`; its parent's collapsed bar
    shows the SUMMED values; task without $ shows name only.

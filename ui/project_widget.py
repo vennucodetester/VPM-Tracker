@@ -54,6 +54,10 @@ class ProjectWidget(QWidget):
         # so the scheduler reads the right holidays/weekend rules.
         self._activate_config()
         self.tree_view.load_project(list(roots) if roots else [])
+        # The timeline's dollar bar refreshed once during _build_ui, BEFORE
+        # these roots existed (totals 0 → it hid itself). Wake it now that the
+        # project's tasks are loaded, so a VAVE file shows its $ bar on open.
+        self.timeline.refresh()
         if notepad_html:
             self.notes_panel.set_html(notepad_html)
         else:
@@ -160,6 +164,7 @@ class ProjectWidget(QWidget):
             return
         self.is_vave = enabled
         self.tree_view.set_vave_enabled(enabled)
+        self.timeline.refresh()  # dollar bar + $ labels follow the VAVE flag
         self._update_vave_totals()
         self.log_event(f"VAVE Project {'enabled' if enabled else 'disabled'}")
         usage_logger.log("vave_toggle", on=enabled)
@@ -257,6 +262,7 @@ class ProjectWidget(QWidget):
                 self.notes_panel.load_notes(snap.get("notes") or [])
             self.is_vave = bool(snap.get("is_vave", False))
             self.tree_view.set_vave_enabled(self.is_vave)
+            self.timeline.refresh()  # keep the timeline's VAVE bar in sync
             self._update_vave_totals()
         finally:
             self._restoring = False
