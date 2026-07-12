@@ -377,9 +377,9 @@ class ProjectWidget(QWidget):
             return
         potential = 0.0
         realized = 0.0
-        for node in self.tree_view.get_all_nodes_flat():
-            potential += float(getattr(node, "vave_potential", None) or 0)
-            realized += float(getattr(node, "vave_realized", None) or 0)
+        for node in self.tree_view.root_nodes:
+            potential += node.vave_total_potential()
+            realized += node.vave_total_realized()
         self.vave_totals_label.setText(
             f"Total Potential: ${potential:,.1f}     Total Realized: ${realized:,.1f}"
         )

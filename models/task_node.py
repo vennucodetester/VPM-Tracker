@@ -410,6 +410,40 @@ class TaskNode:
                 self.parent.update_status_from_dates()
 
     # ------------------------------------------------------------------
+    # VAVE dollars
+    # ------------------------------------------------------------------
+
+    def vave_display_potential(self) -> Optional[float]:
+        return self._vave_display_value("vave_potential")
+
+    def vave_display_realized(self) -> Optional[float]:
+        return self._vave_display_value("vave_realized")
+
+    def _vave_display_value(self, attr: str) -> Optional[float]:
+        manual = getattr(self, attr, None)
+        if manual is not None:
+            return manual
+        rolled = sum(
+            float(value)
+            for child in self.children
+            for value in [child._vave_display_value(attr)]
+            if value is not None
+        )
+        return rolled if rolled else None
+
+    def vave_total_potential(self) -> float:
+        return self._vave_total_value("vave_potential")
+
+    def vave_total_realized(self) -> float:
+        return self._vave_total_value("vave_realized")
+
+    def _vave_total_value(self, attr: str) -> float:
+        manual = getattr(self, attr, None)
+        if manual is not None:
+            return float(manual)
+        return sum(child._vave_total_value(attr) for child in self.children)
+
+    # ------------------------------------------------------------------
     # Serialization
     # ------------------------------------------------------------------
 

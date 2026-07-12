@@ -67,8 +67,8 @@ def _flatten(roots: List[TaskNode]) -> List[Dict]:
             "Start": node.start_date or "",
             "End": node.end_date or "",
             "Duration": node.duration or "",
-            "Potential $": getattr(node, "vave_potential", None),
-            "Realized $": getattr(node, "vave_realized", None),
+            "Potential $": node.vave_display_potential(),
+            "Realized $": node.vave_display_realized(),
             "Status": node.status or "",
             "Owner": owner_text,
             "Depends On": pred_id,  # resolved to name by caller

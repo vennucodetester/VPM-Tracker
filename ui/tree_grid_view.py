@@ -356,9 +356,9 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
         self.setData(Columns.END, Qt.ItemDataRole.DisplayRole, display_date(self.node.end_date or ""))
         self.setData(Columns.END, Qt.ItemDataRole.EditRole, self.node.end_date or "")
         self.setText(Columns.DURATION, self.node.duration)
-        self.setData(Columns.POTENTIAL, Qt.ItemDataRole.DisplayRole, money_text(self.node.vave_potential))
+        self.setData(Columns.POTENTIAL, Qt.ItemDataRole.DisplayRole, money_text(self.node.vave_display_potential()))
         self.setData(Columns.POTENTIAL, Qt.ItemDataRole.EditRole, "" if self.node.vave_potential is None else str(self.node.vave_potential))
-        self.setData(Columns.REALIZED, Qt.ItemDataRole.DisplayRole, money_text(self.node.vave_realized))
+        self.setData(Columns.REALIZED, Qt.ItemDataRole.DisplayRole, money_text(self.node.vave_display_realized()))
         self.setData(Columns.REALIZED, Qt.ItemDataRole.EditRole, "" if self.node.vave_realized is None else str(self.node.vave_realized))
         self.setText(Columns.STATUS, self.node.status)
         waiting_text = self._waiting_display()
@@ -2255,8 +2255,9 @@ class TreeGridView(QTreeWidget):
                 try:
                     node.vave_potential = parse_money(text)
                     usage_logger.log("vave_edit", col="Potential $")
+                    self.refresh_entire_tree()
                 except ValueError:
-                    item.setData(Columns.POTENTIAL, Qt.ItemDataRole.DisplayRole, money_text(node.vave_potential))
+                    item.setData(Columns.POTENTIAL, Qt.ItemDataRole.DisplayRole, money_text(node.vave_display_potential()))
                     item.setData(Columns.POTENTIAL, Qt.ItemDataRole.EditRole, "" if node.vave_potential is None else str(node.vave_potential))
                     self.blockSignals(False)
                     window = self.window()
@@ -2267,8 +2268,9 @@ class TreeGridView(QTreeWidget):
                 try:
                     node.vave_realized = parse_money(text)
                     usage_logger.log("vave_edit", col="Realized $")
+                    self.refresh_entire_tree()
                 except ValueError:
-                    item.setData(Columns.REALIZED, Qt.ItemDataRole.DisplayRole, money_text(node.vave_realized))
+                    item.setData(Columns.REALIZED, Qt.ItemDataRole.DisplayRole, money_text(node.vave_display_realized()))
                     item.setData(Columns.REALIZED, Qt.ItemDataRole.EditRole, "" if node.vave_realized is None else str(node.vave_realized))
                     self.blockSignals(False)
                     window = self.window()
