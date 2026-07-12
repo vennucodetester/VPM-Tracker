@@ -356,9 +356,11 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
         self.setData(Columns.END, Qt.ItemDataRole.DisplayRole, display_date(self.node.end_date or ""))
         self.setData(Columns.END, Qt.ItemDataRole.EditRole, self.node.end_date or "")
         self.setText(Columns.DURATION, self.node.duration)
-        self.setText(Columns.POTENTIAL, money_text(self.node.vave_display_potential()))
+        val_potential = self.node.vave_display_potential()
+        self.setData(Columns.POTENTIAL, Qt.ItemDataRole.DisplayRole, val_potential if val_potential is not None else "")
         self.setTextAlignment(Columns.POTENTIAL, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-        self.setText(Columns.REALIZED, money_text(self.node.vave_display_realized()))
+        val_realized = self.node.vave_display_realized()
+        self.setData(Columns.REALIZED, Qt.ItemDataRole.DisplayRole, val_realized if val_realized is not None else "")
         self.setTextAlignment(Columns.REALIZED, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.setText(Columns.STATUS, self.node.status)
         waiting_text = self._waiting_display()
@@ -2262,7 +2264,8 @@ class TreeGridView(QTreeWidget):
                     usage_logger.log("vave_edit", col="Potential $")
                     self.refresh_entire_tree()
                 except ValueError:
-                    item.setText(Columns.POTENTIAL, money_text(node.vave_display_potential()))
+                    val_potential = node.vave_display_potential()
+                    item.setData(Columns.POTENTIAL, Qt.ItemDataRole.DisplayRole, val_potential if val_potential is not None else "")
                     self.blockSignals(False)
                     window = self.window()
                     if hasattr(window, "statusBar"):
@@ -2274,7 +2277,8 @@ class TreeGridView(QTreeWidget):
                     usage_logger.log("vave_edit", col="Realized $")
                     self.refresh_entire_tree()
                 except ValueError:
-                    item.setText(Columns.REALIZED, money_text(node.vave_display_realized()))
+                    val_realized = node.vave_display_realized()
+                    item.setData(Columns.REALIZED, Qt.ItemDataRole.DisplayRole, val_realized if val_realized is not None else "")
                     self.blockSignals(False)
                     window = self.window()
                     if hasattr(window, "statusBar"):
