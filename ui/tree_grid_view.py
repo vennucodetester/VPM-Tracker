@@ -356,10 +356,10 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
         self.setData(Columns.END, Qt.ItemDataRole.DisplayRole, display_date(self.node.end_date or ""))
         self.setData(Columns.END, Qt.ItemDataRole.EditRole, self.node.end_date or "")
         self.setText(Columns.DURATION, self.node.duration)
-        self.setData(Columns.POTENTIAL, Qt.ItemDataRole.DisplayRole, money_text(self.node.vave_display_potential()))
-        self.setData(Columns.POTENTIAL, Qt.ItemDataRole.EditRole, "" if self.node.vave_potential is None else str(self.node.vave_potential))
-        self.setData(Columns.REALIZED, Qt.ItemDataRole.DisplayRole, money_text(self.node.vave_display_realized()))
-        self.setData(Columns.REALIZED, Qt.ItemDataRole.EditRole, "" if self.node.vave_realized is None else str(self.node.vave_realized))
+        self.setText(Columns.POTENTIAL, money_text(self.node.vave_display_potential()))
+        self.setTextAlignment(Columns.POTENTIAL, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        self.setText(Columns.REALIZED, money_text(self.node.vave_display_realized()))
+        self.setTextAlignment(Columns.REALIZED, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.setText(Columns.STATUS, self.node.status)
         waiting_text = self._waiting_display()
         self.setText(Columns.OWNER, waiting_text)
@@ -427,6 +427,11 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
         # Apply status color to all columns
         for col in range(Columns.COUNT):
             self.setForeground(col, QBrush(status_color))
+
+        if self.node.children and self.node.vave_potential is None and self.node.vave_display_potential() is not None:
+            self.setForeground(Columns.POTENTIAL, QBrush(QColor("#666666")))
+        if self.node.children and self.node.vave_realized is None and self.node.vave_display_realized() is not None:
+            self.setForeground(Columns.REALIZED, QBrush(QColor("#666666")))
 
         # Delay column color (overrides status color for this column)
         if self.node.baseline_duration is not None or delay_text == "On track":
@@ -2257,8 +2262,7 @@ class TreeGridView(QTreeWidget):
                     usage_logger.log("vave_edit", col="Potential $")
                     self.refresh_entire_tree()
                 except ValueError:
-                    item.setData(Columns.POTENTIAL, Qt.ItemDataRole.DisplayRole, money_text(node.vave_display_potential()))
-                    item.setData(Columns.POTENTIAL, Qt.ItemDataRole.EditRole, "" if node.vave_potential is None else str(node.vave_potential))
+                    item.setText(Columns.POTENTIAL, money_text(node.vave_display_potential()))
                     self.blockSignals(False)
                     window = self.window()
                     if hasattr(window, "statusBar"):
@@ -2270,8 +2274,7 @@ class TreeGridView(QTreeWidget):
                     usage_logger.log("vave_edit", col="Realized $")
                     self.refresh_entire_tree()
                 except ValueError:
-                    item.setData(Columns.REALIZED, Qt.ItemDataRole.DisplayRole, money_text(node.vave_display_realized()))
-                    item.setData(Columns.REALIZED, Qt.ItemDataRole.EditRole, "" if node.vave_realized is None else str(node.vave_realized))
+                    item.setText(Columns.REALIZED, money_text(node.vave_display_realized()))
                     self.blockSignals(False)
                     window = self.window()
                     if hasattr(window, "statusBar"):
