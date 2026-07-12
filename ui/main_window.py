@@ -136,12 +136,11 @@ class MainWindow(QMainWindow):
                                journal: list = None,
                                notes: list = None,
                                notepad_html: str = None,
-                               is_vave: bool = False,
-                               vave_items: list = None) -> ProjectWidget:
+                               is_vave: bool = False) -> ProjectWidget:
         proj = ProjectWidget(name=name, metadata=metadata, roots=roots,
                              journal=journal, notes=notes,
                              notepad_html=notepad_html,
-                             is_vave=is_vave, vave_items=vave_items)
+                             is_vave=is_vave)
         proj.project_changed.connect(self.on_data_changed)
         index = self.project_tabs.addTab(proj, self._project_tab_label(proj))
         self.project_tabs.setCurrentIndex(index)
@@ -431,16 +430,6 @@ class MainWindow(QMainWindow):
         proj = self.active_project()
         if not proj:
             return
-        if not checked and getattr(proj, "vave_panel", None) and proj.vave_panel.items():
-            reply = QMessageBox.question(
-                self,
-                "Hide VAVE Register?",
-                "Register stays saved, tab is hidden.\n\nContinue?",
-                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-            )
-            if reply != QMessageBox.StandardButton.Yes:
-                self._update_vave_action_state()
-                return
         proj.set_vave_enabled(checked)
         self._refresh_project_tab_labels()
         self.on_data_changed()
@@ -1193,7 +1182,6 @@ class MainWindow(QMainWindow):
                 proj_dict.get("notes", []),
                 proj_dict.get("notepad_html", ""),
                 proj_dict.get("is_vave", False),
-                proj_dict.get("vave_items", []),
             )
 
         self.current_filepath = None if is_recovery else filename

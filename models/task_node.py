@@ -34,6 +34,8 @@ class TaskNode:
         self.waiting_since: Optional[str] = None
         self.notes: str = ""
         self.is_parallel: bool = False
+        self.vave_potential: Optional[float] = None
+        self.vave_realized: Optional[float] = None
 
         # Hierarchy
         self.parent: Optional[TaskNode] = parent
@@ -424,6 +426,8 @@ class TaskNode:
             "waiting_since": self.waiting_since,
             "notes": self.notes,
             "is_parallel": self.is_parallel,
+            "vave_potential": self.vave_potential,
+            "vave_realized": self.vave_realized,
             "children": [c.to_dict() for c in self.children],
             "expanded": self.expanded,
             "dates_locked": self.dates_locked,
@@ -449,6 +453,8 @@ class TaskNode:
         node.waiting_on = data.get("waiting_on", "")
         node.waiting_since = data.get("waiting_since")
         node.notes = data.get("notes", "")
+        node.vave_potential = cls._money_or_none(data.get("vave_potential"))
+        node.vave_realized = cls._money_or_none(data.get("vave_realized"))
         node.expanded = data.get("expanded", True)
         node.dates_locked = data.get("dates_locked", False)
         node.predecessor_id = data.get("predecessor_id")
@@ -469,6 +475,15 @@ class TaskNode:
 
         node.update_status_from_dates()
         return node
+
+    @staticmethod
+    def _money_or_none(value) -> Optional[float]:
+        if value in ("", None):
+            return None
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return None
 
     # ------------------------------------------------------------------
     # Dependency traversal (used by simulate / CPM / UI)

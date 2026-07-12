@@ -14,14 +14,20 @@ class Columns:
     START = 1
     END = 2
     DURATION = 3
-    STATUS = 4
-    OWNER = 5
-    PREDECESSOR = 6
-    NOTES = 7
-    DELAY = 8
-    COUNT = 9
+    POTENTIAL = 4
+    REALIZED = 5
+    STATUS = 6
+    OWNER = 7
+    PREDECESSOR = 8
+    NOTES = 9
+    DELAY = 10
+    COUNT = 11
 
-    NAMES = ["Task Name", "Start Date", "End Date", "Duration", "Status", "Waiting On", "Depends On", "Notes", "Delay"]
+    NAMES = [
+        "Task Name", "Start", "End", "Duration",
+        "Potential $", "Realized $",
+        "Status", "Waiting On", "Depends On", "Notes", "Delay",
+    ]
 
 class Status(Enum):
     PENDING = "Not Started"

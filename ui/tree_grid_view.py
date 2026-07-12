@@ -17,11 +17,48 @@ from utils import usage_logger
 # bare string literal to avoid importing the pad here (one-way dependency).
 NOTE_MIME = "application/x-vpm-note"
 
+
+def display_date(value: str) -> str:
+    if not value:
+        return ""
+    try:
+        return datetime.strptime(value, "%Y-%m-%d").strftime("%m-%d-%y")
+    except ValueError:
+        return value
+
+
+def model_date(value: str) -> str:
+    text = (value or "").strip()
+    if not text:
+        return ""
+    for fmt in ("%Y-%m-%d", "%m-%d-%y", "%m/%d/%y", "%m-%d-%Y", "%m/%d/%Y"):
+        try:
+            return datetime.strptime(text, fmt).strftime("%Y-%m-%d")
+        except ValueError:
+            continue
+    return text
+
+
+def money_text(value) -> str:
+    if value in ("", None):
+        return ""
+    try:
+        return f"${float(value):,.0f}"
+    except (TypeError, ValueError):
+        return ""
+
+
+def parse_money(value):
+    text = (value or "").strip()
+    if not text:
+        return None
+    return float(text.replace("$", "").replace(",", ""))
+
 class DateDelegate(QStyledItemDelegate):
     def createEditor(self, parent, option, index):
         editor = QDateEdit(parent)
         editor.setCalendarPopup(True)
-        editor.setDisplayFormat("yyyy-MM-dd")
+        editor.setDisplayFormat("MM-dd-yy")
 
         # Explicitly highlight today in the calendar popup. Qt's default
         # outline can get swallowed by dark-theme stylesheets, so we set a
@@ -50,7 +87,7 @@ class DateDelegate(QStyledItemDelegate):
         date_str = index.model().data(index, Qt.ItemDataRole.EditRole)
         if date_str:
             try:
-                dt = datetime.strptime(date_str, "%Y-%m-%d")
+                dt = datetime.strptime(model_date(date_str), "%Y-%m-%d")
                 editor.setDate(QDate(dt.year, dt.month, dt.day))
             except ValueError:
                 editor.setDate(QDate.currentDate())
@@ -76,6 +113,11 @@ class StatusDelegate(QStyledItemDelegate):
 
     def setModelData(self, editor, model, index):
         model.setData(index, editor.currentText(), Qt.ItemDataRole.EditRole)
+
+
+class MoneyDelegate(QStyledItemDelegate):
+    def displayText(self, value, locale):
+        return money_text(value)
 
 class WaitingOnDelegate(QStyledItemDelegate):
     def createEditor(self, parent, option, index):
@@ -309,9 +351,15 @@ class TaskTreeWidgetItem(QTreeWidgetItem):
         # Parallel Toggle (Checkbox styled as Radio)
         self.setCheckState(Columns.TREE, Qt.CheckState.Checked if self.node.is_parallel else Qt.CheckState.Unchecked)
 
-        self.setText(Columns.START, self.node.start_date or "")
-        self.setText(Columns.END, self.node.end_date or "")
+        self.setData(Columns.START, Qt.ItemDataRole.DisplayRole, display_date(self.node.start_date or ""))
+        self.setData(Columns.START, Qt.ItemDataRole.EditRole, self.node.start_date or "")
+        self.setData(Columns.END, Qt.ItemDataRole.DisplayRole, display_date(self.node.end_date or ""))
+        self.setData(Columns.END, Qt.ItemDataRole.EditRole, self.node.end_date or "")
         self.setText(Columns.DURATION, self.node.duration)
+        self.setData(Columns.POTENTIAL, Qt.ItemDataRole.DisplayRole, money_text(self.node.vave_potential))
+        self.setData(Columns.POTENTIAL, Qt.ItemDataRole.EditRole, "" if self.node.vave_potential is None else str(self.node.vave_potential))
+        self.setData(Columns.REALIZED, Qt.ItemDataRole.DisplayRole, money_text(self.node.vave_realized))
+        self.setData(Columns.REALIZED, Qt.ItemDataRole.EditRole, "" if self.node.vave_realized is None else str(self.node.vave_realized))
         self.setText(Columns.STATUS, self.node.status)
         waiting_text = self._waiting_display()
         self.setText(Columns.OWNER, waiting_text)
@@ -558,12 +606,23 @@ class TreeGridView(QTreeWidget):
         self.setHeader(self.filter_header)
         self.filter_header.filter_changed.connect(self.apply_column_filter)
         
-        # Allow resizing of Task Name column
-        self.header().setSectionResizeMode(Columns.TREE, QHeaderView.ResizeMode.Interactive)
-        self.header().resizeSection(Columns.TREE, 300) # Default width
-        
-        # Notes column should stretch to fill space
-        self.header().setSectionResizeMode(Columns.NOTES, QHeaderView.ResizeMode.Stretch)
+        header = self.header()
+        header.setStretchLastSection(False)
+        for col in range(Columns.COUNT):
+            header.setSectionResizeMode(col, QHeaderView.ResizeMode.Interactive)
+        header.resizeSection(Columns.TREE, 330)
+        header.resizeSection(Columns.START, 92)
+        header.resizeSection(Columns.END, 92)
+        header.resizeSection(Columns.DURATION, 78)
+        header.resizeSection(Columns.POTENTIAL, 105)
+        header.resizeSection(Columns.REALIZED, 105)
+        header.resizeSection(Columns.STATUS, 120)
+        header.resizeSection(Columns.OWNER, 115)
+        header.resizeSection(Columns.PREDECESSOR, 125)
+        header.resizeSection(Columns.NOTES, 420)
+        header.resizeSection(Columns.DELAY, 85)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.set_vave_enabled(False)
         
         # Enable Extended Selection (Shift/Ctrl)
         self.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
@@ -576,6 +635,8 @@ class TreeGridView(QTreeWidget):
         # Delegates
         self.setItemDelegateForColumn(Columns.START, DateDelegate(self))
         self.setItemDelegateForColumn(Columns.END, DateDelegate(self))
+        self.setItemDelegateForColumn(Columns.POTENTIAL, MoneyDelegate(self))
+        self.setItemDelegateForColumn(Columns.REALIZED, MoneyDelegate(self))
         self.setItemDelegateForColumn(Columns.STATUS, StatusDelegate(self))
         self.setItemDelegateForColumn(Columns.OWNER, WaitingOnDelegate(self))
         self.setItemDelegateForColumn(Columns.NOTES, NotesDelegate(self))
@@ -602,6 +663,10 @@ class TreeGridView(QTreeWidget):
         self.setAcceptDrops(True)
         self.setDragDropMode(QAbstractItemView.DragDropMode.InternalMove)
         self.setDefaultDropAction(Qt.DropAction.MoveAction)
+
+    def set_vave_enabled(self, enabled: bool):
+        self.setColumnHidden(Columns.POTENTIAL, not enabled)
+        self.setColumnHidden(Columns.REALIZED, not enabled)
 
     def apply_zoom(self, factor: float):
         """Zoom = bigger TEXT, not bigger gaps. The grid owns its font (bold),
@@ -2069,6 +2134,7 @@ class TreeGridView(QTreeWidget):
             elif column == Columns.START:
                 # Smart Date Change Logic
                 if self.is_updating: return
+                text = model_date(text)
 
                 # Block manual start edits whenever the scheduler owns the
                 # start. Only the first root task and any is_parallel=ON task
@@ -2085,6 +2151,8 @@ class TreeGridView(QTreeWidget):
                     QMessageBox.warning(self, "Start date is automatic", msg)
                     usage_logger.log("warning_shown", name="start_is_auto")
                     item.setText(Columns.START, node.start_date or "")
+                    item.setData(Columns.START, Qt.ItemDataRole.DisplayRole, display_date(node.start_date or ""))
+                    item.setData(Columns.START, Qt.ItemDataRole.EditRole, node.start_date or "")
                     self.blockSignals(False)
                     return
                 
@@ -2147,6 +2215,7 @@ class TreeGridView(QTreeWidget):
                         item.setText(Columns.START, node.start_date)
                     
             elif column == Columns.END:
+                text = model_date(text)
                 # First end date typed on a fresh row: apply silently and
                 # re-baseline — a brand-new line is on track by definition
                 # until its schedule has been set once. No popup, no delay.
@@ -2182,6 +2251,30 @@ class TreeGridView(QTreeWidget):
             elif column == Columns.OWNER:
                 node.set_waiting_on(text)
                 self.refresh_entire_tree()
+            elif column == Columns.POTENTIAL:
+                try:
+                    node.vave_potential = parse_money(text)
+                    usage_logger.log("vave_edit", col="Potential $")
+                except ValueError:
+                    item.setData(Columns.POTENTIAL, Qt.ItemDataRole.DisplayRole, money_text(node.vave_potential))
+                    item.setData(Columns.POTENTIAL, Qt.ItemDataRole.EditRole, "" if node.vave_potential is None else str(node.vave_potential))
+                    self.blockSignals(False)
+                    window = self.window()
+                    if hasattr(window, "statusBar"):
+                        window.statusBar().showMessage("Invalid Potential $; keeping previous value.", 3000)
+                    return
+            elif column == Columns.REALIZED:
+                try:
+                    node.vave_realized = parse_money(text)
+                    usage_logger.log("vave_edit", col="Realized $")
+                except ValueError:
+                    item.setData(Columns.REALIZED, Qt.ItemDataRole.DisplayRole, money_text(node.vave_realized))
+                    item.setData(Columns.REALIZED, Qt.ItemDataRole.EditRole, "" if node.vave_realized is None else str(node.vave_realized))
+                    self.blockSignals(False)
+                    window = self.window()
+                    if hasattr(window, "statusBar"):
+                        window.statusBar().showMessage("Invalid Realized $; keeping previous value.", 3000)
+                    return
             elif column == Columns.NOTES: node.notes = text
             elif column == Columns.DELAY: pass  # read-only, skip
             elif column == Columns.DURATION:
