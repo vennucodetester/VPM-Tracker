@@ -18,6 +18,7 @@ from ui.tree_grid_view import TreeGridView
 from ui.focus_view import FocusView
 from ui.timeline_pane import TimelineContainer
 from ui.notes_panel import NotesPanel
+from ui.vave_panel import VavePanel
 from utils.config_manager import ConfigManager
 from utils.history import HistoryStack
 from utils import usage_logger
@@ -29,7 +30,8 @@ class ProjectWidget(QWidget):
 
     def __init__(self, name: str = "Project 1", metadata: Dict = None,
                  roots: List[TaskNode] = None, journal: list = None,
-                 notes: list = None, notepad_html: str = None, parent=None):
+                 notes: list = None, notepad_html: str = None,
+                 is_vave: bool = False, vave_items: list = None, parent=None):
         super().__init__(parent)
         self.project_id = f"proj-{uuid.uuid4().hex[:8]}"
         self.name = name or "Project 1"
@@ -42,6 +44,8 @@ class ProjectWidget(QWidget):
         # Activity journal: the app's own diary of every change, persisted
         # in the .vpmt file. Entries: {"ts": "2026-06-10 14:32", "text": "..."}
         self.journal: list = list(journal) if journal else []
+        self.is_vave = bool(is_vave)
+        self.vave_items = list(vave_items) if vave_items else []
 
         # Register metadata into the per-project config store.
         ConfigManager.register_project(self.project_id, metadata or {})
@@ -132,11 +136,40 @@ class ProjectWidget(QWidget):
         self._focus_refresh_timer.setInterval(1000)
         self._focus_refresh_timer.timeout.connect(self._refresh_focus_if_visible)
         self.inner_tabs.currentChanged.connect(self._on_inner_tab_changed)
+        self.vave_panel = VavePanel()
+        self.vave_panel.vave_changed.connect(self._on_vave_changed)
+        self.vave_panel.set_items(self.vave_items)
+        self._sync_vave_tab()
 
     def _on_inner_tab_changed(self, index: int):
-        usage_logger.log("tab_switch", to="visuals" if index == 1 else "tracker")
+        widget = self.inner_tabs.widget(index)
+        if widget is getattr(self, "vave_panel", None):
+            usage_logger.log("tab_switch", to="vave")
+        else:
+            usage_logger.log("tab_switch", to="visuals" if index == 1 else "tracker")
         if index == 1:  # Visuals
             self.gantt_view.load_nodes(self.tree_view.root_nodes)
+
+    def set_vave_enabled(self, enabled: bool):
+        enabled = bool(enabled)
+        if self.is_vave == enabled:
+            return
+        self.is_vave = enabled
+        self._sync_vave_tab()
+        self.log_event(f"VAVE Project {'enabled' if enabled else 'disabled'}")
+        usage_logger.log("vave_toggle", on=enabled)
+        self._on_tree_changed()
+
+    def _sync_vave_tab(self):
+        index = self.inner_tabs.indexOf(self.vave_panel)
+        if self.is_vave and index < 0:
+            self.inner_tabs.addTab(self.vave_panel, "VAVE")
+        elif not self.is_vave and index >= 0:
+            self.inner_tabs.removeTab(index)
+
+    def _on_vave_changed(self):
+        self.vave_items = self.vave_panel.items()
+        self._on_tree_changed()
 
     def _refresh_focus_if_visible(self):
         if self.inner_tabs.currentIndex() == 1:
@@ -207,6 +240,8 @@ class ProjectWidget(QWidget):
             "tasks": [n.to_dict() for n in self.tree_view.root_nodes],
             "notes": self.notes_panel.get_notes(),
             "notepad_html": self.notes_panel.get_html(),
+            "is_vave": self.is_vave,
+            "vave_items": self.vave_panel.items(),
         }
 
     def load_snapshot(self, snap: Dict):
@@ -227,6 +262,9 @@ class ProjectWidget(QWidget):
                 self.notes_panel.set_html(snap["notepad_html"])
             else:
                 self.notes_panel.load_notes(snap.get("notes") or [])
+            self.is_vave = bool(snap.get("is_vave", False))
+            self.vave_panel.set_items(snap.get("vave_items") or [])
+            self._sync_vave_tab()
         finally:
             self._restoring = False
 
@@ -344,4 +382,6 @@ class ProjectWidget(QWidget):
             "journal": list(self.journal),
             "notes": self.notes_panel.get_notes(),
             "notepad_html": self.notes_panel.get_html(),
+            "is_vave": self.is_vave,
+            "vave_items": self.vave_panel.items(),
         }

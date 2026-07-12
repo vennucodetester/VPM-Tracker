@@ -23,6 +23,17 @@ TASK_COLUMNS = [
     "Status", "Owner", "Depends On", "Notes",
 ]
 
+VAVE_COLUMNS = [
+    ("idea", "Idea"),
+    ("category", "Category"),
+    ("baseline_cost", "Baseline $"),
+    ("proposed_cost", "Proposed $"),
+    ("potential", "Potential $"),
+    ("realized", "Realized $"),
+    ("status", "Status"),
+    ("notes", "Notes"),
+]
+
 
 def _safe_sheet_name(name: str, suffix: str, seen: set) -> str:
     """Excel sheet names: max 31 chars, no []:*?/\\, unique per workbook."""
@@ -93,6 +104,65 @@ def _resolve_pred_names(rows: List[Dict], roots: List[TaskNode]):
         pid = row["Depends On"]
         if pid:
             row["Depends On"] = id_to_name.get(pid, "(missing)")
+
+
+def _write_vave_sheet(wb, project_name: str, items: List[Dict], used_names: set,
+                      header_font, header_fill):
+    from openpyxl.styles import Font, PatternFill, Alignment
+
+    ws = wb.create_sheet(_safe_sheet_name(project_name, "VAVE", used_names))
+    ws.append([label for _key, label in VAVE_COLUMNS])
+    for col_idx in range(1, len(VAVE_COLUMNS) + 1):
+        cell = ws.cell(row=1, column=col_idx)
+        cell.font = header_font
+        cell.fill = header_fill
+
+    currency_cols = {"baseline_cost", "proposed_cost", "potential", "realized"}
+    for item in items:
+        row = []
+        for key, _label in VAVE_COLUMNS:
+            value = item.get(key)
+            if key in currency_cols and value in ("", None):
+                value = None
+            row.append(value)
+        ws.append(row)
+        status = item.get("status")
+        fill = None
+        if status == "Realized":
+            fill = PatternFill("solid", fgColor="DFF3DF")
+        elif status == "Dropped":
+            fill = PatternFill("solid", fgColor="E6E6E6")
+        if fill:
+            for cell in ws[ws.max_row]:
+                cell.fill = fill
+
+    total_row = ws.max_row + 1
+    ws.cell(row=total_row, column=1).value = "Totals"
+    ws.cell(row=total_row, column=1).font = Font(bold=True)
+    if items:
+        for col in (3, 4, 5, 6):
+            letter = ws.cell(row=1, column=col).column_letter
+            ws.cell(row=total_row, column=col).value = (
+                f'=SUMIFS({letter}2:{letter}{total_row - 1},'
+                f'$G$2:$G${total_row - 1},"<>Dropped")'
+            )
+            ws.cell(row=total_row, column=col).font = Font(bold=True)
+            ws.cell(row=total_row, column=col).number_format = '$#,##0'
+
+    for col_idx, (key, label) in enumerate(VAVE_COLUMNS, start=1):
+        letter = ws.cell(row=1, column=col_idx).column_letter
+        if key in currency_cols:
+            ws.column_dimensions[letter].width = 14
+            for row in range(2, total_row + 1):
+                ws.cell(row=row, column=col_idx).number_format = '$#,##0'
+        elif key in {"idea", "notes"}:
+            ws.column_dimensions[letter].width = 42
+        else:
+            ws.column_dimensions[letter].width = max(14, len(label) + 2)
+    for row in ws.iter_rows(min_row=2, max_row=total_row):
+        for cell in row:
+            cell.alignment = Alignment(wrap_text=True, vertical="top")
+    ws.freeze_panes = "A2"
 
 
 def export_projects(projects: List[Dict], filename: str):
@@ -166,6 +236,10 @@ def export_projects(projects: List[Dict], filename: str):
         ms.append(["Exclude Weekends", "Yes" if excl else "No"])
         ms.column_dimensions["A"].width = 20
         ms.column_dimensions["B"].width = 80
+
+        vave_items = proj.get("vave_items", []) or []
+        if proj.get("is_vave") and vave_items:
+            _write_vave_sheet(wb, name, vave_items, used_names, header_font, header_fill)
 
     if not wb.sheetnames:
         # Pathological: zero projects — leave a stub so the file opens cleanly.

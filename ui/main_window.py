@@ -135,17 +135,30 @@ class MainWindow(QMainWindow):
     def _add_project_from_data(self, name: str, metadata: dict, roots: list,
                                journal: list = None,
                                notes: list = None,
-                               notepad_html: str = None) -> ProjectWidget:
+                               notepad_html: str = None,
+                               is_vave: bool = False,
+                               vave_items: list = None) -> ProjectWidget:
         proj = ProjectWidget(name=name, metadata=metadata, roots=roots,
                              journal=journal, notes=notes,
-                             notepad_html=notepad_html)
+                             notepad_html=notepad_html,
+                             is_vave=is_vave, vave_items=vave_items)
         proj.project_changed.connect(self.on_data_changed)
-        index = self.project_tabs.addTab(proj, name)
+        index = self.project_tabs.addTab(proj, self._project_tab_label(proj))
         self.project_tabs.setCurrentIndex(index)
         proj.activate()
         if hasattr(proj.tree_view, "apply_zoom"):
             proj.tree_view.apply_zoom(getattr(self, "_zoom_factor", 1.0))
         return proj
+
+    def _project_tab_label(self, proj: ProjectWidget) -> str:
+        suffix = " [VAVE]" if getattr(proj, "is_vave", False) else ""
+        return f"{proj.name}{suffix}"
+
+    def _refresh_project_tab_labels(self):
+        for i in range(self.project_tabs.count()):
+            proj = self.project_tabs.widget(i)
+            if isinstance(proj, ProjectWidget):
+                self.project_tabs.setTabText(i, self._project_tab_label(proj))
 
     def _seed_test_data(self, proj: ProjectWidget):
         """Give a brand-new blank project something to look at."""
@@ -205,7 +218,7 @@ class MainWindow(QMainWindow):
         new_name, ok = QInputDialog.getText(self, "Rename Project", "Project name:", text=proj.name)
         if ok and new_name.strip():
             proj.name = new_name.strip()
-            self.project_tabs.setTabText(index, proj.name)
+            self.project_tabs.setTabText(index, self._project_tab_label(proj))
             self.on_data_changed()
 
     def on_tab_context_menu(self, pos):
@@ -223,6 +236,7 @@ class MainWindow(QMainWindow):
         proj = self.project_tabs.widget(index)
         if isinstance(proj, ProjectWidget):
             proj.activate()
+        self._update_vave_action_state()
         self._update_overdue_action()
         usage_logger.log("tab_switch", to=f"project:{index}")
 
@@ -384,6 +398,15 @@ class MainWindow(QMainWindow):
         self._wire_action(calendar_action, self.open_calendar_settings)
         options_menu.addAction(calendar_action)
 
+        options_menu.addSeparator()
+        self.vave_project_action = QAction("VAVE Project", self)
+        self.vave_project_action.setCheckable(True)
+        self.vave_project_action.toggled.connect(self._toggle_active_project_vave)
+        options_menu.addAction(self.vave_project_action)
+        self._update_vave_action_state()
+
+        options_menu.addSeparator()
+
         usage_action = QAction("Record usage statistics", self)
         usage_action.setCheckable(True)
         usage_action.setChecked(usage_logger.is_enabled())
@@ -393,6 +416,34 @@ class MainWindow(QMainWindow):
         )
         usage_action.toggled.connect(usage_logger.set_enabled)
         options_menu.addAction(usage_action)
+
+    def _update_vave_action_state(self):
+        action = getattr(self, "vave_project_action", None)
+        if action is None:
+            return
+        proj = self.active_project()
+        action.blockSignals(True)
+        action.setEnabled(proj is not None)
+        action.setChecked(bool(getattr(proj, "is_vave", False)) if proj else False)
+        action.blockSignals(False)
+
+    def _toggle_active_project_vave(self, checked: bool):
+        proj = self.active_project()
+        if not proj:
+            return
+        if not checked and getattr(proj, "vave_panel", None) and proj.vave_panel.items():
+            reply = QMessageBox.question(
+                self,
+                "Hide VAVE Register?",
+                "Register stays saved, tab is hidden.\n\nContinue?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            )
+            if reply != QMessageBox.StandardButton.Yes:
+                self._update_vave_action_state()
+                return
+        proj.set_vave_enabled(checked)
+        self._refresh_project_tab_labels()
+        self.on_data_changed()
 
     def _undo_active(self):
         proj = self.active_project()
@@ -1005,6 +1056,8 @@ class MainWindow(QMainWindow):
         if not self.unsaved_changes:
             self.unsaved_changes = True
         self.update_title()
+        self._refresh_project_tab_labels()
+        self._update_vave_action_state()
         self._update_overdue_action()
 
     def update_title(self):
@@ -1139,6 +1192,8 @@ class MainWindow(QMainWindow):
                 proj_dict.get("journal", []),
                 proj_dict.get("notes", []),
                 proj_dict.get("notepad_html", ""),
+                proj_dict.get("is_vave", False),
+                proj_dict.get("vave_items", []),
             )
 
         self.current_filepath = None if is_recovery else filename

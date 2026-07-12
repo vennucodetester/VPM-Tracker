@@ -24,7 +24,7 @@ from typing import List, Dict
 from models.task_node import TaskNode
 
 
-CURRENT_VERSION = "2.1"
+CURRENT_VERSION = "2.2"
 BACKUP_KEEP = 5
 
 
@@ -88,6 +88,8 @@ def save_projects(projects: List[Dict], filename: str, rotate_backups: bool = Tr
                 "journal": p.get("journal", []),
                 "notes": p.get("notes", []),
                 "notepad_html": p.get("notepad_html", ""),
+                "is_vave": bool(p.get("is_vave", False)),
+                "vave_items": p.get("vave_items", []) or [],
             }
             for p in projects
         ],
@@ -125,11 +127,14 @@ def load_projects(filename: str) -> List[Dict]:
         result.append({"name": name, "metadata": metadata, "roots": roots,
                        "journal": proj.get("journal", []) or [],
                        "notes": proj.get("notes", []) or [],
-                       "notepad_html": proj.get("notepad_html", "") or ""})
+                       "notepad_html": proj.get("notepad_html", "") or "",
+                       "is_vave": bool(proj.get("is_vave", False)),
+                       "vave_items": proj.get("vave_items", []) or []})
 
     # Always hand back at least one project so the UI has something to show.
     if not result:
-        result.append({"name": "Project 1", "metadata": {}, "roots": []})
+        result.append({"name": "Project 1", "metadata": {}, "roots": [],
+                       "is_vave": False, "vave_items": []})
     return result
 
 
