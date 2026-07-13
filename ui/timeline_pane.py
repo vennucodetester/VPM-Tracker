@@ -86,6 +86,45 @@ def _is_late(node, today):
     return node.status != "Completed" and e is not None and e < today
 
 
+def _progress_parts(node):
+    """Duration-weighted completed leaf work for node's dated descendants."""
+    if _is_inbox(node):
+        return 0, 0
+    if not node.children:
+        if not _parse(node.start_date) or not _parse(node.end_date):
+            return 0, 0
+        try:
+            weight = max(int(node.duration), 1)
+        except (TypeError, ValueError):
+            weight = 1
+        return (weight if node.status == "Completed" else 0), weight
+    done = total = 0
+    for child in node.children:
+        d, t = _progress_parts(child)
+        done += d
+        total += t
+    return done, total
+
+
+def progress_fraction(node):
+    """Completed work fraction, weighted by leaf workday duration."""
+    done, total = _progress_parts(node)
+    if total <= 0:
+        return None
+    return done / total
+
+
+def _progress_fraction_for_roots(roots):
+    done = total = 0
+    for root in roots:
+        d, t = _progress_parts(root)
+        done += d
+        total += t
+    if total <= 0:
+        return None
+    return done / total
+
+
 def _status_color(node, today):
     e = _parse(node.end_date)
     if node.status == "Completed":
@@ -190,8 +229,12 @@ class TimelineCanvas(QWidget):
         return f" (${(rea or 0):,.0f} / ${(pot or 0):,.0f})"
 
     def _bar_label(self, node, limit):
-        """Truncated name plus the VAVE $ suffix (suffix never truncated)."""
+        """Truncated name plus group progress and VAVE suffix."""
         name = node.name if len(node.name) <= limit else node.name[:limit - 3] + "…"
+        if node.children:
+            fraction = progress_fraction(node)
+            if fraction is not None:
+                name += f" · {round(fraction * 100)}%"
         return name + self._vave_suffix(node)
 
     # ---------------- shared chart renderer ----------------
@@ -269,14 +312,25 @@ class TimelineCanvas(QWidget):
 
             if last is None:
                 # Collapsed group → one fat slate bar (management view).
-                # Use the row's own status color here; otherwise a collapsed
-                # view hides the green/amber/red status story completely.
+                # Green shows completed work; slate is the remaining phase.
                 bh = max(14, int(row_h * 0.55))
                 bar = QRect(x1, yc - bh // 2, max(x2 - x1, 4), bh)
-                color = _status_color(node, today)
-                p.setPen(QPen(color.darker(135), 1))
-                p.setBrush(color)
+                p.setPen(QPen(C_SUMMARY.darker(125), 1))
+                p.setBrush(C_SUMMARY)
                 p.drawRoundedRect(bar, 3, 3)
+                fraction = progress_fraction(node)
+                if fraction is not None and fraction > 0:
+                    fill_w = min(bar.width(), max(1, int(round(bar.width() * fraction))))
+                    p.save()
+                    p.setClipRect(QRect(bar.left(), bar.top(), fill_w, bar.height()))
+                    p.setPen(Qt.PenStyle.NoPen)
+                    p.setBrush(C_DONE)
+                    p.drawRoundedRect(bar, 3, 3)
+                    p.restore()
+                    if 0 < fill_w < bar.width():
+                        bx = bar.left() + fill_w
+                        p.setPen(QPen(C_SUMMARY.darker(135), 1))
+                        p.drawLine(bx, bar.top() + 1, bx, bar.bottom() - 1)
                 if self._is_critical(node):
                     p.setPen(QPen(C_CRITICAL, 2))
                     p.setBrush(Qt.BrushStyle.NoBrush)
@@ -547,16 +601,21 @@ class TimelineCanvas(QWidget):
             e, n = upcoming[0]
             line2 += f" · Next milestone: {n.name} {e.strftime('%b %d')}"
         lines = [("title", line1), ("normal", line2)]
+        roots = [r for r in self._tree.root_nodes if not _is_inbox(r)]
+        work_fraction = _progress_fraction_for_roots(roots)
+        work_text = (f"{round(work_fraction * 100)}% of work complete"
+                     if work_fraction is not None else None)
         if self._vave_on():
             A = B = 0.0
-            for r in self._tree.root_nodes:
-                if _is_inbox(r):
-                    continue
+            for r in roots:
                 A += r.vave_total_realized()
                 B += r.vave_total_potential()
             P = int(round(A / B * 100)) if B else 0
+            prefix = f"{work_text} · " if work_text else ""
             lines.append(("vave",
-                          f"VAVE: Realized ${A:,.0f} of ${B:,.0f} ({P}%)"))
+                          f"VAVE: {prefix}Realized ${A:,.0f} of ${B:,.0f} ({P}%)"))
+        elif work_text:
+            lines.append(("normal", f"Progress: {work_text}"))
         return lines
 
     def _draw_export_title(self, p, lines, width, title_h):
@@ -634,6 +693,10 @@ class TimelineCanvas(QWidget):
             p.setFont(f)
             p.setPen(QPen(QColor("#222222")))
             name = node.name
+            if node.children:
+                fraction = progress_fraction(node)
+                if fraction is not None:
+                    name += f" · {round(fraction * 100)}%"
             limit = 38 - depth * 2
             if len(name) > limit:
                 name = name[:limit - 2] + "…"
