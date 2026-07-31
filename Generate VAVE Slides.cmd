@@ -10,6 +10,7 @@ set "GENERATOR_WORKSPACE=%TEMP%\VPM-VAVE-Slides"
 set "WORKBOOK=%~dp0..\outputs\vave-slide-pack\VAVE-Slide-Input.xlsx"
 set "SEED_WORKBOOK=%GENERATOR_WORKSPACE%\VAVE-Slide-Seed.xlsx"
 set "POWERPOINT=%~dp0..\outputs\vave-slide-pack\VAVE-Slides-Generated.pptx"
+set "SLIDE_TEMPLATE=%~dp0EXTRA\VAVE-Slide-Template.pptx"
 
 if not exist "%CODEX_PYTHON%" (
     echo The bundled Codex Python runtime was not found:
@@ -24,6 +25,12 @@ if not exist "%CODEX_NODE%" (
 if not exist "%PRESENTATION_SKILL%\container_tools\setup_artifact_tool_workspace.mjs" (
     echo The Codex presentation runtime was not found:
     echo %PRESENTATION_SKILL%
+    goto :failed
+)
+if not exist "%SLIDE_TEMPLATE%" (
+    echo The internal VAVE PowerPoint template is missing:
+    echo %SLIDE_TEMPLATE%
+    echo Restore the EXTRA folder before running this command.
     goto :failed
 )
 
@@ -60,7 +67,7 @@ if exist "%WORKBOOK%" (
 
 echo.
 echo [4/4] Building the editable, automatically paginated VAVE slides...
-"%CODEX_NODE%" "%GENERATOR_WORKSPACE%\generate_vave_slides.mjs" --xlsx "%WORKBOOK%" --template "%~dp0EXTRA\VAVE-Slide-Template.pptx" --out "%POWERPOINT%" --qa-dir "%GENERATOR_WORKSPACE%\qa"
+"%CODEX_NODE%" "%GENERATOR_WORKSPACE%\generate_vave_slides.mjs" --xlsx "%WORKBOOK%" --template "%SLIDE_TEMPLATE%" --out "%POWERPOINT%" --qa-dir "%GENERATOR_WORKSPACE%\qa"
 if errorlevel 1 goto :failed
 
 echo.
