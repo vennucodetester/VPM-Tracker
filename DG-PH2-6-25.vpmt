@@ -7533,24 +7533,24 @@
                     {
                       "id": "f5812395-0ea5-4b0e-b6f2-acab96e589e3",
                       "name": "Remove distributor from LT cassette",
-                      "start_date": "2026-10-13",
-                      "end_date": "2026-10-13",
-                      "status": "Not Started",
+                      "start_date": "2026-06-05",
+                      "end_date": "2026-06-05",
+                      "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
                       "waiting_on": "",
                       "waiting_since": null,
                       "notes": "",
-                      "is_parallel": false,
+                      "is_parallel": true,
                       "vave_potential": null,
                       "vave_realized": null,
                       "children": [
                         {
                           "id": "9a460fba-0d5e-450f-8cb4-fb36ee36d579",
                           "name": "Use distributor tester",
-                          "start_date": "2026-10-13",
-                          "end_date": "2026-10-13",
-                          "status": "Not Started",
+                          "start_date": "2026-06-05",
+                          "end_date": "2026-06-05",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -7582,15 +7582,15 @@
                     {
                       "id": "379ec39c-238b-4b54-8350-ef300bc80ffc",
                       "name": "New plastic base injection foam",
-                      "start_date": "2026-10-14",
-                      "end_date": "2026-10-14",
-                      "status": "Not Started",
-                      "status_manual": false,
+                      "start_date": "2026-06-05",
+                      "end_date": "2026-06-05",
+                      "status": "In Progress",
+                      "status_manual": true,
                       "owner": "",
                       "waiting_on": "",
                       "waiting_since": null,
                       "notes": "",
-                      "is_parallel": false,
+                      "is_parallel": true,
                       "vave_potential": null,
                       "vave_realized": null,
                       "children": [],
@@ -7606,24 +7606,24 @@
                     {
                       "id": "de24d2b8-7d7c-4143-880e-c0f1005e60ae",
                       "name": "New TXV Danfoss",
-                      "start_date": "2026-10-15",
-                      "end_date": "2026-10-15",
-                      "status": "Not Started",
+                      "start_date": "2026-06-05",
+                      "end_date": "2026-06-05",
+                      "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
                       "waiting_on": "",
                       "waiting_since": null,
                       "notes": "",
-                      "is_parallel": false,
-                      "vave_potential": null,
+                      "is_parallel": true,
+                      "vave_potential": 5.0,
                       "vave_realized": null,
                       "children": [
                         {
                           "id": "554e4f58-e753-4621-9465-9ca5daa0cd56",
                           "name": "Samples delivery date",
-                          "start_date": "2026-10-15",
-                          "end_date": "2026-10-15",
-                          "status": "Not Started",
+                          "start_date": "2026-06-05",
+                          "end_date": "2026-06-05",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -7655,24 +7655,24 @@
                     {
                       "id": "3159e3c6-f12a-473a-ac75-b9bd59e3460e",
                       "name": "New solenoid Sanhua",
-                      "start_date": "2026-10-16",
-                      "end_date": "2026-10-16",
-                      "status": "Not Started",
+                      "start_date": "2026-06-05",
+                      "end_date": "2026-06-05",
+                      "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
                       "waiting_on": "",
                       "waiting_since": null,
                       "notes": "[2026-07-30]: Worked with Danfoss. quotes not saving anymoney. Now going with Sanhua ",
-                      "is_parallel": false,
-                      "vave_potential": null,
+                      "is_parallel": true,
+                      "vave_potential": 10.0,
                       "vave_realized": null,
                       "children": [
                         {
                           "id": "7dc5c05c-ee19-4f17-8162-bc225ce45ad9",
                           "name": "Samples delivery date",
-                          "start_date": "2026-10-16",
-                          "end_date": "2026-10-16",
-                          "status": "Not Started",
+                          "start_date": "2026-06-05",
+                          "end_date": "2026-06-05",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -7704,9 +7704,9 @@
                     {
                       "id": "552e3bab-4309-4d1c-88ef-867e4947661d",
                       "name": "New HP Switch- Danfoss",
-                      "start_date": "2026-10-19",
-                      "end_date": "2026-10-19",
-                      "status": "Not Started",
+                      "start_date": "2026-06-08",
+                      "end_date": "2026-06-08",
+                      "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
                       "waiting_on": "",
@@ -7719,9 +7719,9 @@
                         {
                           "id": "e155ca03-6027-4363-beeb-1564bbf73c10",
                           "name": "Samples delivery date.",
-                          "start_date": "2026-10-19",
-                          "end_date": "2026-10-19",
-                          "status": "Not Started",
+                          "start_date": "2026-06-08",
+                          "end_date": "2026-06-08",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -7753,24 +7753,24 @@
                     {
                       "id": "c932d38e-35da-4529-817e-f4add65b4234",
                       "name": "Condenser coil with no quoting - Dunan",
-                      "start_date": "2026-10-20",
-                      "end_date": "2026-10-20",
-                      "status": "Not Started",
+                      "start_date": "2026-06-05",
+                      "end_date": "2026-06-05",
+                      "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
                       "waiting_on": "",
                       "waiting_since": null,
                       "notes": "",
-                      "is_parallel": false,
+                      "is_parallel": true,
                       "vave_potential": null,
                       "vave_realized": null,
                       "children": [
                         {
                           "id": "a34b9549-22c2-4d14-ac77-a3bf894429fe",
                           "name": "We already ",
-                          "start_date": "2026-10-20",
-                          "end_date": "2026-10-20",
-                          "status": "Not Started",
+                          "start_date": "2026-06-05",
+                          "end_date": "2026-06-05",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -7927,7 +7927,7 @@
                   "id": "02363461-6696-4fa2-b32f-9568b712cc55",
                   "name": "Case VAVE activities",
                   "start_date": "2026-06-26",
-                  "end_date": "2026-09-02",
+                  "end_date": "2026-09-10",
                   "status": "In Progress",
                   "status_manual": false,
                   "owner": "",
@@ -7942,7 +7942,7 @@
                       "id": "0666ca2c-efbd-410b-b618-091980be626a",
                       "name": "Plastic Deck Pans",
                       "start_date": "2026-06-26",
-                      "end_date": "2026-09-02",
+                      "end_date": "2026-09-10",
                       "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
@@ -7989,13 +7989,13 @@
                           "id": "04defaa2-bd64-4e17-9d57-5c629c2984cc",
                           "name": "Lab test base line",
                           "start_date": "2026-07-16",
-                          "end_date": "2026-07-29",
+                          "end_date": "2026-08-06",
                           "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
-                          "notes": "[2026-07-09]: Delayed +9d, end -> 2026-07-24.",
+                          "notes": "[2026-07-31]: Delayed +6d, end -> 2026-08-06.\n[2026-07-09]: Delayed +9d, end -> 2026-07-24.",
                           "is_parallel": false,
                           "vave_potential": null,
                           "vave_realized": null,
@@ -8013,6 +8013,13 @@
                               "end": "2026-07-24",
                               "slip": 9,
                               "reason": ""
+                            },
+                            {
+                              "rev": "C",
+                              "date": "2026-07-31",
+                              "end": "2026-08-06",
+                              "slip": 6,
+                              "reason": ""
                             }
                           ],
                           "baseline_provisional": false
@@ -8020,10 +8027,10 @@
                         {
                           "id": "f9937b4d-5b5b-423f-b970-36e348ca73c6",
                           "name": "Lab test new deck pans",
-                          "start_date": "2026-07-30",
-                          "end_date": "2026-08-05",
+                          "start_date": "2026-08-07",
+                          "end_date": "2026-08-13",
                           "status": "In Progress",
-                          "status_manual": false,
+                          "status_manual": true,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
@@ -8052,10 +8059,10 @@
                         {
                           "id": "4fee05ad-7182-4778-b343-b2014ab44fce",
                           "name": "ECN release process",
-                          "start_date": "2026-08-06",
-                          "end_date": "2026-08-26",
-                          "status": "Not Started",
-                          "status_manual": false,
+                          "start_date": "2026-08-14",
+                          "end_date": "2026-09-03",
+                          "status": "In Progress",
+                          "status_manual": true,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
@@ -8084,8 +8091,8 @@
                         {
                           "id": "396e28b4-3d9c-4b44-8003-8cc6ce711611",
                           "name": "Implementation date",
-                          "start_date": "2026-08-27",
-                          "end_date": "2026-09-02",
+                          "start_date": "2026-09-04",
+                          "end_date": "2026-09-10",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -8604,7 +8611,7 @@
                       "baseline_provisional": false
                     }
                   ],
-                  "expanded": false,
+                  "expanded": true,
                   "dates_locked": true,
                   "predecessor_id": null,
                   "baseline_duration": null,
@@ -8629,54 +8636,6 @@
           "predecessor_id": null,
           "baseline_duration": 70,
           "baseline_end": "2026-07-17",
-          "delay_notes": "",
-          "revisions": [],
-          "baseline_provisional": false
-        },
-        {
-          "id": "691b14db-8c8f-4931-86d8-1de77933c8f2",
-          "name": "NOM should be on all the 2.0 cases. get that testing done.",
-          "start_date": "2027-02-15",
-          "end_date": "2027-02-15",
-          "status": "Not Started",
-          "status_manual": false,
-          "owner": "",
-          "waiting_on": "",
-          "waiting_since": null,
-          "notes": "",
-          "is_parallel": false,
-          "vave_potential": null,
-          "vave_realized": null,
-          "children": [],
-          "expanded": true,
-          "dates_locked": false,
-          "predecessor_id": null,
-          "baseline_duration": null,
-          "baseline_end": null,
-          "delay_notes": "",
-          "revisions": [],
-          "baseline_provisional": false
-        },
-        {
-          "id": "91dc5b44-ca34-43c4-8b3c-42e7fe4c70ef",
-          "name": "NOM should be on all the 2.0 cases. get that testing done.",
-          "start_date": "2027-02-16",
-          "end_date": "2027-02-16",
-          "status": "Not Started",
-          "status_manual": false,
-          "owner": "",
-          "waiting_on": "",
-          "waiting_since": null,
-          "notes": "",
-          "is_parallel": false,
-          "vave_potential": null,
-          "vave_realized": null,
-          "children": [],
-          "expanded": true,
-          "dates_locked": false,
-          "predecessor_id": null,
-          "baseline_duration": null,
-          "baseline_end": null,
           "delay_notes": "",
           "revisions": [],
           "baseline_provisional": false
@@ -11522,6 +11481,138 @@
         {
           "ts": "2026-07-30 15:56",
           "text": "Promoted 1 note(s) to task(s)"
+        },
+        {
+          "ts": "2026-07-31 01:07",
+          "text": "'Remove distributor from LT cassette': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:07",
+          "text": "'New plastic base injection foam': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:07",
+          "text": "'New TXV Danfoss': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:07",
+          "text": "'New solenoid Sanhua': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:07",
+          "text": "'New HP Switch- Danfoss': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:07",
+          "text": "'Condenser coil with no quoting - Dunan': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:09",
+          "text": "Deleted task 'NOM should be on all the 2.0 cases. get that testing done.'"
+        },
+        {
+          "ts": "2026-07-31 01:09",
+          "text": "Deleted task 'NOM should be on all the 2.0 cases. get that testing done.'"
+        },
+        {
+          "ts": "2026-07-31 01:09",
+          "text": "'New TXV Danfoss': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:09",
+          "text": "'New solenoid Sanhua': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:09",
+          "text": "'New HP Switch- Danfoss': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:09",
+          "text": "'Remove distributor from LT cassette': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:10",
+          "text": "'Condenser coil with no quoting - Dunan': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:10",
+          "text": "Delay logged \u2014 'Lab test base line' +6d: (no reason given)"
+        },
+        {
+          "ts": "2026-07-31 01:10",
+          "text": "'Lab test base line': end 2026-07-29 \u2192 2026-08-06"
+        },
+        {
+          "ts": "2026-07-31 01:11",
+          "text": "'Lab test new deck pans': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:11",
+          "text": "'ECN release process': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:11",
+          "text": "'Remove distributor from LT cassette': parallel mode ON"
+        },
+        {
+          "ts": "2026-07-31 01:11",
+          "text": "'Remove distributor from LT cassette': start 2026-10-13 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-07-31 01:11",
+          "text": "'Remove distributor from LT cassette': end 2026-10-13 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-07-31 01:11",
+          "text": "'Remove distributor from LT cassette': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:11",
+          "text": "'New plastic base injection foam': parallel mode ON"
+        },
+        {
+          "ts": "2026-07-31 01:11",
+          "text": "'New plastic base injection foam': start 2026-06-08 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-07-31 01:11",
+          "text": "'New plastic base injection foam': end 2026-06-08 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-07-31 01:11",
+          "text": "'New TXV Danfoss': parallel mode ON"
+        },
+        {
+          "ts": "2026-07-31 01:11",
+          "text": "'New TXV Danfoss': start 2026-06-08 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-07-31 01:11",
+          "text": "'New TXV Danfoss': end 2026-06-08 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-07-31 01:11",
+          "text": "'New solenoid Sanhua': parallel mode ON"
+        },
+        {
+          "ts": "2026-07-31 01:11",
+          "text": "'New solenoid Sanhua': start 2026-06-08 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-07-31 01:11",
+          "text": "'New solenoid Sanhua': end 2026-06-08 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-07-31 01:11",
+          "text": "'Condenser coil with no quoting - Dunan': parallel mode ON"
+        },
+        {
+          "ts": "2026-07-31 01:11",
+          "text": "'Condenser coil with no quoting - Dunan': start 2026-06-09 \u2192 2026-06-05"
+        },
+        {
+          "ts": "2026-07-31 01:11",
+          "text": "'Condenser coil with no quoting - Dunan': end 2026-06-09 \u2192 2026-06-05"
         }
       ],
       "notes": [

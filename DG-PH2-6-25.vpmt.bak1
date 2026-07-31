@@ -3989,7 +3989,7 @@
         "- Rating for the wires. 70C",
         "- Press switch and other valves with connectors on them. "
       ],
-      "notepad_html": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Segoe UI'; font-size:9.9pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Check valve removal testing - LT or both? Does it need MS request?</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">New controller will not have variable speed controller. VAVE controller should be able to do that. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\tHarness will need to change. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\tControllers with no connector at the back if harness is finalized. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\tNo testing needed.</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\tNo cost yest. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Drop in logic controller - Figuired out.</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">For variable speed VCC. Controlling </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Harness</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Put part numbers on the drawing. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Pressure switch , solenoid valve, or other labels on the wires so they know what to plug into what. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Part number for the sensors. ?</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Rating for the wires. 70C</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Press switch and other valves with connectors on them. </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
+      "notepad_html": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Segoe UI'; font-size:8.1pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Check valve removal testing - LT or both? Does it need MS request?</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">New controller will not have variable speed controller. VAVE controller should be able to do that. </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">\tHarness will need to change. </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">\tControllers with no connector at the back if harness is finalized. </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">\tNo testing needed.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">\tNo cost yest. </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">Drop in logic controller - Figuired out.</span></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:9.9pt;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">For variable speed VCC. Controlling </span></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:9.9pt;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">Harness</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">- Put part numbers on the drawing. </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">- Pressure switch , solenoid valve, or other labels on the wires so they know what to plug into what. </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">- Part number for the sensors. ?</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">- Rating for the wires. 70C</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">- Press switch and other valves with connectors on them. </span></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:9.9pt;\"><br /></p></body></html>",
       "is_vave": false
     },
     {
@@ -7241,7 +7241,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": true,
+                      "expanded": false,
                       "dates_locked": true,
                       "predecessor_id": null,
                       "baseline_duration": 1,
@@ -7262,7 +7262,7 @@
                       "waiting_since": null,
                       "notes": "",
                       "is_parallel": true,
-                      "vave_potential": 10.0,
+                      "vave_potential": 15.0,
                       "vave_realized": null,
                       "children": [
                         {
@@ -7535,7 +7535,7 @@
                       "name": "Remove distributor from LT cassette",
                       "start_date": "2026-10-13",
                       "end_date": "2026-10-13",
-                      "status": "Not Started",
+                      "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
                       "waiting_on": "",
@@ -7584,8 +7584,8 @@
                       "name": "New plastic base injection foam",
                       "start_date": "2026-10-14",
                       "end_date": "2026-10-14",
-                      "status": "Not Started",
-                      "status_manual": false,
+                      "status": "In Progress",
+                      "status_manual": true,
                       "owner": "",
                       "waiting_on": "",
                       "waiting_since": null,
@@ -7608,14 +7608,14 @@
                       "name": "New TXV Danfoss",
                       "start_date": "2026-10-15",
                       "end_date": "2026-10-15",
-                      "status": "Not Started",
+                      "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
                       "waiting_on": "",
                       "waiting_since": null,
                       "notes": "",
                       "is_parallel": false,
-                      "vave_potential": null,
+                      "vave_potential": 5.0,
                       "vave_realized": null,
                       "children": [
                         {
@@ -7657,14 +7657,14 @@
                       "name": "New solenoid Sanhua",
                       "start_date": "2026-10-16",
                       "end_date": "2026-10-16",
-                      "status": "Not Started",
+                      "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
                       "waiting_on": "",
                       "waiting_since": null,
                       "notes": "[2026-07-30]: Worked with Danfoss. quotes not saving anymoney. Now going with Sanhua ",
                       "is_parallel": false,
-                      "vave_potential": null,
+                      "vave_potential": 10.0,
                       "vave_realized": null,
                       "children": [
                         {
@@ -7706,7 +7706,7 @@
                       "name": "New HP Switch- Danfoss",
                       "start_date": "2026-10-19",
                       "end_date": "2026-10-19",
-                      "status": "Not Started",
+                      "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
                       "waiting_on": "",
@@ -7755,7 +7755,7 @@
                       "name": "Condenser coil with no quoting - Dunan",
                       "start_date": "2026-10-20",
                       "end_date": "2026-10-20",
-                      "status": "Not Started",
+                      "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
                       "waiting_on": "",
@@ -11522,6 +11522,30 @@
         {
           "ts": "2026-07-30 15:56",
           "text": "Promoted 1 note(s) to task(s)"
+        },
+        {
+          "ts": "2026-07-31 01:07",
+          "text": "'Remove distributor from LT cassette': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:07",
+          "text": "'New plastic base injection foam': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:07",
+          "text": "'New TXV Danfoss': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:07",
+          "text": "'New solenoid Sanhua': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:07",
+          "text": "'New HP Switch- Danfoss': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-31 01:07",
+          "text": "'Condenser coil with no quoting - Dunan': status \u2192 In Progress"
         }
       ],
       "notes": [
@@ -11551,7 +11575,7 @@
         "NOM should be on all the 2.0 cases. get that testing done. ",
         "Set up a meeting with MFG to discuss the end of line testing process"
       ],
-      "notepad_html": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Segoe UI'; font-size:9.9pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">process in place to not dispatch if the store humidity is high. Atleast from one connect. we wont get money back. FEXA is fine. we can get that money back</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Harness design - UL wire spec 10-32. or what. Also what colors do we need and the gage?</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Sensor probe number. and the sensor part number. This is all on page 2</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Page 3 0 - UL wire types for 12 and 18 gage wires. Want the exact part number you want mega fit and mini fit size. Any insulation needed on the ground terminal.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">15amp cord. what UL requirements? For NEMA 5-15. They will send specs. for us to pick.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Fan - Taiko connectors instead of current connectors.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Failure mode of RH cases. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">coating on coil is $20</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">3/8 to 5/16 coil size. will loose 2% capactiy. same design on both LT and MT. Cost reduction becasuse amount of copper is reduced. Increased the airflow a little bit. Julia will need to find that out. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">7mm also tested. We can increase the capacity. increase the number of circuits. LT and MT same coil.</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Also did calculation on aluminum coil - no baseline. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Conduit can be implemented already - </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">First vaccume is not working because of the AC conditions. humidity is so high that the vaccume is struggling to get down to 50 microns. The entire room will be conditioned by the end of next week</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Controller - 3 deg F is on . Time is 1hr + 2hr for CTA + 1hr for triage , Dispatch. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Alarm off criteria is +1F deg. </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Doug: door open </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Door issues vs when they got installed. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">FEXA paredo</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Tecumseh will ship lab units on 8/5</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Send to Rafeal:</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Send the routed gasket quote to Rafael.</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Cases need to be joinable. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#fff59d;\">Kits : Need everything thats on 1.0 including COD's. </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#fff59d;\">NOM should be on all the 2.0 cases. get that testing done. </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Set up a meeting with MFG to discuss the end of line testing process</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
+      "notepad_html": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Segoe UI'; font-size:8.1pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">process in place to not dispatch if the store humidity is high. Atleast from one connect. we wont get money back. FEXA is fine. we can get that money back</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Harness design - UL wire spec 10-32. or what. Also what colors do we need and the gage?</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Sensor probe number. and the sensor part number. This is all on page 2</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Page 3 0 - UL wire types for 12 and 18 gage wires. Want the exact part number you want mega fit and mini fit size. Any insulation needed on the ground terminal.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">15amp cord. what UL requirements? For NEMA 5-15. They will send specs. for us to pick.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Fan - Taiko connectors instead of current connectors.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">Failure mode of RH cases. </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">coating on coil is $20</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">3/8 to 5/16 coil size. will loose 2% capactiy. same design on both LT and MT. Cost reduction becasuse amount of copper is reduced. Increased the airflow a little bit. Julia will need to find that out. </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">7mm also tested. We can increase the capacity. increase the number of circuits. LT and MT same coil.</span></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:9.9pt;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">Also did calculation on aluminum coil - no baseline. </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">Conduit can be implemented already - </span></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:9.9pt;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">First vaccume is not working because of the AC conditions. humidity is so high that the vaccume is struggling to get down to 50 microns. The entire room will be conditioned by the end of next week</span></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:9.9pt;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">Controller - 3 deg F is on . Time is 1hr + 2hr for CTA + 1hr for triage , Dispatch. </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">Alarm off criteria is +1F deg. </span></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:9.9pt;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">Doug: door open </span></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:9.9pt;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">Door issues vs when they got installed. </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">FEXA paredo</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">Tecumseh will ship lab units on 8/5</span></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:9.9pt;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">Send to Rafeal:</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">Send the routed gasket quote to Rafael.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">Cases need to be joinable. </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt; background-color:#fff59d;\">Kits : Need everything thats on 1.0 including COD's. </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt; background-color:#fff59d;\">NOM should be on all the 2.0 cases. get that testing done. </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9.9pt;\">Set up a meeting with MFG to discuss the end of line testing process</span></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:9.9pt;\"><br /></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:9.9pt;\"><br /></p></body></html>",
       "is_vave": true
     }
   ]

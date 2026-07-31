@@ -155,17 +155,21 @@ def _has_manual_vave_value(node: TaskNode) -> bool:
 def _collect_vave_sections(roots: List[TaskNode]) -> List[Dict]:
     """Collect deepest useful VAVE groups in visual tree order.
 
-    A section is a node with one or more immediate children carrying manual
-    VAVE dollars.  This maps the current tracker hierarchy directly to the
-    reference deck: e.g. ``Cassette VAVE activities`` becomes a slide title
-    and its dollar-bearing children become the slide rows.
+    A section is a VAVE activity group with direct task lines.  Once a group
+    qualifies, every immediate child is exported, including newly added tasks
+    whose VAVE dollars have not been entered yet.
     """
     sections = []
 
     def visit(node: TaskNode):
-        rows = [child for child in node.children if _has_manual_vave_value(child)]
-        if rows:
-            sections.append({"title": node.name or "VAVE activities", "nodes": rows})
+        direct_has_dollars = any(_has_manual_vave_value(child)
+                                 for child in node.children)
+        named_vave_group = "vave" in (node.name or "").lower()
+        direct_has_leaf = any(not child.children for child in node.children)
+        if node.children and (direct_has_dollars or
+                              (named_vave_group and direct_has_leaf)):
+            sections.append({"title": node.name or "VAVE activities",
+                             "nodes": list(node.children)})
         for child in node.children:
             visit(child)
 

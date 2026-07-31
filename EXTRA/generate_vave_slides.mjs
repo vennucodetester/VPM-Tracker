@@ -156,9 +156,14 @@ async function readVavePages(xlsxPath) {
     section.rows.sort((a, b) => a.taskOrder - b.taskOrder || a.sourceIndex - b.sourceIndex);
     const totalCount = section.rows.length;
     const totalSavings = section.rows.reduce((sum, row) => sum + row.savings, 0);
+    // 14 is the slide template's physical capacity, not a target. Match
+    // sync_vave_input.mjs and split an oversized section evenly instead of
+    // filling page 1 and leaving a stub: 19 lines become 10 + 9, not 14 + 5.
+    const pageCount = Math.max(1, Math.ceil(section.rows.length / 14));
+    const pageSize = Math.max(1, Math.ceil(section.rows.length / pageCount));
     const chunks = [];
-    for (let offset = 0; offset < section.rows.length; offset += 14) {
-      chunks.push(section.rows.slice(offset, offset + 14));
+    for (let offset = 0; offset < section.rows.length; offset += pageSize) {
+      chunks.push(section.rows.slice(offset, offset + pageSize));
     }
     for (const [pageIndex, chunk] of chunks.entries()) {
       pages.push({
@@ -418,10 +423,15 @@ async function main() {
   const pptx = await PresentationFile.exportPptx(presentation);
   await pptx.save(outputPath);
   console.log(JSON.stringify({ outputPath, pages: pages.map((page) => ({ title: page.title, rows: page.rows.length })) }));
-  process.exitCode = 0;
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+main().then(
+  // The artifact-tool runtime crashes during normal interpreter teardown, which
+  // hands the .cmd a non-zero errorlevel after a successful run. Exit explicitly
+  // once the file is on disk, exactly as sync_vave_input.mjs does.
+  () => process.exit(0),
+  (error) => {
+    console.error(error);
+    process.exit(1);
+  },
+);

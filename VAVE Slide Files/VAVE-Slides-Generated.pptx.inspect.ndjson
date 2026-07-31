@@ -1,13 +1,13 @@
-{"kind":"deck","id":"pr/zf6958","name":"Deck"}
+{"kind":"deck","id":"pr/xx3vk0","name":"Deck"}
 {"kind":"layout","layoutId":"/ppt/slideMasters/slideMaster1.xml","name":"","type":"master"}
 {"kind":"layout","layoutId":"/ppt/slideLayouts/slideLayout1.xml","name":"DEFAULT"}
 {"kind":"layout","layoutId":"/ppt/slideLayouts/slideLayout2.xml","name":"Blank","type":"blank","placeholders":[{"name":"dateTime","type":"dateTime","textPreview":"7/10/2026"},{"name":"footer","type":"footer"},{"name":"slideNumber","type":"slideNumber","textPreview":"‹#›"}]}
-{"kind":"slide","id":"sl/y90nupkv","slide":1,"title":"Cassette VAVE activities","textShapes":67}
+{"kind":"slide","id":"sl/y90nupkv","slide":1,"title":"Cassette VAVE activities · 1 of 2","textShapes":51}
 {"kind":"shape","id":"sh/547294r6","slide":1,"name":"Rectangle 1","bbox":[0,0,1279.97,65.28]}
-{"kind":"textbox","id":"sh/k3yl0zql","slide":1,"name":"TextBox 2","text":"Cassette VAVE activities","textPreview":"Cassette VAVE activities","textChars":24,"textLines":1,"bbox":[33.6,14.4,777.6,29.76]}
+{"kind":"textbox","id":"sh/k3yl0zql","slide":1,"name":"TextBox 2","text":"Cassette VAVE activities · 1 of 2","textPreview":"Cassette VAVE activities · 1 of 2","textChars":33,"textLines":1,"bbox":[33.6,14.4,777.6,29.76]}
 {"kind":"shape","id":"sh/ts7md4r2","slide":1,"name":"Rectangle 5","bbox":[43.2,96,1193.28,34.56]}
-{"kind":"textbox","id":"sh/sryl4zqx","slide":1,"name":"TextBox 6","text":"14 savings opportunities","textPreview":"14 savings opportunities","textChars":24,"textLines":1,"bbox":[59.52,101.66,182.51,20.36]}
-{"kind":"textbox","id":"sh/fu94fe98","slide":1,"name":"TextBox 7","text":"Total: $268.20","textPreview":"Total: $268.20","textChars":14,"textLines":1,"bbox":[1027.2,104.64,182.4,16.16]}
+{"kind":"textbox","id":"sh/sryl4zqx","slide":1,"name":"TextBox 6","text":"19 savings opportunities","textPreview":"19 savings opportunities","textChars":24,"textLines":1,"bbox":[59.52,101.66,182.51,20.36]}
+{"kind":"textbox","id":"sh/fu94fe98","slide":1,"name":"TextBox 7","text":"Total: $283.20","textPreview":"Total: $283.20","textChars":14,"textLines":1,"bbox":[1027.2,104.64,182.4,16.16]}
 {"kind":"shape","id":"sh/utg3698n","slide":1,"name":"Rectangle 8","bbox":[52.8,158.4,580.8,28.8]}
 {"kind":"textbox","id":"sh/wn6dc7eh","slide":1,"name":"TextBox 9","text":"Task Name","textPreview":"Task Name","textChars":9,"textLines":1,"bbox":[64.32,161.84,71.36,17.13]}
 {"kind":"textbox","id":"sh/hofulsf2","slide":1,"name":"TextBox 10","text":"Savings","textPreview":"Savings","textChars":7,"textLines":1,"bbox":[393.24,161.84,51,17.13]}
@@ -43,111 +43,158 @@
 {"kind":"textbox","id":"sh/e1oz61c3","slide":1,"name":"TextBox 40","text":"10/30/2026","textPreview":"10/30/2026","textChars":10,"textLines":1,"bbox":[461.37,492.56,70.86,17.13]}
 {"kind":"shape","id":"sh/14fyhgbe","slide":1,"name":"Rounded Rectangle 41","bbox":[540.67,490.56,86.4,26.88]}
 {"kind":"textbox","id":"sh/036h8but","slide":1,"name":"TextBox 42","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[547.69,492.08,72.37,17.13]}
-{"kind":"shape","id":"sh/nqxgjqtk","slide":1,"name":"Rectangle 43","bbox":[52.8,546.24,580.8,61.44]}
-{"kind":"textbox","id":"sh/mpozalcz","slide":1,"name":"TextBox 44","text":"Aluminum coil","textPreview":"Aluminum coil","textChars":13,"textLines":1,"bbox":[64.32,570.32,87.86,17.13]}
-{"kind":"textbox","id":"sh/9sfylgbq","slide":1,"name":"TextBox 45","text":"$40.00","textPreview":"$40.00","textChars":6,"textLines":1,"bbox":[400.14,562.64,44.1,17.13]}
-{"kind":"textbox","id":"sh/or6hcvu5","slide":1,"name":"TextBox 46","text":"2/12/2027","textPreview":"2/12/2027","textChars":9,"textLines":1,"bbox":[468.61,562.64,56.39,17.13]}
-{"kind":"shape","id":"sh/buh0nqtg","slide":1,"name":"Rounded Rectangle 47","bbox":[540.67,560.64,86.4,26.88]}
-{"kind":"textbox","id":"sh/at8zelcb","slide":1,"name":"TextBox 48","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[547.69,562.16,72.37,17.13]}
-{"kind":"shape","id":"sh/8zqx4vq9","slide":1,"name":"Rectangle 49","bbox":[52.8,616.32,580.8,61.44]}
-{"kind":"textbox","id":"sh/t0jyd0ru","slide":1,"name":"TextBox 50","text":"Cheaper Carel controller","textPreview":"Cheaper Carel controller","textChars":24,"textLines":1,"bbox":[64.32,640.4,147.94,17.13]}
-{"kind":"textbox","id":"sh/6x8f2583","slide":1,"name":"TextBox 51","text":"$15.00","textPreview":"$15.00","textChars":6,"textLines":1,"bbox":[400.14,632.72,44.1,17.13]}
-{"kind":"textbox","id":"sh/7yhgbq9o","slide":1,"name":"TextBox 52","text":"9/7/2026","textPreview":"9/7/2026","textChars":8,"textLines":1,"bbox":[464.99,632.72,63.62,17.13]}
-{"kind":"shape","id":"sh/kvqx0vqd","slide":1,"name":"Rounded Rectangle 53","bbox":[540.67,630.72,86.4,26.88]}
-{"kind":"textbox","id":"sh/lwzy90ry","slide":1,"name":"TextBox 54","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[547.69,632.24,72.37,17.13]}
 {"kind":"shape","id":"sh/yt8fyl87","slide":1,"name":"Rectangle 55","bbox":[657.6,158.4,580.8,28.8]}
 {"kind":"textbox","id":"sh/juhg7q9s","slide":1,"name":"TextBox 56","text":"Task Name","textPreview":"Task Name","textChars":9,"textLines":1,"bbox":[669.12,161.84,71.36,17.13]}
 {"kind":"textbox","id":"sh/wr6xwbq1","slide":1,"name":"TextBox 57","text":"Savings","textPreview":"Savings","textChars":7,"textLines":1,"bbox":[998.04,161.84,51,17.13]}
 {"kind":"textbox","id":"sh/xsfy5grm","slide":1,"name":"TextBox 58","text":"End","textPreview":"End","textChars":3,"textLines":1,"bbox":[1085.08,161.84,27.27,17.13]}
 {"kind":"textbox","id":"sh/dc7md8fe","slide":1,"name":"TextBox 59","text":"Status","textPreview":"Status","textChars":6,"textLines":1,"bbox":[1163.03,161.84,43.59,17.13]}
 {"kind":"shape","id":"sh/cby5k3yt","slide":1,"name":"Rectangle 60","bbox":[657.6,195.84,580.8,61.44]}
-{"kind":"textbox","id":"sh/ra54bix8","slide":1,"name":"TextBox 61","text":"Tube on drip tray","textPreview":"Tube on drip tray","textChars":17,"textLines":1,"bbox":[669.12,219.92,100.48,17.13]}
-{"kind":"textbox","id":"sh/q9wnidgn","slide":1,"name":"TextBox 62","text":"$0.00","textPreview":"$0.00","textChars":5,"textLines":1,"bbox":[1012.18,212.24,36.86,17.13]}
-{"kind":"textbox","id":"sh/5onm98f2","slide":1,"name":"TextBox 63","text":"7/30/2026","textPreview":"7/30/2026","textChars":9,"textLines":1,"bbox":[1069.79,212.24,63.62,17.13]}
+{"kind":"textbox","id":"sh/ra54bix8","slide":1,"name":"TextBox 61","text":"Aluminum coil","textPreview":"Aluminum coil","textChars":13,"textLines":1,"bbox":[669.12,219.92,100.48,17.13]}
+{"kind":"textbox","id":"sh/q9wnidgn","slide":1,"name":"TextBox 62","text":"$40.00","textPreview":"$40.00","textChars":6,"textLines":1,"bbox":[1012.18,212.24,36.86,17.13]}
+{"kind":"textbox","id":"sh/5onm98f2","slide":1,"name":"TextBox 63","text":"2/12/2027","textPreview":"2/12/2027","textChars":9,"textLines":1,"bbox":[1069.79,212.24,63.62,17.13]}
 {"kind":"shape","id":"sh/4ne5g3yh","slide":1,"name":"Rounded Rectangle 64","bbox":[1145.47,210.24,86.4,26.88]}
 {"kind":"textbox","id":"sh/3m547yxw","slide":1,"name":"TextBox 65","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[1152.49,211.76,72.37,17.13]}
 {"kind":"shape","id":"sh/ilw3etgr","slide":1,"name":"Rectangle 66","bbox":[657.6,265.92,580.8,61.44]}
-{"kind":"textbox","id":"sh/9kr6lsfm","slide":1,"name":"TextBox 67","text":"Harness design","textPreview":"Harness design","textChars":14,"textLines":1,"bbox":[669.12,290,93.91,17.13]}
-{"kind":"textbox","id":"sh/oji5sne1","slide":1,"name":"TextBox 68","text":"$20.00","textPreview":"$20.00","textChars":6,"textLines":1,"bbox":[1004.94,282.32,44.1,17.13]}
-{"kind":"textbox","id":"sh/6psjmpwj","slide":1,"name":"TextBox 69","text":"10/5/2026","textPreview":"10/5/2026","textChars":9,"textLines":1,"bbox":[1069.79,282.32,63.62,17.13]}
+{"kind":"textbox","id":"sh/9kr6lsfm","slide":1,"name":"TextBox 67","text":"Cheaper Carel controller","textPreview":"Cheaper Carel controller","textChars":24,"textLines":1,"bbox":[669.12,290,93.91,17.13]}
+{"kind":"textbox","id":"sh/oji5sne1","slide":1,"name":"TextBox 68","text":"$15.00","textPreview":"$15.00","textChars":6,"textLines":1,"bbox":[1004.94,282.32,44.1,17.13]}
+{"kind":"textbox","id":"sh/6psjmpwj","slide":1,"name":"TextBox 69","text":"9/7/2026","textPreview":"9/7/2026","textChars":8,"textLines":1,"bbox":[1069.79,282.32,63.62,17.13]}
 {"kind":"shape","id":"sh/7q1kfudo","slide":1,"name":"Rounded Rectangle 70","bbox":[1145.47,280.32,86.4,26.88]}
 {"kind":"textbox","id":"sh/8ra1oze9","slide":1,"name":"TextBox 71","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[1152.49,281.84,72.37,17.13]}
 {"kind":"shape","id":"sh/ts32h4vu","slide":1,"name":"Rectangle 72","bbox":[657.6,336,580.8,61.44]}
-{"kind":"textbox","id":"sh/ylsjipw7","slide":1,"name":"TextBox 73","text":"Evap/ Condenser fan - 3 qty","textPreview":"Evap/ Condenser fan - 3 qty","textChars":27,"textLines":1,"bbox":[669.12,360.08,162.92,17.13]}
-{"kind":"textbox","id":"sh/jm1kbuds","slide":1,"name":"TextBox 74","text":"$42.00","textPreview":"$42.00","textChars":6,"textLines":1,"bbox":[1004.94,352.4,44.1,17.13]}
-{"kind":"textbox","id":"sh/kna1kzed","slide":1,"name":"TextBox 75","text":"9/18/2026","textPreview":"9/18/2026","textChars":9,"textLines":1,"bbox":[1069.79,352.4,63.62,17.13]}
+{"kind":"textbox","id":"sh/ylsjipw7","slide":1,"name":"TextBox 73","text":"Tube on drip tray","textPreview":"Tube on drip tray","textChars":17,"textLines":1,"bbox":[669.12,360.08,162.92,17.13]}
+{"kind":"textbox","id":"sh/jm1kbuds","slide":1,"name":"TextBox 74","text":"$0.00","textPreview":"$0.00","textChars":5,"textLines":1,"bbox":[1004.94,352.4,44.1,17.13]}
+{"kind":"textbox","id":"sh/kna1kzed","slide":1,"name":"TextBox 75","text":"7/30/2026","textPreview":"7/30/2026","textChars":9,"textLines":1,"bbox":[1069.79,352.4,63.62,17.13]}
 {"kind":"shape","id":"sh/loj2dkvy","slide":1,"name":"Rounded Rectangle 76","bbox":[1145.47,350.4,86.4,26.88]}
 {"kind":"textbox","id":"sh/ihc3u9cr","slide":1,"name":"TextBox 77","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[1152.49,351.92,72.37,17.13]}
 {"kind":"shape","id":"sh/3ilknedw","slide":1,"name":"Rectangle 78","bbox":[657.6,406.08,580.8,61.44]}
-{"kind":"textbox","id":"sh/rehk7e50","slide":1,"name":"TextBox 79","text":"Pallet - CArdboard design","textPreview":"Pallet - CArdboard design","textChars":25,"textLines":1,"bbox":[669.12,430.16,151.98,17.13]}
-{"kind":"textbox","id":"sh/qd8jy94v","slide":1,"name":"TextBox 80","text":"$15.00","textPreview":"$15.00","textChars":6,"textLines":1,"bbox":[1004.94,422.48,44.1,17.13]}
-{"kind":"textbox","id":"sh/d0j29on6","slide":1,"name":"TextBox 81","text":"10/12/2026","textPreview":"10/12/2026","textChars":10,"textLines":1,"bbox":[1069.79,422.48,63.62,17.13]}
+{"kind":"textbox","id":"sh/rehk7e50","slide":1,"name":"TextBox 79","text":"Harness design","textPreview":"Harness design","textChars":14,"textLines":1,"bbox":[669.12,430.16,151.98,17.13]}
+{"kind":"textbox","id":"sh/qd8jy94v","slide":1,"name":"TextBox 80","text":"$20.00","textPreview":"$20.00","textChars":6,"textLines":1,"bbox":[1004.94,422.48,44.1,17.13]}
+{"kind":"textbox","id":"sh/d0j29on6","slide":1,"name":"TextBox 81","text":"10/5/2026","textPreview":"10/5/2026","textChars":9,"textLines":1,"bbox":[1069.79,422.48,63.62,17.13]}
 {"kind":"shape","id":"sh/cfa10jml","slide":1,"name":"Rounded Rectangle 82","bbox":[1145.47,420.48,86.4,26.88]}
 {"kind":"textbox","id":"sh/3ahk3u54","slide":1,"name":"TextBox 83","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[1152.49,422,72.37,17.13]}
 {"kind":"shape","id":"sh/298ju94j","slide":1,"name":"Rectangle 84","bbox":[657.6,476.16,580.8,61.44]}
-{"kind":"textbox","id":"sh/pcz254na","slide":1,"name":"TextBox 85","text":"New HP Switch- Danfoss","textPreview":"New HP Switch- Danfoss","textChars":22,"textLines":1,"bbox":[669.12,500.24,60.26,17.13]}
-{"kind":"textbox","id":"sh/4bq1wzmp","slide":1,"name":"TextBox 86","text":"$7.00","textPreview":"$7.00","textChars":5,"textLines":1,"bbox":[1004.94,492.56,44.1,17.13]}
-{"kind":"textbox","id":"sh/f6x0zu58","slide":1,"name":"TextBox 87","text":"10/19/2026","textPreview":"10/19/2026","textChars":10,"textLines":1,"bbox":[1069.79,492.56,63.62,17.13]}
+{"kind":"textbox","id":"sh/pcz254na","slide":1,"name":"TextBox 85","text":"Evap/ Condenser fan - 3 qty","textPreview":"Evap/ Condenser fan - 3 qty","textChars":27,"textLines":1,"bbox":[669.12,500.24,60.26,17.13]}
+{"kind":"textbox","id":"sh/4bq1wzmp","slide":1,"name":"TextBox 86","text":"$42.00","textPreview":"$42.00","textChars":6,"textLines":1,"bbox":[1004.94,492.56,44.1,17.13]}
+{"kind":"textbox","id":"sh/f6x0zu58","slide":1,"name":"TextBox 87","text":"9/18/2026","textPreview":"9/18/2026","textChars":9,"textLines":1,"bbox":[1069.79,492.56,63.62,17.13]}
 {"kind":"shape","id":"sh/u5ojqpon","slide":1,"name":"Rounded Rectangle 88","bbox":[1145.47,490.56,86.4,26.88]}
-{"kind":"textbox","id":"sh/kbmh0v25","slide":1,"name":"TextBox 89","text":"Not Started","textPreview":"Not Started","textChars":11,"textLines":1,"bbox":[1156.52,492.08,64.3,17.13]}
-{"kind":"shape","id":"sh/5cvy903q","slide":1,"name":"Rectangle 90","bbox":[657.6,546.24,580.8,61.44]}
-{"kind":"textbox","id":"sh/ip4zyl4f","slide":1,"name":"TextBox 91","text":"Tariff - MT","textPreview":"Tariff - MT","textChars":11,"textLines":1,"bbox":[669.12,570.32,56.39,17.13]}
-{"kind":"textbox","id":"sh/jadg7ql0","slide":1,"name":"TextBox 92","text":"$43.70","textPreview":"$43.70","textChars":6,"textLines":1,"bbox":[1004.94,562.64,44.1,17.13]}
-{"kind":"textbox","id":"sh/sf6h4v2h","slide":1,"name":"TextBox 93","text":"6/15/2026","textPreview":"6/15/2026","textChars":9,"textLines":1,"bbox":[1069.79,562.64,63.62,17.13]}
-{"kind":"shape","id":"sh/tgfyd032","slide":1,"name":"Rounded Rectangle 94","bbox":[1145.47,560.64,86.4,26.88]}
-{"kind":"textbox","id":"sh/6d4z25kb","slide":1,"name":"TextBox 95","text":"Completed","textPreview":"Completed","textChars":9,"textLines":1,"bbox":[1156.52,562.16,64.3,17.13]}
-{"kind":"shape","id":"sh/7edgbalw","slide":1,"name":"Generated Right Row 7","bbox":[657.6,616.32,580.8,61.44]}
-{"kind":"textbox","id":"sh/8j2xsbmd","slide":1,"name":"Generated Right Task 7","text":"Tariff - LT","textPreview":"Tariff - LT","textChars":11,"textLines":1,"bbox":[669.12,632.1,316,33.3]}
-{"kind":"textbox","id":"sh/9kby1g3i","slide":1,"name":"Generated Right Savings 7","text":"$0.00","textPreview":"$0.00","textChars":5,"textLines":1,"bbox":[996,632.72,54,17.13]}
-{"kind":"textbox","id":"sh/yhkza1wv","slide":1,"name":"Generated Right Date 7","text":"6/15/2026","textPreview":"6/15/2026","textChars":9,"textLines":1,"bbox":[1067,632.72,70,17.13]}
-{"kind":"shape","id":"sh/jitg36dg","slide":1,"name":"Generated Right Status Pill 7","bbox":[1145.47,630.72,86.4,26.88]}
-{"kind":"textbox","id":"sh/kj2hcbel","slide":1,"name":"Generated Right Status 7","text":"Completed","textPreview":"Completed","textChars":9,"textLines":1,"bbox":[1151,632.24,75,17.13]}
+{"kind":"textbox","id":"sh/kbmh0v25","slide":1,"name":"TextBox 89","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[1156.52,492.08,64.3,17.13]}
 {"kind":"notes","id":"nt/y90nupkv","slide":1,"text":"[Sources]\n- VAVE-Slide-Input.xlsx; sheet: VAVE Data; section: Cassette VAVE activities"}
-{"kind":"slide","id":"sl/hwbqtkby","slide":2,"title":"Case VAVE activities","textShapes":31}
-{"kind":"shape","id":"sh/9072xkry","slide":2,"name":"Rectangle 1","bbox":[0,0,1279.97,65.28]}
-{"kind":"textbox","id":"sh/ozy1ofad","slide":2,"name":"TextBox 2","text":"Case VAVE activities","textPreview":"Case VAVE activities","textChars":20,"textLines":1,"bbox":[33.6,14.4,777.6,43.2]}
-{"kind":"shape","id":"sh/x4r21kru","slide":2,"name":"Rectangle 5","bbox":[43.2,96,1193.28,34.56]}
-{"kind":"textbox","id":"sh/w3i1sfa9","slide":2,"name":"TextBox 6","text":"6 savings opportunities","textPreview":"6 savings opportunities","textChars":23,"textLines":1,"bbox":[59.52,104.64,499.2,16.16]}
-{"kind":"textbox","id":"sh/r65knqtk","slide":2,"name":"TextBox 7","text":"Total: $74.52","textPreview":"Total: $74.52","textChars":13,"textLines":1,"bbox":[1027.2,104.64,182.4,16.16]}
-{"kind":"shape","id":"sh/q5wjelsz","slide":2,"name":"Rectangle 8","bbox":[62.4,155.52,1152,34.56]}
-{"kind":"textbox","id":"sh/ove9o7yd","slide":2,"name":"TextBox 9","text":"Task Name","textPreview":"Task Name","textChars":9,"textLines":1,"bbox":[76.8,162.32,71.36,17.13]}
-{"kind":"textbox","id":"sh/9wnqhczy","slide":2,"name":"TextBox 10","text":"Savings","textPreview":"Savings","textChars":7,"textLines":1,"bbox":[678.6,162.32,51,17.13]}
-{"kind":"textbox","id":"sh/mtwrmxg7","slide":2,"name":"TextBox 11","text":"End Date","textPreview":"End Date","textChars":8,"textLines":1,"bbox":[789.34,162.32,59.08,17.13]}
-{"kind":"textbox","id":"sh/nu58f2hs","slide":2,"name":"TextBox 12","text":"Status","textPreview":"Status","textChars":6,"textLines":1,"bbox":[980.44,162.32,43.59,17.13]}
-{"kind":"shape","id":"sh/wjy9sry9","slide":2,"name":"Rectangle 13","bbox":[62.4,201.6,1152,49.92]}
-{"kind":"textbox","id":"sh/xk7qlczu","slide":2,"name":"TextBox 14","text":"Plastic Deck Pans","textPreview":"Plastic Deck Pans","textChars":17,"textLines":1,"bbox":[79.68,213.2,107.88,17.13]}
-{"kind":"textbox","id":"sh/ahwrqhgj","slide":2,"name":"TextBox 15","text":"$26.65","textPreview":"$26.65","textChars":6,"textLines":1,"bbox":[685.5,213.2,44.1,17.13]}
-{"kind":"textbox","id":"sh/bip8jmho","slide":2,"name":"TextBox 16","text":"9/2/2026","textPreview":"9/2/2026","textChars":8,"textLines":1,"bbox":[787.07,213.2,63.62,17.13]}
-{"kind":"shape","id":"sh/cnupgny5","slide":2,"name":"Rounded Rectangle 17","bbox":[928.32,211.2,148.8,29.76]}
-{"kind":"textbox","id":"sh/do3q9szq","slide":2,"name":"TextBox 18","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[966.53,213.68,72.37,17.13]}
-{"kind":"shape","id":"sh/t8byxkn2","slide":2,"name":"Rectangle 19","bbox":[62.4,263.04,1152,49.92]}
-{"kind":"textbox","id":"sh/s72xofmh","slide":2,"name":"TextBox 20","text":"Simplify Raceway","textPreview":"Simplify Raceway","textChars":16,"textLines":1,"bbox":[79.68,274.64,105.7,17.13]}
-{"kind":"textbox","id":"sh/76twva5c","slide":2,"name":"TextBox 21","text":"$3.07","textPreview":"$3.07","textChars":5,"textLines":1,"bbox":[692.74,274.64,36.86,17.13]}
-{"kind":"textbox","id":"sh/65kfmpor","slide":2,"name":"TextBox 22","text":"8/7/2026","textPreview":"8/7/2026","textChars":8,"textLines":1,"bbox":[790.69,274.64,56.39,17.13]}
-{"kind":"shape","id":"sh/hcvy14ne","slide":2,"name":"Rounded Rectangle 23","bbox":[928.32,272.64,148.8,29.76]}
-{"kind":"textbox","id":"sh/gbmxszmt","slide":2,"name":"TextBox 24","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[966.53,275.12,72.37,17.13]}
-{"kind":"shape","id":"sh/fadgzu58","slide":2,"name":"Rectangle 25","bbox":[62.4,324.48,1152,49.92]}
-{"kind":"textbox","id":"sh/u94fqp4n","slide":2,"name":"TextBox 26","text":"Case power cord","textPreview":"Case power cord","textChars":15,"textLines":1,"bbox":[79.68,336.08,102.33,17.13]}
-{"kind":"textbox","id":"sh/p0vy54na","slide":2,"name":"TextBox 27","text":"$5.50","textPreview":"$5.50","textChars":5,"textLines":1,"bbox":[692.74,336.08,36.86,17.13]}
-{"kind":"textbox","id":"sh/4zmxwzmp","slide":2,"name":"TextBox 28","text":"9/1/2026","textPreview":"9/1/2026","textChars":8,"textLines":1,"bbox":[790.69,336.08,56.39,17.13]}
-{"kind":"shape","id":"sh/mlgvq147","slide":2,"name":"Rounded Rectangle 29","bbox":[928.32,334.08,148.8,29.76]}
-{"kind":"textbox","id":"sh/nmpcj6ls","slide":2,"name":"TextBox 30","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[966.53,336.56,72.37,17.13]}
-{"kind":"shape","id":"sh/onydsbmd","slide":2,"name":"Rectangle 31","bbox":[62.4,385.92,1152,49.92]}
-{"kind":"textbox","id":"sh/9o7ulg3y","slide":2,"name":"TextBox 32","text":"10Amp Breaker","textPreview":"10Amp Breaker","textChars":13,"textLines":1,"bbox":[79.68,397.52,93.07,17.13]}
-{"kind":"textbox","id":"sh/a9gvulkj","slide":2,"name":"TextBox 33","text":"$32.50","textPreview":"$32.50","textChars":6,"textLines":1,"bbox":[685.5,397.52,44.1,17.13]}
-{"kind":"textbox","id":"sh/ba9cn6l4","slide":2,"name":"TextBox 34","text":"8/11/2026","textPreview":"8/11/2026","textChars":9,"textLines":1,"bbox":[787.07,397.52,63.62,17.13]}
-{"kind":"shape","id":"sh/wbidwb29","slide":2,"name":"Rounded Rectangle 35","bbox":[928.32,395.52,148.8,29.76]}
-{"kind":"textbox","id":"sh/xcrupg3u","slide":2,"name":"TextBox 36","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[966.53,398,72.37,17.13]}
-{"kind":"shape","id":"sh/id0vylkf","slide":2,"name":"Rectangle 37","bbox":[62.4,447.36,1152,49.92]}
-{"kind":"textbox","id":"sh/je9crql0","slide":2,"name":"TextBox 38","text":"Simplify Under Door Support","textPreview":"Simplify Under Door Support","textChars":27,"textLines":1,"bbox":[79.68,458.96,169.48,17.13]}
-{"kind":"textbox","id":"sh/ru5cbqd4","slide":2,"name":"TextBox 39","text":"$1.50","textPreview":"$1.50","textChars":5,"textLines":1,"bbox":[692.74,458.96,36.86,17.13]}
-{"kind":"textbox","id":"sh/69wbilcj","slide":2,"name":"TextBox 40","text":"8/7/2026","textPreview":"8/7/2026","textChars":8,"textLines":1,"bbox":[790.69,458.96,56.39,17.13]}
-{"kind":"shape","id":"sh/tw7ud0va","slide":2,"name":"Rounded Rectangle 41","bbox":[928.32,456.96,148.8,29.76]}
-{"kind":"textbox","id":"sh/svedkvup","slide":2,"name":"TextBox 42","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[966.53,459.44,72.37,17.13]}
-{"kind":"shape","id":"sh/fypcfqdg","slide":2,"name":"Rectangle 43","bbox":[62.4,508.8,1152,49.92]}
-{"kind":"textbox","id":"sh/exgvmlcv","slide":2,"name":"TextBox 44","text":"Reduce Qty of Canopy Foam Backers","textPreview":"Reduce Qty of Canopy Foam Backers","textChars":33,"textLines":1,"bbox":[79.68,520.4,218.79,17.13]}
-{"kind":"textbox","id":"sh/107uh0v6","slide":2,"name":"TextBox 45","text":"$5.30","textPreview":"$5.30","textChars":5,"textLines":1,"bbox":[692.74,520.4,36.86,17.13]}
-{"kind":"textbox","id":"sh/gzydovul","slide":2,"name":"TextBox 46","text":"8/7/2026","textPreview":"8/7/2026","textChars":8,"textLines":1,"bbox":[790.69,520.4,56.39,17.13]}
-{"kind":"shape","id":"sh/v2lc36dw","slide":2,"name":"Rounded Rectangle 47","bbox":[928.32,518.4,148.8,29.76]}
-{"kind":"textbox","id":"sh/a1cba1wb","slide":2,"name":"TextBox 48","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[966.53,520.88,72.37,17.13]}
-{"kind":"notes","id":"nt/hwbqtkby","slide":2,"text":"[Sources]\n- VAVE-Slide-Input.xlsx; sheet: VAVE Data; section: Case VAVE activities"}
+{"kind":"slide","id":"sl/6viqge","slide":2,"title":"Cassette VAVE activities · 2 of 2","textShapes":47}
+{"kind":"shape","id":"sh/ni5gfuhk","slide":2,"name":"Rectangle 1","bbox":[0,0,1279.97,65.28]}
+{"kind":"textbox","id":"sh/mhwz6pgz","slide":2,"name":"TextBox 2","text":"Cassette VAVE activities · 2 of 2","textPreview":"Cassette VAVE activities · 2 of 2","textChars":33,"textLines":1,"bbox":[33.6,14.4,777.6,29.76]}
+{"kind":"shape","id":"sh/vm5gjehg","slide":2,"name":"Rectangle 5","bbox":[43.2,96,1193.28,34.56]}
+{"kind":"textbox","id":"sh/alwza9gv","slide":2,"name":"TextBox 6","text":"19 savings opportunities","textPreview":"19 savings opportunities","textChars":24,"textLines":1,"bbox":[59.52,101.66,182.51,20.36]}
+{"kind":"textbox","id":"sh/ds3y9kz2","slide":2,"name":"TextBox 7","text":"Total: $283.20","textPreview":"Total: $283.20","textChars":14,"textLines":1,"bbox":[1027.2,104.64,182.4,16.16]}
+{"kind":"shape","id":"sh/crux0fyx","slide":2,"name":"Rectangle 8","bbox":[52.8,158.4,580.8,28.8]}
+{"kind":"textbox","id":"sh/atsjqxsj","slide":2,"name":"TextBox 9","text":"Task Name","textPreview":"Task Name","textChars":9,"textLines":1,"bbox":[64.32,161.84,71.36,17.13]}
+{"kind":"textbox","id":"sh/bu1kj2t4","slide":2,"name":"TextBox 10","text":"Savings","textPreview":"Savings","textChars":7,"textLines":1,"bbox":[393.24,161.84,51,17.13]}
+{"kind":"textbox","id":"sh/wva1s7ap","slide":2,"name":"TextBox 11","text":"End","textPreview":"End","textChars":3,"textLines":1,"bbox":[480.28,161.84,27.27,17.13]}
+{"kind":"textbox","id":"sh/xwj2lsba","slide":2,"name":"TextBox 12","text":"Status","textPreview":"Status","textChars":6,"textLines":1,"bbox":[558.23,161.84,43.59,17.13]}
+{"kind":"shape","id":"sh/yxsjuxsf","slide":2,"name":"Rectangle 13","bbox":[52.8,195.84,580.8,61.44]}
+{"kind":"textbox","id":"sh/jylkn2t0","slide":2,"name":"TextBox 14","text":"Pallet - CArdboard design","textPreview":"Pallet - CArdboard design","textChars":25,"textLines":1,"bbox":[64.32,219.92,129.26,17.13]}
+{"kind":"textbox","id":"sh/kzulw7al","slide":2,"name":"TextBox 15","text":"$15.00","textPreview":"$15.00","textChars":6,"textLines":1,"bbox":[400.14,212.24,44.1,17.13]}
+{"kind":"textbox","id":"sh/l032pcb6","slide":2,"name":"TextBox 16","text":"10/12/2026","textPreview":"10/12/2026","textChars":10,"textLines":1,"bbox":[468.61,212.24,56.39,17.13]}
+{"kind":"shape","id":"sh/61c3yhsr","slide":2,"name":"Rounded Rectangle 17","bbox":[540.67,210.24,86.4,26.88]}
+{"kind":"textbox","id":"sh/7mlkrmtc","slide":2,"name":"TextBox 18","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[547.69,211.76,72.37,17.13]}
+{"kind":"shape","id":"sh/3q50fmp4","slide":2,"name":"Rectangle 19","bbox":[52.8,265.92,580.8,61.44]}
+{"kind":"textbox","id":"sh/ipwjmh8z","slide":2,"name":"TextBox 20","text":"Remove distributor from LT cassette","textPreview":"Remove distributor from LT cassette","textChars":35,"textLines":1,"bbox":[64.32,290,123.87,17.13]}
+{"kind":"textbox","id":"sh/5sn2hw7a","slide":2,"name":"TextBox 21","text":"$0.00","textPreview":"$0.00","textChars":5,"textLines":1,"bbox":[407.38,282.32,36.86,17.13]}
+{"kind":"textbox","id":"sh/4re1orqp","slide":2,"name":"TextBox 22","text":"10/13/2026","textPreview":"10/13/2026","textChars":10,"textLines":1,"bbox":[464.99,282.32,63.62,17.13]}
+{"kind":"shape","id":"sh/v2l0b2p8","slide":2,"name":"Rounded Rectangle 23","bbox":[540.67,280.32,86.4,26.88]}
+{"kind":"textbox","id":"sh/u1cjix8n","slide":2,"name":"TextBox 24","text":"Not Started","textPreview":"Not Started","textChars":11,"textLines":1,"bbox":[546.84,281.84,74.06,17.13]}
+{"kind":"shape","id":"sh/ho3idc7e","slide":2,"name":"Rectangle 25","bbox":[52.8,336,580.8,61.44]}
+{"kind":"textbox","id":"sh/g3u1k7qt","slide":2,"name":"TextBox 26","text":"New plastic base injection foam","textPreview":"New plastic base injection foam","textChars":31,"textLines":1,"bbox":[64.32,360.08,263.56,17.13]}
+{"kind":"textbox","id":"sh/7yl0729c","slide":2,"name":"TextBox 27","text":"$0.00","textPreview":"$0.00","textChars":5,"textLines":1,"bbox":[407.38,352.4,36.86,17.13]}
+{"kind":"textbox","id":"sh/6xsjex8r","slide":2,"name":"TextBox 28","text":"10/14/2026","textPreview":"10/14/2026","textChars":10,"textLines":1,"bbox":[468.61,352.4,56.39,17.13]}
+{"kind":"shape","id":"sh/c3qx8369","slide":2,"name":"Rounded Rectangle 29","bbox":[540.67,350.4,86.4,26.88]}
+{"kind":"textbox","id":"sh/x4zyh8nu","slide":2,"name":"TextBox 30","text":"Not Started","textPreview":"Not Started","textChars":11,"textLines":1,"bbox":[547.6,351.92,72.54,17.13]}
+{"kind":"shape","id":"sh/a18f6toj","slide":2,"name":"Rectangle 31","bbox":[52.8,406.08,580.8,61.44]}
+{"kind":"textbox","id":"sh/b2hgfyp4","slide":2,"name":"TextBox 32","text":"S/m - 2 (Control box redesign, evap shroud,\n compress base, cond. shroud)","textPreview":"S/m - 2 (Control box redesign, evap shroud, |  compress base, cond. shroud)","textChars":73,"textLines":2,"bbox":[64.32,422.08,253.46,33.28]}
+{"kind":"textbox","id":"sh/k7ahc36l","slide":2,"name":"TextBox 33","text":"$5.00","textPreview":"$5.00","textChars":5,"textLines":1,"bbox":[400.14,422.48,44.1,17.13]}
+{"kind":"textbox","id":"sh/l8jyl8n6","slide":2,"name":"TextBox 34","text":"10/15/2026","textPreview":"10/15/2026","textChars":10,"textLines":1,"bbox":[464.99,422.48,63.62,17.13]}
+{"kind":"shape","id":"sh/y58zadof","slide":2,"name":"Rounded Rectangle 35","bbox":[540.67,420.48,86.4,26.88]}
+{"kind":"textbox","id":"sh/j61gjy50","slide":2,"name":"TextBox 36","text":"Not Started","textPreview":"Not Started","textChars":11,"textLines":1,"bbox":[547.69,422,72.37,17.13]}
+{"kind":"shape","id":"sh/0b6xgj6h","slide":2,"name":"Rectangle 37","bbox":[52.8,476.16,580.8,61.44]}
+{"kind":"textbox","id":"sh/1cfy9o7m","slide":2,"name":"TextBox 38","text":"New solenoid Sanhua","textPreview":"New solenoid Sanhua","textChars":19,"textLines":1,"bbox":[64.32,500.24,289.64,17.13]}
+{"kind":"textbox","id":"sh/tsrq9o76","slide":2,"name":"TextBox 39","text":"$10.00","textPreview":"$10.00","textChars":6,"textLines":1,"bbox":[400.14,492.56,44.1,17.13]}
+{"kind":"textbox","id":"sh/sripgj6l","slide":2,"name":"TextBox 40","text":"10/16/2026","textPreview":"10/16/2026","textChars":10,"textLines":1,"bbox":[461.37,492.56,70.86,17.13]}
+{"kind":"shape","id":"sh/7q987ep0","slide":2,"name":"Rounded Rectangle 41","bbox":[540.67,490.56,86.4,26.88]}
+{"kind":"textbox","id":"sh/6507e9of","slide":2,"name":"TextBox 42","text":"Not Started","textPreview":"Not Started","textChars":11,"textLines":1,"bbox":[547.69,492.08,72.37,17.13]}
+{"kind":"shape","id":"sh/03u5gvm5","slide":2,"name":"Rectangle 55","bbox":[657.6,158.4,580.8,28.8]}
+{"kind":"textbox","id":"sh/14nm90nq","slide":2,"name":"TextBox 56","text":"Task Name","textPreview":"Task Name","textChars":9,"textLines":1,"bbox":[669.12,161.84,71.36,17.13]}
+{"kind":"textbox","id":"sh/qdcnal43","slide":2,"name":"TextBox 57","text":"Savings","textPreview":"Savings","textChars":7,"textLines":1,"bbox":[998.04,161.84,51,17.13]}
+{"kind":"textbox","id":"sh/rel4365o","slide":2,"name":"TextBox 58","text":"End","textPreview":"End","textChars":3,"textLines":1,"bbox":[1085.08,161.84,27.27,17.13]}
+{"kind":"textbox","id":"sh/fihkbmlg","slide":2,"name":"TextBox 59","text":"Status","textPreview":"Status","textChars":6,"textLines":1,"bbox":[1163.03,161.84,43.59,17.13]}
+{"kind":"shape","id":"sh/uh8jihkv","slide":2,"name":"Rectangle 60","bbox":[657.6,195.84,580.8,61.44]}
+{"kind":"textbox","id":"sh/hkj2dc3m","slide":2,"name":"TextBox 61","text":"New HP Switch- Danfoss","textPreview":"New HP Switch- Danfoss","textChars":22,"textLines":1,"bbox":[669.12,219.92,100.48,17.13]}
+{"kind":"textbox","id":"sh/gjq1k721","slide":2,"name":"TextBox 62","text":"$7.00","textPreview":"$7.00","textChars":5,"textLines":1,"bbox":[1012.18,212.24,36.86,17.13]}
+{"kind":"textbox","id":"sh/3m1kfmlc","slide":2,"name":"TextBox 63","text":"10/19/2026","textPreview":"10/19/2026","textChars":10,"textLines":1,"bbox":[1069.79,212.24,63.62,17.13]}
+{"kind":"shape","id":"sh/2lsjmhkr","slide":2,"name":"Rounded Rectangle 64","bbox":[1145.47,210.24,86.4,26.88]}
+{"kind":"textbox","id":"sh/p8j2hw3i","slide":2,"name":"TextBox 65","text":"Not Started","textPreview":"Not Started","textChars":11,"textLines":1,"bbox":[1152.49,211.76,72.37,17.13]}
+{"kind":"shape","id":"sh/47a1or2x","slide":2,"name":"Rectangle 66","bbox":[657.6,265.92,580.8,61.44]}
+{"kind":"textbox","id":"sh/jqxk3il8","slide":2,"name":"TextBox 67","text":"Condenser coil with no quoting - Dunan","textPreview":"Condenser coil with no quoting - Dunan","textChars":38,"textLines":1,"bbox":[669.12,290,93.91,17.13]}
+{"kind":"textbox","id":"sh/ipojaxkn","slide":2,"name":"TextBox 68","text":"$0.00","textPreview":"$0.00","textChars":5,"textLines":1,"bbox":[1004.94,282.32,44.1,17.13]}
+{"kind":"textbox","id":"sh/ovmhkjil","slide":2,"name":"TextBox 69","text":"10/20/2026","textPreview":"10/20/2026","textChars":10,"textLines":1,"bbox":[1069.79,282.32,63.62,17.13]}
+{"kind":"shape","id":"sh/9wvydoj6","slide":2,"name":"Rounded Rectangle 70","bbox":[1145.47,280.32,86.4,26.88]}
+{"kind":"textbox","id":"sh/mtkzit0f","slide":2,"name":"TextBox 71","text":"Not Started","textPreview":"Not Started","textChars":11,"textLines":1,"bbox":[1152.49,281.84,72.37,17.13]}
+{"kind":"shape","id":"sh/nudgby10","slide":2,"name":"Rectangle 72","bbox":[657.6,336,580.8,61.44]}
+{"kind":"textbox","id":"sh/0r2hgji9","slide":2,"name":"TextBox 73","text":"Tariff - MT","textPreview":"Tariff - MT","textChars":11,"textLines":1,"bbox":[669.12,360.08,162.92,17.13]}
+{"kind":"textbox","id":"sh/1sby9oju","slide":2,"name":"TextBox 74","text":"$43.70","textPreview":"$43.70","textChars":6,"textLines":1,"bbox":[1004.94,352.4,44.1,17.13]}
+{"kind":"textbox","id":"sh/epkze90j","slide":2,"name":"TextBox 75","text":"6/15/2026","textPreview":"6/15/2026","textChars":9,"textLines":1,"bbox":[1069.79,352.4,63.62,17.13]}
+{"kind":"shape","id":"sh/zqtg7e1o","slide":2,"name":"Rounded Rectangle 76","bbox":[1145.47,350.4,86.4,26.88]}
+{"kind":"textbox","id":"sh/kn6hc3it","slide":2,"name":"TextBox 77","text":"Completed","textPreview":"Completed","textChars":9,"textLines":1,"bbox":[1152.49,351.92,72.37,17.13]}
+{"kind":"shape","id":"sh/5ofil8je","slide":2,"name":"Rectangle 78","bbox":[657.6,406.08,580.8,61.44]}
+{"kind":"textbox","id":"sh/tozulkri","slide":2,"name":"TextBox 79","text":"Tariff - LT","textPreview":"Tariff - LT","textChars":11,"textLines":1,"bbox":[669.12,430.16,151.98,17.13]}
+{"kind":"textbox","id":"sh/snqdcfax","slide":2,"name":"TextBox 80","text":"$0.00","textPreview":"$0.00","textChars":5,"textLines":1,"bbox":[1004.94,422.48,44.1,17.13]}
+{"kind":"textbox","id":"sh/rmhcja9c","slide":2,"name":"TextBox 81","text":"6/15/2026","textPreview":"6/15/2026","textChars":9,"textLines":1,"bbox":[1069.79,422.48,63.62,17.13]}
+{"kind":"shape","id":"sh/6l8va5sr","slide":2,"name":"Rounded Rectangle 82","bbox":[1145.47,420.48,86.4,26.88]}
+{"kind":"textbox","id":"sh/1sjup4ru","slide":2,"name":"TextBox 83","text":"Completed","textPreview":"Completed","textChars":9,"textLines":1,"bbox":[1152.49,422,72.37,17.13]}
+{"kind":"notes","id":"nt/6viqge","slide":2,"text":"[Sources]\n- VAVE-Slide-Input.xlsx; sheet: VAVE Data; section: Cassette VAVE activities"}
+{"kind":"slide","id":"sl/hwbqtkby","slide":3,"title":"Case VAVE activities","textShapes":31}
+{"kind":"shape","id":"sh/9072xkry","slide":3,"name":"Rectangle 1","bbox":[0,0,1279.97,65.28]}
+{"kind":"textbox","id":"sh/ozy1ofad","slide":3,"name":"TextBox 2","text":"Case VAVE activities","textPreview":"Case VAVE activities","textChars":20,"textLines":1,"bbox":[33.6,14.4,777.6,43.2]}
+{"kind":"shape","id":"sh/x4r21kru","slide":3,"name":"Rectangle 5","bbox":[43.2,96,1193.28,34.56]}
+{"kind":"textbox","id":"sh/w3i1sfa9","slide":3,"name":"TextBox 6","text":"6 savings opportunities","textPreview":"6 savings opportunities","textChars":23,"textLines":1,"bbox":[59.52,104.64,499.2,16.16]}
+{"kind":"textbox","id":"sh/r65knqtk","slide":3,"name":"TextBox 7","text":"Total: $74.52","textPreview":"Total: $74.52","textChars":13,"textLines":1,"bbox":[1027.2,104.64,182.4,16.16]}
+{"kind":"shape","id":"sh/q5wjelsz","slide":3,"name":"Rectangle 8","bbox":[62.4,155.52,1152,34.56]}
+{"kind":"textbox","id":"sh/ove9o7yd","slide":3,"name":"TextBox 9","text":"Task Name","textPreview":"Task Name","textChars":9,"textLines":1,"bbox":[76.8,162.32,71.36,17.13]}
+{"kind":"textbox","id":"sh/9wnqhczy","slide":3,"name":"TextBox 10","text":"Savings","textPreview":"Savings","textChars":7,"textLines":1,"bbox":[678.6,162.32,51,17.13]}
+{"kind":"textbox","id":"sh/mtwrmxg7","slide":3,"name":"TextBox 11","text":"End Date","textPreview":"End Date","textChars":8,"textLines":1,"bbox":[789.34,162.32,59.08,17.13]}
+{"kind":"textbox","id":"sh/nu58f2hs","slide":3,"name":"TextBox 12","text":"Status","textPreview":"Status","textChars":6,"textLines":1,"bbox":[980.44,162.32,43.59,17.13]}
+{"kind":"shape","id":"sh/wjy9sry9","slide":3,"name":"Rectangle 13","bbox":[62.4,201.6,1152,49.92]}
+{"kind":"textbox","id":"sh/xk7qlczu","slide":3,"name":"TextBox 14","text":"Plastic Deck Pans","textPreview":"Plastic Deck Pans","textChars":17,"textLines":1,"bbox":[79.68,213.2,107.88,17.13]}
+{"kind":"textbox","id":"sh/ahwrqhgj","slide":3,"name":"TextBox 15","text":"$26.65","textPreview":"$26.65","textChars":6,"textLines":1,"bbox":[685.5,213.2,44.1,17.13]}
+{"kind":"textbox","id":"sh/bip8jmho","slide":3,"name":"TextBox 16","text":"9/2/2026","textPreview":"9/2/2026","textChars":8,"textLines":1,"bbox":[787.07,213.2,63.62,17.13]}
+{"kind":"shape","id":"sh/cnupgny5","slide":3,"name":"Rounded Rectangle 17","bbox":[928.32,211.2,148.8,29.76]}
+{"kind":"textbox","id":"sh/do3q9szq","slide":3,"name":"TextBox 18","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[966.53,213.68,72.37,17.13]}
+{"kind":"shape","id":"sh/t8byxkn2","slide":3,"name":"Rectangle 19","bbox":[62.4,263.04,1152,49.92]}
+{"kind":"textbox","id":"sh/s72xofmh","slide":3,"name":"TextBox 20","text":"Simplify Raceway","textPreview":"Simplify Raceway","textChars":16,"textLines":1,"bbox":[79.68,274.64,105.7,17.13]}
+{"kind":"textbox","id":"sh/76twva5c","slide":3,"name":"TextBox 21","text":"$3.07","textPreview":"$3.07","textChars":5,"textLines":1,"bbox":[692.74,274.64,36.86,17.13]}
+{"kind":"textbox","id":"sh/65kfmpor","slide":3,"name":"TextBox 22","text":"8/7/2026","textPreview":"8/7/2026","textChars":8,"textLines":1,"bbox":[790.69,274.64,56.39,17.13]}
+{"kind":"shape","id":"sh/hcvy14ne","slide":3,"name":"Rounded Rectangle 23","bbox":[928.32,272.64,148.8,29.76]}
+{"kind":"textbox","id":"sh/gbmxszmt","slide":3,"name":"TextBox 24","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[966.53,275.12,72.37,17.13]}
+{"kind":"shape","id":"sh/fadgzu58","slide":3,"name":"Rectangle 25","bbox":[62.4,324.48,1152,49.92]}
+{"kind":"textbox","id":"sh/u94fqp4n","slide":3,"name":"TextBox 26","text":"Case power cord","textPreview":"Case power cord","textChars":15,"textLines":1,"bbox":[79.68,336.08,102.33,17.13]}
+{"kind":"textbox","id":"sh/p0vy54na","slide":3,"name":"TextBox 27","text":"$5.50","textPreview":"$5.50","textChars":5,"textLines":1,"bbox":[692.74,336.08,36.86,17.13]}
+{"kind":"textbox","id":"sh/4zmxwzmp","slide":3,"name":"TextBox 28","text":"9/1/2026","textPreview":"9/1/2026","textChars":8,"textLines":1,"bbox":[790.69,336.08,56.39,17.13]}
+{"kind":"shape","id":"sh/mlgvq147","slide":3,"name":"Rounded Rectangle 29","bbox":[928.32,334.08,148.8,29.76]}
+{"kind":"textbox","id":"sh/nmpcj6ls","slide":3,"name":"TextBox 30","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[966.53,336.56,72.37,17.13]}
+{"kind":"shape","id":"sh/onydsbmd","slide":3,"name":"Rectangle 31","bbox":[62.4,385.92,1152,49.92]}
+{"kind":"textbox","id":"sh/9o7ulg3y","slide":3,"name":"TextBox 32","text":"10Amp Breaker","textPreview":"10Amp Breaker","textChars":13,"textLines":1,"bbox":[79.68,397.52,93.07,17.13]}
+{"kind":"textbox","id":"sh/a9gvulkj","slide":3,"name":"TextBox 33","text":"$32.50","textPreview":"$32.50","textChars":6,"textLines":1,"bbox":[685.5,397.52,44.1,17.13]}
+{"kind":"textbox","id":"sh/ba9cn6l4","slide":3,"name":"TextBox 34","text":"8/11/2026","textPreview":"8/11/2026","textChars":9,"textLines":1,"bbox":[787.07,397.52,63.62,17.13]}
+{"kind":"shape","id":"sh/wbidwb29","slide":3,"name":"Rounded Rectangle 35","bbox":[928.32,395.52,148.8,29.76]}
+{"kind":"textbox","id":"sh/xcrupg3u","slide":3,"name":"TextBox 36","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[966.53,398,72.37,17.13]}
+{"kind":"shape","id":"sh/id0vylkf","slide":3,"name":"Rectangle 37","bbox":[62.4,447.36,1152,49.92]}
+{"kind":"textbox","id":"sh/je9crql0","slide":3,"name":"TextBox 38","text":"Simplify Under Door Support","textPreview":"Simplify Under Door Support","textChars":27,"textLines":1,"bbox":[79.68,458.96,169.48,17.13]}
+{"kind":"textbox","id":"sh/ru5cbqd4","slide":3,"name":"TextBox 39","text":"$1.50","textPreview":"$1.50","textChars":5,"textLines":1,"bbox":[692.74,458.96,36.86,17.13]}
+{"kind":"textbox","id":"sh/69wbilcj","slide":3,"name":"TextBox 40","text":"8/7/2026","textPreview":"8/7/2026","textChars":8,"textLines":1,"bbox":[790.69,458.96,56.39,17.13]}
+{"kind":"shape","id":"sh/tw7ud0va","slide":3,"name":"Rounded Rectangle 41","bbox":[928.32,456.96,148.8,29.76]}
+{"kind":"textbox","id":"sh/svedkvup","slide":3,"name":"TextBox 42","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[966.53,459.44,72.37,17.13]}
+{"kind":"shape","id":"sh/fypcfqdg","slide":3,"name":"Rectangle 43","bbox":[62.4,508.8,1152,49.92]}
+{"kind":"textbox","id":"sh/exgvmlcv","slide":3,"name":"TextBox 44","text":"Reduce Qty of Canopy Foam Backers","textPreview":"Reduce Qty of Canopy Foam Backers","textChars":33,"textLines":1,"bbox":[79.68,520.4,218.79,17.13]}
+{"kind":"textbox","id":"sh/107uh0v6","slide":3,"name":"TextBox 45","text":"$5.30","textPreview":"$5.30","textChars":5,"textLines":1,"bbox":[692.74,520.4,36.86,17.13]}
+{"kind":"textbox","id":"sh/gzydovul","slide":3,"name":"TextBox 46","text":"8/7/2026","textPreview":"8/7/2026","textChars":8,"textLines":1,"bbox":[790.69,520.4,56.39,17.13]}
+{"kind":"shape","id":"sh/v2lc36dw","slide":3,"name":"Rounded Rectangle 47","bbox":[928.32,518.4,148.8,29.76]}
+{"kind":"textbox","id":"sh/a1cba1wb","slide":3,"name":"TextBox 48","text":"On Track","textPreview":"On Track","textChars":8,"textLines":1,"bbox":[966.53,520.88,72.37,17.13]}
+{"kind":"notes","id":"nt/hwbqtkby","slide":3,"text":"[Sources]\n- VAVE-Slide-Input.xlsx; sheet: VAVE Data; section: Case VAVE activities"}

@@ -98,6 +98,25 @@ class VaveSlideExportTests(unittest.TestCase):
             '\'VAVE Project VAVE Data\'!$O$2:$O$16,1)',
         )
 
+    def test_new_vave_group_lines_export_before_savings_are_entered(self):
+        group = _attach(
+            _node("Cassette VAVE activities"),
+            [_node("Priced idea", potential=12.5), _node("New unpriced idea")],
+        )
+        project = {
+            "name": "VAVE Project",
+            "metadata": {},
+            "roots": [_attach(_node("VAVE activities"), [group])],
+            "is_vave": True,
+        }
+        tmp, wb = self._export([project])
+        self.addCleanup(tmp.cleanup)
+
+        data = wb["VAVE Project VAVE Data"]
+        self.assertEqual(data.max_row - 1, 2)
+        self.assertEqual(data["H3"].value, "New unpriced idea")
+        self.assertIsNone(data["I3"].value)
+
     def test_explicit_realized_value_controls_slide_savings_and_status(self):
         section = _attach(
             _node("Savings VAVE activities"),
