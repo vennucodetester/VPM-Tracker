@@ -4399,7 +4399,7 @@
                       "id": "8144df1b-b6d7-40ea-952e-a886b457c1bc",
                       "name": "Check valve removal",
                       "start_date": "2026-07-20",
-                      "end_date": "2026-08-21",
+                      "end_date": "2026-08-28",
                       "status": "Not Started",
                       "status_manual": false,
                       "owner": "",
@@ -4414,7 +4414,7 @@
                           "id": "157a479e-d665-4cf9-b8ed-33839851f112",
                           "name": "MS request - LT unit",
                           "start_date": "2026-07-30",
-                          "end_date": "2026-08-21",
+                          "end_date": "2026-07-30",
                           "status": "Completed",
                           "status_manual": false,
                           "owner": "",
@@ -4446,13 +4446,13 @@
                           "id": "fe23d55f-ecae-4691-b6e2-29f99167e8ab",
                           "name": "Hot box testing.",
                           "start_date": "2026-07-20",
-                          "end_date": "2026-07-24",
+                          "end_date": "2026-08-28",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
-                          "notes": "",
+                          "notes": "[2026-07-14]: Delayed +25d, end -> 2026-08-28.",
                           "is_parallel": false,
                           "vave_potential": null,
                           "vave_realized": null,
@@ -4470,6 +4470,13 @@
                               "end": "2026-07-08",
                               "slip": 4,
                               "reason": "no delay"
+                            },
+                            {
+                              "rev": "C",
+                              "date": "2026-07-14",
+                              "end": "2026-08-28",
+                              "slip": 25,
+                              "reason": ""
                             }
                           ],
                           "baseline_provisional": false
@@ -7504,7 +7511,7 @@
                       "waiting_since": null,
                       "notes": "",
                       "is_parallel": true,
-                      "vave_potential": 45.0,
+                      "vave_potential": 0.0,
                       "vave_realized": null,
                       "children": [
                         {
@@ -7586,7 +7593,7 @@
                       "waiting_since": null,
                       "notes": "",
                       "is_parallel": true,
-                      "vave_potential": null,
+                      "vave_potential": 26.65,
                       "vave_realized": null,
                       "children": [
                         {
@@ -7771,7 +7778,7 @@
                       "waiting_since": null,
                       "notes": "",
                       "is_parallel": true,
-                      "vave_potential": null,
+                      "vave_potential": 3.07,
                       "vave_realized": null,
                       "children": [
                         {
@@ -7867,7 +7874,7 @@
                       "waiting_since": null,
                       "notes": "",
                       "is_parallel": true,
-                      "vave_potential": null,
+                      "vave_potential": 5.5,
                       "vave_realized": null,
                       "children": [
                         {
@@ -7963,7 +7970,7 @@
                       "waiting_since": null,
                       "notes": "",
                       "is_parallel": true,
-                      "vave_potential": null,
+                      "vave_potential": 32.5,
                       "vave_realized": null,
                       "children": [
                         {
@@ -8059,7 +8066,7 @@
                       "waiting_since": null,
                       "notes": "",
                       "is_parallel": true,
-                      "vave_potential": null,
+                      "vave_potential": 1.5,
                       "vave_realized": null,
                       "children": [
                         {
@@ -8155,7 +8162,7 @@
                       "waiting_since": null,
                       "notes": "",
                       "is_parallel": true,
-                      "vave_potential": null,
+                      "vave_potential": 5.3,
                       "vave_realized": null,
                       "children": [
                         {
@@ -8251,7 +8258,7 @@
                       "waiting_since": null,
                       "notes": "",
                       "is_parallel": true,
-                      "vave_potential": null,
+                      "vave_potential": 3.8,
                       "vave_realized": null,
                       "children": [
                         {
@@ -10839,6 +10846,18 @@
         {
           "ts": "2026-07-14 10:43",
           "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-07-14 10:47",
+          "text": "'MS request - LT unit': end 2026-08-21 \u2192 2026-07-30"
+        },
+        {
+          "ts": "2026-07-14 10:47",
+          "text": "Delay logged \u2014 'Hot box testing.' +25d: (no reason given)"
+        },
+        {
+          "ts": "2026-07-14 10:47",
+          "text": "'Hot box testing.': end 2026-07-24 \u2192 2026-08-28"
         }
       ],
       "notes": [

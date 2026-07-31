@@ -125,7 +125,7 @@
                           "name": "CFD",
                           "start_date": "2026-05-15",
                           "end_date": "2026-07-17",
-                          "status": "Completed",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -213,7 +213,7 @@
                               "name": "3Dr + 4Dr",
                               "start_date": "2026-05-15",
                               "end_date": "2026-07-17",
-                              "status": "Completed",
+                              "status": "In Progress",
                               "status_manual": false,
                               "owner": "",
                               "waiting_on": "",
@@ -456,7 +456,7 @@
                       "name": "Engineering Drawings",
                       "start_date": "2026-07-29",
                       "end_date": "2026-08-04",
-                      "status": "Not Started",
+                      "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
                       "waiting_on": "",
@@ -1037,7 +1037,7 @@
                       "name": "MS request",
                       "start_date": "2026-07-22",
                       "end_date": "2026-07-22",
-                      "status": "Not Started",
+                      "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
                       "waiting_on": "",
@@ -1061,7 +1061,7 @@
                       "name": "MS parts done. Case ready",
                       "start_date": "2026-07-23",
                       "end_date": "2026-07-29",
-                      "status": "Not Started",
+                      "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
                       "waiting_on": "",
@@ -1085,7 +1085,7 @@
                       "name": "Trial 2",
                       "start_date": "2026-07-30",
                       "end_date": "2026-08-19",
-                      "status": "Not Started",
+                      "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
                       "waiting_on": "",
@@ -1321,7 +1321,7 @@
               "id": "4d277fdb-376b-4f15-b5a5-45cc73b5a580",
               "name": "DG 2.5 - Variable speed",
               "start_date": "2026-04-13",
-              "end_date": "2026-12-29",
+              "end_date": "2026-12-30",
               "status": "In Progress",
               "status_manual": false,
               "owner": "",
@@ -1600,7 +1600,7 @@
                   "name": "Proto Lab testing - (Design validation)",
                   "start_date": "2026-07-29",
                   "end_date": "2026-08-18",
-                  "status": "Not Started",
+                  "status": "In Progress",
                   "status_manual": false,
                   "owner": "",
                   "waiting_on": "",
@@ -1615,7 +1615,7 @@
                       "name": "2Dr LT C2",
                       "start_date": "2026-07-29",
                       "end_date": "2026-08-18",
-                      "status": "Not Started",
+                      "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
                       "waiting_on": "",
@@ -1630,7 +1630,7 @@
                           "name": "NSF & DOE",
                           "start_date": "2026-07-29",
                           "end_date": "2026-08-18",
-                          "status": "Not Started",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -2130,6 +2130,30 @@
                   "delay_notes": "",
                   "revisions": [],
                   "baseline_provisional": false
+                },
+                {
+                  "id": "abae6d73-7779-436c-a41c-45c332a5397c",
+                  "name": "NOM 2.0 cases",
+                  "start_date": "2026-12-30",
+                  "end_date": "2026-12-30",
+                  "status": "Not Started",
+                  "status_manual": false,
+                  "owner": "",
+                  "waiting_on": "",
+                  "waiting_since": null,
+                  "notes": "",
+                  "is_parallel": false,
+                  "vave_potential": null,
+                  "vave_realized": null,
+                  "children": [],
+                  "expanded": true,
+                  "dates_locked": false,
+                  "predecessor_id": null,
+                  "baseline_duration": 1,
+                  "baseline_end": "2026-12-30",
+                  "delay_notes": "",
+                  "revisions": [],
+                  "baseline_provisional": true
                 }
               ],
               "expanded": true,
@@ -3935,6 +3959,18 @@
         {
           "ts": "2026-07-28 14:00",
           "text": "'3Dr + 4Dr': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-30 15:56",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-07-30 15:56",
+          "text": "Renamed 'New Task' \u2192 'NOM should be on all the 2.0 cases. get that testing done. '"
+        },
+        {
+          "ts": "2026-07-30 15:57",
+          "text": "Renamed 'NOM should be on all the 2.0 cases. get that testing done. ' \u2192 'NOM 2.0 cases'"
         }
       ],
       "notes": [
@@ -6675,7 +6711,7 @@
                           "name": "Implementation",
                           "start_date": "2026-07-30",
                           "end_date": "2026-07-30",
-                          "status": "Not Started",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -6963,7 +6999,7 @@
                       "id": "53d08d30-2db2-4c2b-9168-5338b53605d4",
                       "name": "Evap/ Condenser fan - 3 qty",
                       "start_date": "2026-06-26",
-                      "end_date": "2026-08-28",
+                      "end_date": "2026-09-18",
                       "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
@@ -7010,13 +7046,13 @@
                           "id": "137415eb-9513-465b-a29f-af27f5d50085",
                           "name": "Sample order - ",
                           "start_date": "2026-07-03",
-                          "end_date": "2026-07-23",
+                          "end_date": "2026-08-13",
                           "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
-                          "notes": "[2026-07-09]: Delayed +14d, end -> 2026-07-23.",
+                          "notes": "[2026-07-30]: Delayed +4d, end -> 2026-08-13. same as above\n[2026-07-30]: Delayed +11d, end -> 2026-08-08. New date for samples arrival to Tecumseh is 8/8. We might get it a week later.\n[2026-07-09]: Delayed +14d, end -> 2026-07-23.",
                           "is_parallel": false,
                           "vave_potential": null,
                           "vave_realized": null,
@@ -7034,6 +7070,20 @@
                               "end": "2026-07-23",
                               "slip": 14,
                               "reason": ""
+                            },
+                            {
+                              "rev": "C",
+                              "date": "2026-07-30",
+                              "end": "2026-08-08",
+                              "slip": 11,
+                              "reason": "New date for samples arrival to Tecumseh is 8/8. We might get it a week later."
+                            },
+                            {
+                              "rev": "D",
+                              "date": "2026-07-30",
+                              "end": "2026-08-13",
+                              "slip": 4,
+                              "reason": "same as above"
                             }
                           ],
                           "baseline_provisional": false
@@ -7041,9 +7091,9 @@
                         {
                           "id": "d9fb2221-659b-4383-bdd2-1dcc44f85975",
                           "name": "Wind tunnel testing",
-                          "start_date": "2026-07-24",
-                          "end_date": "2026-07-30",
-                          "status": "In Progress",
+                          "start_date": "2026-08-14",
+                          "end_date": "2026-08-20",
+                          "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -7073,8 +7123,8 @@
                         {
                           "id": "368d9054-de89-4d92-bc0f-d4c417e6ed1a",
                           "name": "Performance testing - NSF",
-                          "start_date": "2026-07-31",
-                          "end_date": "2026-08-13",
+                          "start_date": "2026-08-21",
+                          "end_date": "2026-09-03",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -7105,8 +7155,8 @@
                         {
                           "id": "8f85463f-f1e9-46a8-9b7d-1744656e66e4",
                           "name": "DOE",
-                          "start_date": "2026-08-14",
-                          "end_date": "2026-08-27",
+                          "start_date": "2026-09-04",
+                          "end_date": "2026-09-17",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -7137,8 +7187,8 @@
                         {
                           "id": "26078d92-0593-436c-adda-0f47f06d8344",
                           "name": "ECO process",
-                          "start_date": "2026-08-14",
-                          "end_date": "2026-08-27",
+                          "start_date": "2026-09-04",
+                          "end_date": "2026-09-17",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -7169,8 +7219,8 @@
                         {
                           "id": "03e56d4f-2ac5-4057-86a1-39f361544382",
                           "name": "Implementation date",
-                          "start_date": "2026-08-28",
-                          "end_date": "2026-08-28",
+                          "start_date": "2026-09-18",
+                          "end_date": "2026-09-18",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -7191,7 +7241,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": false,
+                      "expanded": true,
                       "dates_locked": true,
                       "predecessor_id": null,
                       "baseline_duration": 1,
@@ -7530,6 +7580,226 @@
                       "baseline_provisional": true
                     },
                     {
+                      "id": "379ec39c-238b-4b54-8350-ef300bc80ffc",
+                      "name": "New plastic base injection foam",
+                      "start_date": "2026-10-14",
+                      "end_date": "2026-10-14",
+                      "status": "Not Started",
+                      "status_manual": false,
+                      "owner": "",
+                      "waiting_on": "",
+                      "waiting_since": null,
+                      "notes": "",
+                      "is_parallel": false,
+                      "vave_potential": null,
+                      "vave_realized": null,
+                      "children": [],
+                      "expanded": true,
+                      "dates_locked": false,
+                      "predecessor_id": null,
+                      "baseline_duration": 1,
+                      "baseline_end": "2026-10-14",
+                      "delay_notes": "",
+                      "revisions": [],
+                      "baseline_provisional": true
+                    },
+                    {
+                      "id": "de24d2b8-7d7c-4143-880e-c0f1005e60ae",
+                      "name": "New TXV Danfoss",
+                      "start_date": "2026-10-15",
+                      "end_date": "2026-10-15",
+                      "status": "Not Started",
+                      "status_manual": false,
+                      "owner": "",
+                      "waiting_on": "",
+                      "waiting_since": null,
+                      "notes": "",
+                      "is_parallel": false,
+                      "vave_potential": null,
+                      "vave_realized": null,
+                      "children": [
+                        {
+                          "id": "554e4f58-e753-4621-9465-9ca5daa0cd56",
+                          "name": "Samples delivery date",
+                          "start_date": "2026-10-15",
+                          "end_date": "2026-10-15",
+                          "status": "Not Started",
+                          "status_manual": false,
+                          "owner": "",
+                          "waiting_on": "",
+                          "waiting_since": null,
+                          "notes": "",
+                          "is_parallel": false,
+                          "vave_potential": null,
+                          "vave_realized": null,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-10-16",
+                          "delay_notes": "",
+                          "revisions": [],
+                          "baseline_provisional": true
+                        }
+                      ],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": null,
+                      "baseline_duration": 1,
+                      "baseline_end": "2026-10-15",
+                      "delay_notes": "",
+                      "revisions": [],
+                      "baseline_provisional": true
+                    },
+                    {
+                      "id": "3159e3c6-f12a-473a-ac75-b9bd59e3460e",
+                      "name": "New solenoid Sanhua",
+                      "start_date": "2026-10-16",
+                      "end_date": "2026-10-16",
+                      "status": "Not Started",
+                      "status_manual": false,
+                      "owner": "",
+                      "waiting_on": "",
+                      "waiting_since": null,
+                      "notes": "[2026-07-30]: Worked with Danfoss. quotes not saving anymoney. Now going with Sanhua ",
+                      "is_parallel": false,
+                      "vave_potential": null,
+                      "vave_realized": null,
+                      "children": [
+                        {
+                          "id": "7dc5c05c-ee19-4f17-8162-bc225ce45ad9",
+                          "name": "Samples delivery date",
+                          "start_date": "2026-10-16",
+                          "end_date": "2026-10-16",
+                          "status": "Not Started",
+                          "status_manual": false,
+                          "owner": "",
+                          "waiting_on": "",
+                          "waiting_since": null,
+                          "notes": "",
+                          "is_parallel": false,
+                          "vave_potential": null,
+                          "vave_realized": null,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-10-19",
+                          "delay_notes": "",
+                          "revisions": [],
+                          "baseline_provisional": true
+                        }
+                      ],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": null,
+                      "baseline_duration": 1,
+                      "baseline_end": "2026-10-16",
+                      "delay_notes": "",
+                      "revisions": [],
+                      "baseline_provisional": true
+                    },
+                    {
+                      "id": "552e3bab-4309-4d1c-88ef-867e4947661d",
+                      "name": "New HP Switch- Danfoss",
+                      "start_date": "2026-10-19",
+                      "end_date": "2026-10-19",
+                      "status": "Not Started",
+                      "status_manual": false,
+                      "owner": "",
+                      "waiting_on": "",
+                      "waiting_since": null,
+                      "notes": "",
+                      "is_parallel": false,
+                      "vave_potential": 7.0,
+                      "vave_realized": null,
+                      "children": [
+                        {
+                          "id": "e155ca03-6027-4363-beeb-1564bbf73c10",
+                          "name": "Samples delivery date.",
+                          "start_date": "2026-10-19",
+                          "end_date": "2026-10-19",
+                          "status": "Not Started",
+                          "status_manual": false,
+                          "owner": "",
+                          "waiting_on": "",
+                          "waiting_since": null,
+                          "notes": "",
+                          "is_parallel": false,
+                          "vave_potential": null,
+                          "vave_realized": null,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-10-20",
+                          "delay_notes": "",
+                          "revisions": [],
+                          "baseline_provisional": true
+                        }
+                      ],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": null,
+                      "baseline_duration": 1,
+                      "baseline_end": "2026-10-19",
+                      "delay_notes": "",
+                      "revisions": [],
+                      "baseline_provisional": true
+                    },
+                    {
+                      "id": "c932d38e-35da-4529-817e-f4add65b4234",
+                      "name": "Condenser coil with no quoting - Dunan",
+                      "start_date": "2026-10-20",
+                      "end_date": "2026-10-20",
+                      "status": "Not Started",
+                      "status_manual": false,
+                      "owner": "",
+                      "waiting_on": "",
+                      "waiting_since": null,
+                      "notes": "",
+                      "is_parallel": false,
+                      "vave_potential": null,
+                      "vave_realized": null,
+                      "children": [
+                        {
+                          "id": "a34b9549-22c2-4d14-ac77-a3bf894429fe",
+                          "name": "We already ",
+                          "start_date": "2026-10-20",
+                          "end_date": "2026-10-20",
+                          "status": "Not Started",
+                          "status_manual": false,
+                          "owner": "",
+                          "waiting_on": "",
+                          "waiting_since": null,
+                          "notes": "",
+                          "is_parallel": false,
+                          "vave_potential": null,
+                          "vave_realized": null,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-10-21",
+                          "delay_notes": "",
+                          "revisions": [],
+                          "baseline_provisional": true
+                        }
+                      ],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": null,
+                      "baseline_duration": 1,
+                      "baseline_end": "2026-10-20",
+                      "delay_notes": "",
+                      "revisions": [],
+                      "baseline_provisional": true
+                    },
+                    {
                       "id": "5e7905c0-cd11-496d-b167-aee30805c055",
                       "name": "Tariff - MT",
                       "start_date": "2026-06-05",
@@ -7644,7 +7914,7 @@
                       "baseline_provisional": false
                     }
                   ],
-                  "expanded": false,
+                  "expanded": true,
                   "dates_locked": false,
                   "predecessor_id": null,
                   "baseline_duration": null,
@@ -7752,7 +8022,7 @@
                           "name": "Lab test new deck pans",
                           "start_date": "2026-07-30",
                           "end_date": "2026-08-05",
-                          "status": "Not Started",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -7844,7 +8114,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": true,
+                      "expanded": false,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": null,
@@ -7940,7 +8210,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": true,
+                      "expanded": false,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": null,
@@ -8036,7 +8306,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": true,
+                      "expanded": false,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": null,
@@ -8132,7 +8402,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": true,
+                      "expanded": false,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 1,
@@ -8228,7 +8498,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": true,
+                      "expanded": false,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": null,
@@ -8324,7 +8594,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": true,
+                      "expanded": false,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": null,
@@ -8334,7 +8604,7 @@
                       "baseline_provisional": false
                     }
                   ],
-                  "expanded": true,
+                  "expanded": false,
                   "dates_locked": true,
                   "predecessor_id": null,
                   "baseline_duration": null,
@@ -8359,6 +8629,54 @@
           "predecessor_id": null,
           "baseline_duration": 70,
           "baseline_end": "2026-07-17",
+          "delay_notes": "",
+          "revisions": [],
+          "baseline_provisional": false
+        },
+        {
+          "id": "691b14db-8c8f-4931-86d8-1de77933c8f2",
+          "name": "NOM should be on all the 2.0 cases. get that testing done.",
+          "start_date": "2027-02-15",
+          "end_date": "2027-02-15",
+          "status": "Not Started",
+          "status_manual": false,
+          "owner": "",
+          "waiting_on": "",
+          "waiting_since": null,
+          "notes": "",
+          "is_parallel": false,
+          "vave_potential": null,
+          "vave_realized": null,
+          "children": [],
+          "expanded": true,
+          "dates_locked": false,
+          "predecessor_id": null,
+          "baseline_duration": null,
+          "baseline_end": null,
+          "delay_notes": "",
+          "revisions": [],
+          "baseline_provisional": false
+        },
+        {
+          "id": "91dc5b44-ca34-43c4-8b3c-42e7fe4c70ef",
+          "name": "NOM should be on all the 2.0 cases. get that testing done.",
+          "start_date": "2027-02-16",
+          "end_date": "2027-02-16",
+          "status": "Not Started",
+          "status_manual": false,
+          "owner": "",
+          "waiting_on": "",
+          "waiting_since": null,
+          "notes": "",
+          "is_parallel": false,
+          "vave_potential": null,
+          "vave_realized": null,
+          "children": [],
+          "expanded": true,
+          "dates_locked": false,
+          "predecessor_id": null,
+          "baseline_duration": null,
+          "baseline_end": null,
           "delay_notes": "",
           "revisions": [],
           "baseline_provisional": false
@@ -11088,6 +11406,122 @@
         {
           "ts": "2026-07-29 11:05",
           "text": "'Reduce Qty of Canopy Foam Backers': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-30 12:28",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-07-30 12:28",
+          "text": "Renamed 'New Task' \u2192 'New plastic base injection foam'"
+        },
+        {
+          "ts": "2026-07-30 12:28",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-07-30 12:29",
+          "text": "Renamed 'New Task' \u2192 'Samples for TXV/ Solenoid valve/ High pressure switch'"
+        },
+        {
+          "ts": "2026-07-30 12:30",
+          "text": "Renamed 'Samples for TXV/ Solenoid valve/ High pressure switch' \u2192 'Samples for TXV/ Solenoid valve/ High pressure switch. '"
+        },
+        {
+          "ts": "2026-07-30 12:30",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-07-30 12:30",
+          "text": "Renamed 'New Task' \u2192 'Samples delivery date'"
+        },
+        {
+          "ts": "2026-07-30 12:30",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-07-30 12:30",
+          "text": "Renamed 'New Task' \u2192 'New solenoid'"
+        },
+        {
+          "ts": "2026-07-30 12:31",
+          "text": "Renamed 'Samples for TXV/ Solenoid valve/ High pressure switch. ' \u2192 'New TXV Danfoss'"
+        },
+        {
+          "ts": "2026-07-30 12:31",
+          "text": "Renamed 'New solenoid' \u2192 'New solenoid Sanhua'"
+        },
+        {
+          "ts": "2026-07-30 12:31",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-07-30 12:31",
+          "text": "Renamed 'New Task' \u2192 'Samples delivery date'"
+        },
+        {
+          "ts": "2026-07-30 12:32",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-07-30 12:32",
+          "text": "Renamed 'New Task' \u2192 'New HP Switch- Danfoss'"
+        },
+        {
+          "ts": "2026-07-30 12:32",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-07-30 12:32",
+          "text": "Renamed 'New Task' \u2192 'Samples delivery date.'"
+        },
+        {
+          "ts": "2026-07-30 12:33",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-07-30 12:34",
+          "text": "Renamed 'New Task' \u2192 'Coil with no quoting'"
+        },
+        {
+          "ts": "2026-07-30 12:34",
+          "text": "Renamed 'Coil with no quoting' \u2192 'Coil with no quoting - Dunan'"
+        },
+        {
+          "ts": "2026-07-30 12:34",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-07-30 12:35",
+          "text": "Renamed 'New Task' \u2192 'We already '"
+        },
+        {
+          "ts": "2026-07-30 12:35",
+          "text": "Renamed 'Coil with no quoting - Dunan' \u2192 'Condenser coil with no quoting - Dunan'"
+        },
+        {
+          "ts": "2026-07-30 13:07",
+          "text": "Delay logged \u2014 'Sample order - ' +11d: New date for samples arrival to Tecumseh is 8/8. We might get it a week later."
+        },
+        {
+          "ts": "2026-07-30 13:07",
+          "text": "'Sample order - ': end 2026-07-23 \u2192 2026-08-08"
+        },
+        {
+          "ts": "2026-07-30 13:08",
+          "text": "Delay logged \u2014 'Sample order - ' +4d: same as above"
+        },
+        {
+          "ts": "2026-07-30 13:08",
+          "text": "'Sample order - ': end 2026-08-08 \u2192 2026-08-13"
+        },
+        {
+          "ts": "2026-07-30 15:56",
+          "text": "Promoted 1 note(s) to task(s)"
+        },
+        {
+          "ts": "2026-07-30 15:56",
+          "text": "Promoted 1 note(s) to task(s)"
         }
       ],
       "notes": [
@@ -11109,9 +11543,15 @@
         "Doug: door open ",
         "Door issues vs when they got installed. ",
         "FEXA paredo",
-        "Tecumseh will ship lab units on 8/5"
+        "Tecumseh will ship lab units on 8/5",
+        "Send to Rafeal:",
+        "Send the routed gasket quote to Rafael.",
+        "Cases need to be joinable. ",
+        "Kits : Need everything thats on 1.0 including COD's. ",
+        "NOM should be on all the 2.0 cases. get that testing done. ",
+        "Set up a meeting with MFG to discuss the end of line testing process"
       ],
-      "notepad_html": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Segoe UI'; font-size:9.9pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">process in place to not dispatch if the store humidity is high. Atleast from one connect. we wont get money back. FEXA is fine. we can get that money back</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Harness design - UL wire spec 10-32. or what. Also what colors do we need and the gage?</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Sensor probe number. and the sensor part number. This is all on page 2</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Page 3 0 - UL wire types for 12 and 18 gage wires. Want the exact part number you want mega fit and mini fit size. Any insulation needed on the ground terminal.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">15amp cord. what UL requirements? For NEMA 5-15. They will send specs. for us to pick.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Fan - Taiko connectors instead of current connectors.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Failure mode of RH cases. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">coating on coil is $20</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">3/8 to 5/16 coil size. will loose 2% capactiy. same design on both LT and MT. Cost reduction becasuse amount of copper is reduced. Increased the airflow a little bit. Julia will need to find that out. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">7mm also tested. We can increase the capacity. increase the number of circuits. LT and MT same coil.</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Also did calculation on aluminum coil - no baseline. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Conduit can be implemented already - </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">First vaccume is not working because of the AC conditions. humidity is so high that the vaccume is struggling to get down to 50 microns. The entire room will be conditioned by the end of next week</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Controller - 3 deg F is on . Time is 1hr + 2hr for CTA + 1hr for triage , Dispatch. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Alarm off criteria is +1F deg. </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Doug: door open </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Door issues vs when they got installed. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">FEXA paredo</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Tecumseh will ship lab units on 8/5</p></body></html>",
+      "notepad_html": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Segoe UI'; font-size:9.9pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">process in place to not dispatch if the store humidity is high. Atleast from one connect. we wont get money back. FEXA is fine. we can get that money back</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Harness design - UL wire spec 10-32. or what. Also what colors do we need and the gage?</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Sensor probe number. and the sensor part number. This is all on page 2</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Page 3 0 - UL wire types for 12 and 18 gage wires. Want the exact part number you want mega fit and mini fit size. Any insulation needed on the ground terminal.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">15amp cord. what UL requirements? For NEMA 5-15. They will send specs. for us to pick.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Fan - Taiko connectors instead of current connectors.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Failure mode of RH cases. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">coating on coil is $20</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">3/8 to 5/16 coil size. will loose 2% capactiy. same design on both LT and MT. Cost reduction becasuse amount of copper is reduced. Increased the airflow a little bit. Julia will need to find that out. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">7mm also tested. We can increase the capacity. increase the number of circuits. LT and MT same coil.</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Also did calculation on aluminum coil - no baseline. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Conduit can be implemented already - </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">First vaccume is not working because of the AC conditions. humidity is so high that the vaccume is struggling to get down to 50 microns. The entire room will be conditioned by the end of next week</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Controller - 3 deg F is on . Time is 1hr + 2hr for CTA + 1hr for triage , Dispatch. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Alarm off criteria is +1F deg. </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Doug: door open </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Door issues vs when they got installed. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">FEXA paredo</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Tecumseh will ship lab units on 8/5</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Send to Rafeal:</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Send the routed gasket quote to Rafael.</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Cases need to be joinable. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#fff59d;\">Kits : Need everything thats on 1.0 including COD's. </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#fff59d;\">NOM should be on all the 2.0 cases. get that testing done. </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Set up a meeting with MFG to discuss the end of line testing process</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
       "is_vave": true
     }
   ]

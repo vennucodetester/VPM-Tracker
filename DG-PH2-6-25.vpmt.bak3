@@ -125,7 +125,7 @@
                           "name": "CFD",
                           "start_date": "2026-05-15",
                           "end_date": "2026-07-17",
-                          "status": "In Progress",
+                          "status": "Completed",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -213,12 +213,12 @@
                               "name": "3Dr + 4Dr",
                               "start_date": "2026-05-15",
                               "end_date": "2026-07-17",
-                              "status": "In Progress",
+                              "status": "Completed",
                               "status_manual": false,
                               "owner": "",
                               "waiting_on": "",
                               "waiting_since": null,
-                              "notes": "[2026-06-08]: Got the initial CFD with acrylic partition off. See high temps on the 3Dr right side. Want another run with it off. ",
+                              "notes": "[2026-07-28]: confirmed that we will need a acrylic partition \n[2026-06-08]: Got the initial CFD with acrylic partition off. See high temps on the 3Dr right side. Want another run with it off. ",
                               "is_parallel": true,
                               "vave_potential": null,
                               "vave_realized": null,
@@ -897,7 +897,7 @@
                       "owner": "",
                       "waiting_on": "",
                       "waiting_since": null,
-                      "notes": "[2026-06-16] empty",
+                      "notes": "[2026-07-28]: redo type 1 and type 2. with facade panels on \n[2026-06-16] empty",
                       "is_parallel": false,
                       "vave_potential": null,
                       "vave_realized": null,
@@ -1308,7 +1308,7 @@
                   "baseline_provisional": false
                 }
               ],
-              "expanded": true,
+              "expanded": false,
               "dates_locked": false,
               "predecessor_id": null,
               "baseline_duration": 176,
@@ -1336,8 +1336,8 @@
                   "id": "6574dc8e-60c2-42bd-bd86-2c85ece1acef",
                   "name": "2.5.1 Cassette build",
                   "start_date": "2026-04-13",
-                  "end_date": "2026-07-15",
-                  "status": "In Progress",
+                  "end_date": "2026-07-21",
+                  "status": "Completed",
                   "status_manual": false,
                   "owner": "",
                   "waiting_on": "",
@@ -1431,13 +1431,13 @@
                       "id": "e1c1f7e8-1aed-4666-b68b-032e34cb658a",
                       "name": "2.5.1 assembly",
                       "start_date": "2026-06-25",
-                      "end_date": "2026-07-15",
-                      "status": "In Progress",
-                      "status_manual": false,
+                      "end_date": "2026-07-21",
+                      "status": "Completed",
+                      "status_manual": true,
                       "owner": "",
                       "waiting_on": "",
                       "waiting_since": null,
-                      "notes": "",
+                      "notes": "[2026-07-21]: Delayed +4d, end -> 2026-07-21. Took a little bit more time in the model shop to get all the parts together. Sample got the gasket and clamping mechanism figured out today. its all done now",
                       "is_parallel": false,
                       "vave_potential": null,
                       "vave_realized": null,
@@ -1455,6 +1455,13 @@
                           "end": "2026-07-15",
                           "slip": 10,
                           "reason": "Compressors from danfoss are delayed. Parts are getting air shipped from china today."
+                        },
+                        {
+                          "rev": "C",
+                          "date": "2026-07-21",
+                          "end": "2026-07-21",
+                          "slip": 4,
+                          "reason": "Took a little bit more time in the model shop to get all the parts together. Sample got the gasket and clamping mechanism figured out today. its all done now"
                         }
                       ],
                       "baseline_provisional": false
@@ -1486,11 +1493,11 @@
                   "children": [
                     {
                       "id": "6732261b-131f-4845-8458-cb19da6a478f",
-                      "name": "3D model - MTY release",
+                      "name": "Cassette 2.5 - MTY release",
                       "start_date": "2026-05-11",
                       "end_date": "2026-07-17",
-                      "status": "In Progress",
-                      "status_manual": false,
+                      "status": "Completed",
+                      "status_manual": true,
                       "owner": "",
                       "waiting_on": "",
                       "waiting_since": null,
@@ -1535,8 +1542,8 @@
                       "name": "2D Drawings",
                       "start_date": "2026-07-20",
                       "end_date": "2026-07-22",
-                      "status": "Not Started",
-                      "status_manual": false,
+                      "status": "Completed",
+                      "status_manual": true,
                       "owner": "",
                       "waiting_on": "",
                       "waiting_since": null,
@@ -1559,8 +1566,8 @@
                       "name": "TC Release",
                       "start_date": "2026-07-23",
                       "end_date": "2026-07-28",
-                      "status": "Not Started",
-                      "status_manual": false,
+                      "status": "In Progress",
+                      "status_manual": true,
                       "owner": "",
                       "waiting_on": "",
                       "waiting_since": null,
@@ -1643,7 +1650,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": false,
+                      "expanded": true,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 15,
@@ -1653,7 +1660,7 @@
                       "baseline_provisional": false
                     }
                   ],
-                  "expanded": false,
+                  "expanded": true,
                   "dates_locked": false,
                   "predecessor_id": null,
                   "baseline_duration": 15,
@@ -2125,7 +2132,7 @@
                   "baseline_provisional": false
                 }
               ],
-              "expanded": false,
+              "expanded": true,
               "dates_locked": false,
               "predecessor_id": null,
               "baseline_duration": 163,
@@ -2320,7 +2327,7 @@
                   "baseline_provisional": false
                 }
               ],
-              "expanded": false,
+              "expanded": true,
               "dates_locked": false,
               "predecessor_id": null,
               "baseline_duration": 141,
@@ -3896,12 +3903,57 @@
         {
           "ts": "2026-07-14 10:16",
           "text": "'Trial 2': end 2026-07-02 \u2192 2026-07-17"
+        },
+        {
+          "ts": "2026-07-21 13:19",
+          "text": "Delay logged \u2014 '2.5.1 assembly' +4d: Took a little bit more time in the model shop to get all the parts together. Sample got the gasket and clamping mechanism figured out today. its all done now"
+        },
+        {
+          "ts": "2026-07-21 13:19",
+          "text": "'2.5.1 assembly': end 2026-07-15 \u2192 2026-07-21"
+        },
+        {
+          "ts": "2026-07-28 13:19",
+          "text": "Renamed '3D model - MTY release' \u2192 'Cassette 2.5 - MTY release'"
+        },
+        {
+          "ts": "2026-07-28 13:19",
+          "text": "'Cassette 2.5 - MTY release': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-28 13:20",
+          "text": "'2D Drawings': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-28 13:20",
+          "text": "'TC Release': status \u2192 In Progress"
+        },
+        {
+          "ts": "2026-07-28 13:20",
+          "text": "'2.5.1 assembly': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-28 14:00",
+          "text": "'3Dr + 4Dr': status \u2192 Completed"
         }
       ],
       "notes": [
-        "Check valve removal testing - LT or both? Does it need MS request?"
+        "Check valve removal testing - LT or both? Does it need MS request?",
+        "New controller will not have variable speed controller. VAVE controller should be able to do that. ",
+        "\tHarness will need to change. ",
+        "\tControllers with no connector at the back if harness is finalized. ",
+        "\tNo testing needed.",
+        "\tNo cost yest. ",
+        "Drop in logic controller - Figuired out.",
+        "For variable speed VCC. Controlling ",
+        "Harness",
+        "- Put part numbers on the drawing. ",
+        "- Pressure switch , solenoid valve, or other labels on the wires so they know what to plug into what. ",
+        "- Part number for the sensors. ?",
+        "- Rating for the wires. 70C",
+        "- Press switch and other valves with connectors on them. "
       ],
-      "notepad_html": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Segoe UI'; font-size:10.8pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Check valve removal testing - LT or both? Does it need MS request?</p></body></html>",
+      "notepad_html": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Segoe UI'; font-size:9.9pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Check valve removal testing - LT or both? Does it need MS request?</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">New controller will not have variable speed controller. VAVE controller should be able to do that. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\tHarness will need to change. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\tControllers with no connector at the back if harness is finalized. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\tNo testing needed.</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\tNo cost yest. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Drop in logic controller - Figuired out.</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">For variable speed VCC. Controlling </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Harness</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Put part numbers on the drawing. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Pressure switch , solenoid valve, or other labels on the wires so they know what to plug into what. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Part number for the sensors. ?</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Rating for the wires. 70C</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Press switch and other valves with connectors on them. </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
       "is_vave": false
     },
     {
@@ -3919,7 +3971,7 @@
           "id": "d83a34b2-2ca1-4c51-940f-279c18272119",
           "name": "DG- VAVE short term",
           "start_date": "2026-06-05",
-          "end_date": "2027-02-01",
+          "end_date": "2027-02-12",
           "status": "In Progress",
           "status_manual": false,
           "owner": "",
@@ -4080,7 +4132,7 @@
               "id": "0a90e840-d138-4d4c-9040-76ca450d5cf0",
               "name": "VAVE activities",
               "start_date": "2026-06-05",
-              "end_date": "2027-02-01",
+              "end_date": "2027-02-12",
               "status": "In Progress",
               "status_manual": false,
               "owner": "",
@@ -4095,7 +4147,7 @@
                   "id": "cbb1ac9a-ea33-47ce-880b-2db673c90ff7",
                   "name": "Cassette VAVE activities",
                   "start_date": "2026-06-05",
-                  "end_date": "2027-02-01",
+                  "end_date": "2027-02-12",
                   "status": "In Progress",
                   "status_manual": false,
                   "owner": "",
@@ -4110,7 +4162,7 @@
                       "id": "5949924d-b968-4ed3-b0c4-f3ead2566455",
                       "name": "CAP Tube testing - MT",
                       "start_date": "2026-06-05",
-                      "end_date": "2026-09-04",
+                      "end_date": "2026-09-11",
                       "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
@@ -4125,8 +4177,8 @@
                           "id": "2ecd4789-2916-47a2-bb2e-97b8b70e4a23",
                           "name": "Hot box  Validation - MT",
                           "start_date": "2026-06-05",
-                          "end_date": "2026-07-17",
-                          "status": "In Progress",
+                          "end_date": "2026-07-24",
+                          "status": "Completed",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -4146,7 +4198,7 @@
                               "owner": "",
                               "waiting_on": "",
                               "waiting_since": null,
-                              "notes": "",
+                              "notes": "[2026-07-21]: testing 32in now ",
                               "is_parallel": false,
                               "vave_potential": null,
                               "vave_realized": null,
@@ -4204,13 +4256,13 @@
                               "id": "b25537d4-1ac6-461c-b63d-e09990a3f45b",
                               "name": "Captube trial 2",
                               "start_date": "2026-06-25",
-                              "end_date": "2026-07-17",
-                              "status": "In Progress",
-                              "status_manual": false,
+                              "end_date": "2026-07-24",
+                              "status": "Completed",
+                              "status_manual": true,
                               "owner": "",
                               "waiting_on": "",
                               "waiting_since": null,
-                              "notes": "[2026-07-09]: Delayed +13d, end -> 2026-07-17. Nothing seems to be changing on cassette. already cut 18in off. Initial analysis might have been done with wrong inputs. Chris doing the analysis again and we will probably use 0.049\" captube",
+                              "notes": "[2026-07-21]: Delayed +5d, end -> 2026-07-24. Need to do more trials. Latest updates look promising on hot box\n[2026-07-09]: Delayed +13d, end -> 2026-07-17. Nothing seems to be changing on cassette. already cut 18in off. Initial analysis might have been done with wrong inputs. Chris doing the analysis again and we will probably use 0.049\" captube",
                               "is_parallel": false,
                               "vave_potential": null,
                               "vave_realized": null,
@@ -4235,12 +4287,19 @@
                                   "end": "2026-07-17",
                                   "slip": 13,
                                   "reason": "Nothing seems to be changing on cassette. already cut 18in off. Initial analysis might have been done with wrong inputs. Chris doing the analysis again and we will probably use 0.049\" captube"
+                                },
+                                {
+                                  "rev": "D",
+                                  "date": "2026-07-21",
+                                  "end": "2026-07-24",
+                                  "slip": 5,
+                                  "reason": "Need to do more trials. Latest updates look promising on hot box"
                                 }
                               ],
                               "baseline_provisional": false
                             }
                           ],
-                          "expanded": false,
+                          "expanded": true,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": 10,
@@ -4260,9 +4319,9 @@
                         {
                           "id": "b1944d97-a15b-4acb-8cc5-e01d4bcda54e",
                           "name": "Lab testing - 2Dr case",
-                          "start_date": "2026-07-20",
-                          "end_date": "2026-07-24",
-                          "status": "Not Started",
+                          "start_date": "2026-07-27",
+                          "end_date": "2026-07-31",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -4292,8 +4351,8 @@
                         {
                           "id": "8edc36b2-f6f5-49fb-81b9-0fd4de5586df",
                           "name": "ECO Process",
-                          "start_date": "2026-07-27",
-                          "end_date": "2026-08-07",
+                          "start_date": "2026-08-03",
+                          "end_date": "2026-08-14",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -4324,8 +4383,8 @@
                         {
                           "id": "a20c4141-82eb-484f-b533-37b8238c1eea",
                           "name": "Tecumseh sourcing (Unknown)",
-                          "start_date": "2026-08-10",
-                          "end_date": "2026-08-28",
+                          "start_date": "2026-08-17",
+                          "end_date": "2026-09-04",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -4356,8 +4415,8 @@
                         {
                           "id": "f1d714fd-3fc3-44df-84d3-055952a2d9b0",
                           "name": "Implementation",
-                          "start_date": "2026-08-31",
-                          "end_date": "2026-09-04",
+                          "start_date": "2026-09-07",
+                          "end_date": "2026-09-11",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -4386,7 +4445,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": false,
+                      "expanded": true,
                       "dates_locked": true,
                       "predecessor_id": null,
                       "baseline_duration": 20,
@@ -4398,14 +4457,14 @@
                     {
                       "id": "8144df1b-b6d7-40ea-952e-a886b457c1bc",
                       "name": "Check valve removal",
-                      "start_date": "2026-07-20",
-                      "end_date": "2026-08-28",
-                      "status": "Not Started",
+                      "start_date": "2026-07-27",
+                      "end_date": "2026-08-14",
+                      "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
                       "waiting_on": "",
                       "waiting_since": null,
-                      "notes": "",
+                      "notes": "[2026-07-28]: Testing on the 5Dr LT in room 9\n[2026-07-16]: still didnt check the inventory to give us a phase out date ",
                       "is_parallel": true,
                       "vave_potential": 5.0,
                       "vave_realized": null,
@@ -4444,10 +4503,10 @@
                         },
                         {
                           "id": "fe23d55f-ecae-4691-b6e2-29f99167e8ab",
-                          "name": "Hot box testing.",
-                          "start_date": "2026-07-20",
-                          "end_date": "2026-08-28",
-                          "status": "Not Started",
+                          "name": "Lab test - 5Dr LT room 9",
+                          "start_date": "2026-07-27",
+                          "end_date": "2026-08-14",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -4482,7 +4541,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": false,
+                      "expanded": true,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 1,
@@ -4496,7 +4555,7 @@
                       "name": "S/M - 1 (Removing parts/clamps from design)",
                       "start_date": "2026-06-08",
                       "end_date": "2026-08-03",
-                      "status": "Completed",
+                      "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
                       "waiting_on": "",
@@ -4631,7 +4690,7 @@
                           "name": "Implementation",
                           "start_date": "2026-08-03",
                           "end_date": "2026-08-03",
-                          "status": "Completed",
+                          "status": "Not Started",
                           "status_manual": true,
                           "owner": "",
                           "waiting_on": "",
@@ -4664,7 +4723,7 @@
                       "id": "5658b013-55e3-4a2e-bb4b-9d23d4b12e0b",
                       "name": "S/m - 2 (Control box redesign, evap shroud, compress base, cond. shroud)",
                       "start_date": "2026-06-05",
-                      "end_date": "2026-10-09",
+                      "end_date": "2026-10-21",
                       "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
@@ -4703,9 +4762,9 @@
                           "id": "2fd1c9b9-c159-4a8f-8102-b5fba0c6fe17",
                           "name": "MS request",
                           "start_date": "2026-06-24",
-                          "end_date": "2026-07-14",
-                          "status": "In Progress",
-                          "status_manual": false,
+                          "end_date": "2026-07-24",
+                          "status": "Completed",
+                          "status_manual": true,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
@@ -4726,10 +4785,10 @@
                         {
                           "id": "e23b2e9b-c433-4176-9a94-8af10ee0840e",
                           "name": "MS work - complete",
-                          "start_date": "2026-07-15",
-                          "end_date": "2026-07-28",
-                          "status": "Not Started",
-                          "status_manual": false,
+                          "start_date": "2026-07-27",
+                          "end_date": "2026-08-07",
+                          "status": "Completed",
+                          "status_manual": true,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
@@ -4758,10 +4817,10 @@
                         {
                           "id": "e8df47f4-206d-4371-b9b5-3309eaed00ee",
                           "name": "Ship to Tecumseh",
-                          "start_date": "2026-07-29",
-                          "end_date": "2026-08-03",
-                          "status": "Not Started",
-                          "status_manual": false,
+                          "start_date": "2026-08-10",
+                          "end_date": "2026-08-13",
+                          "status": "Completed",
+                          "status_manual": true,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
@@ -4782,8 +4841,8 @@
                         {
                           "id": "d378809f-e97d-4bc5-9336-cc82b5afdd89",
                           "name": "Cassettes build",
-                          "start_date": "2026-08-04",
-                          "end_date": "2026-08-17",
+                          "start_date": "2026-08-14",
+                          "end_date": "2026-08-27",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -4821,8 +4880,8 @@
                         {
                           "id": "07eb0b86-f713-48dd-a523-cc24f9a5248d",
                           "name": "Ship to Hussmann",
-                          "start_date": "2026-08-18",
-                          "end_date": "2026-08-24",
+                          "start_date": "2026-08-28",
+                          "end_date": "2026-09-03",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -4853,8 +4912,8 @@
                         {
                           "id": "cfd86651-d130-48e2-8b3b-aa1f1fed46e4",
                           "name": "Transit test",
-                          "start_date": "2026-08-25",
-                          "end_date": "2026-08-28",
+                          "start_date": "2026-09-04",
+                          "end_date": "2026-09-09",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -4885,8 +4944,8 @@
                         {
                           "id": "3d4bb986-2068-425d-9fea-0b56f7f73987",
                           "name": "Vibration test",
-                          "start_date": "2026-08-31",
-                          "end_date": "2026-09-04",
+                          "start_date": "2026-09-10",
+                          "end_date": "2026-09-16",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -4909,8 +4968,8 @@
                         {
                           "id": "a21fb35c-3833-44e3-ac9c-99fe70a01066",
                           "name": "ECO Process",
-                          "start_date": "2026-09-07",
-                          "end_date": "2026-09-18",
+                          "start_date": "2026-09-17",
+                          "end_date": "2026-09-30",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -4933,8 +4992,8 @@
                         {
                           "id": "32b2dafc-8102-42c3-9d99-dfc2e011e0c9",
                           "name": "Implementation timeline (Confirm inventory)",
-                          "start_date": "2026-09-21",
-                          "end_date": "2026-10-09",
+                          "start_date": "2026-10-01",
+                          "end_date": "2026-10-21",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -5039,7 +5098,7 @@
                           "id": "633b7a5b-4f61-4b07-808b-185e5d27292d",
                           "name": "Quotes",
                           "start_date": "2026-07-13",
-                          "end_date": "2026-07-24",
+                          "end_date": "2026-08-03",
                           "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
@@ -5054,13 +5113,13 @@
                               "id": "93a1c19c-85a3-4628-a5c5-6b4b43910345",
                               "name": "sheetmetal - Victor Lopez",
                               "start_date": "2026-07-13",
-                              "end_date": "2026-07-17",
+                              "end_date": "2026-07-27",
                               "status": "In Progress",
                               "status_manual": false,
                               "owner": "",
                               "waiting_on": "",
                               "waiting_since": null,
-                              "notes": "[2026-07-09]: Delayed +4d, end -> 2026-07-17.",
+                              "notes": "[2026-07-23]: Delayed +6d, end -> 2026-07-27. Victor is out of office. Sent the drawing to Tecumseh as well for their quote\n[2026-07-09]: Delayed +4d, end -> 2026-07-17.",
                               "is_parallel": false,
                               "vave_potential": null,
                               "vave_realized": null,
@@ -5078,6 +5137,13 @@
                                   "end": "2026-07-17",
                                   "slip": 4,
                                   "reason": ""
+                                },
+                                {
+                                  "rev": "C",
+                                  "date": "2026-07-23",
+                                  "end": "2026-07-27",
+                                  "slip": 6,
+                                  "reason": "Victor is out of office. Sent the drawing to Tecumseh as well for their quote"
                                 }
                               ],
                               "baseline_provisional": false
@@ -5085,9 +5151,9 @@
                             {
                               "id": "1927e61b-2df6-4688-b997-57417e52ad88",
                               "name": "Molded foam Quotes - MTY/ATI",
-                              "start_date": "2026-07-20",
-                              "end_date": "2026-07-24",
-                              "status": "Not Started",
+                              "start_date": "2026-07-28",
+                              "end_date": "2026-08-03",
+                              "status": "In Progress",
                               "status_manual": false,
                               "owner": "",
                               "waiting_on": "",
@@ -5144,8 +5210,8 @@
                               "name": "3D printed foam",
                               "start_date": "2026-07-13",
                               "end_date": "2026-07-24",
-                              "status": "In Progress",
-                              "status_manual": false,
+                              "status": "Completed",
+                              "status_manual": true,
                               "owner": "",
                               "waiting_on": "",
                               "waiting_since": null,
@@ -5176,8 +5242,8 @@
                               "name": "S/m part",
                               "start_date": "2026-07-13",
                               "end_date": "2026-07-17",
-                              "status": "In Progress",
-                              "status_manual": false,
+                              "status": "Completed",
+                              "status_manual": true,
                               "owner": "",
                               "waiting_on": "",
                               "waiting_since": null,
@@ -5250,7 +5316,7 @@
                           "name": "Initial Validation Test - on 2Dr case",
                           "start_date": "2026-07-27",
                           "end_date": "2026-08-07",
-                          "status": "Not Started",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -5500,7 +5566,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": false,
+                      "expanded": true,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 31,
@@ -5513,7 +5579,7 @@
                       "id": "1dbd22fd-e92f-4060-8ab5-5c5efb445f7f",
                       "name": "Aluminum coil",
                       "start_date": "2026-06-05",
-                      "end_date": "2027-02-01",
+                      "end_date": "2027-02-12",
                       "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
@@ -5528,7 +5594,7 @@
                           "id": "d0c2320b-8357-4efb-ab7b-2e68a2f672f8",
                           "name": "MT Aluminum coil",
                           "start_date": "2026-06-05",
-                          "end_date": "2027-02-01",
+                          "end_date": "2027-02-12",
                           "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
@@ -5599,7 +5665,7 @@
                               "id": "577cd9a4-39cf-4765-8ce3-77f03cbfd795",
                               "name": "Get quotes/Timelines from supplier",
                               "start_date": "2026-06-24",
-                              "end_date": "2026-07-17",
+                              "end_date": "2026-07-30",
                               "status": "In Progress",
                               "status_manual": false,
                               "owner": "",
@@ -5622,10 +5688,10 @@
                             {
                               "id": "3b1eee8d-41d4-478d-b7a3-b793b3f31db1",
                               "name": "Request samples- Send PO",
-                              "start_date": "2026-07-20",
-                              "end_date": "2026-07-24",
-                              "status": "Not Started",
-                              "status_manual": false,
+                              "start_date": "2026-07-31",
+                              "end_date": "2026-08-06",
+                              "status": "Completed",
+                              "status_manual": true,
                               "owner": "",
                               "waiting_on": "",
                               "waiting_since": null,
@@ -5646,8 +5712,8 @@
                             {
                               "id": "58a2991a-d4f0-4337-ac0b-d17bf389c227",
                               "name": "Receive samples",
-                              "start_date": "2026-07-27",
-                              "end_date": "2026-10-12",
+                              "start_date": "2026-08-07",
+                              "end_date": "2026-10-23",
                               "status": "Not Started",
                               "status_manual": false,
                               "owner": "",
@@ -5670,8 +5736,8 @@
                             {
                               "id": "76a3c1da-3cf2-43d7-8dc5-c718c92258d0",
                               "name": "Lab testing",
-                              "start_date": "2026-10-13",
-                              "end_date": "2026-10-26",
+                              "start_date": "2026-10-26",
+                              "end_date": "2026-11-06",
                               "status": "Not Started",
                               "status_manual": false,
                               "owner": "",
@@ -5685,8 +5751,8 @@
                                 {
                                   "id": "2abc6ad4-9ef3-40d0-ac86-06ace6f1774d",
                                   "name": "NSF",
-                                  "start_date": "2026-10-13",
-                                  "end_date": "2026-10-19",
+                                  "start_date": "2026-10-26",
+                                  "end_date": "2026-10-30",
                                   "status": "Not Started",
                                   "status_manual": false,
                                   "owner": "",
@@ -5709,8 +5775,8 @@
                                 {
                                   "id": "f27ef3f5-8c05-46e9-ae57-128d2448bdbc",
                                   "name": "DOE",
-                                  "start_date": "2026-10-20",
-                                  "end_date": "2026-10-26",
+                                  "start_date": "2026-11-02",
+                                  "end_date": "2026-11-06",
                                   "status": "Not Started",
                                   "status_manual": false,
                                   "owner": "",
@@ -5743,8 +5809,8 @@
                             {
                               "id": "3c3c49c4-de86-4251-b56a-c9a847471de3",
                               "name": "ECO process",
-                              "start_date": "2026-10-20",
-                              "end_date": "2026-11-02",
+                              "start_date": "2026-11-02",
+                              "end_date": "2026-11-13",
                               "status": "Not Started",
                               "status_manual": false,
                               "owner": "",
@@ -5775,8 +5841,8 @@
                             {
                               "id": "b27c460f-2147-40b3-8735-f7f8663452f8",
                               "name": "Order parts",
-                              "start_date": "2026-11-03",
-                              "end_date": "2027-01-11",
+                              "start_date": "2026-11-16",
+                              "end_date": "2027-01-22",
                               "status": "Not Started",
                               "status_manual": false,
                               "owner": "",
@@ -5807,8 +5873,8 @@
                             {
                               "id": "350db5d3-0ba8-4e32-a092-cdd673caf4ac",
                               "name": "Implementation date",
-                              "start_date": "2027-01-12",
-                              "end_date": "2027-02-01",
+                              "start_date": "2027-01-25",
+                              "end_date": "2027-02-12",
                               "status": "Not Started",
                               "status_manual": false,
                               "owner": "",
@@ -5850,7 +5916,7 @@
                           "id": "226fa85b-44d8-4720-aa91-ec46db581f3c",
                           "name": "LT Aluminum coil",
                           "start_date": "2026-06-05",
-                          "end_date": "2027-02-01",
+                          "end_date": "2027-02-12",
                           "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
@@ -5921,7 +5987,7 @@
                               "id": "f2bc0e90-780a-45ce-a0c5-a36f042e55de",
                               "name": "Get quotes/Timelines from supplier",
                               "start_date": "2026-06-24",
-                              "end_date": "2026-07-17",
+                              "end_date": "2026-07-30",
                               "status": "In Progress",
                               "status_manual": false,
                               "owner": "",
@@ -5944,10 +6010,10 @@
                             {
                               "id": "c61e94d4-13c2-4114-9bbc-675fdb0a4921",
                               "name": "Request samples- Send PO",
-                              "start_date": "2026-07-20",
-                              "end_date": "2026-07-24",
-                              "status": "Not Started",
-                              "status_manual": false,
+                              "start_date": "2026-07-31",
+                              "end_date": "2026-08-06",
+                              "status": "Completed",
+                              "status_manual": true,
                               "owner": "",
                               "waiting_on": "",
                               "waiting_since": null,
@@ -5968,8 +6034,8 @@
                             {
                               "id": "639f17f6-e319-4738-b665-4ec673ed50db",
                               "name": "Receive samples",
-                              "start_date": "2026-07-27",
-                              "end_date": "2026-10-12",
+                              "start_date": "2026-08-07",
+                              "end_date": "2026-10-23",
                               "status": "Not Started",
                               "status_manual": false,
                               "owner": "",
@@ -5992,8 +6058,8 @@
                             {
                               "id": "fbb3aa18-df13-490a-b424-54293fc31ebb",
                               "name": "Lab testing",
-                              "start_date": "2026-10-13",
-                              "end_date": "2026-10-26",
+                              "start_date": "2026-10-26",
+                              "end_date": "2026-11-06",
                               "status": "Not Started",
                               "status_manual": false,
                               "owner": "",
@@ -6007,8 +6073,8 @@
                                 {
                                   "id": "1dd82726-f381-4134-a291-4e15ce13f775",
                                   "name": "NSF",
-                                  "start_date": "2026-10-13",
-                                  "end_date": "2026-10-19",
+                                  "start_date": "2026-10-26",
+                                  "end_date": "2026-10-30",
                                   "status": "Not Started",
                                   "status_manual": false,
                                   "owner": "",
@@ -6031,8 +6097,8 @@
                                 {
                                   "id": "c3ba391e-bd44-4d03-87cb-d9b3a7cff93c",
                                   "name": "DOE",
-                                  "start_date": "2026-10-20",
-                                  "end_date": "2026-10-26",
+                                  "start_date": "2026-11-02",
+                                  "end_date": "2026-11-06",
                                   "status": "Not Started",
                                   "status_manual": false,
                                   "owner": "",
@@ -6065,8 +6131,8 @@
                             {
                               "id": "cb68a4fa-8046-4ebd-9f76-de94f99794c7",
                               "name": "ECO process",
-                              "start_date": "2026-10-20",
-                              "end_date": "2026-11-02",
+                              "start_date": "2026-11-02",
+                              "end_date": "2026-11-13",
                               "status": "Not Started",
                               "status_manual": false,
                               "owner": "",
@@ -6097,8 +6163,8 @@
                             {
                               "id": "49f8c78c-301f-4e0e-97b1-031513d31b8e",
                               "name": "Order parts",
-                              "start_date": "2026-11-03",
-                              "end_date": "2027-01-11",
+                              "start_date": "2026-11-16",
+                              "end_date": "2027-01-22",
                               "status": "Not Started",
                               "status_manual": false,
                               "owner": "",
@@ -6129,8 +6195,8 @@
                             {
                               "id": "b6cc9032-37c8-4ca4-ac5e-1b8fc980ebc4",
                               "name": "Implementation date",
-                              "start_date": "2027-01-12",
-                              "end_date": "2027-02-01",
+                              "start_date": "2027-01-25",
+                              "end_date": "2027-02-12",
                               "status": "Not Started",
                               "status_manual": false,
                               "owner": "",
@@ -6182,7 +6248,7 @@
                       "id": "ba7b470f-08de-43b2-afe3-1684401a7fe8",
                       "name": "Cheaper Carel controller",
                       "start_date": "2026-06-05",
-                      "end_date": "2026-09-17",
+                      "end_date": "2026-09-07",
                       "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
@@ -6237,12 +6303,12 @@
                           "name": "New wiring diagrams",
                           "start_date": "2026-06-23",
                           "end_date": "2026-07-14",
-                          "status": "In Progress",
-                          "status_manual": false,
+                          "status": "Completed",
+                          "status_manual": true,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
-                          "notes": "[2026-07-14]: Delayed +1d, end -> 2026-07-14.\n[2026-07-09]: Delayed +5d, end -> 2026-07-13.",
+                          "notes": "[2026-07-21]: not needed \n[2026-07-14]: Delayed +1d, end -> 2026-07-14.\n[2026-07-09]: Delayed +5d, end -> 2026-07-13.",
                           "is_parallel": false,
                           "vave_potential": null,
                           "vave_realized": null,
@@ -6280,15 +6346,15 @@
                         },
                         {
                           "id": "ca55feb2-7373-413f-8417-35f5fbc0a7c3",
-                          "name": "Quote",
+                          "name": "Quote+ part number",
                           "start_date": "2026-07-15",
-                          "end_date": "2026-07-21",
-                          "status": "Not Started",
+                          "end_date": "2026-07-31",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
-                          "notes": "",
+                          "notes": "[2026-07-23]: Delayed +8d, end -> 2026-07-31. no other testing is needed once the part number is created. following up with Schnur",
                           "is_parallel": false,
                           "vave_potential": null,
                           "vave_realized": null,
@@ -6306,21 +6372,28 @@
                               "end": "2026-07-13",
                               "slip": 4,
                               "reason": ""
+                            },
+                            {
+                              "rev": "C",
+                              "date": "2026-07-23",
+                              "end": "2026-07-31",
+                              "slip": 8,
+                              "reason": "no other testing is needed once the part number is created. following up with Schnur"
                             }
                           ],
                           "baseline_provisional": false
                         },
                         {
                           "id": "5020b99b-4e2f-453d-bd3d-90f28c2dfd48",
-                          "name": "Initiate Sample PO",
-                          "start_date": "2026-07-22",
-                          "end_date": "2026-07-28",
+                          "name": "Initiate ECO process",
+                          "start_date": "2026-08-03",
+                          "end_date": "2026-08-21",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
-                          "notes": "",
+                          "notes": "[2026-07-23]: Delayed +10d, end -> 2026-08-21. ECO process is needed for this task as well. Just learned that today in the meeting with Tecumseh",
                           "is_parallel": false,
                           "vave_potential": null,
                           "vave_realized": null,
@@ -6338,70 +6411,13 @@
                               "end": "2026-07-20",
                               "slip": 4,
                               "reason": ""
-                            }
-                          ],
-                          "baseline_provisional": false
-                        },
-                        {
-                          "id": "7036997b-6326-4821-88d8-2e60b121c2d5",
-                          "name": "Samples",
-                          "start_date": "2026-07-29",
-                          "end_date": "2026-08-11",
-                          "status": "Not Started",
-                          "status_manual": false,
-                          "owner": "",
-                          "waiting_on": "",
-                          "waiting_since": null,
-                          "notes": "",
-                          "is_parallel": false,
-                          "vave_potential": null,
-                          "vave_realized": null,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": 1,
-                          "baseline_end": "2026-07-14",
-                          "delay_notes": "",
-                          "revisions": [
+                            },
                             {
-                              "rev": "B",
-                              "date": "2026-06-25",
-                              "end": "2026-07-27",
-                              "slip": 9,
-                              "reason": ""
-                            }
-                          ],
-                          "baseline_provisional": false
-                        },
-                        {
-                          "id": "fb4fe944-cc3c-4ffc-823b-36921bcd9ce1",
-                          "name": "Bench testing",
-                          "start_date": "2026-08-12",
-                          "end_date": "2026-08-18",
-                          "status": "Not Started",
-                          "status_manual": false,
-                          "owner": "",
-                          "waiting_on": "",
-                          "waiting_since": null,
-                          "notes": "",
-                          "is_parallel": false,
-                          "vave_potential": null,
-                          "vave_realized": null,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": 1,
-                          "baseline_end": "2026-07-28",
-                          "delay_notes": "",
-                          "revisions": [
-                            {
-                              "rev": "B",
-                              "date": "2026-06-25",
-                              "end": "2026-08-03",
-                              "slip": 4,
-                              "reason": ""
+                              "rev": "C",
+                              "date": "2026-07-23",
+                              "end": "2026-08-21",
+                              "slip": 10,
+                              "reason": "ECO process is needed for this task as well. Just learned that today in the meeting with Tecumseh"
                             }
                           ],
                           "baseline_provisional": false
@@ -6409,32 +6425,40 @@
                         {
                           "id": "5f752d1f-b902-4e2f-9b81-b3edf9f64f60",
                           "name": "Initiate production PO",
-                          "start_date": "2026-08-19",
-                          "end_date": "2026-08-19",
+                          "start_date": "2026-08-03",
+                          "end_date": "2026-08-07",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
-                          "notes": "",
+                          "notes": "[2026-07-23]: Delayed +4d, end -> 2026-08-07.",
                           "is_parallel": false,
                           "vave_potential": null,
                           "vave_realized": null,
                           "children": [],
                           "expanded": false,
                           "dates_locked": false,
-                          "predecessor_id": null,
+                          "predecessor_id": "ca55feb2-7373-413f-8417-35f5fbc0a7c3",
                           "baseline_duration": 1,
                           "baseline_end": "2026-08-11",
                           "delay_notes": "",
-                          "revisions": [],
+                          "revisions": [
+                            {
+                              "rev": "B",
+                              "date": "2026-07-23",
+                              "end": "2026-08-07",
+                              "slip": 4,
+                              "reason": ""
+                            }
+                          ],
                           "baseline_provisional": false
                         },
                         {
                           "id": "a874a34d-1b6b-4fa8-b1e2-63f8154cd647",
                           "name": "ECO process",
-                          "start_date": "2026-08-20",
-                          "end_date": "2026-09-02",
+                          "start_date": "2026-08-10",
+                          "end_date": "2026-08-21",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -6465,8 +6489,8 @@
                         {
                           "id": "6ba6f6fc-fbab-4afd-9c81-b217c52da8af",
                           "name": "Procure parts for production",
-                          "start_date": "2026-08-20",
-                          "end_date": "2026-09-16",
+                          "start_date": "2026-08-10",
+                          "end_date": "2026-09-04",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -6497,8 +6521,8 @@
                         {
                           "id": "ebb905fd-d488-4b10-a42b-9c0066267a40",
                           "name": "Implementation date",
-                          "start_date": "2026-09-17",
-                          "end_date": "2026-09-17",
+                          "start_date": "2026-09-07",
+                          "end_date": "2026-09-07",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -6553,7 +6577,7 @@
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
-                          "notes": "[2026-07-14]: Delayed +4d, end -> 2026-07-15.\n[2026-07-09]: Delayed +1d, end -> 2026-07-10.",
+                          "notes": "[2026-07-28]: installed on the 4Dr case in room 1.  \n[2026-07-14]: Delayed +4d, end -> 2026-07-15.\n[2026-07-09]: Delayed +1d, end -> 2026-07-10.",
                           "is_parallel": false,
                           "vave_potential": null,
                           "vave_realized": null,
@@ -6587,7 +6611,7 @@
                           "name": "ECO process",
                           "start_date": "2026-07-16",
                           "end_date": "2026-07-29",
-                          "status": "Not Started",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -6619,7 +6643,7 @@
                           "name": "Procure parts",
                           "start_date": "2026-07-16",
                           "end_date": "2026-07-29",
-                          "status": "Not Started",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -6684,7 +6708,7 @@
                       "id": "c6182a40-5c31-4b38-87b0-3e81c696f312",
                       "name": "Harness design",
                       "start_date": "2026-06-05",
-                      "end_date": "2026-09-17",
+                      "end_date": "2026-10-05",
                       "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
@@ -6729,15 +6753,15 @@
                         },
                         {
                           "id": "a7986d34-a2bb-4011-8b17-1eecdd333a68",
-                          "name": "Quote",
+                          "name": "Quote from EMF",
                           "start_date": "2026-06-29",
-                          "end_date": "2026-07-15",
+                          "end_date": "2026-07-31",
                           "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
-                          "notes": "[2026-07-09]: Delayed +12d, end -> 2026-07-15.",
+                          "notes": "[2026-07-23]: Delayed +12d, end -> 2026-07-31. Taking more time with supplier than initially anticipated. This is because of weipu connector. Supplier has all info he needs for quoting\n[2026-07-09]: Delayed +12d, end -> 2026-07-15.",
                           "is_parallel": false,
                           "vave_potential": null,
                           "vave_realized": null,
@@ -6755,6 +6779,13 @@
                               "end": "2026-07-15",
                               "slip": 12,
                               "reason": ""
+                            },
+                            {
+                              "rev": "C",
+                              "date": "2026-07-23",
+                              "end": "2026-07-31",
+                              "slip": 12,
+                              "reason": "Taking more time with supplier than initially anticipated. This is because of weipu connector. Supplier has all info he needs for quoting"
                             }
                           ],
                           "baseline_provisional": false
@@ -6762,8 +6793,8 @@
                         {
                           "id": "8d8eb1b8-1073-42dc-888e-44b70e4871ae",
                           "name": "PO for samples",
-                          "start_date": "2026-07-16",
-                          "end_date": "2026-07-16",
+                          "start_date": "2026-08-03",
+                          "end_date": "2026-08-03",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -6786,8 +6817,8 @@
                         {
                           "id": "bb961cc0-a4ce-4c0c-b07c-c2504292fd51",
                           "name": "Samples",
-                          "start_date": "2026-07-17",
-                          "end_date": "2026-08-20",
+                          "start_date": "2026-08-04",
+                          "end_date": "2026-09-07",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -6825,8 +6856,8 @@
                         {
                           "id": "938d7184-2dc9-4ad5-b982-47703e0b578b",
                           "name": "Validation",
-                          "start_date": "2026-08-21",
-                          "end_date": "2026-08-27",
+                          "start_date": "2026-09-08",
+                          "end_date": "2026-09-14",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -6857,8 +6888,8 @@
                         {
                           "id": "84da62f7-4785-4adb-8a6f-4a9428956544",
                           "name": "Eco Process",
-                          "start_date": "2026-08-28",
-                          "end_date": "2026-09-10",
+                          "start_date": "2026-09-15",
+                          "end_date": "2026-09-28",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -6889,8 +6920,8 @@
                         {
                           "id": "fcea3c9f-8918-4a7d-9633-378d80daf8f1",
                           "name": "Implementation date",
-                          "start_date": "2026-09-11",
-                          "end_date": "2026-09-17",
+                          "start_date": "2026-09-29",
+                          "end_date": "2026-10-05",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -7012,7 +7043,7 @@
                           "name": "Wind tunnel testing",
                           "start_date": "2026-07-24",
                           "end_date": "2026-07-30",
-                          "status": "Not Started",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -7173,7 +7204,7 @@
                       "id": "13f159e2-426e-4fc7-b2ea-e603c4e5eca6",
                       "name": "Pallet - CArdboard design",
                       "start_date": "2026-06-05",
-                      "end_date": "2026-09-28",
+                      "end_date": "2026-10-12",
                       "status": "In Progress",
                       "status_manual": false,
                       "owner": "",
@@ -7220,13 +7251,13 @@
                           "id": "c5b9a9d0-68ca-4550-91df-0758bd87dd9d",
                           "name": "Quote",
                           "start_date": "2026-06-15",
-                          "end_date": "2026-07-17",
+                          "end_date": "2026-07-31",
                           "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
-                          "notes": "[2026-07-09]: Delayed +24d, end -> 2026-07-17.",
+                          "notes": "[2026-07-23]: Delayed +10d, end -> 2026-07-31. Tecumseh not getting enough feedback from initial supplier. Trying to get quotse from second supplier\n[2026-07-23]: Tecumseh said they will follow up with second supplier. First supplier not giving good feedback \n[2026-07-09]: Delayed +24d, end -> 2026-07-17.",
                           "is_parallel": false,
                           "vave_potential": null,
                           "vave_realized": null,
@@ -7244,6 +7275,13 @@
                               "end": "2026-07-17",
                               "slip": 24,
                               "reason": ""
+                            },
+                            {
+                              "rev": "C",
+                              "date": "2026-07-23",
+                              "end": "2026-07-31",
+                              "slip": 10,
+                              "reason": "Tecumseh not getting enough feedback from initial supplier. Trying to get quotse from second supplier"
                             }
                           ],
                           "baseline_provisional": false
@@ -7251,8 +7289,8 @@
                         {
                           "id": "b0012794-685a-44eb-9ce4-26230f505c8a",
                           "name": "Samples to Tecum",
-                          "start_date": "2026-07-20",
-                          "end_date": "2026-08-07",
+                          "start_date": "2026-08-03",
+                          "end_date": "2026-08-21",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -7283,8 +7321,8 @@
                         {
                           "id": "f5dd1871-6abb-4645-a987-454576388938",
                           "name": "Ship 3 samples to BGN ",
-                          "start_date": "2026-08-10",
-                          "end_date": "2026-08-21",
+                          "start_date": "2026-08-24",
+                          "end_date": "2026-09-04",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -7315,8 +7353,8 @@
                         {
                           "id": "f20974f4-cf58-4115-b91a-80df7a975ff4",
                           "name": "Transit test - triple stack",
-                          "start_date": "2026-08-24",
-                          "end_date": "2026-09-04",
+                          "start_date": "2026-09-07",
+                          "end_date": "2026-09-18",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -7347,8 +7385,8 @@
                         {
                           "id": "fab15218-1968-4b43-96a2-4febaf762240",
                           "name": "Pressure test",
-                          "start_date": "2026-09-07",
-                          "end_date": "2026-09-11",
+                          "start_date": "2026-09-21",
+                          "end_date": "2026-09-25",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -7379,8 +7417,8 @@
                         {
                           "id": "859ea5ff-dea0-4a73-9f2a-c2a00e410793",
                           "name": "ECO Process",
-                          "start_date": "2026-09-14",
-                          "end_date": "2026-09-25",
+                          "start_date": "2026-09-28",
+                          "end_date": "2026-10-09",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -7411,8 +7449,8 @@
                         {
                           "id": "fa78fcf6-c608-4265-a311-f808bb221c93",
                           "name": "Implementation date",
-                          "start_date": "2026-09-28",
-                          "end_date": "2026-09-28",
+                          "start_date": "2026-10-12",
+                          "end_date": "2026-10-12",
                           "status": "Not Started",
                           "status_manual": false,
                           "owner": "",
@@ -7433,7 +7471,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": false,
+                      "expanded": true,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 1,
@@ -7441,6 +7479,55 @@
                       "delay_notes": "",
                       "revisions": [],
                       "baseline_provisional": false
+                    },
+                    {
+                      "id": "f5812395-0ea5-4b0e-b6f2-acab96e589e3",
+                      "name": "Remove distributor from LT cassette",
+                      "start_date": "2026-10-13",
+                      "end_date": "2026-10-13",
+                      "status": "Not Started",
+                      "status_manual": false,
+                      "owner": "",
+                      "waiting_on": "",
+                      "waiting_since": null,
+                      "notes": "",
+                      "is_parallel": false,
+                      "vave_potential": null,
+                      "vave_realized": null,
+                      "children": [
+                        {
+                          "id": "9a460fba-0d5e-450f-8cb4-fb36ee36d579",
+                          "name": "Use distributor tester",
+                          "start_date": "2026-10-13",
+                          "end_date": "2026-10-13",
+                          "status": "Not Started",
+                          "status_manual": false,
+                          "owner": "",
+                          "waiting_on": "",
+                          "waiting_since": null,
+                          "notes": "",
+                          "is_parallel": false,
+                          "vave_potential": null,
+                          "vave_realized": null,
+                          "children": [],
+                          "expanded": false,
+                          "dates_locked": false,
+                          "predecessor_id": null,
+                          "baseline_duration": 1,
+                          "baseline_end": "2026-10-14",
+                          "delay_notes": "",
+                          "revisions": [],
+                          "baseline_provisional": true
+                        }
+                      ],
+                      "expanded": false,
+                      "dates_locked": false,
+                      "predecessor_id": null,
+                      "baseline_duration": 1,
+                      "baseline_end": "2026-10-13",
+                      "delay_notes": "",
+                      "revisions": [],
+                      "baseline_provisional": true
                     },
                     {
                       "id": "5e7905c0-cd11-496d-b167-aee30805c055",
@@ -7601,8 +7688,8 @@
                           "name": "LAb request",
                           "start_date": "2026-06-26",
                           "end_date": "2026-07-15",
-                          "status": "In Progress",
-                          "status_manual": false,
+                          "status": "Completed",
+                          "status_manual": true,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
@@ -7633,7 +7720,7 @@
                           "name": "Lab test base line",
                           "start_date": "2026-07-16",
                           "end_date": "2026-07-29",
-                          "status": "Not Started",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -7786,8 +7873,8 @@
                           "name": "Design changes",
                           "start_date": "2026-06-26",
                           "end_date": "2026-07-14",
-                          "status": "In Progress",
-                          "status_manual": false,
+                          "status": "Completed",
+                          "status_manual": true,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
@@ -7825,7 +7912,7 @@
                           "name": "ECN Release",
                           "start_date": "2026-07-15",
                           "end_date": "2026-08-07",
-                          "status": "Not Started",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -7882,8 +7969,8 @@
                           "name": "Design changes",
                           "start_date": "2026-06-26",
                           "end_date": "2026-07-14",
-                          "status": "In Progress",
-                          "status_manual": false,
+                          "status": "Completed",
+                          "status_manual": true,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
@@ -7921,7 +8008,7 @@
                           "name": "Seperate ECN ( sourcing task)",
                           "start_date": "2026-07-15",
                           "end_date": "2026-09-01",
-                          "status": "Not Started",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -7978,8 +8065,8 @@
                           "name": "Design changes",
                           "start_date": "2026-06-26",
                           "end_date": "2026-07-14",
-                          "status": "In Progress",
-                          "status_manual": false,
+                          "status": "Completed",
+                          "status_manual": true,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
@@ -8017,7 +8104,7 @@
                           "name": "ECN Release",
                           "start_date": "2026-07-15",
                           "end_date": "2026-08-11",
-                          "status": "Not Started",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -8074,8 +8161,8 @@
                           "name": "Design changes",
                           "start_date": "2026-06-26",
                           "end_date": "2026-07-14",
-                          "status": "In Progress",
-                          "status_manual": false,
+                          "status": "Completed",
+                          "status_manual": true,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
@@ -8113,7 +8200,7 @@
                           "name": "ECN Release",
                           "start_date": "2026-07-15",
                           "end_date": "2026-08-07",
-                          "status": "Not Started",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -8170,8 +8257,8 @@
                           "name": "Design changes",
                           "start_date": "2026-06-26",
                           "end_date": "2026-07-14",
-                          "status": "In Progress",
-                          "status_manual": false,
+                          "status": "Completed",
+                          "status_manual": true,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
@@ -8209,7 +8296,7 @@
                           "name": "ECN Release",
                           "start_date": "2026-07-15",
                           "end_date": "2026-08-07",
-                          "status": "Not Started",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -8266,8 +8353,8 @@
                           "name": "Design changes",
                           "start_date": "2026-06-26",
                           "end_date": "2026-07-15",
-                          "status": "In Progress",
-                          "status_manual": false,
+                          "status": "Completed",
+                          "status_manual": true,
                           "owner": "",
                           "waiting_on": "",
                           "waiting_since": null,
@@ -8298,7 +8385,7 @@
                           "name": "ECN Release",
                           "start_date": "2026-07-16",
                           "end_date": "2026-08-12",
-                          "status": "Not Started",
+                          "status": "In Progress",
                           "status_manual": false,
                           "owner": "",
                           "waiting_on": "",
@@ -8336,7 +8423,7 @@
                       "baseline_provisional": false
                     }
                   ],
-                  "expanded": true,
+                  "expanded": false,
                   "dates_locked": true,
                   "predecessor_id": null,
                   "baseline_duration": null,
@@ -10858,6 +10945,202 @@
         {
           "ts": "2026-07-14 10:47",
           "text": "'Hot box testing.': end 2026-07-24 \u2192 2026-08-28"
+        },
+        {
+          "ts": "2026-07-21 11:27",
+          "text": "'New wiring diagrams': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-21 11:28",
+          "text": "Delay logged \u2014 'Captube trial 2' +5d: Need to do more trials. Latest updates look promising on hot box"
+        },
+        {
+          "ts": "2026-07-21 11:28",
+          "text": "'Captube trial 2': end 2026-07-17 \u2192 2026-07-24"
+        },
+        {
+          "ts": "2026-07-21 11:28",
+          "text": "'MS request': end 2026-07-14 \u2192 2026-07-24"
+        },
+        {
+          "ts": "2026-07-21 11:29",
+          "text": "'LAb request': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-21 11:29",
+          "text": "'Design changes': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-21 11:29",
+          "text": "'Design changes': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-21 11:29",
+          "text": "'Design changes': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-21 11:30",
+          "text": "'Design changes': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-21 11:30",
+          "text": "'Design changes': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-21 11:30",
+          "text": "'Design changes': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-23 21:24",
+          "text": "Delay logged \u2014 'sheetmetal - Victor Lopez' +6d: Victor is out of office. Sent the drawing to Tecumseh as well for their quote"
+        },
+        {
+          "ts": "2026-07-23 21:24",
+          "text": "'sheetmetal - Victor Lopez': end 2026-07-17 \u2192 2026-07-27"
+        },
+        {
+          "ts": "2026-07-23 21:24",
+          "text": "'S/m part': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-23 21:29",
+          "text": "'Get quotes/Timelines from supplier': end 2026-07-17 \u2192 2026-07-30"
+        },
+        {
+          "ts": "2026-07-23 21:29",
+          "text": "'Request samples- Send PO': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-23 21:30",
+          "text": "'Get quotes/Timelines from supplier': end 2026-07-17 \u2192 2026-07-30"
+        },
+        {
+          "ts": "2026-07-23 21:30",
+          "text": "'Request samples- Send PO': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-23 21:31",
+          "text": "Deleted task 'Samples'"
+        },
+        {
+          "ts": "2026-07-23 21:31",
+          "text": "Deleted task 'Bench testing'"
+        },
+        {
+          "ts": "2026-07-23 21:31",
+          "text": "Renamed 'Quote' \u2192 'Quote+ part number'"
+        },
+        {
+          "ts": "2026-07-23 21:32",
+          "text": "Delay logged \u2014 'Quote+ part number' +8d: no other testing is needed once the part number is created. following up with Schnur"
+        },
+        {
+          "ts": "2026-07-23 21:32",
+          "text": "'Quote+ part number': end 2026-07-21 \u2192 2026-07-31"
+        },
+        {
+          "ts": "2026-07-23 21:32",
+          "text": "Renamed 'Initiate Sample PO' \u2192 'Initiate ECO process'"
+        },
+        {
+          "ts": "2026-07-23 21:33",
+          "text": "Delay logged \u2014 'Initiate ECO process' +10d: ECO process is needed for this task as well. Just learned that today in the meeting with Tecumseh"
+        },
+        {
+          "ts": "2026-07-23 21:33",
+          "text": "'Initiate ECO process': end 2026-08-07 \u2192 2026-08-21"
+        },
+        {
+          "ts": "2026-07-23 21:34",
+          "text": "Delay logged \u2014 'Initiate production PO' +4d: (no reason given)"
+        },
+        {
+          "ts": "2026-07-23 21:34",
+          "text": "'Initiate production PO': end 2026-08-03 \u2192 2026-08-07"
+        },
+        {
+          "ts": "2026-07-23 21:36",
+          "text": "Delay logged \u2014 'Quote' +12d: Taking more time with supplier than initially anticipated. This is because of weipu connector. Supplier has all info he needs for quoting"
+        },
+        {
+          "ts": "2026-07-23 21:36",
+          "text": "'Quote': end 2026-07-15 \u2192 2026-07-31"
+        },
+        {
+          "ts": "2026-07-23 21:37",
+          "text": "Delay logged \u2014 'Quote' +10d: Tecumseh not getting enough feedback from initial supplier. Trying to get quotse from second supplier"
+        },
+        {
+          "ts": "2026-07-23 21:37",
+          "text": "'Quote': end 2026-07-17 \u2192 2026-07-31"
+        },
+        {
+          "ts": "2026-07-24 09:47",
+          "text": "Promoted 1 note(s) to task(s)"
+        },
+        {
+          "ts": "2026-07-24 09:47",
+          "text": "Deleted task 'Tecumseh will ship lab units on 8/5'"
+        },
+        {
+          "ts": "2026-07-28 13:41",
+          "text": "'Implementation': status \u2192 Not Started"
+        },
+        {
+          "ts": "2026-07-28 13:42",
+          "text": "'MS request': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-28 13:50",
+          "text": "Renamed 'Quote' \u2192 'Quote from EMF'"
+        },
+        {
+          "ts": "2026-07-28 13:57",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-07-28 13:57",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-07-28 13:57",
+          "text": "Renamed 'New Task' \u2192 'Remove distributor from LT cassette'"
+        },
+        {
+          "ts": "2026-07-28 13:57",
+          "text": "Added task 'New Task'"
+        },
+        {
+          "ts": "2026-07-28 13:57",
+          "text": "Renamed 'New Task' \u2192 'Use distributor tester'"
+        },
+        {
+          "ts": "2026-07-29 10:56",
+          "text": "'MS work - complete': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-29 10:56",
+          "text": "'Ship to Tecumseh': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-29 10:56",
+          "text": "'Hot box  Validation - MT': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-29 10:57",
+          "text": "'Captube trial 2': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-29 10:58",
+          "text": "Renamed 'Hot box testing.' \u2192 'Lab test - 5Dr LT room 9'"
+        },
+        {
+          "ts": "2026-07-29 11:01",
+          "text": "'Lab test - 5Dr LT room 9': end 2026-09-04 \u2192 2026-08-14"
+        },
+        {
+          "ts": "2026-07-29 11:01",
+          "text": "'3D printed foam': status \u2192 Completed"
         }
       ],
       "notes": [
@@ -10865,10 +11148,23 @@
         "Harness design - UL wire spec 10-32. or what. Also what colors do we need and the gage?",
         "Sensor probe number. and the sensor part number. This is all on page 2",
         "Page 3 0 - UL wire types for 12 and 18 gage wires. Want the exact part number you want mega fit and mini fit size. Any insulation needed on the ground terminal.",
-        "15amp cord. what UL requirements. For NEMA 5-15. They will send specs. for us to pick.",
-        "Fan - Taiko connectors instead of current connectors."
+        "15amp cord. what UL requirements? For NEMA 5-15. They will send specs. for us to pick.",
+        "Fan - Taiko connectors instead of current connectors.",
+        "Failure mode of RH cases. ",
+        "coating on coil is $20",
+        "3/8 to 5/16 coil size. will loose 2% capactiy. same design on both LT and MT. Cost reduction becasuse amount of copper is reduced. Increased the airflow a little bit. Julia will need to find that out. ",
+        "7mm also tested. We can increase the capacity. increase the number of circuits. LT and MT same coil.",
+        "Also did calculation on aluminum coil - no baseline. ",
+        "Conduit can be implemented already - ",
+        "First vaccume is not working because of the AC conditions. humidity is so high that the vaccume is struggling to get down to 50 microns. The entire room will be conditioned by the end of next week",
+        "Controller - 3 deg F is on . Time is 1hr + 2hr for CTA + 1hr for triage , Dispatch. ",
+        "Alarm off criteria is +1F deg. ",
+        "Doug: door open ",
+        "Door issues vs when they got installed. ",
+        "FEXA paredo",
+        "Tecumseh will ship lab units on 8/5"
       ],
-      "notepad_html": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Segoe UI'; font-size:10.8pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">process in place to not dispatch if the store humidity is high. Atleast from one connect. we wont get money back. FEXA is fine. we can get that money back</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Harness design - UL wire spec 10-32. or what. Also what colors do we need and the gage?</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Sensor probe number. and the sensor part number. This is all on page 2</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Page 3 0 - UL wire types for 12 and 18 gage wires. Want the exact part number you want mega fit and mini fit size. Any insulation needed on the ground terminal.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">15amp cord. what UL requirements. For NEMA 5-15. They will send specs. for us to pick.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Fan - Taiko connectors instead of current connectors.</span></p></body></html>",
+      "notepad_html": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Segoe UI'; font-size:9.9pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">process in place to not dispatch if the store humidity is high. Atleast from one connect. we wont get money back. FEXA is fine. we can get that money back</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Harness design - UL wire spec 10-32. or what. Also what colors do we need and the gage?</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Sensor probe number. and the sensor part number. This is all on page 2</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Page 3 0 - UL wire types for 12 and 18 gage wires. Want the exact part number you want mega fit and mini fit size. Any insulation needed on the ground terminal.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">15amp cord. what UL requirements? For NEMA 5-15. They will send specs. for us to pick.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10.8pt;\">Fan - Taiko connectors instead of current connectors.</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Failure mode of RH cases. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">coating on coil is $20</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">3/8 to 5/16 coil size. will loose 2% capactiy. same design on both LT and MT. Cost reduction becasuse amount of copper is reduced. Increased the airflow a little bit. Julia will need to find that out. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">7mm also tested. We can increase the capacity. increase the number of circuits. LT and MT same coil.</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Also did calculation on aluminum coil - no baseline. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Conduit can be implemented already - </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">First vaccume is not working because of the AC conditions. humidity is so high that the vaccume is struggling to get down to 50 microns. The entire room will be conditioned by the end of next week</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Controller - 3 deg F is on . Time is 1hr + 2hr for CTA + 1hr for triage , Dispatch. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Alarm off criteria is +1F deg. </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Doug: door open </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Door issues vs when they got installed. </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">FEXA paredo</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Tecumseh will ship lab units on 8/5</p></body></html>",
       "is_vave": true
     }
   ]

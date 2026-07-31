@@ -4299,7 +4299,7 @@
                               "baseline_provisional": false
                             }
                           ],
-                          "expanded": true,
+                          "expanded": false,
                           "dates_locked": false,
                           "predecessor_id": null,
                           "baseline_duration": 10,
@@ -4445,7 +4445,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": true,
+                      "expanded": false,
                       "dates_locked": true,
                       "predecessor_id": null,
                       "baseline_duration": 20,
@@ -4541,7 +4541,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": true,
+                      "expanded": false,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 1,
@@ -5566,7 +5566,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": true,
+                      "expanded": false,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 31,
@@ -7471,7 +7471,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": true,
+                      "expanded": false,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 1,
@@ -7644,7 +7644,7 @@
                       "baseline_provisional": false
                     }
                   ],
-                  "expanded": true,
+                  "expanded": false,
                   "dates_locked": false,
                   "predecessor_id": null,
                   "baseline_duration": null,
@@ -7844,7 +7844,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": false,
+                      "expanded": true,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": null,
@@ -7940,7 +7940,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": false,
+                      "expanded": true,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": null,
@@ -8036,7 +8036,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": false,
+                      "expanded": true,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": null,
@@ -8132,7 +8132,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": false,
+                      "expanded": true,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": 1,
@@ -8228,7 +8228,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": false,
+                      "expanded": true,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": null,
@@ -8324,96 +8324,7 @@
                           "baseline_provisional": false
                         }
                       ],
-                      "expanded": false,
-                      "dates_locked": false,
-                      "predecessor_id": null,
-                      "baseline_duration": null,
-                      "baseline_end": null,
-                      "delay_notes": "",
-                      "revisions": [],
-                      "baseline_provisional": false
-                    },
-                    {
-                      "id": "0753abee-843c-4ad3-9c0e-d81f12c72914",
-                      "name": "Remove Drain",
-                      "start_date": "2026-06-26",
-                      "end_date": "2026-08-12",
-                      "status": "In Progress",
-                      "status_manual": false,
-                      "owner": "",
-                      "waiting_on": "",
-                      "waiting_since": null,
-                      "notes": "",
-                      "is_parallel": true,
-                      "vave_potential": 3.8,
-                      "vave_realized": null,
-                      "children": [
-                        {
-                          "id": "aa9a142b-248f-4f7e-a713-ff2500f395ad",
-                          "name": "Design changes",
-                          "start_date": "2026-06-26",
-                          "end_date": "2026-07-15",
-                          "status": "Completed",
-                          "status_manual": true,
-                          "owner": "",
-                          "waiting_on": "",
-                          "waiting_since": null,
-                          "notes": "[2026-07-09]: Delayed +13d, end -> 2026-07-15.",
-                          "is_parallel": false,
-                          "vave_potential": null,
-                          "vave_realized": null,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": 1,
-                          "baseline_end": "2026-06-29",
-                          "delay_notes": "",
-                          "revisions": [
-                            {
-                              "rev": "B",
-                              "date": "2026-07-09",
-                              "end": "2026-07-15",
-                              "slip": 13,
-                              "reason": ""
-                            }
-                          ],
-                          "baseline_provisional": false
-                        },
-                        {
-                          "id": "34bc5f7f-2808-4363-ab79-d7ddefe09acd",
-                          "name": "ECN Release",
-                          "start_date": "2026-07-16",
-                          "end_date": "2026-08-12",
-                          "status": "In Progress",
-                          "status_manual": false,
-                          "owner": "",
-                          "waiting_on": "",
-                          "waiting_since": null,
-                          "notes": "[2026-07-09]: Delayed +19d, end -> 2026-08-12.",
-                          "is_parallel": false,
-                          "vave_potential": null,
-                          "vave_realized": null,
-                          "children": [],
-                          "expanded": false,
-                          "dates_locked": false,
-                          "predecessor_id": null,
-                          "baseline_duration": 1,
-                          "baseline_end": "2026-06-30",
-                          "delay_notes": "",
-                          "revisions": [
-                            {
-                              "rev": "B",
-                              "date": "2026-07-09",
-                              "end": "2026-08-12",
-                              "slip": 19,
-                              "reason": ""
-                            }
-                          ],
-                          "baseline_provisional": false
-                        }
-                      ],
-                      "expanded": false,
+                      "expanded": true,
                       "dates_locked": false,
                       "predecessor_id": null,
                       "baseline_duration": null,
@@ -8423,7 +8334,7 @@
                       "baseline_provisional": false
                     }
                   ],
-                  "expanded": false,
+                  "expanded": true,
                   "dates_locked": true,
                   "predecessor_id": null,
                   "baseline_duration": null,
@@ -11141,6 +11052,42 @@
         {
           "ts": "2026-07-29 11:01",
           "text": "'3D printed foam': status \u2192 Completed"
+        },
+        {
+          "ts": "2026-07-29 11:04",
+          "text": "Deleted task 'Remove Drain'"
+        },
+        {
+          "ts": "2026-07-29 11:05",
+          "text": "'Reduce Qty of Canopy Foam Backers': parallel mode OFF"
+        },
+        {
+          "ts": "2026-07-29 11:05",
+          "text": "'Reduce Qty of Canopy Foam Backers': start 2026-06-26 \u2192 2026-08-10"
+        },
+        {
+          "ts": "2026-07-29 11:05",
+          "text": "'Reduce Qty of Canopy Foam Backers': end 2026-08-07 \u2192 2026-09-21"
+        },
+        {
+          "ts": "2026-07-29 11:05",
+          "text": "'Reduce Qty of Canopy Foam Backers': status \u2192 Not Started"
+        },
+        {
+          "ts": "2026-07-29 11:05",
+          "text": "'Reduce Qty of Canopy Foam Backers': parallel mode ON"
+        },
+        {
+          "ts": "2026-07-29 11:05",
+          "text": "'Reduce Qty of Canopy Foam Backers': start 2026-08-10 \u2192 2026-06-26"
+        },
+        {
+          "ts": "2026-07-29 11:05",
+          "text": "'Reduce Qty of Canopy Foam Backers': end 2026-09-21 \u2192 2026-08-07"
+        },
+        {
+          "ts": "2026-07-29 11:05",
+          "text": "'Reduce Qty of Canopy Foam Backers': status \u2192 In Progress"
         }
       ],
       "notes": [
