@@ -5,7 +5,7 @@ import {
   FileBlob,
   PresentationFile,
   SpreadsheetFile,
-} from "@oai/artifact-tool";
+} from "../portable-runtime/node_modules/@oai/artifact-tool/dist/artifact_tool.mjs";
 
 function parseArgs(argv) {
   const args = {};

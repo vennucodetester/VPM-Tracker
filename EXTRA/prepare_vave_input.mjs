@@ -1,7 +1,7 @@
 // Create the persistent, user-editable Excel source for VAVE slide generation.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { FileBlob, SpreadsheetFile } from "@oai/artifact-tool";
+import { FileBlob, SpreadsheetFile } from "../portable-runtime/node_modules/@oai/artifact-tool/dist/artifact_tool.mjs";
 
 const sourcePath = path.resolve(process.argv[2]);
 const outputPath = path.resolve(process.argv[3]);
